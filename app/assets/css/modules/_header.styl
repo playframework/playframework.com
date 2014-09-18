@@ -1,0 +1,119 @@
+#navigation
+    // scoped vars
+    border-top-width=5px
+
+    position: relative
+    z-index: 1
+    background: white
+    height: header-height
+    border-top: border-top-width solid green
+    box-shadow: 0 0 5px rgba(#000, .2)
+    .wrapper
+        position: relative
+
+    #logo
+        box: 117px, 40px
+        float: left
+        margin: 20px 0
+        background: image("logo.png") no-repeat
+        retina("logo.png", cover)
+        hide-text()
+
+    #sections
+        float: right
+        border-right: 1px solid grey-light
+        clear: after
+        a
+            display: block
+            float: left
+            height: (header-height - border-top-width)
+            line-height: header-height
+            padding: 0 30px
+            color: grey-dark
+            border-left: 1px solid grey-light
+            text: title big
+            &:hover
+                background: rgba(grey-light,.3)
+                color: black
+                box-shadow: inset 0 4px 0 green, inset 0 0 3px rgba(grey-light)
+                transition: all 150ms ease-in-out
+
+    #social
+        absolute: top 120px right 40px
+        social(pos)
+            background-position: ((pos * -1) * 30px) 0
+            &:hover
+                background-position: ((pos * -1) * 30px) -30px
+        a
+            position: relative
+            box: 32px 32px
+            float: left
+            background: image("layout/social-icons.png") no-repeat
+            retina("layout/social-icons.png", 180px)
+            &[href*=twitter]
+                social(0)
+            &[href*=google]
+                social(1)
+            &[href*=facebook]
+                social(2)
+            &[href*=github]
+                social(3)
+            &[href*=stackoverflow]
+                social(4)
+            &[href*=forum]
+                social(5)
+
+            span
+                display: none
+                absolute: top -25px right 0
+                padding: 3px 6px
+                background: grey-dark
+                color: white
+                border-radius: 3px
+                text: small title
+                white-space: nowrap
+                &:after
+                    content: " "
+                    absolute: top 100% right 11px
+                    width: 0
+                    height: 0
+                    border-left: 6px solid transparent
+                    border-right: 6px solid transparent
+                    border-top: 6px solid grey-dark
+            &:hover span
+                display: block
+
+@media only screen and (max-width: 700px)
+    #navigation
+        height: auto
+        clear: after
+        #logo
+            float: none
+            margin: 20px auto
+        #sections
+            border-top: 1px solid grey-light
+            float: none
+            a
+                float: none
+                height: 40px
+                line-height: 40px
+                text-align: center
+                border-bottom: 1px solid grey-light
+        #social
+            position: static
+            padding: 20px 0
+            text-align: center
+            a
+                display: inline-block
+                float: none
+
+#search
+    margin: 20px 0
+    text-align: center
+    input
+        width: 150px
+    select
+        width: 60px
+    button
+        position: absolute
+        top: -500px

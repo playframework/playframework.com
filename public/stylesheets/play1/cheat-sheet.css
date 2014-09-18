@@ -1,0 +1,262 @@
+/*
+ * Play 1 cheat-sheets are designed to be printed out, so they have their own separate layout/stylesheets.
+ *
+ * I've taken the ones from the old website and combined them into one stylesheet for screen and one for print.
+ */
+
+html {
+    overflow-y: scroll;
+}
+
+html, body {
+    background: #F7F7F7;
+    font-family: 'Lucida Grande', Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5em !important;
+}
+
+html {
+    border-top: 5px solid #67A927;    
+}
+
+a {
+    color: #000;
+}
+
+.wrapper {
+    padding: 20px 0;
+    width: 900px;
+    margin: auto;
+    position: relative; 
+}
+
+.wrapped {
+    width: 650px;
+}
+
+/** Manual **/
+
+#logo {
+    margin-top: 10px;
+    text-align: center;
+}
+
+#logo #version {
+    font-size: 10px;
+    margin-top: 0;
+    font-weight: normal;
+}
+
+#pageContent {
+    width: 650px;
+}
+
+#docSidebar {
+    width: 200px;
+    position: absolute;
+    right: 0;
+    background: #fff;
+    padding: 10px;
+}
+
+#docSidebar {
+    font-size: 12px;
+    overflow: hidden;
+    -webkit-box-shadow: #eee -1px 1px 2px;
+    -moz-box-shadow: #eee -1px 1px 2px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+#docSidebar h2 {
+    font-weight: bold;
+    color: #666;
+    font-size: 120%;
+    margin-bottom: 5px;
+    margin-top: 20px;
+}
+
+#docSidebar p {
+    margin: 1em 0;
+}
+
+#docSidebar h2:first-child {
+    margin-top: 0;
+}
+
+#docSidebar ul, #docSidebar ol {
+    list-style: square;
+    color: #888;
+    line-height: 1.3em;
+}
+#docSidebar ol {
+    padding-left: 2.4em;
+}
+#docSidebar ul {
+    padding-left: 1.5em;
+}
+
+#docSidebar li {
+    padding: 3px 0;
+}
+
+#docSidebar ol {
+    list-style-type: decimal;
+}
+
+#docSidebar ul .selected {
+    font-weight: bold !important;
+}
+
+#docSidebar a {
+    color: #568C00;
+}
+
+#docSidebar ol.keywords {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+#docSidebar ol ol {
+    list-style-type: square;
+    margin-top: 0.5em;
+    padding-left: 1.5em;
+}
+
+.index ol {
+    list-style: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.index ol {
+    overflow: auto;
+}
+
+.index ol li {
+    display: block;
+    float: left;
+}
+
+.index ol li a {
+    display: block;
+    border: 1px solid #ddd;
+    width: 130px;
+    margin: 5px;
+    padding: 1px 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background: #fff;
+    -webkit-box-shadow: #EEE -1px 1px 2px;
+    -moz-box-shadow: #EEE -1px 1px 2px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+.cs-wrapper {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+div.cs {
+    -moz-column-count: 3;
+    -moz-column-gap: 10px;
+    -webkit-column-count: 3;
+    -webkit-column-gap: 10px;
+    column-count: 3;
+    column-gap: 10px;
+    margin: auto;
+    font-size: 90%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 0 0 5px 0;
+    -webkit-box-shadow: #ccc -1px 1px 3px;
+    -moz-box-shadow: #ccc -1px 1px 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+div.cs:hover {
+    background-color:white;
+}
+
+.wikistyle .cs h2 {
+    width: 100%;
+    background: rgba(103, 169, 39, 0.75);
+    color: white;
+    text-shadow: #3F6C12 1px 1px 0px;
+    font-size: 12px !important;
+    margin-top: 0 !important;
+    margin-bottom: 0 !important;
+    border-top: none !important;
+    padding-top: 0 !important;
+    text-indent: 0.5em;
+    -webkit-border-top-left-radius: 3px;
+    -moz-border-radius-topleft: 3px;
+    border-top-left-radius: 3px;
+}
+
+.wikistyle div.cs p {
+    margin: 0.5em !important;
+    line-height: 1.3 !important;
+}
+
+#docTopbar {
+    position: relative;
+    background: #fff;
+    padding: 10px;
+    height: 70px;
+    font-size: 12px;
+    overflow: hidden;
+    -webkit-box-shadow: #eee -1px 1px 2px;
+    -moz-box-shadow: #eee -1px 1px 2px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+}
+
+#docTopbar a {
+    color: #568C00;
+}
+
+#docTopbar .titlebar {
+    width: 100%;
+    text-align: center;
+}
+
+#backToToc {
+    font-size: 14px;
+    position: absolute;
+    top: 5px;
+    left: 5px;
+}
+
+#backToToc span {
+    font-weight: bold;
+    color: #666;
+    font-size: 15px;
+}
+
+#searchBar {
+    position: absolute;
+    bottom: 5px;
+    left: 5px;
+    height: 45px;
+}
+
+#logobar {
+    right: 5px;
+    top: 5px;
+    text-align: center;
+    position: absolute;
+}
+
+#logobar #version {
+    font-size: 10px;
+    margin-top: 0;
+    font-weight: normal;
+}

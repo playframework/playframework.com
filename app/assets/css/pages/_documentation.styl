@@ -1,0 +1,241 @@
+toolbar-height=120px
+content-gap=40px
+
+.documentation
+    &, article
+        color: #333
+
+    #top
+        padding: content-gap 0 100px
+
+    #content
+        position: relative
+        margin-top: -60px
+        padding: 1px 0 0
+        background: #fff image("layout/right-fake-column.png") right top repeat-y
+        background-size: 300px 1px
+        retina("layout/right-fake-column.png", 300px 1px)
+        &:before
+            left: -23px
+            right: -23px
+
+        article
+            width: auto
+            margin-right: 300px
+            padding: 0
+            background: white
+            border-right: 1px solid sand
+
+            // Align content, limit content width
+            p, li, table
+                max-width: 840px
+
+            > *
+                padding-left: content-gap
+                padding-right: content-gap
+
+            h1
+                margin: 30px 0
+
+            h2
+                padding-top: 1em
+                border-top: 1px solid sand
+
+            pre
+                background: #f7f7f7
+                border: none
+                code
+                    background: none
+
+            li > p:first-child
+                margin-top: 0
+
+            li > p:last-child
+                margin-bottom: 0
+
+            // Tabbed code snippets
+            dl
+                dt
+                    font-weight:bold
+
+            dl.tabbed
+                position:relative
+
+                dt
+                    float: left
+                    margin: 0 5px 0 0
+                    border: 1px solid #ddd
+                    line-height: 2
+                    border-radius: 5px 5px 0 0
+
+                    a
+                        display: block
+                        padding: 0 20px
+                        height: 30px
+                        color: #333
+                        text-decoration: none
+
+                dt.current
+                    background: #f7f7f7
+                    position: relative
+                    top: 0px
+                    z-index: 1
+                    border-bottom: none
+
+                dd
+                    position: absolute
+                    width: 100%
+                    left: 0
+                    top: 30px
+                    padding-left: content-gap
+                    padding-right: content-gap
+
+                    pre
+                        margin-top: 0
+                        border: 1px solid #ddd
+                        border-radius: 0 5px 5px 5px
+                        padding: 10px
+
+
+    aside
+        absolute: top (toolbar-height) right 0
+        width: 300px
+        padding: 0 content-gap
+
+#toolbar
+    absolute: top 0 right 0
+    width: 300px
+    line-height: 20px
+    padding: 20px content-gap 0
+    color: #999
+    text: title bold
+    white-space: nowrap
+    clear: after
+    h3
+        float: left
+        clear: both
+        padding: 0
+        font-size: 16px
+
+    div
+        float: right
+        font-size: 0 // remove white space
+
+    h3, div
+        margin: 5px 0
+        vertical-align: bottom
+
+    a, dl
+        display: inline-block
+        padding: 0 5px
+        background: #eee
+        color: #999
+        font-size: 15px
+        cursor: pointer
+        box-shadow: inset 0 0 1px rgba(#000, .4)
+        &:first-child
+            border-radius: 2px 0 0 2px
+        &:last-child
+            border-radius: 0 2px 2px 0
+        &.active, &:hover
+            background: green
+            color: #fff
+
+    .switch > a
+        max-width: 90px
+
+    .dropdown
+        display: inline-block
+        position: relative
+        dd
+            display: none
+            absolute: top 100% right 0
+            z-index: 999
+            border: none
+            box-shadow: 0 2px 5px rgba(#000, .3)
+            a
+                display: block
+                padding: 0 10px
+                background: white
+                color: green-text
+                border-bottom: 1px solid sand
+                border-radius: 0
+                font-size: 15px
+                box-shadow: none
+                &:hover
+                    background: green
+                    color: white
+        &.open
+            dd
+                display: block
+            dt:before
+                content: " "
+                position: fixed
+                top: 0
+                left: 0
+                right: 0
+                bottom: 0
+                z-index: 99
+
+#extend
+    display: none
+
+@media only screen and (min-width: 960px)
+    .documentation
+        &.flex
+            #content, .wrapper
+                width: 90% !important
+
+        #content, .wrapper
+            max-width: 1500px
+            margin-left: 0 auto
+
+        &.animate
+            #content, .wrapper
+                transition: width 100ms ease-in-out
+
+        #content.plus
+            width: 1000px
+
+
+        #extend
+            display: block
+            box: 20px 20px
+            absolute: top 0 right 0
+            border: 0
+            opacity: .2
+            background: image("layout/extend.png") top right no-repeat, image("layout/extend.png") bottom left no-repeat
+            z-index: 99
+            transition: all 100ms ease-in-out
+            color: transparent
+            overflow: hidden
+            cursor: pointer
+            @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2),only screen and (min-device-pixel-ratio: 2),only screen and (min-resolution: 192dpi),only screen and (min-resolution: 2dppx)
+                background: image("layout/extend@2x.png") top right no-repeat, image("layout/extend@2x.png") bottom left no-repeat
+                background-size: 15px, 15px
+        .plus #extend
+            width: 80px
+            opacity: .4
+            color: #000
+
+@media only screen and (max-width: 960px)
+    .documentation
+
+        #content
+            background: #fff
+            article
+                margin-right: 0
+                padding: 0
+                > *
+                    padding-left: 10px
+                    padding-right: 10px
+
+            aside
+                position: static
+                width: auto
+                padding: 0 10px
+
+            #toolbar
+                position: static
+                width: auto
+                padding: 0 10px

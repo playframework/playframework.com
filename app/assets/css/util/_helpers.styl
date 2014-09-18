@@ -1,0 +1,48 @@
+image(path)
+    ext = extname(path)
+    path = pathjoin('/assets/images/', dirname(path), basename(path, ext) + ext)
+    url(path)
+
+retina(path, size)
+    @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2),only screen and (min-device-pixel-ratio: 2),only screen and (min-resolution: 192dpi),only screen and (min-resolution: 2dppx)
+        ext = extname(path)
+        path = pathjoin('/assets/images/', dirname(path), basename(path, ext) +"@2x"+ ext)
+        background-image: url(path)
+        background-size: size
+
+
+box(w = auto, h = auto, d = block)
+    display: d
+    width: w
+    height: h
+
+circle(size)
+    border-radius: size
+    box: size
+    text-align: center
+    line-height: size
+
+clear(arg)
+    if (arg == after)
+        zoom: 1
+        &:after
+            content: " "
+            display: block
+            clear: both
+    else
+       clear: arg
+
+overflow(arg)
+    if (arg == text)
+        overflow: hidden
+        text-indent: -99em
+    else if (arg == ellipsis)
+        white-space: nowrap
+        overflow: hidden
+        text-overflow: ellipsis
+    else
+        overflow: arg
+
+hide-text()
+    overflow: hidden
+    text-indent: -99em

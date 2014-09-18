@@ -1,0 +1,46 @@
+@(context: models.documentation.TranslationContext, title: String, otherCategories: Map[String,String], sheets: Seq[String])
+
+<html>
+<head>
+    <title>Play manual - Cheat Sheet</title>
+    <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/play1/cheat-sheet.css")" type="text/css" media="screen" charset="utf-8">
+    <link rel="stylesheet" href="@routes.Assets.versioned("stylesheets/play1/cheat-sheet-print.css")" type="text/css" media="print" charset="utf-8">
+</head>
+<body>
+<div class="cs-wrapper">
+<div id="docTopbar">
+<div id="backToToc">
+    <span>Back to </span><a href="@controllers.documentation.ReverseRouter.home(context.alternateLang, context.version.fold("")(_.name))">Table of contents</a>
+</div>
+<div id="searchBar">
+<span>Get help with Google:</span>
+<div id="searchBox"><form action="//www.google.com/cse" id="cse-search-box"><div><input type="hidden" name="cx" value="002614023023983855063:jn1mu_7bof0" /><input type="hidden" name="ie" value="UTF-8" /><input type="text" name="q" size="28" style="font-size:14px"/></div></form><script type="text/javascript" src="//www.google.com/coop/cse/brand?form=cse-search-box&lang=en"></script></div>
+                </div>
+<div class="titlebar">
+    <h1>@title</h1>
+</div>
+<div class="titlebar links">
+@otherCategories.map { category =>
+    @if(category._2 != title) {
+        <a href="@controllers.documentation.ReverseRouter.cheatsheet(context.alternateLang, context.version.fold("")(_.name), category._1)">@category._2</a>
+    } else {
+        @category._2
+    }
+    &nbsp;
+}
+</div>
+<div id="logobar">
+    <img src="@routes.Assets.versioned("images/docs/play1-cheat-sheet-logo.png")"/>
+    <h2 id="version">Play @context.version.fold("")(_.name)</h2>
+</div>
+</div>
+<div id="content" class="wikistyle">
+@sheets.map { sheet =>
+    <div class="cs">
+    @Html(sheet)
+    </div>
+}
+</div>
+</div>
+    </body>
+</html>

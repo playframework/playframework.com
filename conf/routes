@@ -1,0 +1,41 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+
+GET         /                                                        controllers.Application.index()
+
+# Pages
+GET         /download                                                controllers.Application.download(platform: Option[String] ?= None)
+GET         /support                                                 controllers.Application.support
+GET         /code                                                    controllers.Code.index
+GET         /get-involved                                            controllers.Application.getInvolved
+GET         /widget                                                  controllers.Application.widget(version: Option[String] ?= None)
+GET         /changelog                                               controllers.Application.changelog
+
+POST        /preferredLang/:lang                                     controllers.Application.setPreferedLanguage(lang)
+
+# Because I sent the security email with a bad link
+GET         /security/vulnerability/20130920XmlExternalEntity        controllers.Application.movedTo(url="/security/vulnerability/20130920-XmlExternalEntity", originalPath="foo")
+GET         /security/vulnerability/:page                            controllers.Security.vulnerability(page)
+GET         /security/vulnerability                                  controllers.Security.index
+
+#Documentation
+->          /documentation                                           controllers.documentation.Router
+
+#Modules
+GET         /modules                                                 controllers.Modules.index(keyword ?= "")
+HEAD        /modules/:name-:version.zip                              controllers.Modules.download(name, version)
+GET         /modules/:name-:version.zip                              controllers.Modules.download(name, version)
+GET         /modules/:name                                           controllers.Modules.show(name)
+GET         /modules/:name-:version/:page                            controllers.Modules.documentation(name, version, page)
+GET         /modules/repo/:name/:version/dependencies.yml            controllers.Modules.dependencies(name, version)
+HEAD        /modules/repo/:name/:version/dependencies.yml            controllers.Modules.dependencies(name, version)
+
+# Deprecated links
+GET         /code/*something                                         controllers.Application.movedTo(url="/code", something)
+
+GET         /assets/*file                                            controllers.Assets.versioned(path="/public", file: Asset)
+
+GET         /*route                                                  controllers.Application.onHandlerNotFound(route)

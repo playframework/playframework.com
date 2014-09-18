@@ -1,0 +1,263 @@
+@keyframes bounce
+    0%
+        background-position: 30px 20px
+    50%
+        background-position: 30px 40px
+    100%
+        background-position: 30px 20px
+
+@keyframes flashing
+    0%
+        color: #333
+    50%
+        color: green
+    100%
+        color: #333
+
+.download
+    @extend .split-page
+
+    #content h1 
+        height: 80px
+        line-height: 80px
+        color: white
+        padding: 0 30px
+
+    article
+        color: #333
+
+    table a:after
+        content: none
+
+    .deprecated
+        background: yellow
+        padding: 30px
+    hr 
+        width: 70%
+        border: none 
+        border-top: 1px solid #ddd
+
+    .downloads
+        background: #333
+        clear: after
+        color: #777
+        padding: 30px
+        a, strong
+            color: white
+        h2, h3
+            margin: 0
+            padding: 0
+            border: 0
+            color: inherit
+            text: title bold
+        a
+            font-weight: bold
+            text-decoration: none
+        li
+            position: relative
+            padding-left: 15px
+            margin: 5px 0
+            :before
+                content: "►"
+                position: absolute
+                top: 3px
+                left: 0
+                margin-right: 5px
+                color: #777
+                font-size: 10px
+    .row
+        width 50%
+        float: right
+    .cols
+        width: 50%
+        float left
+        a:hover
+            text-decoration: underline
+    h3:target
+        animation: flashing 500ms 4 linear
+    .latest
+        width: 400px
+        float: left
+        position: relative
+        background: green image("download/download-big-icon.png") 10px 10px no-repeat
+        retina("download/download-big-icon.png", 50px)
+        padding: 7px 20px 10px 80px
+        border-radius: 3px
+        color: #547C18
+        box-shadow: 0 3px 0 rgba(green, .7)
+        @media only screen and (max-width: 450px)
+            padding: 20px 10px 20px 40px
+            background-image: none
+        h2
+            margin: 0 0 5px
+        &:hover
+            background-color: blue
+            color: white
+            box-shadow: 0 3px 0 rgba(blue, .7)
+        .cover:after
+            content: ' '
+            position: absolute
+            top: 0
+            left: 0
+            right: 0
+            bottom: 0
+    @media only screen and (max-width: 960px)
+        .downloads
+            padding: 1px 10px
+        .row, .cols, .latest
+            float: none
+            display: block
+            width: auto
+            margin: 10px auto
+
+    .version
+        margin: 20px 0
+    .show-all-versions
+        font-size: 12px
+        margin: 0 10px
+        cursor: pointer
+
+    .updates
+        margin: 10px 0 40px
+        text-align: center
+        a
+            display: inline-block
+            background: blue image("download/twitter-big-icon.png") 10px 10px no-repeat
+            retina("download/twitter-big-icon.png", 25px 20px)
+            color: white
+            margin: 0
+            padding: 10px 20px 10px 40px
+            text: title
+            border-radius: 3px
+            box-shadow: 0 3px 0 blue - #111
+            white-space: nowrap
+            &:after
+                content: none
+
+    .cloudbees
+        display: block
+        width: 350px
+        height: 40px
+        line-height: 30px
+        background: linear-gradient(top, #444, #222)
+        box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 0px 1px, rgba(0, 0, 0, 0.4) 0px 1px 1px 0px, rgba(255, 255, 255, 0.117188) 0px -1px 0px 0px inset
+        border-radius: 3px
+        font-size: 14px
+        color: white
+        text-decoration: none
+        text-shadow: rgba(0, 0, 0, 0.238281) 0px 1px 0px
+        text-align: center
+        &:hover
+            background: linear-gradient(top, #555, #333)
+        &:after
+            content: none
+        &:before
+            content: ''
+
+            width: 38px
+
+            height: 38px
+
+            margin-right: 5px
+            display: inline-block
+            background-image: url(https://www-staging.cloudbees.com/sites/all/themes/custom/cloudbees_zen/css/bidesign/_ui/images/logo_small.png)
+
+            background-size: 38px auto
+
+            background-repeat: no-repeat
+
+            background-position: center center
+
+            vertical-align: -13px
+
+    .changelogLink
+        font-size: 0.9em
+        margin: 10px 0 20px
+
+
+    .activator, .cli, .ui
+        position: relative
+        min-height: 300px
+        margin: 50px auto
+        img
+            position: absolute
+            top: -10px
+        p
+            margin: 14px 0 4px
+        pre
+            margin: 4px 0 14px
+    .activator
+        min-height: 10px
+        width: 530px
+        text-align: center
+    .cli
+        margin-left: 400px
+        img
+            left: -430px
+    .ui
+        margin-right: 400px
+        img
+            right: -430px
+
+    @media only screen and (max-width: 960px)
+        .activator, .cli, .ui
+            width: auto
+            min-height: 10px
+            margin: 10px
+            img
+                position: static
+                display: block
+                left: 0
+                right: 0
+                margin: 20px auto
+    .moto
+        color: green
+
+
+.get-started
+    position: fixed
+    top: 0
+    left: 0
+    right: 0
+    bottom: 0
+    z-index: 999
+    .back
+        background: rgba(#000,.5)
+        position: absolute
+        top: 0
+        left: 0
+        right: 0
+        bottom: 0
+    .wrapped
+        position: absolute
+        top: 0
+        left: 0
+        right: 0
+        bottom: 0
+        margin: auto
+        height: 300px
+        width: 400px
+        padding: 20px 30px
+        background: #fff
+        box-shadow: 0 2px 10px rgba(#000, .5)
+        z-index: 10000
+        color: grey-dark
+        h3
+            text: title bold
+            margin: 20px 0
+    q
+        display: block
+        padding: 0 0 20px
+        color: grey
+        font: 19px Georgia, Serif
+        font-family: 'PT Serif', serif
+        font-style: italic
+        border-bottom: 1px solid sand
+        &:before, &:after
+            content: ""
+
+    .bold
+        font-size: 18px
+        font-weight: bold
+        a 
+            color: blue

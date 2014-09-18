@@ -1,0 +1,153 @@
+@(activator: ActivatorRelease, title: String = "Play Framework - Build Modern & Scalable Web Apps with Java and Scala")(implicit requestHeader : RequestHeader)
+
+@main(title) {
+    <header id="top">
+        <div class="wrapper">
+            <h1>
+                The High Velocity<br/>
+                Web Framework<br/>
+                For Java and Scala
+            </h1>
+        </div>
+    </header>
+    <section id="content">
+        <div id="start">
+            <h2>Get the latest package</h2>
+                <a href="@routes.Application.download()" class="download">Download @activator.playVersion</a>
+            <p>
+                or <a href="@routes.Application.download()#older-versions">browse all versions</a>
+            </p>
+            <h2>Get started with</h2>
+                <a href='@controllers.documentation.ReverseRouter.latest(None, "Tutorials")' class="download">Tutorials</a>
+            <p>
+                or <a href="@controllers.documentation.ReverseRouter.index(None)">read full documentation</a>
+            </p>
+        </div>
+        <div id="video">
+            <h3>Video introduction to Play Framework</h3>
+            <div class="lang-switch">
+                <span class="play-play"></span>
+                <a href="//www.youtube.com/watch?v=eNCerkVyQdc" data-id="eNCerkVyQdc" class="play-scala">Scala</a>
+                <a href="//www.youtube.com/watch?v=bLrmnjPQsZc" data-id="bLrmnjPQsZc" class="play-java">Java</a>
+            </div>
+            <div id="videoframe"></div>
+        </div>
+        <article class="hat">
+            <h1>Play Framework makes it easy to build web applications with Java & Scala.</h1>
+            <p>
+                Play is based on a lightweight, stateless, web-friendly architecture.
+            </p>
+            <p>
+                Built on Akka, Play provides predictable and minimal resource consumption (CPU, memory, threads) for highly-scalable applications.
+            </p>
+        </article>
+        <article class="feature developer">
+            <h2>Developer friendly.</h2>
+            <p>
+                Make your changes and simply hit refresh!  All you need is a browser and a text editor.
+            </p>
+            <ul>
+                <li>Hit refresh workflow</li>
+                <li>Powerful console &amp; build tools</li>
+                <li>Type safety</li>
+                <li>Built in testing tools</li>
+                <li>IDE support for Eclipse and IntelliJ IDEA</li>
+            </ul>
+            <div id="workflow">
+                <div class="terminal"></div>
+                <div class="editor"></div>
+                <div class="browser"></div>
+            </div>
+        </article>
+        <article class="feature scale alt">
+            <div id="scale">
+                <h6>Play instances usage</h6>
+                <div class="instance1"></div>
+                <div class="instance2"></div>
+                <div class="instance3"></div>
+                <div class="instance4"></div>
+                <p class="triggers">
+                    <span class="instance1"></span>
+                    <span class="instance2"></span>
+                    <span class="instance3"></span>
+                    <span class="instance4"></span>
+                </p>
+            </div>
+            <h2>Scale predictably.</h2>
+            <p>
+                Underneath the covers Play uses a fully asynchronous model built on top of Akka.  Combined with being stateless, Play scales simply and predictably.
+            </p>
+            <ul>
+                <li>Stateless Web Tier</li>
+                <li>Non-blocking I/O</li>
+                <li>Built on Akka</li>
+                <li>Real-time enabled</li>
+            </ul>
+        </article>
+        <article class="feature modern">
+            <div id="modern">
+                <div></div>
+            </div>
+            <h2>Modern web &amp; mobile.</h2>
+            <p>
+                Play was built for needs of modern web & mobile apps.
+            </p>
+            <ul>
+                <li>RESTful by default</li>
+                <li>Asset Compiler for CoffeeScript, LESS, etc</li>
+                <li>JSON is a first class citizen</li>
+                <li>Websockets, Comet, EventSource</li>
+                <li>Extensive NoSQL &amp; Big Data Support</li>
+            </ul>
+        </article>
+        <article class="feature strong small">
+            <h2>Solid &amp; fast.</h2>
+            <p>
+                The compiler and runtime (JVM) do the heavy lifting so that your apps run super-fast and keeps running under load.
+            </p>
+            <ul>
+                <li>Code is compiled</li>
+                <li>Runs on the JVM</li>
+                <li>Java NIO via Netty</li>
+            </ul>
+        </article>
+        <article class="feature techs small">
+            <h2>Massive ecosystem.</h2>
+            <p>
+                The ecosystem around Java is huge.  There are libraries for everything - most of which can be used in Play.
+            </p>
+            <ul>
+                <li>Use Maven Central libraries</li>
+                <li>Numerous Play plugins</li>
+                <li>Very active Play community</li>
+            </ul>
+        </article>
+        <article class="feature extend small">
+            <h2>Proven in production.</h2>
+            <p>
+                From startups to enterprises, Play powers some of the most innovative web sites.  Play is proven, reliable and scalable.
+            </p>
+            <ul>
+                <li>Production support by Typesafe</li>
+                <li>Many cloud deployment options</li>
+                <li>Used in mission-critical apps</li>
+            </ul>
+        </article>
+
+    </section>
+        <div id="references">
+            <h2>They already use Play Framework</h2>
+            <a class="linkedin" href="//linkedin.com">Linkedin</a>
+            <a class="klout" href="//klout.com">Klout</a>
+            <a class="guardian" href="http://m.guardian.co.uk/">The Guardian</a>
+            <a class="gilt" href="http://www.gilt.com">Gilt</a>
+            <a class="zaptravel" href="http://zaptravel.com">Zaptravel</a>
+        </div>
+
+
+
+<script type="text/javascript" charset="utf-8" src="/assets/javascripts/fse.js"></script>
+
+
+}
+

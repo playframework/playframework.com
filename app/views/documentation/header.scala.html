@@ -1,0 +1,69 @@
+@(context: models.documentation.TranslationContext, page: String, apis: Seq[(String, String)])(content: Html)(implicit req: RequestHeader)
+
+@language(lang: Lang, isDefault: Boolean, version: Option[models.documentation.Version]) = {
+    <a href="@version.fold(
+        controllers.documentation.ReverseRouter.latest(Some(lang).filterNot(_ => isDefault))
+    )( v =>
+        controllers.documentation.ReverseRouter.page(Some(lang).filterNot(_ => isDefault), v.name, page)
+    )">@Messages("lang.name")(lang)</a>
+}
+
+@main(page, "documentation") {
+
+    <header id="top">
+        <div class="wrapper">
+            <h1>Documentation</h1>
+        </div>
+    </header>
+
+    <section id="content">
+        <button id="extend">extend</button>
+
+        <nav id="toolbar">
+            <h3>Browse versions</h3>
+            <div class="switch">
+                @for(version <- context.version) {
+                    <a href="@controllers.documentation.ReverseRouter.page(context.alternateLang, version.name)">@version.name</a>
+                }
+                <dl class="dropdown">
+                    <dt>▾</dt>
+                    <dd>
+                    @for(v <- context.displayVersions) {
+                        <a href="@controllers.documentation.ReverseRouter.home(context.alternateLang, v.name)">@v.name</a>
+                    }
+                    </dd>
+                </dl>
+            </div>
+
+            @for(version <- context.version) {
+                <h3>Browse APIs</h3>
+                <div class="switch">
+                @for(api <- apis) {
+                    <a href="@controllers.documentation.ReverseRouter.api(version.name, api._2)">@api._1</a>
+                }
+                </div>
+            }
+
+            <h3>Language</h3>
+            <div class="switch">
+                @language(context.lang, context.isDefault, context.version)
+                <dl class="dropdown">
+                    <dt>▾</dt>
+                    <dd>
+                    @for(alternative <- context.alternatives) {
+                        @language(alternative.lang, alternative.isDefault, alternative.version)
+                    }
+                    </dd>
+                </dl>
+            </div>
+
+        </nav>
+
+        @content
+
+        <script type="text/javascript">
+            // On start, check if flex mod is enabled
+            if (localStorage && localStorage['flex'] == "true" ) document.body.className += " flex"
+        </script>
+    </section>
+}

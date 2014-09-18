@@ -1,0 +1,46 @@
+@(modules: Seq[Module])(implicit requestHeader : RequestHeader)
+
+@layout {
+            
+    <h1>Modules repository</h1>
+    
+    <blockquote>
+        <p>
+            These modules are for the <strong>Play 1.x</strong> series only and are now read-only.  If you really need to provide an update, email the <a href="//groups.google.com/group/play-framework-dev">play-framework-dev</a> group.
+        </p>
+        <p>
+            <strong>Play 2.0</strong> modules can be hosted anywhere on any Ivy, Maven or Git repository.
+        </p>
+    </blockquote>
+    
+    <p>
+        Here you can find great modules contributed by the play community. Browse the catalog and add instant power to your application.
+    </p>
+    
+    <p>
+        <input type="search" id="keyword" size="50" class="disabled" style="font-size: 20px" placeholder="Searching for something special?">
+    </p>
+    
+    <div id="modules">
+        @modules.map { module =>
+            <div class="module">
+                <h2>[@module.name] @module.fullname <span class="by">by @module.author<span></h2>
+                <p>
+                    @Html(utils.Textile.toHTML(module.description))
+                </p>
+                <p>
+                    <a href="@routes.Modules.show(module.name)">Get details and versions</a>
+                </p>
+            </div>
+        }
+    </div>
+    
+    <script type="text/javascript" charset="utf-8">
+        $(function() {
+            $('#keyword').keyup(function() {
+                $('#modules').load('@routes.Modules.index("_KEYWORD_")'.replace(/_KEYWORD_/, $('#keyword').val()) + ' #modules')
+            })
+        })
+    </script>
+            
+}

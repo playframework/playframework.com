@@ -1,0 +1,48 @@
+@(context: models.documentation.TranslationContext, page: String, content: String)(implicit req: RequestHeader)
+
+@header(context, page, Seq("Java" -> "index.html")) {
+
+    <article>
+        @Html(content)
+    </article>
+
+    <aside>
+        @for(version <- context.version) {
+            <form id="search" method="get" action="//www.google.com/search">
+                <input type="search" name="q" placeholder="Search @version docs" results="10">
+                <input type="hidden" name="sitesearch" value="@req.host@controllers.documentation.ReverseRouter.home(context.alternateLang, version.name)">
+                <button type="submit">Search</button>
+            </form>
+        }
+
+        <h3>Browse</h3>
+        <ul>
+            <li id="gotoc"><a href="home">Table of contents</a></li>
+        </ul>
+
+        <h3>Contents</h3>
+        <div id="toc"></div>
+
+        <h3>Books</h3>
+
+        <p>
+            <a href="//www.packtpub.com/play-framework-cookbook/book"><img src="@routes.Assets.versioned("images/docs/play-framework-cookbook-cover.jpg")"></a>
+        </p>
+
+        <p>
+            <a href="http://www.the-play-book.co.uk/"><img src="@routes.Assets.versioned("images/docs/introducing-play-cover.gif")"></a> </li>
+        </p>
+    </aside>
+}
+
+<script type="text/javascript" src="@routes.Assets.versioned("javascripts/play1/navigation.js")" charset="utf-8"></script>
+<script type="text/javascript" charset="utf-8">
+    buildNavigation();
+
+    @for(version <- context.version) {
+      // Fix API link
+      $('a[href="/@@api/index.html"]').attr('href', '@controllers.documentation.ReverseRouter.api(version.name, "index.html")');
+    }
+</script>
+
+@prettify()

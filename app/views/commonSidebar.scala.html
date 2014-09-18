@@ -1,0 +1,22 @@
+@(hn: String = "h3")
+
+<@hn>Documentation</@hn>
+<ul>
+    <li><a href="@controllers.documentation.ReverseRouter.latest(None, "Installing")">Installation instructions</a></li>
+    <li><a href="@controllers.documentation.ReverseRouter.latest(None, "NewApplication")">Build your first app</a></li>
+    <li><a href="@controllers.documentation.ReverseRouter.index(None)">Full documentation</a></li>
+    <li><a href="@routes.Application.changelog()">Change log</a></li>
+    <li><a href="@routes.Security.index()">Security advisories</a></li>
+</ul>
+<@hn>Find help</@hn>
+<ul>
+    <li><a href="//groups.google.com/forum/#!forum/play-framework">Mailing list</a></li>
+    <li><a href="//stackoverflow.com/questions/tagged/playframework">Stackoverflow</a></li>
+    <li><a href="//typesafe.com/how">Professional support</a></li>
+</ul>
+<@hn>Contribute</@hn>
+<ul>
+    <li><a href="@routes.Code.index()">Code and contributors</a></li>
+    <li><a href="@routes.Application.getInvolved()">Get involved</a></li>
+    <li><a href="@routes.Security.index()">Reporting security vulnerabilities</a></li>
+</ul>

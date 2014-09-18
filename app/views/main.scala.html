@@ -1,0 +1,147 @@
+@(title: String, scope: String = "home")(content: Html)(implicit requestHeader : RequestHeader)
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>@title</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width,maximum-scale=1.0;"/>
+        <link href="//fonts.googleapis.com/css?family=PT+Serif:700italic" rel="stylesheet" type="text/css">
+        <link href="//fonts.googleapis.com/css?family=Open+Sans+Condensed:700,300" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="@routes.Assets.versioned("css/main.min.css")">
+        <link rel="icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")"/>
+        <meta name="globalsign-domain-verification" content="VZ40O1AAJJDZexnYFJe5pSmc1emq0A-FW8NOHOnBIx" />
+
+        <!--[if lt IE 9]>
+        <script src="@routes.Assets.versioned("javascripts/vendor/html5shiv.js")"></script>
+        <![endif]-->
+        <script src="@routes.Assets.versioned("javascripts/vendor/jquery-1.8.2.min.js")"></script>
+        <script src="@routes.Assets.versioned("javascripts/main.js")"></script>
+    </head>
+    <body class="@scope">
+        <!--[if lt IE 7]>
+            <p class="outdated">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="//www.google.com/chrome/browser/">install Google Chrome Frame</a> to better experience this site.</p>
+        <![endif]-->
+
+        <header id="navigation">
+            <div class="wrapper">
+                <a href="/" id="logo">Typesafe</a>
+                <nav id="sections">
+                    <a href="@routes.Application.download()">Download</a>
+                    <a href="@controllers.documentation.ReverseRouter.index(None)">Documentation</a>
+                    <a href="@routes.Application.getInvolved()">Get Involved</a>
+                </nav>
+                <nav id="social">
+                    <a href="//groups.google.com/forum/#!forum/play-framework"><span>Mailing list</span></a>
+                    <a href="//twitter.com/playframework"><span>Twitter</span></a>
+                    <a href="//plus.google.com/106233335814246022600"><span>Google+</span></a>
+                    <a href="//www.facebook.com/pages/Play-Framework/50884087887"><span>Facebook</span></a>
+                    <a href="//github.com/playframework/playframework"><span>Github</span></a>
+                    <a href="//stackoverflow.com/questions/tagged/playframework"><span>Stackoverflow</span></a>
+                </nav>
+            </div>
+        </header>
+
+        <div id="getLogo">
+            <div class="pan">
+                <q>Is that what you're looking for?</q>
+                <figure>
+                    <img src="/assets/images/logos/normal-mini.png">
+                     <figcaption>
+                        <a href="/assets/images/logos/normal.png">(png)</a>
+                        <a href="/assets/images/logos/normal.svg">(svg)</a>
+                     </figcaption>
+                </figure>
+                <figure>
+                    <img src="/assets/images/logos/black-mini.png">
+                     <figcaption>
+                        <a href="/assets/images/logos/black.png">(png)</a>
+                        <a href="/assets/images/logos/black.svg">(svg)</a>
+                     </figcaption>
+                </figure>
+            </div>
+        </div>
+
+
+@*
+        @if(requestHeader.session.data.get("github")) {
+            welcome, @requestHeader.session.data("github") 
+            <img src="@requestHeader.session.data("github_avatar")"></img>
+        } else { 
+          <a href="https://github.com/login/oauth/authorize?client_id=@models.Github.clientId&scope=repo,user">login via Github</a>	
+        }
+*@
+
+        @content
+
+        <footer>
+            <div id="support">
+                <article class="community">
+                    <h3>Community support</h3>
+                    <ul>
+                        <li><a href="//groups.google.com/forum/#!forum/play-framework">Mailing list</a></li>
+                        <li><a href="//stackoverflow.com/questions/tagged/playframework">Stackoverflow</a></li>
+                    </ul>
+                </article>
+                <article class="professional">
+                    <h3>Professional support</h3>
+                    <ul>
+                        <li><a href="//typesafe.com/how/subscription">Typesafe Subscription</a></li>
+                        <li><a href="//typesafe.com/how/training">Training</a></li>
+                        <li><a href="//typesafe.com/how/consulting">Consulting</a></li>
+                    </ul>
+                </article>
+            </div>
+            <div class="wrapper">
+                <div>
+                    <h3>Play Framework</h3>
+                    <ul>
+                        <li><a href="@routes.Application.download()">Download</a></li>
+                        <li><a href="@controllers.documentation.ReverseRouter.latest(None, "Tutorials")">Tutorials</a></li>
+                        <li><a href="@controllers.documentation.ReverseRouter.index(None)">Documentation</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Community links</h3>
+                    <ul>
+                        <li><a href="//www.eventbrite.com/directory/?q=play+framework&loc=Worldwide">Events <em>via Eventbrite</em></a></li>
+                        <li><a href="http://www.indeed.com/jobs?q=%22play+framework%22&l=">Jobs <em>via Indeed</em></a></li>
+                        <li><a href="http://www.scoop.it/playframework">Blogs <em>via Scoop.it</em></a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Code &amp; contribution</h3>
+                    <ul>
+                        <li><a href="@routes.Code.index()">Code &amp; contributors</a></li>
+                        <li><a href="//github.com/playframework/playframework/issues">Bug tracker <em>GitHub</em></a></li>
+                        <li><a href="@routes.Application.getInvolved()">Get involved</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3>Social networks</h3>
+                    <ul>
+                        <li><a href="//twitter.com/playframework"><span>Twitter</span></a></li>
+                        <li><a href="//plus.google.com/106233335814246022600"><span>Google+</span></a></li>
+                        <li><a href="//www.facebook.com/pages/Play-Framework/50884087887"><span>Facebook</span></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="credits">
+                <a href="/" class="logo"><img src="/assets/images/logos/soft-logo.png"></a>
+                <a href="//typesafe.com" class="partner"><img src="/assets/images/logos/typesafe.png"></a>
+                <a href="http://zengularity.com" class="partner"><img src="/assets/images/logos/zengularity.png"></a>
+                <p>
+                    Play Framework is released under the Apache 2 License
+                </p>
+            </div>
+        </footer>
+
+        <a href="http://www.reactivemanifesto.org/">
+            <img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000"
+                src="//d379ifj7s9wntv.cloudfront.net/reactivemanifesto/images/ribbons/we-are-reactive-black-right.png">
+        </a>
+
+    </body>
+</html>
+

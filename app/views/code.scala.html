@@ -1,0 +1,71 @@
+@(contributors: Code.Contributors, title: String = "Code & contributors")(implicit requestHeader : RequestHeader)
+
+@renderContributors(contributors: Seq[Code.Contributor]) = {
+    @for(contributor <- contributors) {
+        <li><a href="@contributor.link"><img src="//gravatar.com/avatar/@contributor.gravatar?size=16"/><span>@contributor.login</span></a></li>
+    }
+}
+
+@main(title, "code"){
+    <header id="top">
+        <div class="wrapper">
+            <h1>
+                @title
+            </h1>
+        </div>
+    </header>
+    <section id="content">
+        <article>
+            <section>
+                <h1>About the code</h1>
+
+                <p>Play Framework is hosted on <a href="//github.com/playframework">Github</a> using the Git version control system. You can get the code with the following command:</p>
+                <pre><code>git clone git://github.com/playframework/playframework.git</code></pre>
+                <p>If you're looking for the code for the previous Play 1.x series, it's available in another repository:</p>
+                <pre><code>git clone git://github.com/playframework/play.git</code></pre>
+                <p>
+                    To contribute, check out the <a href="@controllers.documentation.ReverseRouter.latest(None, "Guidelines")">contributor guide</a> and learn how to <a href="@controllers.documentation.ReverseRouter.latest(None, "BuildingFromSource")">build Play from source</a>.
+                </p>
+
+                <h2>Licence</h2>
+                <p>The Play Framework source code is released under the <a href="//www.apache.org/licenses/LICENSE-2.0.html">Apache 2 licence</a>.</p>
+
+                @commonSidebar("h2")
+
+            </section>
+            <section>
+                <h1>Team &amp; contributors</h1>
+
+                @for(contributor <- contributors.core) {
+                    <div class="coreteam">
+                        <a href="@contributor.link">
+                            <img src="//gravatar.com/avatar/@contributor.gravatar?size=80"/>
+                            <h2>@contributor.name.getOrElse(contributor.login)</h2>
+                        </a>
+                        <p>
+                        @contributor.bio.map(text => Html(utils.Markdown.toHtml(text)))
+                        </p>
+                    </div>
+                }
+
+                <h2>Main contributors</h2>
+
+                @for((organisation, members) <- contributors.organisationBased) {
+                    <h3>From <a href="@organisation.url">@organisation.name</a></h3>
+
+                    <ul class="contributors">
+                        @renderContributors(members)
+                    </ul>
+                }
+
+                <h2>Other contributors</h2>
+
+                <ul class="contributors others">
+                    @renderContributors(contributors.others)
+                </ul>
+
+            </section>
+        </article>
+    </section>
+}
+

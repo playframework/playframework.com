@@ -1,0 +1,34 @@
+@import "nib"
+@import "util/_index"
+
+global-reset()
+
+*
+    box-sizing: border-box
+
+body
+    background: white
+    color: sand-text
+    text: default
+    -webkit-font-smoothing: antialiased
+
+@media only screen and (max-device-width: 500px)
+    body
+        -webkit-text-size-adjust:none
+
+a
+    text-decoration: none
+
+@import "modules/_index.styl"
+@import "pages/_index.styl"
+
+a[href="#"], a[href="#todo"], [todo]
+    &:before
+        content: "TODO"
+        background: #b00
+        padding: 0 2px
+        margin-right: 4px
+        border-radius: 2px
+        color: white
+        font-size: 8px
+        font-weight: bold

@@ -1,0 +1,55 @@
+@(module: Module, releases: Seq[Release])(implicit requestHeader : RequestHeader)
+
+@layout {
+            
+    <h1>@module.fullname [@module.name] module</h1>
+    
+    <blockquote>
+        <p>
+            This module is for the <strong>Play 1.x</strong> series only.
+        </p>
+    </blockquote>
+    
+    @Html(utils.Textile.toHTML(module.description))
+    
+    <p>
+        <a href="@module.homePage">@module.homePage</a>
+    </p>
+    
+    <p>
+        Written by @module.author.
+    </p>
+    
+    @if(!releases.isEmpty) {
+        
+        <h2>Published releases</h2>
+
+        <table>
+            <tbody>
+                @releases.map { release =>
+                    <tr>
+                        <td><strong>@release.version</strong></td>
+                        <td>@(new java.text.SimpleDateFormat("MMM dd yyyy").format(release.date))</td>
+                        <td><a href="@routes.Modules.documentation(module.name, release.version, "home")">Documentation</a></td>
+                        <td><a href="@routes.Modules.download(module.name, release.version)">Download</a></td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <p>
+            To install locally this module use the <code>install</code> command:
+        </p>
+
+        <pre><code>play install @(module.name)-{version}</code></pre>
+
+        <p>To add this module as dependency of your application, add it to the dependencies.yml file:</p>
+
+    <pre><code>require:
+        - play -> @(module.name) {version}</code></pre>
+        
+    }
+    
+    
+            
+}

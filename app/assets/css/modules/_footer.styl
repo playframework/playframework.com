@@ -1,0 +1,100 @@
+body > footer
+    margin: 50px 0 0
+    background: grey-dark - #111
+    color: white
+    text: center
+    .logo
+        float: left
+    .wrapper
+        clear: after
+        padding: 40px 30px
+        div
+            width: 25%
+            padding: 0 10px
+            float: left
+        @media only screen and (max-width: 960px)
+            padding: 20px
+            div
+                width: 50%
+        @media only screen and (max-width: 450px)
+            div
+                width: auto
+                float: none
+                margin-top: 30px
+        h3
+            padding: 9px 0
+            text: title bold
+            font-size: 16px
+            border-bottom: 1px solid #444
+    .credits
+        width: 880px
+        margin: 0 auto
+        padding: 40px 0
+        border-top: 1px solid #444
+        text-align: center
+        color: #777
+        @media only screen and (max-width: 960px)
+            padding: 20px
+            width: auto
+            p
+                clear: both
+                padding: 20px 0 0
+    .partner
+        float: right
+        margin-left: 10px
+    ul
+        margin: 10px 0 0
+        li
+            padding: 4px 0
+            //border-top: 1px solid grey-dark - #080808
+    a
+        color: #999
+        &:hover
+            color: green
+    em
+        color: #666
+        text: small uppercase
+    img
+        height: 18px
+        vertical-align: middle
+
+#support
+    background: grey-dark
+    clear: after
+    padding: 40px 0
+    a
+        color: #aaa
+        &:hover
+            color: green
+            text-decoration: none
+    .wrapper
+        padding: 40px
+        clear: after
+    article
+        display: inline-block
+        height: 50px
+        text-align: left
+        padding: 0 0 0 70px
+        &.community
+            background: image("support/community.png") no-repeat
+            retina("support/community.png", auto 50px)
+        &.professional
+            margin-left: 50px
+            background: image("support/pro.png") no-repeat
+            retina("support/pro.png", auto 50px)
+
+    @media only screen and (max-width: 960px)
+        padding: 1px 20px !important
+        article
+            display: block
+            height: auto
+            margin: 30px 0 !important
+
+    h3
+        margin: 3px 0
+        color: white
+    li
+        padding: 0 10px 5px 0
+        display: inline-block
+        &:before
+            content: none

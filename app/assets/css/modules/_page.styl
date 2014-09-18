@@ -1,0 +1,127 @@
+#top
+    padding: 40px 0 100px
+    background: green
+    color: white
+    h1
+        text: title bigger
+
+#content
+    position: relative
+    clear: after
+    min-height: 600px
+    width: 960px
+    margin: -60px auto 0
+    padding: 0 40px
+    z-index: 2
+    background: #fff
+    @media only screen and (max-width: 960px)
+        width: 100%
+        padding: 0 10px
+
+    @media screen and (min-width: 1020px)
+        &:before
+            content: " "
+            background: image("layout/content-shadow@2x.png") 0 -542px no-repeat, image("layout/content-shadow@2x.png") right 0 no-repeat
+            absolute: top 0 left -23px
+            right: -23px
+            display: block
+            height: 540px
+            z-index: -1
+
+article, aside
+    @extend .typo
+
+.wrapper
+    width: site-width
+    margin: 0 auto
+    padding: 0 40px
+    @media only screen and (max-width: 960px)
+        width: auto
+
+// With right menu
+.content-column
+    #content
+        background: #fff image("layout/right-fake-column.png") right top repeat-y
+        background-size: 300px 1px
+        retina("layout/right-fake-column.png", 300px 1px)
+
+        article, .main
+            width:70%
+            float:left
+            padding-right: 40px
+
+        aside
+            counter-reset: steps
+            width: 30%
+            float: left
+            padding: 18px 0 0 40px
+            ul
+                padding: 0 0 20px
+                border-bottom: 1px solid grey-light
+            h3
+                text: center
+            h3:before
+                counter-increment: steps
+                content: counter(steps)
+                display: block
+                margin: 0 auto 4px
+                width: 20px
+                height: 20px
+                line-height: 20px
+                text-align: center
+                vertical-align: 2px
+                border-radius: 10px
+                background: green
+                color: white
+                font-size: 14px
+
+        @media only screen and (max-width: 960px)
+            background: #fff
+            padding: 0
+            article, .main, aside
+                width: 100%
+                overflow: hidden
+                float: none
+                padding: 10px
+
+            aside
+                border-top: 1px solid #ccc
+                background: #f5f5f5
+
+// Split in two wih dark header
+.split-page
+    #content
+        padding: 0
+        background: image("support/line.png") left top repeat-x
+        // retina("support/line.png", 100% 80px)
+        background-size: 100% 80px
+
+        section
+            width: 50%
+            float: left
+            padding: 0 40px
+            min-height: 500px
+            background-position: center 15px
+            background-repeat: no-repeat
+            background-size: auto 50px
+            &:last-child
+                box-shadow: -1px 0 0 rgba(#000, .1)
+            h1
+                margin-top: 100px
+                font-size: 30px
+                text-align: center
+
+            h2
+                text: large
+            h3
+                margin: 15px 0 0
+                text: big
+
+        @media only screen and (max-width: 960px)
+            background: image("support/line.png") left top repeat-x
+            background-size: 100% 80px
+            section
+                width: 100%
+                float: none
+                padding: 10px
+

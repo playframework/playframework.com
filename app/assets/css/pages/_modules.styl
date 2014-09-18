@@ -1,0 +1,124 @@
+.modules
+    @extend .content-column
+
+    #content
+
+        header
+            height: 60px
+            margin: 0 -40px
+            padding: 14px 40px
+            background: grey-dark
+
+            #module-search
+                width: 320px
+                height: 30px
+                margin-right: 10px
+                padding: 0 10px
+                border: none
+                background: grey-dark - #030303
+                background: grey-dark - #111
+                color: #fff
+                font-size: 16px
+                outline: 0
+                border-radius: 4px
+                &::-webkit-input-placeholder
+                    color: #626262
+                &:-moz-placeholder
+                    color: #626262
+
+            fieldset
+                display: inline-block
+                vertical-align: top
+                margin: 0 10px
+                text: title bold
+                label
+                    display: block
+                    float: left
+                    height: 30px
+                    line-height: 32px
+                    padding: 0 10px
+                    margin-left: 1px
+                    background: grey-dark - #111
+                    color: #626262
+                    &:first-of-type
+                        border-radius: 4px 0 0 4px
+                    &:last-of-type
+                        border-radius: 0 4px 4px 0
+                input
+                    absolute: top -999em left 0
+                input:checked + label
+                    background: grey-dark - #171717
+                    color: white
+
+
+    #list
+        color: #999
+        min-height: 600px
+        > li
+            clear: after
+            padding: 10px 0
+            border-bottom: 1px solid sand - #111
+        h2
+            margin: 0
+            color: grey-dark
+            text: title
+            small
+                font-size: 14px
+                color: grey-dark + #444
+
+        ul li
+            margin: 10px 0
+            display: inline-block
+            padding: 0 20px 0 0
+
+        .description
+            display: block
+            margin: 0
+            padding: 0
+            cite
+                color: green-alt
+            time
+                padding: 0 10px
+                font-size: 11px
+
+        .play
+            display: block
+            float: right
+            clear: right
+            margin: 3px 0 0 10px
+            text-align: center
+            strong
+                display: block
+                width: 90px
+                color: white
+                border-radius: 4px
+                padding: 3px 10px
+            em
+                display: block
+            &.v2 strong
+                background: green
+            &.v1 strong
+                background: blue
+
+        .full
+            margin: 20px 0
+            font-size: 13px
+            display: none
+        li.open .full
+            display: block
+
+        .installation
+            margin: 10px
+            border: 1px solid green
+            border-radius: 3px
+            background: #e6f3d1
+            color: grey-dark
+            font-size: 11px
+            &:before
+                content: "Quick installation"
+                display: inline-block
+                background: green
+                margin-right: 5px
+                padding: 5px
+                color: #fff
+                text: title

@@ -1,0 +1,35 @@
+@(content: Html)(implicit requestHeader : RequestHeader)
+
+@main("Modules", "documentation") {
+    
+    <section id="top">
+        <div class="wrapper">
+            <h1>Community contributed extensions</h1>
+        </div>
+    </section>
+    
+    <div id="content" class="wrapper">
+        
+        <article>
+            
+            @content
+            
+        </article>
+        
+        <aside>
+            <h3>Selected modules</h3>
+            <ul>
+                <li><a href="@routes.Modules.show("gae")">Google App Engine</a></li>
+                <li><a href="@routes.Modules.show("pdf")">PDF Generation</a></li>
+                <li><a href="@routes.Modules.show("sass")">SASS and SCSS</a></li>
+                <li><a href="@routes.Modules.show("gwt2")">Google Web Toolkit</a></li>
+                <li><a href="@routes.Modules.show("securesocial")">Secure Social</a></li>
+                <li><a href="@routes.Modules.show("greenscript")">Minimize javascript/css files</a></li>
+                <li><a href="@routes.Modules.show("morphia")">Mongo DB</a></li>
+                <li><a href="@routes.Modules.show("search")">Simple search</a></li>
+            </ul>
+        </aside>
+        
+    </div>
+    
+}

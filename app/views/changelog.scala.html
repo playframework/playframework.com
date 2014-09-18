@@ -1,0 +1,18 @@
+@(markdown: Html)(implicit requestHeader : RequestHeader)
+
+@main("Play Change Log", "changelog"){
+    <header id="top">
+        <div class="wrapper">
+            <h1>Play Change Log</h1>
+        </div>
+    </header>
+    <section id="content">
+        <article>
+            @markdown
+        </article>
+        <aside>
+            @commonSidebar()
+        </aside>
+    </section>
+    @prettify()
+}

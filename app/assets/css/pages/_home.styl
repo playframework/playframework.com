@@ -1,0 +1,350 @@
+.home
+    #top
+        padding: 60px 0 350px
+        h1
+            height: 155px
+            margin-left: -10px
+            padding-left: 280px
+            background: image("home/title.png") no-repeat
+            retina("home/title.png", 245px)
+            text: biggest
+
+    #content
+        margin: -260px auto 0
+
+    h2
+        padding-top: 1em
+
+    .hat
+        clear: both
+        width: 700px
+        padding-top: 1px
+        font-size: 20px
+
+    article.feature
+        position: relative
+        clear: after
+        padding-left: 50%
+        font-size: 16px
+        &.alt
+            padding-left: 0
+            padding-right: 50%
+        &.developer, &.scale, &.modern
+            height: 400px
+        &.scale
+            height: 300px
+        &.modern
+            height: 350px
+        &.small
+            clear: none
+            margin: 60px 0
+            padding: 20px
+            float: left
+            width: 307px
+            font-size: 14px
+            &.strong
+                padding-left: 0
+                width: 287px
+            &.extend
+                width: 286px
+                padding-right: 0
+            h2
+                margin-top: 0
+                padding-top: 0
+                font-size: 22px
+        li
+            color: #50b4a2
+            text: title bold
+            font-size: 1.2em
+
+#start
+    float: left
+    width: 230px
+    h2
+        margin: 30px 0 10px
+        color: grey-dark
+        text: title big uppercase
+
+    .download
+        button: green
+
+    .getting-started
+        position: relative
+        clear: after
+        a
+            float: left
+            width: 50%
+            button: green
+            border-left: 1px solid green + #111
+            border-right: 1px solid green - #111
+            &:first-child
+                border-radius: 5px 0 0 5px
+                border-left: none
+            &:last-child
+                border-radius: 0 5px 5px 0
+                border-right: none
+        &:before
+            content: "&"
+            absolute: top 50% left 50%
+            circle: 20px
+            margin: -12px 0 0 -10px
+            background: green - #444
+            box-shadow: inset 0 1px 5px rgba(#000, .3), 0 1px 0 rgba(#fff, .5)
+            color: white
+
+    p
+        margin: 10px 0
+        text: center
+        a
+            color: grey-text
+            text: underline
+            &:hover
+                color: grey-text - #222
+                text: no-underline
+
+#video
+    position: relative
+    float: right
+    width: 610px
+    height: 343px
+    margin: -40px 0 30px
+    color: #fff
+    background: url(/assets/images/home/video.png)
+    h3
+        text: title big
+        line-height: 50px
+        text-align: center
+    &:after
+        content: " "
+        absolute: top 100% left 0
+        width: inherit
+        height: 16px
+        background: image("home/video-shadow@2x.png") center top no-repeat
+    .lang-switch
+        position: absolute
+        top: 143px
+        left: 160px
+        width: 290px
+        height: 60px
+        z-index: 10
+    &.playing
+        .lang-switch
+            display: none
+        &:hover .lang-switch
+            display: block
+    a
+        display: block
+        position: absolute
+        top: 0
+        width: 170px
+        height: 60px
+        padding: 0 20px
+        text: title uppercase
+        font-size: 22px
+        border-radius: 60px
+        background: rgba(#fff, .3) url(/assets/images/home/video-play.png) 0 0 no-repeat
+        transition: background 300ms linear
+        color: #333
+        line-height: 60px
+        text-align: center
+        &:hover
+            background-color: #fff
+    .play-scala
+        left: 0
+        padding-right: 60px
+        background-position: 120px 0px
+    .play-java
+        padding-left: 60px
+        right: 0
+    &.play-scala .play-scala, &.play-java .play-java
+        background-color: #fff
+
+#videoframe
+    position: absolute
+    top: 0
+    left: 0
+    z-index: 5
+
+#workflow
+    absolute: top 0px left 0
+    -webkit-perspective: 100px
+    -webkit-perspective-origin: 200px 0
+    -moz-perspective: 100px
+    -moz-perspective-origin: 200px 0
+    perspective: 100px
+    perspective-origin: 200px 0
+    div
+        position: absolute
+        top: 0
+        left: 0
+        width: 401px
+        height: 289px
+        background-size: cover
+        background-repeat: no-repeat
+        -webkit-backface-visibility: hidden
+        -webkit-transform-style: preserve-3d
+        -moz-backface-visibility: hidden
+        -moz-transform-style: preserve-3d
+        backface-visibility: hidden
+        transform-style: preserve-3d
+        opacity: 1
+        //transition: -webkit-transform 300ms ease-in, opacity 200ms linear
+    .terminal
+        background-image: image('home/workflow/terminal.png')
+        retina('home/workflow/terminal.png', cover)
+    .editor
+        background-image: image('home/workflow/editor.png')
+        retina('home/workflow/editor.png', cover)
+    .browser
+        background-image: image('home/workflow/browser.png')
+        retina('home/workflow/browser.png', cover)
+
+    .terminal
+        transform: translate3d(0,0,0px)
+        background-position: 0 0
+    .editor
+        transform: translate3d(0,250px,0) rotateX(-20deg)
+        background-position: 0 0
+    .browser
+        background-position: 0 0
+        transform: translate3d(0,300px,0) rotateX(-20deg)
+
+#scale
+    absolute: top 50px right 0
+    box: 350px, 250px
+    background: white image("home/scale/lines.png") 0 37px repeat-x
+    retina("home/scale/lines.png", 1px 142px)
+    border: 1px solid #c5c5c3
+    border-radius: 3px
+    overflow: hidden
+    h6
+        color: #c5c5c3
+        text: uppercase center
+        font-size: 13px
+    .triggers
+        absolute: bottom 0 left 0
+        width: 100%
+        height: 50px
+        margin: 0
+        background: #333
+        span
+            display: block
+            absolute: top 0 left 0
+            width: 100%
+            height: 50px
+            background: image("home/scale/1.png") center center no-repeat;
+            retina("home/scale/1.png", 252px 23px)
+            opacity: 0
+            transform: translate3d(0,0,0)
+            -webkit-transition: opacity 300ms linear
+            -moz-transition: opacity 300ms linear
+            transition: opacity 300ms linear
+            &.instance1
+                opacity: 1
+            &.instance2
+                background-image: image("home/scale/2.png")
+                retina("home/scale/2.png", 252px 23px)
+            &.instance3
+                background-image: image("home/scale/3.png")
+                retina("home/scale/3.png", 252px 23px)
+            &.instance4
+                background-image: image("home/scale/4.png")
+                retina("home/scale/4.png", 252px 23px)
+
+    div
+        absolute: bottom 0
+        margin-left: -25px
+        width: 50px
+        min-height: 60px
+        border-radius: 4px 4px 0 0
+        transform: translate3d(0,0,0)
+        &.instance1
+            left: 16%
+            background: #58b4a1
+            height: 100px
+        &.instance2
+            left: 38%
+            background: #6cbe71
+        &.instance3
+            left: 61%
+            background: #86ca34
+        &.instance4
+            left: 83%
+            background: #99d309
+
+#modern
+    absolute: top 50px left 0
+    width: 332px
+    height: 310px
+    background: image("home/techs.png") 20px 23px
+    retina("home/techs.png", 291px 728px)
+    div
+        width: inherit
+        height: inherit
+        background: image("home/mac.png") 0 0
+        retina("home/mac.png", 332px 310px)
+
+#references
+    clear: both
+    clear: after
+    text-align: center
+    h2
+        text: bigger title
+        color: grey-dark
+        margin: 10px
+    a
+        display: inline-block
+        margin: 10px
+        height 45px
+        background: image("home/references.png") no-repeat
+        retina("home/references.png", 960px 45px)
+        text-indent: -9999em
+        &.linkedin
+            width: 165px
+        &.klout
+            width: 120px
+            background-position: -178px
+        &.guardian
+            width: 201px
+            background-position: -315px 0
+        &.gilt
+            width: 90px
+            background-position: -534px 0
+        &.egraphs
+            width: 132px
+            background-position: -643px 0
+        &.zaptravel
+            width: 166px
+            background-position: -796px 0
+
+
+@media only screen and (max-width: 960px)
+    .home
+        #top
+            padding: 40px 0
+            h1
+                height: auto
+                margin: 0
+                padding-left: 0
+                background: none
+
+        #content
+            margin: 0
+
+        #video, #start
+            float: none
+            margin: 20px auto
+        article.feature
+            padding: 0 !important
+            height: auto !important
+            &.small
+                float: none
+                width: auto
+        #modern, #workflow, #scale
+            display: none
+        .hat
+            width: auto
+
+@media only screen and (max-width: 700px)
+    #video, #start
+        display: none

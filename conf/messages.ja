@@ -1,0 +1,8 @@
+# Note: This file is in UTF-8. If using an IDE that defaults to ISO-8859-1 for properties files (eg IntelliJ),
+# you'll need to reconfigure it for this project to use UTF-8.
+
+lang.name=日本語
+
+documentation.contribute.message=このドキュメントの翻訳は Play チームによってメンテナンスされているものではありません。 \
+  間違いを見つけた場合、このページのソースコードを {0}ここ{1} で確認することができます。 \
+  {2}ドキュメントガイドライン{3} を読んで、お気軽にプルリクエストを送ってください。

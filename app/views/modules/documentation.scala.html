@@ -1,0 +1,36 @@
+@(module: String, content: String)(implicit requestHeader : RequestHeader)
+
+@main("Modules", "documentation") {
+    
+    <section id="top">
+        <div class="wrapper">
+            <h1>Community contributed extensions</h1>
+        </div>
+    </section>
+    
+    <div id="content" class="wrapper">
+        <article>
+            @Html(content)
+        </article>
+        <aside>
+            
+            <h3>Browse</h3>
+            <ul>
+                <li><a href="@routes.Modules.show(module)">Back to module description</a></li>
+                <li id="gotoc"><a href="home">Table of content</a></li>
+            </ul>
+            
+            <h3>Contents</h3>
+            <div id="toc"></div>
+            
+        </aside>
+    </div>
+    
+    <script type="text/javascript" src="@routes.Assets.versioned("javascripts/modules/navigation.js")" charset="utf-8"></script>
+    <script type="text/javascript" charset="utf-8">
+        buildNavigation()
+    </script>
+    
+    @prettify()
+    
+}
