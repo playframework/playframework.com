@@ -1,3 +1,18 @@
+## Play 2.3.5
+
+*Released 7 October 2014*
+
+**Vulnerabilities fixed**
+
+* [CVE-2014-3630](/security/vulnerability/CVE-2014-3630-XmlExternalEntity) XML External Entity exploit
+
+**Other changes**
+
+* [2767](https://github.com/playframework/playframework/issues/2767) Gracefully handle hostname cannot be verified HTTPS errors.
+* [3471](https://github.com/playframework/playframework/pull/3471) Ensure AddCsrfToken provides original context.
+
+[Full changelog](https://github.com/playframework/playframework/issues?q=milestone%3A2.3.5)
+
 ## Play 2.3.4
 
 *Released 1 September 2014*
@@ -97,6 +112,14 @@
 [Highlights](http://playframework.com/documentation/2.3.x/Highlights23)
 [Migration Guide](http://playframework.com/documentation/2.3.x/Migration23)
 [Full changelog](https://github.com/playframework/playframework/issues?milestone=3&state=closed)
+
+## Play 2.2.5
+
+*Released 7 October 2014*
+
+* [3471](https://github.com/playframework/playframework/pull/3471) Ensure AddCsrfToken provides original context.
+
+[Full changelog](https://github.com/playframework/playframework/issues?q=milestone%3A2.2.5)
 
 ## Play 2.2.4
 
