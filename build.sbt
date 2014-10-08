@@ -19,7 +19,7 @@ libraryDependencies ++= Seq(
   ws
 )
 
-scalaVersion := "2.11.1"
+scalaVersion := "2.11.2"
 
 StylusKeys.useNib in Assets := true
 
