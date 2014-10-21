@@ -129,8 +129,20 @@ class PlayGitRepository(val gitDir: File, val remote: String = "origin", basePat
 }
 
 class GitFileRepository(playRepo: PlayGitRepository, hash: ObjectId, base: Option[String]) extends ExtendedFileRepository {
+
+  def resolve(path: String): String = {
+    // Split into parts, fold it from the right back into parts, skipping any part after a .. part
+    val resolvedPath = path.split("/").foldRight((List.empty[String], 0)) {
+      case (part, (parts, toSkip)) if part == ".." => (parts, toSkip + 1)
+      case (part, (parts, toSkip)) if toSkip > 0 => (parts, toSkip - 1)
+      case (part, (parts, _)) => (part :: parts, 0)
+    }._1
+    // Prepend the base if it exists, and make back into a string
+    base.fold(resolvedPath)(_ :: resolvedPath).mkString("/")
+  }
+
   def loadFile[A](path: String)(loader: (InputStream) => A) = {
-    playRepo.loadFile(hash, base.fold(path)(_ + "/" + path)).map { file =>
+    playRepo.loadFile(hash, resolve(path)).map { file =>
       try {
         loader(file._2)
       } finally {
@@ -142,12 +154,12 @@ class GitFileRepository(playRepo: PlayGitRepository, hash: ObjectId, base: Optio
   def findFileWithName(name: String) = playRepo.findFileWithName(hash, base, name)
 
   def handleFile[A](path: String)(handler: (FileHandle) => A) = {
-    playRepo.loadFile(hash, base.fold(path)(_ + "/" + path)).map {
+    playRepo.loadFile(hash, resolve(path)).map {
       case (length, is) => handler(FileHandle(path.drop(path.lastIndexOf('/') + 1), length, is, () => is.close()))
     }
   }
 
-  def listAllFilesInPath(path: String) = playRepo.listAllFilesInPath(hash, base.fold(path)(_ + "/" + path))
+  def listAllFilesInPath(path: String) = playRepo.listAllFilesInPath(hash, resolve(path))
 
   override def toString = {
     s"GitFileRepository(${playRepo.gitDir}:${playRepo.remote}@${hash.name}})"

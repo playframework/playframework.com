@@ -28,6 +28,20 @@ class GitFileRepositorySpec extends Specification {
       playRepo.allBranches.map(_._1) must containAllOf(Seq("2.1.x", "2.0.x"))
     }
 
+    "work with relative paths" in {
+      gitRepo.loadFile("working/scalaGuide/main/async/../http/code/ScalaActions.scala")(IOUtils.toString) must
+        beSome.which(_ must contain("Action"))
+    }
+
+    "work with doubly relative paths" in {
+      gitRepo.loadFile("working/scalaGuide/main/async/code/../../http/code/ScalaActions.scala")(IOUtils.toString) must
+        beSome.which(_ must contain("Action"))
+    }
+
+    "not escape outside the base path" in {
+      gitRepo.loadFile("../../framework/build.sbt")(IOUtils.toString) must beNone
+    }
+
   }
 
 }
