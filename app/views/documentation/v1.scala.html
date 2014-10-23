@@ -1,12 +1,11 @@
 @(context: models.documentation.TranslationContext, page: String, content: String)(implicit req: RequestHeader)
 
-@header(context, page, Seq("Java" -> "index.html")) {
-
-    <article>
-        @Html(content)
-    </article>
+@header(page) {
 
     <aside>
+
+        @nav(context, page, Seq("Java" -> "index.html"))
+
         @for(version <- context.version) {
             <form id="search" method="get" action="//www.google.com/search">
                 <input type="search" name="q" placeholder="Search @version docs" results="10">
@@ -33,6 +32,10 @@
             <a href="http://www.the-play-book.co.uk/"><img src="@routes.Assets.versioned("images/docs/introducing-play-cover.gif")"></a> </li>
         </p>
     </aside>
+
+    <article>
+        @Html(content)
+    </article>
 }
 
 <script type="text/javascript" src="@routes.Assets.versioned("javascripts/play1/navigation.js")" charset="utf-8"></script>
