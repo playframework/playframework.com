@@ -1,25 +1,11 @@
 @(context: models.documentation.TranslationContext, page: String = "Documentation", content: Option[String] = None, sidebar: Option[String] = None, source: Option[String] = None)(implicit req : RequestHeader)
 
-@header(context, page, Seq("Scala" -> "scala/index.html", "Java" -> "java/index.html")) {
-    <article>
-        @content.map { html =>
-            @Html(html)
-
-            @source.map { source =>
-              <hr/>
-              <p>
-                  @Html(Messages("documentation.contribute.message",
-                      s"""<a href="$source">""", "</a>",
-                      s"""<a href="${controllers.documentation.ReverseRouter.latest(context.alternateLang, "Documentation")}">""", "</a>"
-                  )(context.lang))
-              </p>
-            }
-        }.getOrElse {
-            <h1>Page not found [ @page ]</h1>
-        }
-    </article>
+@header(page) {
 
     <aside>
+
+        @nav(context, page, Seq("Scala" -> "scala/index.html", "Java" -> "java/index.html"))
+
         @for(version <- context.version) {
             <form id="search" method="get" action="//www.google.com/search">
                 <input type="search" name="q" placeholder="Search @version docs" results="10">
@@ -37,6 +23,24 @@
         <p><a title="Play for Java" href="//typesafe.com/resources/e-book/play-for-java"><img src="@routes.Assets.versioned("images/docs/play-for-java-cover.jpg")"></a></p>
         <p><a title="Learning Play! Framework 2" href="//www.packtpub.com/learning-play-framework-2/book"><img src="@routes.Assets.versioned("images/docs/learning-play-cover.jpg")"></a></p>
     </aside>
+
+    <article>
+        @content.map { html =>
+            @Html(html)
+
+            @source.map { source =>
+              <hr/>
+              <p>
+                  @Html(Messages("documentation.contribute.message",
+                      s"""<a href="$source">""", "</a>",
+                      s"""<a href="${controllers.documentation.ReverseRouter.latest(context.alternateLang, "Documentation")}">""", "</a>"
+                  )(context.lang))
+              </p>
+            }
+        }.getOrElse {
+            <h1>Page not found [ @page ]</h1>
+        }
+    </article>
 }
 
 @prettify()

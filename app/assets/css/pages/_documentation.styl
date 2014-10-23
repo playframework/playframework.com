@@ -1,6 +1,10 @@
 toolbar-height=120px
 content-gap=40px
 
+hr.clear
+    clear: both
+    visibility: hidden
+
 .documentation
     &, article
         color: #333
@@ -98,15 +102,13 @@ content-gap=40px
 
 
     aside
-        absolute: top (toolbar-height) right 0
+        float: right
         width: 300px
         padding: 0 content-gap
 
 #toolbar
-    absolute: top 0 right 0
-    width: 300px
     line-height: 20px
-    padding: 20px content-gap 0
+    padding: 20px 0 0
     color: #999
     text: title bold
     white-space: nowrap
@@ -222,6 +224,8 @@ content-gap=40px
     .documentation
 
         #content
+            display: flex
+            flex-direction: column
             background: #fff
             article
                 margin-right: 0
@@ -231,11 +235,5 @@ content-gap=40px
                     padding-right: 10px
 
             aside
-                position: static
-                width: auto
-                padding: 0 10px
-
-            #toolbar
-                position: static
                 width: auto
                 padding: 0 10px
