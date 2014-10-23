@@ -1,4 +1,4 @@
-@(title: String, scope: String = "home")(content: Html)(implicit requestHeader : RequestHeader)
+ @(title: String, scope: String = "home")(content: Html)(implicit requestHeader : RequestHeader)
 <!DOCTYPE html>
 <html>
     <head>
@@ -10,7 +10,7 @@
         <link href="//fonts.googleapis.com/css?family=PT+Serif:700italic" rel="stylesheet" type="text/css">
         <link href="//fonts.googleapis.com/css?family=Open+Sans+Condensed:700,300" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="@routes.Assets.versioned("css/main.min.css")">
-        <link rel="icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")"/>
+        <link rel="shortcut icon" href="@routes.Assets.versioned("images/favicon.ico")"/>
         <meta name="globalsign-domain-verification" content="VZ40O1AAJJDZexnYFJe5pSmc1emq0A-FW8NOHOnBIx" />
 
         <!--[if lt IE 9]>
@@ -47,17 +47,31 @@
             <div class="pan">
                 <q>Is that what you're looking for?</q>
                 <figure>
-                    <img src="/assets/images/logos/normal-mini.png">
+                    <img src="/assets/images/logos/play_full_color.svg">
                      <figcaption>
-                        <a href="/assets/images/logos/normal.png">(png)</a>
-                        <a href="/assets/images/logos/normal.svg">(svg)</a>
+                        <a href="/assets/images/logos/play_full_color.svg">(svg)</a>
+                        <a href="/assets/images/logos/play_full_color.png">(png)</a>
                      </figcaption>
                 </figure>
                 <figure>
-                    <img src="/assets/images/logos/black-mini.png">
+                    <img src="/assets/images/logos/play_icon_full_color.svg">
                      <figcaption>
-                        <a href="/assets/images/logos/black.png">(png)</a>
-                        <a href="/assets/images/logos/black.svg">(svg)</a>
+                        <a href="/assets/images/logos/play_icon_full_color.svg">(svg)</a>
+                        <a href="/assets/images/logos/play_icon_full_color.png">(png)</a>
+                     </figcaption>
+                </figure>
+                <figure class="reverse">
+                    <img src="/assets/images/logos/play_reverse.svg">
+                     <figcaption>
+                        <a href="/assets/images/logos/play_reverse.svg">(svg)</a>
+                        <a href="/assets/images/logos/play_reverse.png">(png)</a>
+                     </figcaption>
+                </figure>
+                <figure class="reverse">
+                    <img src="/assets/images/logos/play_icon_reverse.svg">
+                     <figcaption>
+                        <a href="/assets/images/logos/play_icon_reverse.svg">(svg)</a>
+                        <a href="/assets/images/logos/play_icon_reverse.png">(png)</a>
                      </figcaption>
                 </figure>
             </div>
@@ -128,8 +142,8 @@
                 </div>
             </div>
             <div class="credits">
-                <a href="/" class="logo"><img src="/assets/images/logos/soft-logo.png"></a>
-                <a href="//typesafe.com" class="partner"><img src="/assets/images/logos/typesafe.png"></a>
+                <a href="/" class="logo"><img src="/assets/images/logos/play_reverse.svg"></a>
+                <a href="//typesafe.com" class="partner"><img src="/assets/images/logos/typesafe_reverse.svg"></a>
                 <a href="http://zengularity.com" class="partner"><img src="/assets/images/logos/zengularity.png"></a>
                 <p>
                     Play Framework is released under the Apache 2 License
