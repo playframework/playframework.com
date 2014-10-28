@@ -1,7 +1,7 @@
 {
     "latest": {
-        "version": "2.3.5",
-        "date": "Oct 7 2014"
+        "version": "2.3.6",
+        "date": "Oct 28 2014"
     },
     "development": [
         {
@@ -12,6 +12,10 @@
         }
     ],
     "previous": [
+        {
+            "version": "2.3.5",
+            "date": "Oct 7 2014"
+        },
         {
             "version": "2.2.5",
             "url": "http://downloads.typesafe.com/play/2.2.5/play-2.2.5.zip",
