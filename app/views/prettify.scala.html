@@ -1,8 +1,8 @@
 <style type="text/css">
-@@import "@routes.Assets.versioned("stylesheets/prettify.css")";
+@@import "@StaticWebJarAssets.getUrl("prettify.css")";
 </style>
-<script type="text/javascript" charset="utf-8" src="@routes.Assets.versioned("javascripts/prettify.js")"></script>
-<script type="text/javascript" charset="utf-8" src="@routes.Assets.versioned("javascripts/lang-scala.js")"></script>
+<script type="text/javascript" charset="utf-8" src="@StaticWebJarAssets.getUrl("prettify.js")"></script>
+<script type="text/javascript" charset="utf-8" src="@StaticWebJarAssets.getUrl("lang-scala.js")"></script>
 <script type="text/javascript">
 $(function(){
 window.prettyPrint && prettyPrint()

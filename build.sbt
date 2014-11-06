@@ -16,6 +16,10 @@ libraryDependencies ++= Seq(
   "org.eclipse.jgit" % "org.eclipse.jgit" % "3.0.0.201306101825-r",
   "mysql" % "mysql-connector-java" % "5.1.18", // TODO: 5.1.34
   "com.damnhandy" % "handy-uri-templates" % "2.0.2",
+  "org.webjars" % "webjars-locator" % "0.19",
+  "org.webjars" % "jquery" % "1.8.2",
+  "org.webjars" % "html5shiv" % "3.7.2",
+  "org.webjars" % "prettify" % "4-Mar-2013",
   anorm,
   jdbc,
   filters,
