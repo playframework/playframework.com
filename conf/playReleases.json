@@ -13,6 +13,12 @@
     ],
     "previous": [
         {
+            "version": "2.2.6",
+            "url": "http://downloads.typesafe.com/play/2.2.6/play-2.2.6.zip",
+            "date": "Nov 14 2014",
+            "size": "107.7M"
+        },
+        {
             "version": "2.3.5",
             "date": "Oct 7 2014"
         },
