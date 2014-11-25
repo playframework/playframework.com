@@ -2,14 +2,14 @@
 
 *Released 28 October 2014*
 
-* [3506](https://github.com/playframework/playframework/3506) Correct group id and version of sbt-run-support sub project
-* [3342](https://github.com/playframework/playframework/3342) Ensure HttpExecutionContext calls delegates prepare method
-* [3533](https://github.com/playframework/playframework/3533) Ensure F.Option can be used in reverse routes
-* [3514](https://github.com/playframework/playframework/3514) Fix NPE for null values in JavaScript reverse router and provide missing binders
-* [3508](https://github.com/playframework/playframework/3508) Providing missing UUID JavaScript reverse router binder
-* [2959](https://github.com/playframework/playframework/2959) Anorm error handling improvements
-* [3049](https://github.com/playframework/playframework/3049) Reinstate Anorm Row extractor
-* [3062](https://github.com/playframework/playframework/3062) Provide Anorm column parser for JDBC array
+* [3506](https://github.com/playframework/playframework/issues/3506) Correct group id and version of sbt-run-support sub project
+* [3342](https://github.com/playframework/playframework/pull/3342) Ensure HttpExecutionContext calls delegates prepare method
+* [3533](https://github.com/playframework/playframework/pull/3533) Ensure F.Option can be used in reverse routes
+* [3514](https://github.com/playframework/playframework/pull/3514) Fix NPE for null values in JavaScript reverse router and provide missing binders
+* [3508](https://github.com/playframework/playframework/pull/3508) Providing missing UUID JavaScript reverse router binder
+* [2959](https://github.com/playframework/playframework/pull/2959) Anorm error handling improvements
+* [3049](https://github.com/playframework/playframework/pull/3049) Reinstate Anorm Row extractor
+* [3062](https://github.com/playframework/playframework/pull/3062) Provide Anorm column parser for JDBC array
 
 [Full changelog](https://github.com/playframework/playframework/issues?q=milestone%3A2.3.6)
 
