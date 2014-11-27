@@ -21,6 +21,7 @@ import scala.util.Try
 class Application @Inject() (
   cache: CacheApi,
   configuration: Configuration,
+  environment: Environment,
   messages: MessagesApi,
   ws: WSClient) extends Controller with Common {
 
@@ -108,10 +109,18 @@ class Application @Inject() (
     playVersion = "(unknown)",
     scalaVersion = "(unknown)")
 
-  def changelog = Action { implicit request =>
-    Play.maybeApplication.flatMap(app => Option(app.classloader.getResourceAsStream("public/markdown/changelog.md"))).map { is =>
+  def changelog = markdownAction("public/markdown/changelog.md", { implicit request =>
+    views.html.changelog(_)
+  })
+  
+  def conduct = markdownAction("public/markdown/code-of-conduct.md", { implicit request =>
+    views.html.conduct(_)
+  })
+
+  def markdownAction(markdownFile: String, template: RequestHeader => Html => Html) = Action { implicit request =>
+    environment.resourceAsStream(markdownFile).map { is =>
       try {
-        Ok(views.html.changelog(Html(Markdown.toHtml(IOUtils.toString(is), link => (link, link)))))
+        Ok(template(request)(Html(Markdown.toHtml(IOUtils.toString(is), link => (link, link)))))
           .withHeaders(CACHE_CONTROL -> "max-age=10000")
       } finally {
         is.close()

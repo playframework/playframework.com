@@ -13,6 +13,7 @@ GET         /code                                                    controllers
 GET         /get-involved                                            controllers.Application.getInvolved
 GET         /widget                                                  controllers.Application.widget(version: Option[String] ?= None)
 GET         /changelog                                               controllers.Application.changelog
+GET         /conduct                                                 controllers.Application.conduct
 
 POST        /preferredLang/:lang                                     controllers.Application.setPreferedLanguage(lang)
 
