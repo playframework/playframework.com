@@ -1,3 +1,18 @@
+## Play 2.3.7
+
+*Released 3 December 2014*
+
+* [3304](https://github.com/playframework/playframework/pull/3304) Close a security hole by using https to fetch artifacts
+* [3546](https://github.com/playframework/playframework/pull/3546) Handle multipart fields with colon inside
+* [3563](https://github.com/playframework/playframework/pull/3563) Backport #3291: Anorm support for joda-time DateTime and Instant
+* [3567](https://github.com/playframework/playframework/pull/3567) Backport #3243: Anorm: more column conversions
+* [3582](https://github.com/playframework/playframework/pull/3582) Backport #3576: Add anorm support for parsing UUIDs from JDBC Strings
+* [3584](https://github.com/playframework/playframework/pull/3584) Backport #3574: Anorm: more column integer conversions
+* [3646](https://github.com/playframework/playframework/pull/3646) Support OpenJDK 6 in WS SSL
+* [3692](https://github.com/playframework/playframework/pull/3692) Upgrade to jboss-logging 3.2.0
+
+[Full changelog](https://github.com/playframework/playframework/issues?q=milestone%3A2.3.7)
+
 ## Play 2.3.6
 
 *Released 28 October 2014*
