@@ -9,8 +9,7 @@ import utils.{ExtendedFileRepository, PlayGitRepository}
 
 import scala.util.control.NonFatal
 
-case class Documentation(default: Translation, defaultLang: Lang, generatedRepo: PlayGitRepository,
-                         translations: Map[Lang, Translation]) {
+case class Documentation(default: Translation, defaultLang: Lang, translations: Map[Lang, Translation]) {
 
   lazy val allLangs: List[Lang] = defaultLang :: translations.keys.toList.sortBy(_.toString)
 

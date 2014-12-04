@@ -6,7 +6,7 @@ import play.api.i18n.Lang
 
 import scala.util.matching.Regex
 
-case class DocumentationConfig(default: TranslationConfig, generatedRepo: TranslationConfig, translations: Seq[TranslationConfig])
+case class DocumentationConfig(default: TranslationConfig, translations: Seq[TranslationConfig])
 
 case class TranslationConfig(lang: Lang,
                              repo: File,

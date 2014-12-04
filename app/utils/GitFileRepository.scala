@@ -32,7 +32,8 @@ class PlayGitRepository(val gitDir: File, val remote: String = "origin", basePat
     Option(repository.getRef("refs/remotes/" + remote + "/" + ref))
       .map(_.getLeaf.getObjectId)
 
-  def fetch(): Unit = git.fetch().setTagOpt(TagOpt.FETCH_TAGS).setRemote(remote).call()
+  def fetch(): Unit = git.fetch().setTagOpt(TagOpt.FETCH_TAGS)
+    .setRemoveDeletedRefs(true).setRemote(remote).call()
 
   private def treeWalkIsFile(walk: TreeWalk) = {
     (walk.getFileMode(0).getBits & FileMode.TYPE_MASK) == FileMode.TYPE_FILE

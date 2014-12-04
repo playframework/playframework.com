@@ -32,7 +32,6 @@ class DocumentationPollingActor(repos: DocumentationGitRepos, documentationActor
   def receive = {
     case Tick =>
       repos.default.repo.fetch()
-      repos.generated.fetch()
       repos.translations.foreach(_.repo.fetch())
       scanAndSendDocumentation()
   }
@@ -58,34 +57,15 @@ class DocumentationPollingActor(repos: DocumentationGitRepos, documentationActor
   }
 
   private def scanAndSendDocumentation() {
-    val generatedRefs = (parseVersionsFromRefs(repos.generated.allTags) ++ parseVersionsFromRefs(repos.generated.allBranches))
-      .map(v => (v._1, v._2, repos.generated.fileRepoForHash(v._2)))
-    val generatedMasterHash = repos.generated.hashForRef("master")
-
-    val defaultRefs = (parseVersionsFromRefs(repos.default.repo.allTags) ++ parseVersionsFromRefs(
+    val defaultVersions = (parseVersionsFromRefs(repos.default.repo.allTags) ++ parseVersionsFromRefs(
       repos.default.repo.allBranches
         .filter(_._1.matches("""\d+\.\d+\.x"""))
-    )).map(v => (v._1, v._2, repos.default.repo.fileRepoForHash(v._2)))
-
-    // Aggregate the generated versions with the default versions
-    val defaultVersions = (generatedRefs ++ defaultRefs).groupBy(_._1).toSeq.map {
-      // Only one, return it as is
-      case (version, Seq((_, hash, repo))) => (version, hash.name, repo, version.name)
-      // More than one, aggregate
-      case (version, multiple) => (version, multiple.map(_._2.name).reduce(xorHashes),
-        new AggregateFileRepository(multiple.map(_._3)), version.name)
-    }
+    )).map(v => (v._1, v._2.name, repos.default.repo.fileRepoForHash(v._2), v._1.name))
 
     val defaultMasterVersion = determineMasterVersion(repos.default).flatMap {
       case (version, hash) if defaultVersions.forall(_._1 != version) =>
         val repo = repos.default.repo.fileRepoForHash(hash)
-        generatedMasterHash match {
-          case Some(ghash) => Some((version, xorHashes(hash.name, ghash.name),
-            new AggregateFileRepository(Seq(
-              repos.generated.fileRepoForHash(ghash), repo
-            )), "master"))
-          case None => Some((version, hash.name, repo, "master"))
-        }
+        Some((version, hash.name, repo, "master"))
       case _ => None
     }
 
@@ -117,7 +97,7 @@ class DocumentationPollingActor(repos: DocumentationGitRepos, documentationActor
       t.config.lang -> Translation(versions, t.repo, t.config.gitHubSource)
     }.toMap
 
-    val documentation = Documentation(defaultTranslation, repos.default.config.lang, repos.generated, translations)
+    val documentation = Documentation(defaultTranslation, repos.default.config.lang, translations)
 
     documentationActor ! UpdateDocumentation(documentation)
   }

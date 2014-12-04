@@ -140,7 +140,7 @@ object DocumentationActor {
 
   // Not part of protocol:
 
-  case class DocumentationGitRepos(default: DocumentationGitRepo, generated: PlayGitRepository,
+  case class DocumentationGitRepos(default: DocumentationGitRepo,
                                    translations: Seq[DocumentationGitRepo])
 
   case class DocumentationGitRepo(config: TranslationConfig, repo: PlayGitRepository)
@@ -163,7 +163,6 @@ class DocumentationActor(config: DocumentationConfig) extends Actor {
 
   private val repos = DocumentationGitRepos(
     createRepo(config.default),
-    new PlayGitRepository(config.generatedRepo.repo, config.generatedRepo.remote, config.generatedRepo.basePath),
     config.translations.map(createRepo)
   )
 
@@ -181,7 +180,6 @@ class DocumentationActor(config: DocumentationConfig) extends Actor {
 
   override def postStop() = {
     repos.default.repo.close()
-    repos.generated.close()
     repos.translations.foreach(_.repo.close())
   }
 

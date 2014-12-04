@@ -25,11 +25,9 @@ class ActorsPlugin(app: Application) extends Plugin {
       path <- docsConfig.getString("path").map(basePath)
       mainConfig <- docsConfig.getConfig("main")
       mainTranslation <- loadTranslationConfig(path, mainConfig)
-      generatedConfig <- docsConfig.getConfig("generated")
-      generatedTranslation <- loadTranslationConfig(path, generatedConfig)
       translations <- docsConfig.getConfigList("translations")
     } yield {
-      DocumentationConfig(mainTranslation, generatedTranslation,
+      DocumentationConfig(mainTranslation,
         translations.toList.collect(Function.unlift(loadTranslationConfig(path, _))))
     }
   }
