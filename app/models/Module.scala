@@ -20,15 +20,14 @@ object Module {
 
 }
 
+import play.api.db._
+
 @Singleton
-class ModuleFinder @Inject() () {
-  
-  import play.api.db._
+class ModuleFinder @Inject() (
+  db: Database) {
   
   import anorm._
   import anorm.SqlParser._
-  
-  import Play.current
   
   private val parser = {
     get[String]("Module.name") ~
@@ -50,18 +49,18 @@ class ModuleFinder @Inject() () {
     }
   }
   
-  def findEverything: Seq[(Module,Seq[Release])] = DB.withConnection { implicit c =>
+  def findEverything: Seq[(Module,Seq[Release])] = db.withConnection { implicit c =>
      SQL("""
         select * from Module 
         join ModuleRelease on Module.id = ModuleRelease.module_id 
       """).as(parser ~ versionParser *).groupBy(_._1).mapValues(_.map(_._2)).toSeq
   }
 
-  def findAll(keyword: String = ""): Seq[Module] = DB.withConnection { implicit c =>
+  def findAll(keyword: String = ""): Seq[Module] = db.withConnection { implicit c =>
     SQL("select * from Module where fullname like {keyword} order by name").on('keyword -> ("%" + keyword + "%")).as(parser *)
   }
 
-  def findById(name: String): Option[(Module,Seq[Release])] = DB.withConnection { implicit c =>
+  def findById(name: String): Option[(Module,Seq[Release])] = db.withConnection { implicit c =>
     val result = SQL("""
       select * from Module 
       left join ModuleRelease on Module.id = ModuleRelease.module_id 

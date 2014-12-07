@@ -62,7 +62,10 @@ object Modules {
 }
 
 @Singleton
-class Modules @Inject() () extends Controller {
+class Modules @Inject() (
+  environment: Environment) extends Controller {
+
+  val current = "hide Play.current"
 
   def index(keyword: String) = Action { implicit request =>
     request.headers.get(ACCEPT).filter(_ == "application/json").map { _ =>
@@ -93,14 +96,14 @@ class Modules @Inject() () extends Controller {
   }
 
   def download(name: String, version: String) = Action { implicit request =>
-    Play.getExistingFile("data/modules/" + name + "-" + version + ".zip").map {
+    environment.getExistingFile("data/modules/" + name + "-" + version + ".zip").map {
       case zip if request.method == "GET" => Ok.sendFile(zip): Result
       case zip if request.method == "HEAD" => Ok.withHeaders(CONTENT_LENGTH -> zip.length.toString): Result
     }.getOrElse(PageNotFound)
   }  
 
   def documentation(name: String, version: String, page: String) = Action { implicit request =>
-    Play.getExistingFile("data/modules/" + name + "-" + version + ".zip").map(new ZipFile(_)).flatMap { zip =>
+    environment.getExistingFile("data/modules/" + name + "-" + version + ".zip").map(new ZipFile(_)).flatMap { zip =>
       try {
         Option(zip.getEntry("documentation/manual/" + page + ".textile")).map { entry =>
           Source.fromInputStream(zip.getInputStream(entry)).mkString
@@ -123,7 +126,7 @@ class Modules @Inject() () extends Controller {
   private def PageNotFound(implicit request: RequestHeader) = NotFound(views.html.notfound())
 
   def dependencies(name: String, version: String) = Action { implicit request =>
-    Play.getExistingFile("data/modules/" + name + "-" + version + ".zip").map(new ZipFile(_)).flatMap { zip =>
+    environment.getExistingFile("data/modules/" + name + "-" + version + ".zip").map(new ZipFile(_)).flatMap { zip =>
       try {
         Option(zip.getEntry("conf/dependencies.yml")).map { entry =>
           Source.fromInputStream(zip.getInputStream(entry)).mkString

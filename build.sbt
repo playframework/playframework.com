@@ -21,6 +21,8 @@ libraryDependencies ++= Seq(
 
 scalaVersion := "2.11.4"
 
+routesGenerator := InjectedRoutesGenerator
+
 StylusKeys.useNib in Assets := true
 
 StylusKeys.compress in Assets := true

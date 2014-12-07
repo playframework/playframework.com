@@ -1,5 +1,6 @@
 package controllers.documentation
 
+import javax.inject.{ Inject, Provider, Singleton }
 import play.api.i18n.Lang
 import play.core.Router.Routes
 
@@ -9,7 +10,26 @@ import utils.routing._
 /**
  * Documentation router
  */
-object Router extends Routes {
+// object Router extends Routes {
+
+//   def instance: Router = play.api.Play.current.injector.instanceOf[Router]
+
+//   def errorHandler = instance.errorHandler
+
+//   def withPrefix(prefix: String): Routes = instance.withPrefix(prefix)
+
+//   def prefix = instance.prefix
+
+//   def documentation = instance.documentation
+
+//   def routes = instance.routes
+// }
+
+/**
+ * Documentation router
+ */
+@Singleton
+class Router @Inject() () extends Routes {
 
   override val errorHandler = play.api.http.LazyHttpErrorHandler
 
@@ -67,8 +87,20 @@ object Router extends Routes {
 }
 
 object ReverseRouter {
+  private def instance: ReverseRouter = play.api.Play.current.injector.instanceOf[ReverseRouter]
+  def index(lang: Option[Lang]) = instance.index(lang)
+  def home(lang: Option[Lang], version: String) = instance.home(lang, version)
+  def page(lang: Option[Lang], version: String, page: String = "Home") = instance.page(lang, version, page)
+  def api(version: String, path: String) = instance.api(version, path)
+  def latest(lang: Option[Lang], page: String = "Home") = instance.latest(lang, page)
+  def cheatsheet(lang: Option[Lang], version: String, category: String) = instance.cheatsheet(lang, version, category)
+}
+
+@Singleton
+class ReverseRouter @Inject() (routerProvider: Provider[Router]) {
+  private def router: Router = routerProvider.get
   def index(lang: Option[Lang]) = {
-    Router.prefix + lang.fold("")(l => "/" + l.code)
+    router.prefix + lang.fold("")(l => "/" + l.code)
   }
   def home(lang: Option[Lang], version: String) = {
     s"${index(lang)}/$version"
@@ -77,7 +109,7 @@ object ReverseRouter {
     s"${index(lang)}/$version/$page"
   }
   def api(version: String, path: String) = {
-    s"${Router.prefix}/$version/api/$path"
+    s"${router.prefix}/$version/api/$path"
   }
   def latest(lang: Option[Lang], page: String = "Home") = {
     this.page(lang, "latest", page)

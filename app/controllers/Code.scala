@@ -74,7 +74,12 @@ object Code {
 trait CodeForBinding
 
 @Singleton
-class Code @Inject() (configuration: Configuration, actorSystem: ActorSystem) extends Controller with CodeForBinding {
+class Code @Inject() (
+  configuration: Configuration,
+  actorSystem: ActorSystem,
+  ws: WSClient) extends Controller with CodeForBinding {
+
+  val current = "hide Play.current"
 
   import Code._
 
@@ -102,7 +107,7 @@ class Code @Inject() (configuration: Configuration, actorSystem: ActorSystem) ex
   private def fetchContributors(accessToken: String) = {
 
     def authCall(url: String) = {
-      WS.url(url).withHeaders(AUTHORIZATION -> ("token " + accessToken))
+      ws.url(url).withHeaders(AUTHORIZATION -> ("token " + accessToken))
     }
 
     def load(path: String) = {
