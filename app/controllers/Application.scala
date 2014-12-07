@@ -1,5 +1,6 @@
 package controllers
 
+import javax.inject.{ Inject, Singleton }
 import play.api._
 import play.api.i18n.Lang
 import play.api.mvc._
@@ -16,11 +17,35 @@ import play.api.libs.ws.WS
 import play.api.Play.current
 import scala.util.Try
 
-
 object Application extends Controller with Common {
 
+  private def instance: Application = Play.current.injector.instanceOf[Application]
 
-  lazy val releases: PlayReleases = {
+  def index = instance.index
+
+  def widget(version: Option[String]) = instance.widget(version)
+
+  def download(platform: Option[String] = None) = instance.download(platform)
+
+  def changelog = instance.changelog
+
+  def support = instance.support
+
+  def getInvolved = instance.getInvolved
+
+  // Deprecated links
+  def movedTo(url: String, originalPath: String) = instance.movedTo(url, originalPath)
+
+  def onHandlerNotFound(route: String) = instance.onHandlerNotFound(route)
+
+  def setPreferedLanguage(lang: String) = instance.setPreferedLanguage(lang)
+
+}
+
+@Singleton
+class Application @Inject() () extends Controller with Common {
+
+  private lazy val releases: PlayReleases = {
     Play.maybeApplication.flatMap(app => Option(app.classloader.getResourceAsStream("playReleases.json"))).flatMap { is =>
       try {
         Json.fromJson[PlayReleases](Json.parse(IOUtils.toByteArray(is))).asOpt
@@ -30,12 +55,12 @@ object Application extends Controller with Common {
     }.getOrElse(PlayReleases(PlayRelease("unknown", None, Some("unknown"), None), Nil, Nil))
   }
 
-  val VulnerableVersions = Set(
+  private val VulnerableVersions = Set(
     "2.0", "2.0.1", "2.0.2", "2.0.3", "2.0.4", "2.0.5",
     "2.1", "2.1.1", "2.1.2"
   )
 
-  def news(version: Option[String]): Seq[Html] = {
+  private def news(version: Option[String]): Seq[Html] = {
     val message = version.filter(VulnerableVersions).map { _ =>
 
       s"""<p style="font-weight: bold; color: red;">You are using a version of Play Framework that has a

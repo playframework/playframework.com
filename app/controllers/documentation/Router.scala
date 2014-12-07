@@ -11,11 +11,20 @@ import utils.routing._
  */
 object Router extends Routes {
 
-  var _prefix = ""
+  override val errorHandler = play.api.http.LazyHttpErrorHandler
+
+  private var _prefix = "/"
+
+  def withPrefix(prefix: String): Routes = {
+    _prefix = prefix
+    this
+  }
+
+  // var _prefix = ""
 
   def prefix = _prefix
 
-  def setPrefix(prefix: String) = _prefix = prefix
+  // def setPrefix(prefix: String) = _prefix = prefix
 
   def documentation = Nil
 

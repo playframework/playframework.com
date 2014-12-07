@@ -2,7 +2,8 @@ package actors
 
 import java.io.File
 
-import akka.actor.ActorRef
+import akka.actor.{ ActorSystem, ActorRef }
+import javax.inject.{ Inject, Singleton }
 import models.documentation._
 import play.api._
 import play.api.i18n.Lang
@@ -10,18 +11,22 @@ import play.api.libs.concurrent.Akka
 import scala.collection.JavaConversions._
 
 object Actors {
-  def documentationActor(implicit app: Application): Option[ActorRef] = actorsPlugin.flatMap(_.documentationActor)
+  def documentationActor(implicit app: Application): Option[ActorRef] = actors.documentationActor
 
-  def actorsPlugin(implicit app: Application) = app.plugin[ActorsPlugin]
+  private def actors(implicit app: Application) = app.injector.instanceOf[Actors]
 }
 
-class ActorsPlugin(app: Application) extends Plugin {
+@Singleton
+class Actors @Inject() (
+  environment: Environment,
+  configuration: Configuration,
+  actorSystem: ActorSystem) {
 
-  lazy val documentationActor = loadConfig.map(config => Akka.system(app).actorOf(DocumentationActor.props(config)))
+  val documentationActor: Option[ActorRef] = loadConfig.map(config => actorSystem.actorOf(DocumentationActor.props(config)))
 
-  def loadConfig: Option[DocumentationConfig] = {
+  private def loadConfig: Option[DocumentationConfig] = {
     for {
-      docsConfig <- app.configuration.getConfig("documentation")
+      docsConfig <- configuration.getConfig("documentation")
       path <- docsConfig.getString("path").map(basePath)
       mainConfig <- docsConfig.getConfig("main")
       mainTranslation <- loadTranslationConfig(path, mainConfig)
@@ -32,7 +37,7 @@ class ActorsPlugin(app: Application) extends Plugin {
     }
   }
 
-  def loadTranslationConfig(base: File, config: Configuration): Option[TranslationConfig] = {
+  private def loadTranslationConfig(base: File, config: Configuration): Option[TranslationConfig] = {
     for {
       lang <- config.getString("lang")
       repo <- config.getString("repo") if verifyTranslationPath(base, repo, lang)
@@ -51,26 +56,22 @@ class ActorsPlugin(app: Application) extends Plugin {
     }
   }
 
-  def basePath(base: String) = {
+  private def basePath(base: String) = {
     if (base == ".") {
-      new File(app.path, "data")
+      new File(environment.rootPath, "data")
     } else {
       new File(base)
     }
   }
 
-  def verifyTranslationPath(base: File, path: String, name: String) = {
+  private def verifyTranslationPath(base: File, path: String, name: String) = {
     val translationPath = new File(base, path)
     if (translationPath.exists()) {
       true
     } else {
-      Logger.warn("Not loading translation: " + name + " because it's configured repo " + translationPath.getCanonicalPath + " doesn't exist")
+      Logger.warn("Not loading translation: " + name + " because its configured repo " + translationPath.getCanonicalPath + " doesn't exist")
       false
     }
   }
 
-  override def onStart() = {
-    // Ensure the documentation actor is eagerly started
-    documentationActor
-  }
 }
