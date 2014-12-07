@@ -1,5 +1,6 @@
 package controllers
 
+import akka.actor.ActorSystem
 import javax.inject.{ Inject, Singleton }
 import play.api._
 import play.api.mvc.{Action, Controller}
@@ -73,7 +74,7 @@ object Code {
 trait CodeForBinding
 
 @Singleton
-class Code @Inject() () extends Controller with CodeForBinding {
+class Code @Inject() (configuration: Configuration, actorSystem: ActorSystem) extends Controller with CodeForBinding {
 
   import Code._
 
@@ -87,9 +88,9 @@ class Code @Inject() () extends Controller with CodeForBinding {
   private var contributors = FallbackContributors.contributors
 
   {
-    current.configuration.getString("github.access.token") match {
+    configuration.getString("github.access.token") match {
       case Some(accessToken) =>
-        Akka.system.scheduler.schedule(0 seconds, 24 hours) {
+        actorSystem.scheduler.schedule(0 seconds, 24 hours) {
           Logger.info("Fetching GitHub contributors...")
           fetchContributors(accessToken)
         }
@@ -212,6 +213,6 @@ import com.google.inject.name.Names
 class CodeModule extends AbstractModule {
   def configure() = {
     bind(classOf[CodeForBinding])
-      .to(classOf[Code])
+      .to(classOf[Code]).asEagerSingleton()
   }
 }
