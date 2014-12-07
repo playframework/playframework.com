@@ -1,5 +1,6 @@
 package controllers
 
+import javax.inject.{ Inject, Singleton }
 import play.api._
 import play.api.mvc.{Action, Controller}
 
@@ -13,11 +14,11 @@ import collection.SortedMap
 import scala.util.{Failure, Success}
 import utils.FallbackContributors
 
-object Code extends Controller {
+object Code {
 
-  def index = Action { implicit req =>
-    Ok(views.html.code(contributors))
-  }
+  private def instance: Code = Play.current.injector.instanceOf[Code]
+
+  def index = instance.index
 
   // To be a member of a blessed organisation (which is just the Play organisation) you need to have contributed to
   // Play 2 and have at least 10 contributions
@@ -36,16 +37,49 @@ object Code extends Controller {
 
   implicit val organisationOrdering = Ordering.by[Organisation, String](_.id).reverse
 
-  // -- Fetch team
-
-  @volatile var contributors = FallbackContributors.contributors
-
   val organisations = Seq(
     Organisation("playframework", "Play framework", "https://www.playframework.org", true),
     Organisation("zenexity", "Zengularity", "http://www.zengularity.com", false),
     Organisation("typesafehub", "Typesafe", "https://www.typesafe.com", false),
     Organisation("lunatech-labs", "Lunatech Labs", "http://www.lunatech.com", false)
   )
+
+  def fetchContributors(accessToken: String) = instance.fetchContributors(accessToken)
+
+  object NextLink {
+    val ParseNext = """.*<([^>]+)>;\s*rel="next".*""".r
+    def unapply(response: WSResponse): Option[String] = {
+      response.header("Link").collect {
+        case ParseNext(next) => next
+      }
+    }
+  }
+
+  private def checkSuccess(response: WSResponse): WSResponse = response.status match {
+    case ok if ok < 300 => response
+    case error => throw responseFailure(response)
+  }
+
+  private def responseFailure(response: WSResponse): Exception = response.status match {
+    case 403 => new RuntimeException("Request forbidden, GitHub quota rate limit is probably exceeded: " + response.body)
+    case error => new RuntimeException("Request failed with " + response.status + " " +
+      response.underlying[com.ning.http.client.Response].getStatusText)
+  }
+
+}
+
+@Singleton
+class Code @Inject() () extends Controller {
+
+  import Code._
+
+  def index = Action { implicit req =>
+    Ok(views.html.code(contributors))
+  }
+
+  // -- Fetch team
+
+  @volatile var contributors = FallbackContributors.contributors
 
   def fetchContributors(accessToken: String) = {
 
@@ -151,26 +185,6 @@ object Code extends Controller {
         val count = contributors.core.size + contributors.organisationBased.foldLeft(0)((c, o) => c + o._2.size) + contributors.others.size
         Logger.info("Loaded " + count + " contributors for GitHub")
     }
-  }
-
-  object NextLink {
-    val ParseNext = """.*<([^>]+)>;\s*rel="next".*""".r
-    def unapply(response: WSResponse): Option[String] = {
-      response.header("Link").collect {
-        case ParseNext(next) => next
-      }
-    }
-  }
-
-  def checkSuccess(response: WSResponse): WSResponse = response.status match {
-    case ok if ok < 300 => response
-    case error => throw responseFailure(response)
-  }
-
-  def responseFailure(response: WSResponse): Exception = response.status match {
-    case 403 => new RuntimeException("Request forbidden, GitHub quota rate limit is probably exceeded: " + response.body)
-    case error => new RuntimeException("Request failed with " + response.status + " " +
-      response.underlying[com.ning.http.client.Response].getStatusText)
   }
 
 }

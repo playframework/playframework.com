@@ -6,7 +6,7 @@ import scala.concurrent.duration._
 import play.api.mvc._
 import utils.PlayGitRepository
 
-object Global extends WithFilters(new GzipFilter(), utils.ServerHeaderFilter) {
+object Global extends WithFilters(new GzipFilter(), utils.ServerHeaderFilter.instance) {
   override def onStart(app: Application) {
     implicit val a = app
 

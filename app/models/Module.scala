@@ -1,12 +1,28 @@
 package models
 
+import javax.inject.{ Inject, Singleton }
+
 case class Module(name: String, fullname: String, author: String, authorId: String, description: String, homePage: String)
 
 case class Release(version: String, date: java.util.Date, frameworkMatch: String, isDefault: Boolean)
 
+import play.api._
+
 object Module {
   
-  import play.api._
+  private def instance: ModuleFinder = Play.current.injector.instanceOf[ModuleFinder]
+
+  def findEverything: Seq[(Module,Seq[Release])] = instance.findEverything
+
+  def findAll(keyword: String = ""): Seq[Module] = instance.findAll(keyword)
+
+  def findById(name: String): Option[(Module,Seq[Release])] = instance.findById(name)
+
+}
+
+@Singleton
+class ModuleFinder @Inject() () {
+  
   import play.api.db._
   
   import anorm._
@@ -14,7 +30,7 @@ object Module {
   
   import Play.current
   
-  val parser = {
+  private val parser = {
     get[String]("Module.name") ~
     get[String]("Module.fullname") ~
     get[String]("Module.author") ~
@@ -25,7 +41,7 @@ object Module {
     }
   }
   
-  val versionParser = {
+  private val versionParser = {
     get[String]("ModuleRelease.version") ~
     get[java.util.Date]("ModuleRelease.publishedDate") ~
     get[String]("ModuleRelease.frameworkMatch") ~

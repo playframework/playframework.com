@@ -1,5 +1,6 @@
 package controllers
 
+import javax.inject.{ Inject, Singleton }
 import play.api._
 import play.api.mvc._
 import play.api.Play.current
@@ -44,7 +45,24 @@ import play.api.cache._
 
 //case class LatestDownloads(latest: Option[String], latestRC: Option[String])
 
-object Modules extends Controller {
+object Modules {
+
+  private def instance: Modules = Play.current.injector.instanceOf[Modules]
+
+  def index(keyword: String) = instance.index(keyword)
+
+  def download(name: String, version: String) = instance.download(name, version)
+
+  def documentation(name: String, version: String, page: String) = instance.documentation(name, version, page)
+
+  def show(name: String) = instance.show(name)
+
+  def dependencies(name: String, version: String) = instance.dependencies(name, version)
+
+}
+
+@Singleton
+class Modules @Inject() () extends Controller {
 
   def index(keyword: String) = Action { implicit request =>
     request.headers.get(ACCEPT).filter(_ == "application/json").map { _ =>
@@ -102,7 +120,7 @@ object Modules extends Controller {
     }.getOrElse(PageNotFound)
   }
 
-  def PageNotFound(implicit request: RequestHeader) = NotFound(views.html.notfound())
+  private def PageNotFound(implicit request: RequestHeader) = NotFound(views.html.notfound())
 
   def dependencies(name: String, version: String) = Action { implicit request =>
     Play.getExistingFile("data/modules/" + name + "-" + version + ".zip").map(new ZipFile(_)).flatMap { zip =>
