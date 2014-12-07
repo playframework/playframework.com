@@ -19,10 +19,6 @@ import utils.FallbackContributors
 
 object Code {
 
-  private def instance: Code = Play.current.injector.instanceOf[Code]
-
-  def index = instance.index
-
   // To be a member of a blessed organisation (which is just the Play organisation) you need to have contributed to
   // Play 2 and have at least 10 contributions
   case class Organisation(id: String, name: String, url: String, blessed: Boolean) {

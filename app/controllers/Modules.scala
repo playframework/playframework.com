@@ -10,60 +10,10 @@ import java.util.zip._
 import utils._
 import scala.io.Source
 
-/** Uncomment the following lines as needed **/
-/**
-import play.api.libs._
-import play.api.libs.iteratee._
-import play.api.libs.concurrent._
-import java.util.concurrent._
-import scala.concurrent.stm._
-import akka.util.duration._
-import play.api.cache._
-**/
-
-// trait Commons {
-//   self: Results =>
-  
-//   // implicit def latestDownloads: LatestDownloads = {
-//   //   val (official, upcoming) = Download.versions
-//   //   LatestDownloads(
-//   //     official.filter(_._1.startsWith("2")).headOption.map(_._1),
-//   //     upcoming.headOption.map(_._1)
-//   //   )
-//   // }
-  
-//   def PageNotFound = NotFound(views.html.defaultpages.notFound())
-  
-//   def Error(t: Throwable) = InternalServerError(views.html.defaultpages.error(t))
-  
-//   def Developers[A](a: String => Action[A]) = Security.Authenticated(
-//     _.session.get("developer"),
-//     _ => Forbidden(views.html.notFound())
-//   )(a)
-  
-// }
-
-//case class LatestDownloads(latest: Option[String], latestRC: Option[String])
-
-object Modules {
-
-  private def instance: Modules = Play.current.injector.instanceOf[Modules]
-
-  def index(keyword: String) = instance.index(keyword)
-
-  def download(name: String, version: String) = instance.download(name, version)
-
-  def documentation(name: String, version: String, page: String) = instance.documentation(name, version, page)
-
-  def show(name: String) = instance.show(name)
-
-  def dependencies(name: String, version: String) = instance.dependencies(name, version)
-
-}
-
 @Singleton
 class Modules @Inject() (
-  environment: Environment) extends Controller {
+  environment: Environment,
+  moduleFinder: ModuleFinder) extends Controller {
 
   val current = "hide Play.current"
 
@@ -72,7 +22,7 @@ class Modules @Inject() (
       Ok {
         JsObject(Seq(
           "modules" -> JsArray(
-            Module.findEverything.map {
+            moduleFinder.findEverything.map {
               case (module, releases) => JsObject(Seq(
                 "name" -> JsString(module.name),
                 "fullname" -> JsString(module.fullname),
@@ -91,7 +41,7 @@ class Modules @Inject() (
         ))
       }
     }.getOrElse {
-      Ok(views.html.modules.list(Module.findAll(keyword)))
+      Ok(views.html.modules.list(moduleFinder.findAll(keyword)))
     }
   }
 
@@ -118,7 +68,7 @@ class Modules @Inject() (
   }
 
   def show(name: String) = Action { implicit request =>
-    Module.findById(name).map {
+    moduleFinder.findById(name).map {
       case (module, releases) => Ok(views.html.modules.show(module, releases))
     }.getOrElse(PageNotFound)
   }

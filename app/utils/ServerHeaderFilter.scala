@@ -11,15 +11,6 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 /**
  * Adds a server header to each response
  */
-object ServerHeaderFilter {
-
-  def instance: ServerHeaderFilter = Play.current.injector.instanceOf[ServerHeaderFilter]
-
-}
-
-/**
- * Adds a server header to each response
- */
 @Singleton
 class ServerHeaderFilter @Inject() extends EssentialFilter {
   private val version = "Play/" + PlayVersion.current +

@@ -10,24 +10,6 @@ import utils.routing._
 /**
  * Documentation router
  */
-// object Router extends Routes {
-
-//   def instance: Router = play.api.Play.current.injector.instanceOf[Router]
-
-//   def errorHandler = instance.errorHandler
-
-//   def withPrefix(prefix: String): Routes = instance.withPrefix(prefix)
-
-//   def prefix = instance.prefix
-
-//   def documentation = instance.documentation
-
-//   def routes = instance.routes
-// }
-
-/**
- * Documentation router
- */
 @Singleton
 class Router @Inject() () extends Routes {
 

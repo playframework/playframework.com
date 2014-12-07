@@ -8,16 +8,6 @@ import utils.Markdown
 import org.apache.commons.io.IOUtils
 import java.io.File
 
-object Security {
-
-  private def instance: Security = Play.current.injector.instanceOf[Security]
-
-  def vulnerability(name: String) = instance.vulnerability(name)
-
-  def index = instance.index
-
-}
-
 @Singleton
 class Security @Inject() () extends Controller with Common {
 

@@ -18,31 +18,6 @@ import play.api.libs.ws.WSClient
 import play.api.Play.current
 import scala.util.Try
 
-object Application {
-
-  private def instance: Application = Play.current.injector.instanceOf[Application]
-
-  def index = instance.index
-
-  def widget(version: Option[String]) = instance.widget(version)
-
-  def download(platform: Option[String] = None) = instance.download(platform)
-
-  def changelog = instance.changelog
-
-  def support = instance.support
-
-  def getInvolved = instance.getInvolved
-
-  // Deprecated links
-  def movedTo(url: String, originalPath: String) = instance.movedTo(url, originalPath)
-
-  def onHandlerNotFound(route: String) = instance.onHandlerNotFound(route)
-
-  def setPreferedLanguage(lang: String) = instance.setPreferedLanguage(lang)
-
-}
-
 @Singleton
 class Application @Inject() (
   cache: CacheApi,

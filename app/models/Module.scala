@@ -8,18 +8,6 @@ case class Release(version: String, date: java.util.Date, frameworkMatch: String
 
 import play.api._
 
-object Module {
-  
-  private def instance: ModuleFinder = Play.current.injector.instanceOf[ModuleFinder]
-
-  def findEverything: Seq[(Module,Seq[Release])] = instance.findEverything
-
-  def findAll(keyword: String = ""): Seq[Module] = instance.findAll(keyword)
-
-  def findById(name: String): Option[(Module,Seq[Release])] = instance.findById(name)
-
-}
-
 import play.api.db._
 
 @Singleton
