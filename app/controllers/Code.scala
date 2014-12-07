@@ -6,11 +6,13 @@ import play.api.mvc.{Action, Controller}
 
 import play.api.libs.ws._
 import play.api.libs.json._
+import play.api.libs.concurrent.Akka
 import play.api.libs.concurrent.Execution.Implicits._
 import play.api.Play.current
 
 import scala.concurrent._
-import collection.SortedMap
+import scala.concurrent.duration._
+import scala.collection.SortedMap
 import scala.util.{Failure, Success}
 import utils.FallbackContributors
 
@@ -44,8 +46,6 @@ object Code {
     Organisation("lunatech-labs", "Lunatech Labs", "http://www.lunatech.com", false)
   )
 
-  def fetchContributors(accessToken: String) = instance.fetchContributors(accessToken)
-
   object NextLink {
     val ParseNext = """.*<([^>]+)>;\s*rel="next".*""".r
     def unapply(response: WSResponse): Option[String] = {
@@ -68,8 +68,12 @@ object Code {
 
 }
 
+// Guice can't bind an eager singleton to itself so we make
+// up a dummy interface to bind to :(
+trait CodeForBinding
+
 @Singleton
-class Code @Inject() () extends Controller {
+class Code @Inject() () extends Controller with CodeForBinding {
 
   import Code._
 
@@ -79,9 +83,22 @@ class Code @Inject() () extends Controller {
 
   // -- Fetch team
 
-  @volatile var contributors = FallbackContributors.contributors
+  @volatile
+  private var contributors = FallbackContributors.contributors
 
-  def fetchContributors(accessToken: String) = {
+  {
+    current.configuration.getString("github.access.token") match {
+      case Some(accessToken) =>
+        Akka.system.scheduler.schedule(0 seconds, 24 hours) {
+          Logger.info("Fetching GitHub contributors...")
+          fetchContributors(accessToken)
+        }
+      case None =>
+        Logger.info("Not fetching GitHub contributors because no github.access.token is set.")
+    }
+  }
+
+  private def fetchContributors(accessToken: String) = {
 
     def authCall(url: String) = {
       WS.url(url).withHeaders(AUTHORIZATION -> ("token " + accessToken))
@@ -187,4 +204,14 @@ class Code @Inject() () extends Controller {
     }
   }
 
+}
+
+import com.google.inject.AbstractModule
+import com.google.inject.name.Names
+  
+class CodeModule extends AbstractModule {
+  def configure() = {
+    bind(classOf[CodeForBinding])
+      .to(classOf[Code])
+  }
 }
