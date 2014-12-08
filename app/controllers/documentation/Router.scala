@@ -1,6 +1,7 @@
 package controllers.documentation
 
 import javax.inject.{ Inject, Provider, Singleton }
+import play.api.http.HttpErrorHandler
 import play.api.i18n.Lang
 import play.core.Router.Routes
 
@@ -12,9 +13,8 @@ import utils.routing._
  */
 @Singleton
 class Router @Inject() (
-  docController: DocumentationController) extends Routes {
-
-  override val errorHandler = play.api.http.LazyHttpErrorHandler
+  docController: DocumentationController,
+  override val errorHandler: HttpErrorHandler) extends Routes {
 
   private var _prefix = "/"
 
