@@ -3,7 +3,6 @@ package controllers
 import javax.inject.{ Inject, Singleton }
 import play.api._
 import play.api.mvc._
-import play.api.Play.current
 import play.api.libs.json._
 import models._
 import java.util.zip._
@@ -14,8 +13,6 @@ import scala.io.Source
 class Modules @Inject() (
   environment: Environment,
   moduleFinder: ModuleFinder) extends Controller {
-
-  val current = "hide Play.current"
 
   def index(keyword: String) = Action { implicit request =>
     request.headers.get(ACCEPT).filter(_ == "application/json").map { _ =>

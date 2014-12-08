@@ -9,7 +9,6 @@ import play.api.libs.ws._
 import play.api.libs.json._
 import play.api.libs.concurrent.Akka
 import play.api.libs.concurrent.Execution.Implicits._
-import play.api.Play.current
 
 import scala.concurrent._
 import scala.concurrent.duration._
@@ -65,17 +64,11 @@ object Code {
 
 }
 
-// Guice can't bind an eager singleton to itself so we make
-// up a dummy interface to bind to :(
-trait CodeForBinding
-
 @Singleton
 class Code @Inject() (
   configuration: Configuration,
   actorSystem: ActorSystem,
-  ws: WSClient) extends Controller with CodeForBinding {
-
-  val current = "hide Play.current"
+  ws: WSClient) extends Controller {
 
   import Code._
 
@@ -213,7 +206,6 @@ import com.google.inject.name.Names
   
 class CodeModule extends AbstractModule {
   def configure() = {
-    bind(classOf[CodeForBinding])
-      .to(classOf[Code]).asEagerSingleton()
+    bind(classOf[Code]).asEagerSingleton()
   }
 }

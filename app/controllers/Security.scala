@@ -11,8 +11,6 @@ import java.io.File
 @Singleton
 class Security @Inject() () extends Controller with Common {
 
-  val current = "hide Play.current"
-
   def vulnerability(name: String) = Action { implicit req =>
     val path = "public/markdown/vulnerabilities/" + name
 

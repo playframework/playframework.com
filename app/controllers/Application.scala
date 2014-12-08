@@ -15,7 +15,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
 import play.api.cache.CacheApi
 import play.api.libs.ws.WSClient
-import play.api.Play.current
 import scala.util.Try
 
 @Singleton
@@ -24,8 +23,6 @@ class Application @Inject() (
   configuration: Configuration,
   messages: MessagesApi,
   ws: WSClient) extends Controller with Common {
-
-  val current = "hide Play.current"
 
   private lazy val releases: PlayReleases = {
     Play.maybeApplication.flatMap(app => Option(app.classloader.getResourceAsStream("playReleases.json"))).flatMap { is =>
