@@ -11,7 +11,8 @@ import utils.routing._
  * Documentation router
  */
 @Singleton
-class Router @Inject() () extends Routes {
+class Router @Inject() (
+  docController: DocumentationController) extends Routes {
 
   override val errorHandler = play.api.http.LazyHttpErrorHandler
 
@@ -42,25 +43,23 @@ class Router @Inject() () extends Routes {
         Some(Lang(mtch.group(1))) -> mtch.group(2)
       } getOrElse None -> path
 
-      val Documentation = DocumentationController
-
       Some(versionPath).collect {
-        case route"" => Documentation.index(lang)
-        case route"/$version<1\.[^/]+>" => Documentation.v1Home(lang, version)
-        case route"/$version/api/$path*" => Documentation.api(lang, version, path)
+        case route"" => docController.index(lang)
+        case route"/$version<1\.[^/]+>" => docController.v1Home(lang, version)
+        case route"/$version/api/$path*" => docController.api(lang, version, path)
         // The docs used to be served from this path
-        case route"/api/$version/$path*" => Documentation.apiRedirect(lang, version, path)
-        case route"/$version<1\.[^/]+>/$page" => Documentation.v1Page(lang, version, page)
-        case route"/$version<1\.[^/]+>/images/$image" => Documentation.v1Image(lang, version, image)
-        case route"/$version<1\.[^/]+>/files/$file" => Documentation.v1File(lang, version, file)
-        case route"/$version<1\.[^/]+>/cheatsheet/$category" => Documentation.v1Cheatsheet(lang, version, category)
+        case route"/api/$version/$path*" => docController.apiRedirect(lang, version, path)
+        case route"/$version<1\.[^/]+>/$page" => docController.v1Page(lang, version, page)
+        case route"/$version<1\.[^/]+>/images/$image" => docController.v1Image(lang, version, image)
+        case route"/$version<1\.[^/]+>/files/$file" => docController.v1File(lang, version, file)
+        case route"/$version<1\.[^/]+>/cheatsheet/$category" => docController.v1Cheatsheet(lang, version, category)
 
-        case route"/$version<2\.[^/]+>" => Documentation.home(lang, version)
-        case route"/$version<2\.[^/]+>/" => Documentation.home(lang, version)
-        case route"/$version<2\.[^/]+>/$page" => Documentation.page(lang, version, page)
-        case route"/$version<2\.[^/]+>/resources/$path*" => Documentation.resource(lang, version, path)
-        case route"/latest" => Documentation.latest(lang, "Home")
-        case route"/latest/$page" => Documentation.latest(lang, page)
+        case route"/$version<2\.[^/]+>" => docController.home(lang, version)
+        case route"/$version<2\.[^/]+>/" => docController.home(lang, version)
+        case route"/$version<2\.[^/]+>/$page" => docController.page(lang, version, page)
+        case route"/$version<2\.[^/]+>/resources/$path*" => docController.resource(lang, version, path)
+        case route"/latest" => docController.latest(lang, "Home")
+        case route"/latest/$page" => docController.latest(lang, page)
       }
     } else {
       None

@@ -10,12 +10,6 @@ import play.api.i18n.Lang
 import play.api.libs.concurrent.Akka
 import scala.collection.JavaConversions._
 
-object Actors {
-  def documentationActor(implicit app: Application): Option[ActorRef] = actors.documentationActor
-
-  private def actors(implicit app: Application) = app.injector.instanceOf[Actors]
-}
-
 @Singleton
 class Actors @Inject() (
   environment: Environment,

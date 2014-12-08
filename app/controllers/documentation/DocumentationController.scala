@@ -16,49 +16,6 @@ import scala.concurrent.duration._
 import play.api.libs.MimeTypes
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
-object DocumentationController {
-
-  def instance: DocumentationController = play.api.Play.current.injector.instanceOf[DocumentationController]
-
-  def index(lang: Option[Lang]) = instance.index(lang)
-
-  //
-  // Play 1 Documentation
-  //
-
-  def v1Home(lang: Option[Lang], version: String) = instance.v1Home(lang, version)
-
-  def v1Page(lang: Option[Lang], v: String, page: String) = instance.v1Page(lang, v, page)
-
-  def v1Image(lang: Option[Lang], v: String, image: String) = instance.v1Image(lang, v, image)
-
-  def v1File(lang: Option[Lang], v: String, file: String) = instance.v1File(lang, v, file)
-
-  def v1Cheatsheet(lang: Option[Lang], v: String, category: String) = instance.v1Cheatsheet(lang, v, category)
-
-  //
-  // Play 2 Documentation
-  //
-
-  def home(lang: Option[Lang], version: String) = instance.home(lang, version)
-
-  def page(lang: Option[Lang], v: String, page: String) = instance.page(lang, v, page)
-
-  def resource(lang: Option[Lang], v: String, resource: String) = instance.resource(lang, v, resource)
-
-  // -- API
-  def v1Api(lang: Option[Lang], version: String) = instance.v1Api(lang, version)
-
-  def api(lang: Option[Lang], v: String, path: String) = instance.api(lang, v, path)
-
-  def apiRedirect(lang: Option[Lang], version: String, path: String) = instance.apiRedirect(lang, version, path)
-
-  // -- Latest
-
-  def latest(lang: Option[Lang], page: String) = instance.latest(lang, page)
-
-}
-
 @Singleton
 class DocumentationController @Inject() (
   actors: Actors) extends Controller {
