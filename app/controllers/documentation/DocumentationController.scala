@@ -5,6 +5,7 @@ import actors.DocumentationActor.{ NotFound => DocsNotFound, NotModified => Docs
 import akka.actor.ActorRef
 import akka.pattern.ask
 import akka.util.Timeout
+import javax.inject.{ Inject, Singleton }
 import models.documentation.{AlternateTranslation, TranslationContext, Version}
 import org.joda.time.format.DateTimeFormat
 import play.api.i18n.Lang
@@ -14,20 +15,64 @@ import scala.concurrent.duration._
 
 import play.api.libs.MimeTypes
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.Play.current
 
-object DocumentationController extends Controller {
+object DocumentationController {
 
-  implicit val timeout = Timeout(5.seconds)
+  def instance: DocumentationController = play.api.Play.current.injector.instanceOf[DocumentationController]
 
-  val Rfc1123DateTimeFormat = DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT'").withZoneUTC()
+  def index(lang: Option[Lang]) = instance.index(lang)
 
-  val EmptyContext = TranslationContext(Lang("en"), true, None, Nil, Nil)
+  //
+  // Play 1 Documentation
+  //
 
-  def pageNotFound(context: TranslationContext, title: String)(implicit req: RequestHeader) =
+  def v1Home(lang: Option[Lang], version: String) = instance.v1Home(lang, version)
+
+  def v1Page(lang: Option[Lang], v: String, page: String) = instance.v1Page(lang, v, page)
+
+  def v1Image(lang: Option[Lang], v: String, image: String) = instance.v1Image(lang, v, image)
+
+  def v1File(lang: Option[Lang], v: String, file: String) = instance.v1File(lang, v, file)
+
+  def v1Cheatsheet(lang: Option[Lang], v: String, category: String) = instance.v1Cheatsheet(lang, v, category)
+
+  //
+  // Play 2 Documentation
+  //
+
+  def home(lang: Option[Lang], version: String) = instance.home(lang, version)
+
+  def page(lang: Option[Lang], v: String, page: String) = instance.page(lang, v, page)
+
+  def resource(lang: Option[Lang], v: String, resource: String) = instance.resource(lang, v, resource)
+
+  // -- API
+  def v1Api(lang: Option[Lang], version: String) = instance.v1Api(lang, version)
+
+  def api(lang: Option[Lang], v: String, path: String) = instance.api(lang, v, path)
+
+  def apiRedirect(lang: Option[Lang], version: String, path: String) = instance.apiRedirect(lang, version, path)
+
+  // -- Latest
+
+  def latest(lang: Option[Lang], page: String) = instance.latest(lang, page)
+
+}
+
+@Singleton
+class DocumentationController @Inject() (
+  actors: Actors) extends Controller {
+
+  private implicit val timeout = Timeout(5.seconds)
+
+  private val Rfc1123DateTimeFormat = DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT'").withZoneUTC()
+
+  private val EmptyContext = TranslationContext(Lang("en"), true, None, Nil, Nil)
+
+  private def pageNotFound(context: TranslationContext, title: String)(implicit req: RequestHeader) =
     NotFound(views.html.documentation.v2(context, title))
 
-  def cacheable(result: Result, cacheId: String) = {
+  private def cacheable(result: Result, cacheId: String) = {
     result.withHeaders(
       ETAG -> ("\"" + cacheId + "\""),
       CACHE_CONTROL -> "max-age=10000",
@@ -35,21 +80,21 @@ object DocumentationController extends Controller {
     )
   }
 
-  def notModified(cacheId: String) = cacheable(NotModified, cacheId)
+  private def notModified(cacheId: String) = cacheable(NotModified, cacheId)
 
-  def DocsAction(action: ActorRef => RequestHeader => Future[Result]) = Action.async(parse.empty) { implicit req =>
-    Actors.documentationActor.fold(Future.successful(pageNotFound(EmptyContext, ""))) { actor =>
+  private def DocsAction(action: ActorRef => RequestHeader => Future[Result]) = Action.async(parse.empty) { implicit req =>
+    actors.documentationActor.fold(Future.successful(pageNotFound(EmptyContext, ""))) { actor =>
       action(actor)(req)
     }
   }
 
-  def VersionAction(version: String)(action: (ActorRef, Version) => RequestHeader => Future[Result]) = DocsAction { actor => implicit req =>
+  private def VersionAction(version: String)(action: (ActorRef, Version) => RequestHeader => Future[Result]) = DocsAction { actor => implicit req =>
     Version.parse(version).fold(Future.successful(pageNotFound(EmptyContext, ""))) { v =>
       action(actor, v)(req)
     }
   }
 
-  def etag(req: RequestHeader): Option[String] = {
+  private def etag(req: RequestHeader): Option[String] = {
     req.headers.get(IF_NONE_MATCH).map { etag =>
       if (etag.startsWith("\"") && etag.endsWith("\"")) {
         etag.substring(1, etag.length - 1)
@@ -57,7 +102,7 @@ object DocumentationController extends Controller {
     }
   }
 
-  def preferredLang(langs: Seq[Lang])(implicit request: RequestHeader) = {
+  private def preferredLang(langs: Seq[Lang])(implicit request: RequestHeader) = {
     request.acceptLanguages.collectFirst(Function.unlift { lang =>
       langs.find(_.satisfies(lang))
     }).orElse {
@@ -176,7 +221,7 @@ object DocumentationController extends Controller {
     }
   }
 
-  def ResourceAction(version: String, resource: String, message: (Version, Option[String]) => Any, inline: Boolean = true) = {
+  private def ResourceAction(version: String, resource: String, message: (Version, Option[String]) => Any, inline: Boolean = true) = {
     VersionAction(version) { (actor, version) => implicit req =>
       (actor ? message(version, etag(req))).mapTo[Response[Resource]].map {
         case DocsNotFound(context) => pageNotFound(context, resource)
