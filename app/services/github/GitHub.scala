@@ -1,23 +1,16 @@
-package services
+package services.github
 
 import javax.inject.Inject
 
-import akka.actor.ActorSystem
 import com.damnhandy.uri.template.UriTemplate
-import com.google.inject.name.Named
-import play.api.{Configuration, Environment, Logger}
 import play.api.http.HeaderNames
-import play.api.inject.Module
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.ws._
 import play.api.libs.concurrent.Execution.Implicits._
 
 import scala.concurrent.Future
-import scala.concurrent.duration._
 import models.github._
-
-import scala.util.{Success, Failure}
 
 /**
  * Interface to making remote calls on GitHub
@@ -58,13 +51,6 @@ trait GitHub {
    * Fetch all the contributors for the given repository
    */
   def fetchRepoContributors(repo: Repository): Future[Seq[(GitHubUser, Int)]]
-}
-
-trait ContributorsSummariser {
-  /**
-   * Fetch and summarise the contributors from GitHub.
-   */
-  def fetchContributors: Future[Contributors]
 }
 
 case class GitHubConfig(accessToken: String, gitHubApiUrl: String, organisation: String, committerTeams: Seq[String])
@@ -149,106 +135,3 @@ class DefaultGitHub @Inject() (ws: WSClient, config: GitHubConfig) extends GitHu
   def fetchOrganisationRepos(organisation: Organisation) = 
     loadWithPaging[Repository](expand(organisation.reposUrl))
 }
-
-class DefaultContributorsSummariser @Inject() (gitHub: GitHub, config: GitHubConfig) extends ContributorsSummariser {
-
-  private def fetchCommitters(teams: Seq[Team]) = {
-    val committerTeams = teams.filter(team => config.committerTeams.contains(team.name))
-    for {
-      members <- Future.sequence(committerTeams.map(gitHub.fetchTeamMembers))
-      details <- Future.sequence(members.flatten.map(gitHub.fetchUserDetails))
-    } yield details
-  }
-
-  private def fetchAllContributors(repos: Seq[Repository]): Future[Seq[GitHubUser]] = {
-    val contributorRepos = repos.filterNot(_.fork)
-    for {
-      contributors <- Future.sequence(contributorRepos.map(gitHub.fetchRepoContributors))
-    } yield {
-      contributors
-        .flatten
-        .groupBy(_._1.id)
-        .map {
-          case ((_, contributions @ ((user, _) :: _))) =>
-            user -> contributions.map(_._2).reduce(_ + _)
-        }.toSeq
-        .sortBy(_._2)
-        .reverse
-        .map(_._1)
-    }
-  }
-
-  def fetchContributors = {
-    for {
-      organisation <- gitHub.fetchOrganisation(config.organisation)
-
-      teams <- gitHub.fetchOrganisationTeams(organisation)
-      members <- gitHub.fetchOrganisationMembers(organisation)
-      repos <- gitHub.fetchOrganisationRepos(organisation)
-
-      committers <- fetchCommitters(teams)
-      contributors <- fetchAllContributors(repos)
-    } yield {
-
-      val memberIds = members.map(_.id).toSet
-      val filteredMembers = members.filterNot(m => committers.exists(_.id == m.id))
-      val filteredContributors = contributors.filterNot(c => memberIds.contains(c.id))
-
-      Contributors(committers, filteredMembers, filteredContributors)
-    }
-  }
-}
-
-class CachingContributorsSummariser @Inject() (actorSystem: ActorSystem,
-        @Named("gitHubContributorsSummariser") delegate: ContributorsSummariser) extends ContributorsSummariser {
-  @volatile private var contributors: Contributors = FallbackContributors.contributors
-
-  actorSystem.scheduler.schedule(0 seconds, 24 hours) {
-    delegate.fetchContributors.onComplete {
-      case Failure(t) => Logger.error("Unable to load contributors from GitHub", t)
-      case Success(cs) =>
-        contributors = cs
-        println(FallbackContributors.dumpContributors(contributors))
-        val count = contributors.committers.size + contributors.playOrganisation.size + contributors.contributors.size
-        Logger.info("Loaded " + count + " contributors for GitHub")
-    }
-  }
-
-  /**
-   * Fetch and summarise the contributors from GitHub.
-   */
-  def fetchContributors = Future.successful(contributors)
-}
-
-/**
- * For use "offline", ie in development, when you don't have a GitHub access token
- */
-class OfflineContributorsSummariser extends ContributorsSummariser {
-  def fetchContributors = Future.successful(FallbackContributors.contributors)
-}
-
-class GitHubModule extends Module {
-
-  def bindings(environment: Environment, configuration: Configuration) = {
-    import scala.collection.JavaConverters._
-    val committerTeams = configuration.underlying.getStringList("github.committerTeams").asScala
-    val organisation = configuration.underlying.getString("github.organisation")
-    val gitHubApiUrl = configuration.underlying.getString("github.apiUrl")
-
-    configuration.getString("github.access.token") match {
-      case Some(accessToken) =>
-        Seq(
-          bind[GitHubConfig].to(GitHubConfig(accessToken, gitHubApiUrl, organisation, committerTeams)),
-          bind[GitHub].to[DefaultGitHub],
-          bind[ContributorsSummariser].qualifiedWith("gitHubContributorsSummariser").to[DefaultContributorsSummariser],
-          bind[ContributorsSummariser].to[CachingContributorsSummariser]
-        )
-      case None =>
-        Logger.info("No GitHub access token yet, using fallback contributors")
-        Seq(bind[ContributorsSummariser].to[OfflineContributorsSummariser])
-    }
-
-  }
-}
-
-

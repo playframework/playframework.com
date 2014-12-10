@@ -1,4 +1,4 @@
-package services
+package services.github
 
 import java.io.File
 
