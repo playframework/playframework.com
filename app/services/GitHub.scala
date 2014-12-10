@@ -13,7 +13,6 @@ import play.api.libs.functional.syntax._
 import play.api.libs.ws._
 import play.api.libs.concurrent.Execution.Implicits._
 
-import scala.collection.SortedMap
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import models.github._
@@ -68,7 +67,7 @@ trait ContributorsSummariser {
   def fetchContributors: Future[Contributors]
 }
 
-case class GitHubConfig(accessToken: String, organisation: String, committerTeams: Seq[String])
+case class GitHubConfig(accessToken: String, gitHubApiUrl: String, organisation: String, committerTeams: Seq[String])
 
 class DefaultGitHub @Inject() (ws: WSClient, config: GitHubConfig) extends GitHub {
 
@@ -77,7 +76,7 @@ class DefaultGitHub @Inject() (ws: WSClient, config: GitHubConfig) extends GitHu
   }
 
   private def load[T: Reads](path: String) = {
-    val url = if (path.matches("https?://.*")) path else "https://api.github.com/" + path
+    val url = if (path.matches("https?://.*")) path else config.gitHubApiUrl + path
     authCall(url).get().map { response => 
       checkSuccess(response).json.as[T]
     }
@@ -107,26 +106,31 @@ class DefaultGitHub @Inject() (ws: WSClient, config: GitHubConfig) extends GitHu
    * Loads all pages from a GitHub API endpoint that uses Link headers for paging
    */
   private def loadWithPaging[T: Reads](path: String): Future[Seq[T]] = {
-    val resource = if (path.matches("https?://.*")) path else "https://api.github.com/" + path
-    val url = if (resource.contains("?")) resource + "&per_page=100" else resource + "?per_page=100"
-    authCall(url).get().flatMap {
-      case notOk if notOk.status >= 300 => throw responseFailure(notOk)
-      case response @ NextLink(next) => for {
-        nextResults <- loadWithPaging(next)
-      } yield {
-        response.json.as[Seq[T]] ++ nextResults
+    val resource = if (path.matches("https?://.*")) path else config.gitHubApiUrl + path
+    val firstUrl = if (resource.contains("?")) resource + "&per_page=100" else resource + "?per_page=100"
+
+    def loadNext(url: String): Future[Seq[T]] = {
+      authCall(url).get().flatMap {
+        case notOk if notOk.status >= 300 => throw responseFailure(notOk)
+        case response @ NextLink(next) => for {
+          nextResults <- loadNext(next)
+        } yield {
+          response.json.as[Seq[T]] ++ nextResults
+        }
+        case lastResponse => Future.successful(lastResponse.json.as[Seq[T]])
       }
-      case lastResponse => Future.successful(lastResponse.json.as[Seq[T]])
     }
+
+    loadNext(firstUrl)
   }
 
   private def expand(uriTemplate: String) = UriTemplate.fromTemplate(uriTemplate).expand()
 
   def fetchOrganisation(organisation: String) =
-    load[Organisation]("orgs/" + organisation)
+    load[Organisation]("/orgs/" + organisation)
   
   def fetchOrganisationTeams(organisation: Organisation) =
-    loadWithPaging[Team]("orgs/" + organisation.login + "/teams")
+    loadWithPaging[Team]("/orgs/" + organisation.login + "/teams")
 
   def fetchTeamMembers(team: Team) = 
     loadWithPaging[GitHubUser](expand(team.membersUrl))
@@ -229,11 +233,12 @@ class GitHubModule extends Module {
     import scala.collection.JavaConverters._
     val committerTeams = configuration.underlying.getStringList("github.committerTeams").asScala
     val organisation = configuration.underlying.getString("github.organisation")
+    val gitHubApiUrl = configuration.underlying.getString("github.apiUrl")
 
     configuration.getString("github.access.token") match {
       case Some(accessToken) =>
         Seq(
-          bind[GitHubConfig].to(GitHubConfig(accessToken, organisation, committerTeams)),
+          bind[GitHubConfig].to(GitHubConfig(accessToken, gitHubApiUrl, organisation, committerTeams)),
           bind[GitHub].to[DefaultGitHub],
           bind[ContributorsSummariser].qualifiedWith("gitHubContributorsSummariser").to[DefaultContributorsSummariser],
           bind[ContributorsSummariser].to[CachingContributorsSummariser]

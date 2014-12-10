@@ -1,0 +1,40 @@
+[
+    {
+        "login": "guillaumebort",
+        "id": 94658,
+        "avatar_url": "https://avatars.githubusercontent.com/u/94658?v=3",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/guillaumebort",
+        "html_url": "https://github.com/guillaumebort",
+        "followers_url": "https://api.github.com/users/guillaumebort/followers",
+        "following_url": "https://api.github.com/users/guillaumebort/following{/other_user}",
+        "gists_url": "https://api.github.com/users/guillaumebort/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/guillaumebort/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/guillaumebort/subscriptions",
+        "organizations_url": "https://api.github.com/users/guillaumebort/orgs",
+        "repos_url": "https://api.github.com/users/guillaumebort/repos",
+        "events_url": "https://api.github.com/users/guillaumebort/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/guillaumebort/received_events",
+        "type": "User",
+        "site_admin": false
+    },
+    {
+        "login": "hilton",
+        "id": 232614,
+        "avatar_url": "https://avatars.githubusercontent.com/u/232614?v=3",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/hilton",
+        "html_url": "https://github.com/hilton",
+        "followers_url": "https://api.github.com/users/hilton/followers",
+        "following_url": "https://api.github.com/users/hilton/following{/other_user}",
+        "gists_url": "https://api.github.com/users/hilton/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/hilton/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/hilton/subscriptions",
+        "organizations_url": "https://api.github.com/users/hilton/orgs",
+        "repos_url": "https://api.github.com/users/hilton/repos",
+        "events_url": "https://api.github.com/users/hilton/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/hilton/received_events",
+        "type": "User",
+        "site_admin": false
+    }
+]

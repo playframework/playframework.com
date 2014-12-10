@@ -1,0 +1,40 @@
+[
+    {
+        "login": "guillaumebort",
+        "id": 94658,
+        "avatar_url": "https://avatars.githubusercontent.com/u/94658?v=3",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/guillaumebort",
+        "html_url": "https://github.com/guillaumebort",
+        "followers_url": "https://api.github.com/users/guillaumebort/followers",
+        "following_url": "https://api.github.com/users/guillaumebort/following{/other_user}",
+        "gists_url": "https://api.github.com/users/guillaumebort/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/guillaumebort/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/guillaumebort/subscriptions",
+        "organizations_url": "https://api.github.com/users/guillaumebort/orgs",
+        "repos_url": "https://api.github.com/users/guillaumebort/repos",
+        "events_url": "https://api.github.com/users/guillaumebort/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/guillaumebort/received_events",
+        "type": "User",
+        "site_admin": false
+    },
+    {
+        "login": "jroper",
+        "id": 105833,
+        "avatar_url": "https://avatars.githubusercontent.com/u/105833?v=3",
+        "gravatar_id": "",
+        "url": "https://api.github.com/users/jroper",
+        "html_url": "https://github.com/jroper",
+        "followers_url": "https://api.github.com/users/jroper/followers",
+        "following_url": "https://api.github.com/users/jroper/following{/other_user}",
+        "gists_url": "https://api.github.com/users/jroper/gists{/gist_id}",
+        "starred_url": "https://api.github.com/users/jroper/starred{/owner}{/repo}",
+        "subscriptions_url": "https://api.github.com/users/jroper/subscriptions",
+        "organizations_url": "https://api.github.com/users/jroper/orgs",
+        "repos_url": "https://api.github.com/users/jroper/repos",
+        "events_url": "https://api.github.com/users/jroper/events{/privacy}",
+        "received_events_url": "https://api.github.com/users/jroper/received_events",
+        "type": "User",
+        "site_admin": false
+    }
+]
