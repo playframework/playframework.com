@@ -1,20 +1,23 @@
 package models
 
+import javax.inject.{ Inject, Singleton }
+
 case class Module(name: String, fullname: String, author: String, authorId: String, description: String, homePage: String)
 
 case class Release(version: String, date: java.util.Date, frameworkMatch: String, isDefault: Boolean)
 
-object Module {
-  
-  import play.api._
-  import play.api.db._
+import play.api._
+
+import play.api.db._
+
+@Singleton
+class ModuleFinder @Inject() (
+  db: Database) {
   
   import anorm._
   import anorm.SqlParser._
   
-  import Play.current
-  
-  val parser = {
+  private val parser = {
     get[String]("Module.name") ~
     get[String]("Module.fullname") ~
     get[String]("Module.author") ~
@@ -25,7 +28,7 @@ object Module {
     }
   }
   
-  val versionParser = {
+  private val versionParser = {
     get[String]("ModuleRelease.version") ~
     get[java.util.Date]("ModuleRelease.publishedDate") ~
     get[String]("ModuleRelease.frameworkMatch") ~
@@ -34,18 +37,18 @@ object Module {
     }
   }
   
-  def findEverything: Seq[(Module,Seq[Release])] = DB.withConnection { implicit c =>
+  def findEverything: Seq[(Module,Seq[Release])] = db.withConnection { implicit c =>
      SQL("""
         select * from Module 
         join ModuleRelease on Module.id = ModuleRelease.module_id 
       """).as(parser ~ versionParser *).groupBy(_._1).mapValues(_.map(_._2)).toSeq
   }
 
-  def findAll(keyword: String = ""): Seq[Module] = DB.withConnection { implicit c =>
+  def findAll(keyword: String = ""): Seq[Module] = db.withConnection { implicit c =>
     SQL("select * from Module where fullname like {keyword} order by name").on('keyword -> ("%" + keyword + "%")).as(parser *)
   }
 
-  def findById(name: String): Option[(Module,Seq[Release])] = DB.withConnection { implicit c =>
+  def findById(name: String): Option[(Module,Seq[Release])] = db.withConnection { implicit c =>
     val result = SQL("""
       select * from Module 
       left join ModuleRelease on Module.id = ModuleRelease.module_id 

@@ -1,8 +1,15 @@
-@(contributors: Code.Contributors, title: String = "Code & contributors")(implicit requestHeader : RequestHeader)
+@import models.github._
 
-@renderContributors(contributors: Seq[Code.Contributor]) = {
+@(contributors: Contributors, title: String = "Code & contributors")(implicit requestHeader : RequestHeader)
+
+@avatar(url: String, size: Int) = @{
+    val doubleSize = size * 2
+    if (url.contains("?")) url + "&size=" + doubleSize else url + "?size=" + doubleSize
+}
+
+@renderContributors(contributors: Seq[GitHubUser]) = {
     @for(contributor <- contributors) {
-        <li><a href="@contributor.link"><img src="//gravatar.com/avatar/@contributor.gravatar?size=16"/><span>@contributor.login</span></a></li>
+        <a href="@contributor.htmlUrl"><img src="@avatar(contributor.avatarUrl, 32)" alt="@contributor.login" title="@contributor.login"/></a>
     }
 }
 
@@ -34,35 +41,27 @@
 
             </section>
             <section>
-                <h1>Team &amp; contributors</h1>
+                <h1>Committers</h1>
 
-                @for(contributor <- contributors.core) {
+                @for(contributor <- contributors.committers) {
                     <div class="coreteam">
-                        <a href="@contributor.link">
-                            <img src="//gravatar.com/avatar/@contributor.gravatar?size=80"/>
+                        <a href="@contributor.htmlUrl">
+                            <img src="@avatar(contributor.avatarUrl, 80)"/>
                             <h2>@contributor.name.getOrElse(contributor.login)</h2>
                         </a>
-                        <p>
-                        @contributor.bio.map(text => Html(utils.Markdown.toHtml(text)))
-                        </p>
                     </div>
                 }
 
-                <h2>Main contributors</h2>
+                <div class="contributors">
 
-                @for((organisation, members) <- contributors.organisationBased) {
-                    <h3>From <a href="@organisation.url">@organisation.name</a></h3>
+                <h2>Play organisation members</h2>
 
-                    <ul class="contributors">
-                        @renderContributors(members)
-                    </ul>
-                }
+                @renderContributors(contributors.playOrganisation)
 
                 <h2>Other contributors</h2>
 
-                <ul class="contributors others">
-                    @renderContributors(contributors.others)
-                </ul>
+                @renderContributors(contributors.contributors)
+                </div>
 
             </section>
         </article>

@@ -1,7 +1,8 @@
 package controllers
 
+import javax.inject.{ Inject, Singleton }
 import play.api._
-import play.api.i18n.Lang
+import play.api.i18n.{ Lang, MessagesApi }
 import play.api.mvc._
 import views._
 import play.twirl.api.Html
@@ -11,16 +12,19 @@ import play.api.libs.json.Json
 import models._
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
-import play.api.cache.Cache
-import play.api.libs.ws.WS
-import play.api.Play.current
+import scala.concurrent.duration._
+import play.api.cache.CacheApi
+import play.api.libs.ws.WSClient
 import scala.util.Try
 
+@Singleton
+class Application @Inject() (
+  cache: CacheApi,
+  configuration: Configuration,
+  messages: MessagesApi,
+  ws: WSClient) extends Controller with Common {
 
-object Application extends Controller with Common {
-
-
-  lazy val releases: PlayReleases = {
+  private lazy val releases: PlayReleases = {
     Play.maybeApplication.flatMap(app => Option(app.classloader.getResourceAsStream("playReleases.json"))).flatMap { is =>
       try {
         Json.fromJson[PlayReleases](Json.parse(IOUtils.toByteArray(is))).asOpt
@@ -30,12 +34,12 @@ object Application extends Controller with Common {
     }.getOrElse(PlayReleases(PlayRelease("unknown", None, Some("unknown"), None), Nil, Nil))
   }
 
-  val VulnerableVersions = Set(
+  private val VulnerableVersions = Set(
     "2.0", "2.0.1", "2.0.2", "2.0.3", "2.0.4", "2.0.5",
     "2.1", "2.1.1", "2.1.2"
   )
 
-  def news(version: Option[String]): Seq[Html] = {
+  private def news(version: Option[String]): Seq[Html] = {
     val message = version.filter(VulnerableVersions).map { _ =>
 
       s"""<p style="font-weight: bold; color: red;">You are using a version of Play Framework that has a
@@ -72,22 +76,22 @@ object Application extends Controller with Common {
   }
 
   private def latestActivator: Future[ActivatorRelease] = {
-    Cache.getAs[ActivatorRelease]("latest-activator").map(Future.successful).getOrElse {
+    cache.get[ActivatorRelease]("latest-activator").map(Future.successful).getOrElse {
       // cache miss
       play.api.Logger.info("latest activator version cache miss")
-      Play.configuration.getString("activator.latest-url").map { url =>
-        WS.url(url).withRequestTimeout(2000).get().map { response =>
+      configuration.getString("activator.latest-url").map { url =>
+        ws.url(url).withRequestTimeout(2000).get().map { response =>
           response.json.as[ActivatorRelease]
         } recover {
           case e =>
             play.api.Logger.error(s"Failed to get Activator version info ${e.getClass.getName}: ${e.getMessage}")
-            Cache.getAs[ActivatorRelease]("latest-activator-eternal")
+            cache.get[ActivatorRelease]("latest-activator-eternal")
               .getOrElse(defaultActivatorLatest)
         }
       } getOrElse Future.successful(defaultActivatorLatest) andThen {
         case r: Try[ActivatorRelease] =>
-          Cache.set("latest-activator", r.get, 60 * 10) // 10 minute cache timeout
-          Cache.set("latest-activator-eternal", r.get, 0) // eternal in case activator service is down
+          cache.set("latest-activator", r.get, 10 minutes) // 10 minute cache timeout
+          cache.set("latest-activator-eternal", r.get, Duration.Inf) // eternal in case activator service is down
       }
     }
   }
@@ -137,7 +141,7 @@ object Application extends Controller with Common {
   }
 
   def setPreferedLanguage(lang: String) = Action {
-    Ok.withLang(Lang(lang))
+    messages.setLang(Ok, Lang(lang))
   }
 
 }

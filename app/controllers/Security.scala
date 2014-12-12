@@ -1,5 +1,6 @@
 package controllers
 
+import javax.inject.{ Inject, Singleton }
 import play.api.mvc.{Action, Controller}
 import play.api.Play
 import play.twirl.api.Html
@@ -7,7 +8,8 @@ import utils.Markdown
 import org.apache.commons.io.IOUtils
 import java.io.File
 
-object Security extends Controller with Common {
+@Singleton
+class Security @Inject() () extends Controller with Common {
 
   def vulnerability(name: String) = Action { implicit req =>
     val path = "public/markdown/vulnerabilities/" + name

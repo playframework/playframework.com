@@ -5,6 +5,7 @@ import actors.DocumentationActor.{ NotFound => DocsNotFound, NotModified => Docs
 import akka.actor.ActorRef
 import akka.pattern.ask
 import akka.util.Timeout
+import javax.inject.{ Inject, Singleton }
 import models.documentation.{AlternateTranslation, TranslationContext, Version}
 import org.joda.time.format.DateTimeFormat
 import play.api.i18n.Lang
@@ -14,20 +15,21 @@ import scala.concurrent.duration._
 
 import play.api.libs.MimeTypes
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
-import play.api.Play.current
 
-object DocumentationController extends Controller {
+@Singleton
+class DocumentationController @Inject() (
+  actors: Actors) extends Controller {
 
-  implicit val timeout = Timeout(5.seconds)
+  private implicit val timeout = Timeout(5.seconds)
 
-  val Rfc1123DateTimeFormat = DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT'").withZoneUTC()
+  private val Rfc1123DateTimeFormat = DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT'").withZoneUTC()
 
-  val EmptyContext = TranslationContext(Lang("en"), true, None, Nil, Nil)
+  private val EmptyContext = TranslationContext(Lang("en"), true, None, Nil, Nil)
 
-  def pageNotFound(context: TranslationContext, title: String)(implicit req: RequestHeader) =
+  private def pageNotFound(context: TranslationContext, title: String)(implicit req: RequestHeader) =
     NotFound(views.html.documentation.v2(context, title))
 
-  def cacheable(result: Result, cacheId: String) = {
+  private def cacheable(result: Result, cacheId: String) = {
     result.withHeaders(
       ETAG -> ("\"" + cacheId + "\""),
       CACHE_CONTROL -> "max-age=10000",
@@ -35,21 +37,21 @@ object DocumentationController extends Controller {
     )
   }
 
-  def notModified(cacheId: String) = cacheable(NotModified, cacheId)
+  private def notModified(cacheId: String) = cacheable(NotModified, cacheId)
 
-  def DocsAction(action: ActorRef => RequestHeader => Future[Result]) = Action.async(parse.empty) { implicit req =>
-    Actors.documentationActor.fold(Future.successful(pageNotFound(EmptyContext, ""))) { actor =>
+  private def DocsAction(action: ActorRef => RequestHeader => Future[Result]) = Action.async(parse.empty) { implicit req =>
+    actors.documentationActor.fold(Future.successful(pageNotFound(EmptyContext, ""))) { actor =>
       action(actor)(req)
     }
   }
 
-  def VersionAction(version: String)(action: (ActorRef, Version) => RequestHeader => Future[Result]) = DocsAction { actor => implicit req =>
+  private def VersionAction(version: String)(action: (ActorRef, Version) => RequestHeader => Future[Result]) = DocsAction { actor => implicit req =>
     Version.parse(version).fold(Future.successful(pageNotFound(EmptyContext, ""))) { v =>
       action(actor, v)(req)
     }
   }
 
-  def etag(req: RequestHeader): Option[String] = {
+  private def etag(req: RequestHeader): Option[String] = {
     req.headers.get(IF_NONE_MATCH).map { etag =>
       if (etag.startsWith("\"") && etag.endsWith("\"")) {
         etag.substring(1, etag.length - 1)
@@ -57,7 +59,7 @@ object DocumentationController extends Controller {
     }
   }
 
-  def preferredLang(langs: Seq[Lang])(implicit request: RequestHeader) = {
+  private def preferredLang(langs: Seq[Lang])(implicit request: RequestHeader) = {
     request.acceptLanguages.collectFirst(Function.unlift { lang =>
       langs.find(_.satisfies(lang))
     }).orElse {
@@ -176,7 +178,7 @@ object DocumentationController extends Controller {
     }
   }
 
-  def ResourceAction(version: String, resource: String, message: (Version, Option[String]) => Any, inline: Boolean = true) = {
+  private def ResourceAction(version: String, resource: String, message: (Version, Option[String]) => Any, inline: Boolean = true) = {
     VersionAction(version) { (actor, version) => implicit req =>
       (actor ? message(version, etag(req))).mapTo[Response[Resource]].map {
         case DocsNotFound(context) => pageNotFound(context, resource)

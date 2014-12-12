@@ -1,7 +1,8 @@
 package utils
 
 import java.net.URI
-
+import javax.inject.{ Inject, Singleton }
+import play.api.Play
 import play.api.libs.iteratee.Done
 import play.api.mvc.{Results, EssentialAction, EssentialFilter}
 import play.core.PlayVersion
@@ -10,13 +11,14 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 /**
  * Adds a server header to each response
  */
-object ServerHeaderFilter extends EssentialFilter {
-  val version = "Play/" + PlayVersion.current +
+@Singleton
+class ServerHeaderFilter @Inject() extends EssentialFilter {
+  private val version = "Play/" + PlayVersion.current +
     " Scala/" + scala.util.Properties.scalaPropOrElse("version.number", "unknown")
 
-  val httpsPort = sys.props.get("https.port").map(_.toInt)
+  private val httpsPort = sys.props.get("https.port").map(_.toInt)
 
-  val headers = {
+  private val headers = {
     val security = if (httpsPort.isDefined) {
       Seq(
         // Force HTTPS for browsers that support strict transport security, but only set a max age of 1 hour
