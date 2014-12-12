@@ -2,14 +2,14 @@ package controllers
 
 import javax.inject.{ Inject, Singleton }
 import play.api.mvc.{Action, Controller}
-import play.api.Play
+import play.api.{Environment, Play}
 import play.twirl.api.Html
 import utils.Markdown
 import org.apache.commons.io.IOUtils
 import java.io.File
 
 @Singleton
-class Security @Inject() () extends Controller with Common {
+class Security @Inject() (environment: Environment) extends Controller with Common {
 
   def vulnerability(name: String) = Action { implicit req =>
     val path = "public/markdown/vulnerabilities/" + name
@@ -18,7 +18,7 @@ class Security @Inject() () extends Controller with Common {
     if (new File("/" + path).getCanonicalPath != "/" + path) {
       notFound
     } else {
-      Play.maybeApplication.flatMap(app => Option(app.classloader.getResourceAsStream(path + ".md"))).map { is =>
+      environment.resourceAsStream(path + ".md").map { is =>
         val content = IOUtils.toString(is)
 
         try {

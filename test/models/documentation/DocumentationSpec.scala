@@ -1,6 +1,5 @@
-package controllers
+package models.documentation
 
-import models.documentation._
 import org.specs2.mutable.Specification
 
 class DocumentationSpec extends Specification {

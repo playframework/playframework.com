@@ -27,12 +27,10 @@ GET         /security/vulnerability                                  controllers
 
 #Modules
 GET         /modules                                                 controllers.Modules.index(keyword ?= "")
-HEAD        /modules/:name-:version.zip                              controllers.Modules.download(name, version)
 GET         /modules/:name-:version.zip                              controllers.Modules.download(name, version)
 GET         /modules/:name                                           controllers.Modules.show(name)
 GET         /modules/:name-:version/:page                            controllers.Modules.documentation(name, version, page)
 GET         /modules/repo/:name/:version/dependencies.yml            controllers.Modules.dependencies(name, version)
-HEAD        /modules/repo/:name/:version/dependencies.yml            controllers.Modules.dependencies(name, version)
 
 # Deprecated links
 GET         /code/*something                                         controllers.Application.movedTo(url="/code", something)

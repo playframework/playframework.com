@@ -7,10 +7,9 @@ import com.google.inject.name.Named
 import models.github._
 import play.api.Logger
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
 import scala.util.{Failure, Success}
-import play.api.libs.concurrent.Execution.Implicits._
 
 trait ContributorsSummariser {
   /**
@@ -19,7 +18,7 @@ trait ContributorsSummariser {
   def fetchContributors: Future[Contributors]
 }
 
-class DefaultContributorsSummariser @Inject() (gitHub: GitHub, config: GitHubConfig) extends ContributorsSummariser {
+class DefaultContributorsSummariser @Inject() (gitHub: GitHub, config: GitHubConfig)(implicit ec: ExecutionContext) extends ContributorsSummariser {
 
   private def fetchCommitters(teams: Seq[Team]) = {
     val committerTeams = teams.filter(team => config.committerTeams.contains(team.name))
@@ -69,7 +68,7 @@ class DefaultContributorsSummariser @Inject() (gitHub: GitHub, config: GitHubCon
 }
 
 class CachingContributorsSummariser @Inject() (actorSystem: ActorSystem,
-                                               @Named("gitHubContributorsSummariser") delegate: ContributorsSummariser) extends ContributorsSummariser {
+                                               @Named("gitHubContributorsSummariser") delegate: ContributorsSummariser)(implicit ec: ExecutionContext) extends ContributorsSummariser {
   @volatile private var contributors: Contributors = FallbackContributors.contributors
 
   actorSystem.scheduler.schedule(0 seconds, 24 hours) {

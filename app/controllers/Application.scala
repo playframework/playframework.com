@@ -20,13 +20,14 @@ import scala.util.Try
 @Singleton
 class Application @Inject() (
   cache: CacheApi,
+  environment: Environment,
   configuration: Configuration,
   environment: Environment,
   messages: MessagesApi,
   ws: WSClient) extends Controller with Common {
 
   private lazy val releases: PlayReleases = {
-    Play.maybeApplication.flatMap(app => Option(app.classloader.getResourceAsStream("playReleases.json"))).flatMap { is =>
+    environment.resourceAsStream("playReleases.json").flatMap { is =>
       try {
         Json.fromJson[PlayReleases](Json.parse(IOUtils.toByteArray(is))).asOpt
       } finally {

@@ -1,91 +1,55 @@
 package controllers
 
 import javax.inject.{ Inject, Singleton }
-import play.api._
 import play.api.mvc._
 import play.api.libs.json._
-import models._
-import java.util.zip._
-import utils._
-import scala.io.Source
+import services.modules._
+import models.modules._
 
 @Singleton
 class Modules @Inject() (
-  environment: Environment,
-  moduleFinder: ModuleFinder) extends Controller {
+  modulesLookup: ModulesLookup,
+  moduleDao: ModuleDao) extends Controller {
 
   def index(keyword: String) = Action { implicit request =>
-    request.headers.get(ACCEPT).filter(_ == "application/json").map { _ =>
-      Ok {
-        JsObject(Seq(
-          "modules" -> JsArray(
-            moduleFinder.findEverything.map {
-              case (module, releases) => JsObject(Seq(
-                "name" -> JsString(module.name),
-                "fullname" -> JsString(module.fullname),
-                "versions" -> JsArray(
-                  releases.map { release =>
-                    JsObject(Seq(
-                      "isDefault" -> JsBoolean(release.isDefault),
-                      "version" -> JsString(release.version),
-                      "matches" -> JsString(release.frameworkMatch)
-                    ))
-                  }.toList
-                )
-              ))
-            }.toList
-          )
-        ))
-      }
-    }.getOrElse {
-      Ok(views.html.modules.list(moduleFinder.findAll(keyword)))
+    request.headers.get(ACCEPT) match {
+      case Some("application/json") =>
+        import Module.modulesWrites
+        Ok(Json.toJson(moduleDao.findEverything))
+      case None =>
+        Ok(views.html.modules.list(moduleDao.findAll(keyword)))
     }
   }
 
   def download(name: String, version: String) = Action { implicit request =>
-    environment.getExistingFile("data/modules/" + name + "-" + version + ".zip").map {
-      case zip if request.method == "GET" => Ok.sendFile(zip): Result
-      case zip if request.method == "HEAD" => Ok.withHeaders(CONTENT_LENGTH -> zip.length.toString): Result
-    }.getOrElse(PageNotFound)
-  }  
+    modulesLookup.findModule(name, version) match {
+      case Some(zip) => Ok.sendFile(zip)
+      case None => PageNotFound
+    }
+  }
 
   def documentation(name: String, version: String, page: String) = Action { implicit request =>
-    environment.getExistingFile("data/modules/" + name + "-" + version + ".zip").map(new ZipFile(_)).flatMap { zip =>
-      try {
-        Option(zip.getEntry("documentation/manual/" + page + ".textile")).map { entry =>
-          Source.fromInputStream(zip.getInputStream(entry)).mkString
-        }
-      } finally {
-        zip.close()
-      }
-    }.map { textile =>
-      val content = Textile.toHTML(textile)
-      Ok(views.html.modules.documentation(name, content))
-    }.getOrElse(PageNotFound)
+    modulesLookup.loadModuleDocumentation(name, version, page) match {
+      case Some(content) =>
+        Ok(views.html.modules.documentation(name, content))
+      case None => PageNotFound
+    }
   }
 
   def show(name: String) = Action { implicit request =>
-    moduleFinder.findById(name).map {
-      case (module, releases) => Ok(views.html.modules.show(module, releases))
-    }.getOrElse(PageNotFound)
+    moduleDao.findById(name) match {
+      case Some((module, releases)) => Ok(views.html.modules.show(module, releases))
+      case None => PageNotFound
+    }
+  }
+
+  def dependencies(name: String, version: String) = Action { implicit request =>
+    modulesLookup.findDependencies(name, version) match {
+      case Some(yml) => Ok(yml)
+      case None => Ok("self: play -> " + name + " " + version)
+    }
   }
 
   private def PageNotFound(implicit request: RequestHeader) = NotFound(views.html.notfound())
-
-  def dependencies(name: String, version: String) = Action { implicit request =>
-    environment.getExistingFile("data/modules/" + name + "-" + version + ".zip").map(new ZipFile(_)).flatMap { zip =>
-      try {
-        Option(zip.getEntry("conf/dependencies.yml")).map { entry =>
-          Source.fromInputStream(zip.getInputStream(entry)).mkString
-        }
-      } finally {
-        zip.close()
-      }
-    }.map {
-      case yml if request.method == "GET" => Ok(yml): Result
-      case yml if request.method == "HEAD" => Ok: Result
-    }.getOrElse(Ok("self: play -> " + name + " " + version))
-  }
-
 }
 

@@ -7,9 +7,8 @@ import play.api.http.HeaderNames
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.ws._
-import play.api.libs.concurrent.Execution.Implicits._
 
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 import models.github._
 
 /**
@@ -55,7 +54,7 @@ trait GitHub {
 
 case class GitHubConfig(accessToken: String, gitHubApiUrl: String, organisation: String, committerTeams: Seq[String])
 
-class DefaultGitHub @Inject() (ws: WSClient, config: GitHubConfig) extends GitHub {
+class DefaultGitHub @Inject() (ws: WSClient, config: GitHubConfig)(implicit ec: ExecutionContext) extends GitHub {
 
   private def authCall(url: String) = {
     ws.url(url).withHeaders(HeaderNames.AUTHORIZATION -> ("token " + config.accessToken))
