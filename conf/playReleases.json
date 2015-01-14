@@ -4,14 +4,14 @@
         "date": "Dec 3 2014"
     },
     "development": [
-        {
-            "version": "1.3.0-RC3",
-            "url": "http://downloads.typesafe.com/play/1.3.0-RC3/play-1.3.0-RC3.zip",
-            "date": "Dec 5 2014",
-            "size": "68.1M"
-        }
     ],
     "previous": [
+        {
+            "version": "1.3.0",
+            "url": "http://downloads.typesafe.com/play/1.3.0/play-1.3.0.zip",
+            "date": "Jan 15 2015",
+            "size": "67.8M"
+        },
         {
             "version": "2.3.6",
             "date": "Oct 28 2014"
