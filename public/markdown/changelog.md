@@ -388,3 +388,31 @@ A complete list of what was fixed for 2.2.2 can be found on [Github](https://git
 * Configured timeouts and redirects for WS API
 * Stopped plugins in reverse order to started
 * Removed circular dependencies in dev mode ClassLoaders
+
+## Play 1.3.0
+
+*Released 15 January 2015*
+
+* Fixed multiple continuations/await bugs
+* Fixed multiple test bugs (auto-test/async/htmlunit)
+* Numerous libraries upgraded (a.o. netty, hibernate, etc)
+* Numerous i18n fixes
+* Experimental java 8 support (however, hibernate does not support it, so some edge cases might now work)
+* Improved intellij support
+* Multiple databases support
+* Customisable netty pipeline
+* Customisable template name resolving
+* Introduce filters in the plugin API
+* Project documentation viewer in dev mode
+* Improved Job support – added afterRequest() support
+* Improved Mailer
+
+**Migration notes**
+
+* Java 1.5 is no longer supported
+* Modules dependencies resolution change from http://www.playframework.org to https://www.playframework.com
+* Run ‘play deps’ to make sure your dependencies are up-to-date
+
+**Known issues**
+
+* Cobertura does not work
