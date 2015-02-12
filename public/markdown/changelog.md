@@ -1,3 +1,17 @@
+## Play 2.3.8
+
+*Released 11 February 2015*
+
+* [3723](https://github.com/playframework/playframework/pull/3723) Upgrade async-http-client
+* [3752](https://github.com/playframework/playframework/pull/3752) Commas in etag break browser caching
+* [3771](https://github.com/playframework/playframework/pull/3771) Log http wire
+* [3773](https://github.com/playframework/playframework/pull/3773) Do not reveal db password in log
+* [3805](https://github.com/playframework/playframework/pull/3805) Updated Javassist to 3.19.0-GA
+* [3811](https://github.com/playframework/playframework/pull/3811) Upgrade to sbteclipse 3.0.0 which has several bug fixes for issues reported by Play users
+* Add forked development-mode run for integration with sbt server
+
+[Full changelog](https://github.com/playframework/playframework/issues?q=milestone%3A2.3.8)
+
 ## Play 2.3.7
 
 *Released 3 December 2014*
