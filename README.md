@@ -1,12 +1,12 @@
 Development Instructions
 ------------------------
 
-To get the documentation served properly, clone Play to some location (can be the clone that you usually work with, playframework.com doesn't touch your working directory), then create a data directory in the repo (this will be ignored by git by default, but may not be ignored by your IDE so you may want to add it to your IDEs excluded folders), and then create a symlink in there called `main` that points to the Play clone.
+Requirements:
+- local MySQL database called "test"
+- local clone of playframework, with remote called origin, symlinked from data/main.
+- local clone of play-generated-docs, with remote called origin, symlinked from data/generated.
+- local clone of each doc translation in data/translationname, e.g. data/ja, data/tr, data/fr, data/bg. See application.conf for list of translation repos.
+
+Git should ignore the symlinked repos but you may need to tell your IDE to exclude them.
 
 You may see exceptions in the logs about failing to authenticate, ignore them, they are just the periodic git fetch failing because the Play app doesn't have your GitHub credentials.
-
-If you want to test with Play 1 docs, Play 2.0.x docs, or the API docs, then you also need to create a symlink from that directory called `generated` that points to that clone.
-
-Similarly for translations of the Play documentation, create a symlink for the name of the translation in that directory to a clone of the translation.
-
-You will also need a mysql database called test setup locally.
