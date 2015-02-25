@@ -32,8 +32,16 @@ class PlayGitRepository(val gitDir: File, val remote: String = "origin", basePat
     Option(repository.getRef("refs/remotes/" + remote + "/" + ref))
       .map(_.getLeaf.getObjectId)
 
-  def fetch(): Unit = git.fetch().setTagOpt(TagOpt.FETCH_TAGS)
-    .setRemoveDeletedRefs(true).setRemote(remote).call()
+  def fetch(): Unit = {
+    // Perform two fetches. The first fetch will remove deleted refs, the second fetch
+    // doesn't remove anything. We need to run the second fetch because the JGit code
+    // for removing deleted remote refs is buggy so the first fetch will remove the
+    // remote master branch if it's already present. The second fetch will restore it.
+    // The second fetch should be pretty lightweight to run again because there shouldn't
+    // be much data that needs pulling down.
+    git.fetch().setTagOpt(TagOpt.FETCH_TAGS).setRemoveDeletedRefs(true).setRemote(remote).call()
+    git.fetch().setTagOpt(TagOpt.FETCH_TAGS).setRemote(remote).call()
+  }
 
   private def treeWalkIsFile(walk: TreeWalk) = {
     (walk.getFileMode(0).getBits & FileMode.TYPE_MASK) == FileMode.TYPE_FILE
