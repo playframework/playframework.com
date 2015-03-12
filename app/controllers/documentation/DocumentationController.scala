@@ -8,7 +8,7 @@ import akka.util.Timeout
 import javax.inject.{ Inject, Singleton }
 import models.documentation.{AlternateTranslation, TranslationContext, Version}
 import org.joda.time.format.DateTimeFormat
-import play.api.i18n.Lang
+import play.api.i18n.{MessagesApi, Lang}
 import play.api.mvc._
 import scala.concurrent.Future
 import scala.concurrent.duration._
@@ -18,6 +18,7 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
 @Singleton
 class DocumentationController @Inject() (
+  messages: MessagesApi,
   actors: Actors) extends Controller {
 
   private implicit val timeout = Timeout(5.seconds)
@@ -27,7 +28,7 @@ class DocumentationController @Inject() (
   private val EmptyContext = TranslationContext(Lang("en"), true, None, Nil, Nil)
 
   private def pageNotFound(context: TranslationContext, title: String)(implicit req: RequestHeader) =
-    NotFound(views.html.documentation.v2(context, title))
+    NotFound(views.html.documentation.v2(messages, context, title))
 
   private def cacheable(result: Result, cacheId: String) = {
     result.withHeaders(
@@ -86,7 +87,7 @@ class DocumentationController @Inject() (
       case DocsNotFound(context) => pageNotFound(context, page)
       case DocsNotModified(cacheId) => notModified(cacheId)
       case RenderedPage(html, _, _, context, cacheId) =>
-        val result = Ok(views.html.documentation.v1(context, page, html))
+        val result = Ok(views.html.documentation.v1(messages, context, page, html))
         cacheable(withLangHeaders(result, page, context), cacheId)
     }
   }
@@ -126,7 +127,7 @@ class DocumentationController @Inject() (
       case DocsNotFound(context) => pageNotFound(context, page)
       case DocsNotModified(cacheId) => notModified(cacheId)
       case RenderedPage(html, sidebarHtml, source, context, cacheId) =>
-        val result = Ok(views.html.documentation.v2(context, page, Some(html), sidebarHtml, source))
+        val result = Ok(views.html.documentation.v2(messages, context, page, Some(html), sidebarHtml, source))
         cacheable(withLangHeaders(result, page, context), cacheId)
     }
   }

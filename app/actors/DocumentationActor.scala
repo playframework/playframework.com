@@ -5,13 +5,13 @@ import akka.pattern.{ask, pipe}
 import akka.routing.SmallestMailboxPool
 import akka.util.Timeout
 import models.documentation._
-import play.api.i18n.Lang
+import play.api.i18n.{MessagesApi, Lang}
 import play.api.libs.iteratee.Enumerator
 import utils.PlayGitRepository
 import scala.concurrent.duration._
 
 /**
- * Protocol for the documentation actor
+ * Protocol for the documentation actor.
  */
 object DocumentationActor {
 
@@ -146,10 +146,17 @@ object DocumentationActor {
   case class DocumentationGitRepo(config: TranslationConfig, repo: PlayGitRepository)
 
 
-  def props(config: DocumentationConfig) = Props(new DocumentationActor(config))
+  def props(messages: MessagesApi, config: DocumentationConfig) = Props(new DocumentationActor(messages, config))
 }
 
-class DocumentationActor(config: DocumentationConfig) extends Actor {
+/**
+ * The documentation actor.
+ *
+ * This is the entry into loading and rendering the documentation.  This actor does not block, it does not do any IO,
+ * it merely coordinates everything.  It keeps a reference to the current documentation index.  All IO, page rendering,
+ * etc is delegated to the other documentation actors.
+ */
+class DocumentationActor(messages: MessagesApi, config: DocumentationConfig) extends Actor {
 
   import DocumentationActor._
   import actors.{ DocumentationLoadingActor => Loader }
@@ -166,8 +173,12 @@ class DocumentationActor(config: DocumentationConfig) extends Actor {
     config.translations.map(createRepo)
   )
 
+  /**
+   * The poller, when it starts, scans all repos and will send the documentation,
+   * moving this actor into the documentation loaded state.
+   */
   private val poller = context.actorOf(
-    Props(new DocumentationPollingActor(repos, self))
+    Props(new DocumentationPollingActor(repos, self, messages))
       .withDispatcher("polling-dispatcher"),
     "documentationPoller"
   )
@@ -185,182 +196,183 @@ class DocumentationActor(config: DocumentationConfig) extends Actor {
 
   val version21 = Version("2.1", 2, 1, 0, 0, Release)
 
-  var documentation: Documentation = null
-
-  var pending: List[(Any, ActorRef)] = Nil
+  def receive = noDocumentation(Nil)
 
   /**
    * Initial state, documentation not loaded, all messages buffered.
    */
-  def receive = {
+  def noDocumentation(pendingRequests: List[(Any, ActorRef)]): Receive = {
     case UpdateDocumentation(docs) =>
-      documentation = docs
-      context.become(documentationLoaded)
-      pending.reverse.foreach(m => self.tell(m._1, m._2))
-      pending = Nil
+      context.become(documentationLoaded(docs))
+      pendingRequests.reverse.foreach(m => self.tell(m._1, m._2))
     case other =>
-      pending = (other, sender()) :: pending
+      context.become(noDocumentation((other, sender()) :: pendingRequests))
   }
 
   /**
    * Final state, documentation loaded
    */
-  def documentationLoaded: Actor.Receive = {
+  def documentationLoaded(documentation: Documentation): Actor.Receive = {
 
-    case UpdateDocumentation(docs) =>
-      documentation = docs
+    /**
+     * Do the given block for the given lang
+     */
+    def forLang[T](req: LangRequest[_])(block: (Lang, Translation, TranslationVersion) => Unit) = {
+      // Fold lang
+      req.lang.fold[Option[(Lang, Translation)]](
+        // No lang, use default
+        Some((documentation.defaultLang, documentation.default))
+      ) { lang =>
+        // Lang was requested, see if we have that lang
+        documentation.translations.get(lang).map { translation =>
+          (lang, translation)
+        }
+      } match {
+        case Some((lang, translation)) =>
 
-    case rp @ RenderPage(_, version, _, page) =>
-      loaderRequest[play.doc.RenderedPage](rp) { tv =>
-        Loader.RenderPage(page, tv.playDoc)
-      } { (lang, translation, tv, page) =>
-
-        val source = if (version.versionType.isLatest) {
-          translation.source.map { gitHubSource =>
-            gitHubSource.format(tv.symbolicName, page.path)
-          }
-        } else None
-
-        RenderedPage(page.html, page.sidebarHtml, source, translationContext(lang, version, translation), tv.cacheId)
-      }
-
-    case rp @ RenderV1Page(_, version, _, page) =>
-      loaderRequest[String](rp) { tv =>
-        Loader.RenderV1Page(page, tv.repo)
-      } { (lang, translation, tv, content) =>
-        RenderedPage(content, None, None, translationContext(lang, version, translation), tv.cacheId)
-      }
-
-    case lr: LoadResource =>
-      loaderRequest[Loader.Resource](lr) { tv =>
-        Loader.LoadResource(lr.resource, tv.repo)
-      } { (_, _, tv, resource) =>
-        Resource(resource.content, resource.size, tv.cacheId)
-      }
-
-    case LoadApi(version, cacheId, resource) =>
-      documentation.default.byVersion.get(version) match {
-        case Some(tr) if cacheId.exists(_ == tr.cacheId) =>
-          sender() ! NotModified(tr.cacheId)
-        case Some(tr) =>
-          val resourceRequest = for {
-            maybeResource <- (loader ? Loader.LoadResource("api/" + resource, tr.repo)).mapTo[Option[Loader.Resource]]
-          } yield {
-            maybeResource.map { resource =>
-              Resource(resource.content, resource.size, tr.cacheId)
-            } getOrElse NotFound(notFoundTranslationContext())
+          translation.byVersion.get(req.version) match {
+            case Some(tv) =>
+              req.cacheId match {
+                case Some(cacheId) if cacheId == tv.cacheId => sender() ! NotModified(cacheId)
+                case _ => block(lang, translation, tv)
+              }
+            case _ => sender() ! NotFound(notFoundTranslationContext(lang, translation.displayVersions))
           }
 
-          resourceRequest pipeTo sender()
-
-        case None => sender() ! NotFound(notFoundTranslationContext())
+        // No lang was found
+        case _ => sender() ! NotFound(notFoundTranslationContext())
       }
+    }
 
-    case GetSummary =>
-      sender() ! DocumentationSummary(documentation.default.defaultVersion, documentation.defaultLang, documentation.allLangs,
-        documentation.translations.mapValues(_.defaultVersion), notFoundTranslationContext())
+    /**
+     * Make a loader request for the given language and version.
+     *
+     * The generated message, when asked from the loader, is expected to return an option of the given return type.
+     *
+     * @param incomingRequest The request message
+     * @param loaderRequest A function that creates the request message from the given repository
+     * @param response A function that creates the response message from the answer, to send back to the sender
+     */
+    def loaderRequest[T](incomingRequest: LangRequest[_])(loaderRequest: TranslationVersion => Any)
+                                (response: (Lang, Translation, TranslationVersion, T) => Response[_]) = {
+      forLang(incomingRequest) { (lang, translation, tv) =>
+        val askRequest = for {
+          answerOpt <- (loader ? loaderRequest(tv)).mapTo[Option[T]]
+        } yield {
+          answerOpt.map { answer =>
+            response(lang, translation, tv, answer)
+          } getOrElse NotFound(notFoundTranslationContext(lang, translation.displayVersions))
+        }
 
-    case rc @ RenderV1Cheatsheet(_, version, _, category) =>
-      loaderRequest[Loader.V1Cheatsheet](rc) { tv =>
-        Loader.RenderV1Cheatsheet(category, tv.repo)
-      } { (lang, translation, tv, cs) =>
-        V1Cheatsheet(cs.sheets, cs.title, cs.otherCategories, translationContext(lang, version, translation), tv.cacheId)
+        askRequest pipeTo sender()
       }
-  }
+    }
 
-  /**
-   * Do the given block for the given lang
-   */
-  private def forLang[T](req: LangRequest[_])(block: (Lang, Translation, TranslationVersion) => Unit) = {
-    // Fold lang
-    req.lang.fold[Option[(Lang, Translation)]](
-      // No lang, use default
-      Some((documentation.defaultLang, documentation.default))
-    ) { lang =>
-      // Lang was requested, see if we have that lang
-      documentation.translations.get(lang).map { translation =>
-        (lang, translation)
+    /**
+     * Get the translation context for the given language and version.
+     */
+    def translationContext(lang: Lang, version: Version, translation: Translation): TranslationContext = {
+      val isDefault = lang == documentation.defaultLang
+      val defaultAlternative = AlternateTranslation(documentation.defaultLang, true,
+        findMostSuitableMatch(version, documentation.default.availableVersions.map(_.version)))
+      val alternatives = documentation.translations.toList.sortBy(_._1.code).map {
+        case (l, t) =>
+          AlternateTranslation(l, false, findMostSuitableMatch(version, t.availableVersions.map(_.version)))
       }
-    } match {
-      case Some((lang, translation)) =>
+      TranslationContext(lang, isDefault, Some(version), translation.displayVersions, defaultAlternative :: alternatives)
+    }
 
-        translation.byVersion.get(req.version) match {
-          case Some(tv) =>
-            req.cacheId match {
-              case Some(cacheId) if cacheId == tv.cacheId => sender() ! NotModified(cacheId)
-              case _ => block(lang, translation, tv)
+    /**
+     * Find the most suitable match for the given version from the list of candidates.
+     *
+     * The most suitable match is defined as a version that is of the same major version, and is either an identical
+     * version, or if no identical version is found, is the most recent stable version of the candidates, otherwise
+     * the most recent version of the candidates.  If there are no candidates of the same major version, none is returned.
+     */
+    def findMostSuitableMatch(version: Version, candidates: List[Version]): Option[Version] = {
+      val sameMajors = candidates.filter(_.sameMajor(version))
+      sameMajors.find(_ == version).orElse {
+        sameMajors.find(v => v.versionType.isLatest || v.versionType.isStable)
+      }.orElse(sameMajors.headOption)
+    }
+
+    /**
+     * The translation context for if a resource is not found.
+     */
+    def notFoundTranslationContext(lang: Lang = documentation.defaultLang,
+                                           displayVersions: List[Version] = documentation.default.displayVersions) = {
+      TranslationContext(lang, lang == documentation.defaultLang, None, displayVersions,
+        AlternateTranslation(documentation.defaultLang, true, None) ::
+          documentation.translations.toList.sortBy(_._1.code).map {
+            case (l, translation) =>
+              AlternateTranslation(l, false, None)
+          }
+      )
+    }
+
+
+    {
+
+      case UpdateDocumentation(docs) =>
+        context.become(documentationLoaded(docs))
+
+      case rp @ RenderPage(_, version, _, page) =>
+        loaderRequest[play.doc.RenderedPage](rp) { tv =>
+          Loader.RenderPage(page, tv.playDoc)
+        } { (lang, translation, tv, page) =>
+
+          val source = if (version.versionType.isLatest) {
+            translation.source.map { gitHubSource =>
+              gitHubSource.format(tv.symbolicName, page.path)
             }
-          case _ => sender() ! NotFound(notFoundTranslationContext(lang, translation.displayVersions))
+          } else None
+
+          RenderedPage(page.html, page.sidebarHtml, source, translationContext(lang, version, translation), tv.cacheId)
         }
 
-      // No lang was found
-      case _ => sender() ! NotFound(notFoundTranslationContext())
-    }
-  }
-
-  /**
-   * Make a loader request for the given language and version.
-   *
-   * The generated message, when asked from the loader, is expected to return an option of the given return type.
-   *
-   * @param incomingRequest The request message
-   * @param loaderRequest A function that creates the request message from the given repository
-   * @param response A function that creates the response message from the answer, to send back to the sender
-   */
-  private def loaderRequest[T](incomingRequest: LangRequest[_])(loaderRequest: TranslationVersion => Any)
-                              (response: (Lang, Translation, TranslationVersion, T) => Response[_]) = {
-    forLang(incomingRequest) { (lang, translation, tv) =>
-      val askRequest = for {
-        answerOpt <- (loader ? loaderRequest(tv)).mapTo[Option[T]]
-      } yield {
-        answerOpt.map { answer =>
-          response(lang, translation, tv, answer)
-        } getOrElse NotFound(notFoundTranslationContext(lang, translation.displayVersions))
-      }
-
-      askRequest pipeTo sender()
-    }
-  }
-
-  /**
-   * Get the translation context for the given language and version.
-   */
-  private def translationContext(lang: Lang, version: Version, translation: Translation): TranslationContext = {
-    val isDefault = lang == documentation.defaultLang
-    val defaultAlternative = AlternateTranslation(documentation.defaultLang, true,
-      findMostSuitableMatch(version, documentation.default.availableVersions.map(_.version)))
-    val alternatives = documentation.translations.toList.sortBy(_._1.code).map {
-      case (l, t) =>
-        AlternateTranslation(l, false, findMostSuitableMatch(version, t.availableVersions.map(_.version)))
-    }
-    TranslationContext(lang, isDefault, Some(version), translation.displayVersions, defaultAlternative :: alternatives)
-  }
-
-  /**
-   * Find the most suitable match for the given version from the list of candidates.
-   *
-   * The most suitable match is defined as a version that is of the same major version, and is either an identical
-   * version, or if no identical version is found, is the most recent stable version of the candidates, otherwise
-   * the most recent version of the candidates.  If there are no candidates of the same major version, none is returned.
-   */
-  private def findMostSuitableMatch(version: Version, candidates: List[Version]): Option[Version] = {
-    val sameMajors = candidates.filter(_.sameMajor(version))
-    sameMajors.find(_ == version).orElse {
-      sameMajors.find(v => v.versionType.isLatest || v.versionType.isStable)
-    }.orElse(sameMajors.headOption)
-  }
-
-  /**
-   * The translation context for if a resource is not found.
-   */
-  def notFoundTranslationContext(lang: Lang = documentation.defaultLang,
-                                 displayVersions: List[Version] = documentation.default.displayVersions) = {
-    TranslationContext(lang, lang == documentation.defaultLang, None, displayVersions,
-      AlternateTranslation(documentation.defaultLang, true, None) ::
-        documentation.translations.toList.sortBy(_._1.code).map {
-          case (l, translation) =>
-            AlternateTranslation(l, false, None)
+      case rp @ RenderV1Page(_, version, _, page) =>
+        loaderRequest[String](rp) { tv =>
+          Loader.RenderV1Page(page, tv.repo)
+        } { (lang, translation, tv, content) =>
+          RenderedPage(content, None, None, translationContext(lang, version, translation), tv.cacheId)
         }
-    )
+
+      case lr: LoadResource =>
+        loaderRequest[Loader.Resource](lr) { tv =>
+          Loader.LoadResource(lr.resource, tv.repo)
+        } { (_, _, tv, resource) =>
+          Resource(resource.content, resource.size, tv.cacheId)
+        }
+
+      case LoadApi(version, cacheId, resource) =>
+        documentation.default.byVersion.get(version) match {
+          case Some(tr) if cacheId.exists(_ == tr.cacheId) =>
+            sender() ! NotModified(tr.cacheId)
+          case Some(tr) =>
+            val resourceRequest = for {
+              maybeResource <- (loader ? Loader.LoadResource("api/" + resource, tr.repo)).mapTo[Option[Loader.Resource]]
+            } yield {
+              maybeResource.map { resource =>
+                Resource(resource.content, resource.size, tr.cacheId)
+              } getOrElse NotFound(notFoundTranslationContext())
+            }
+
+            resourceRequest pipeTo sender()
+
+          case None => sender() ! NotFound(notFoundTranslationContext())
+        }
+
+      case GetSummary =>
+        sender() ! DocumentationSummary(documentation.default.defaultVersion, documentation.defaultLang, documentation.allLangs,
+          documentation.translations.mapValues(_.defaultVersion), notFoundTranslationContext())
+
+      case rc @ RenderV1Cheatsheet(_, version, _, category) =>
+        loaderRequest[Loader.V1Cheatsheet](rc) { tv =>
+          Loader.RenderV1Cheatsheet(category, tv.repo)
+        } { (lang, translation, tv, cs) =>
+          V1Cheatsheet(cs.sheets, cs.title, cs.otherCategories, translationContext(lang, version, translation), tv.cacheId)
+        }
+    }
   }
+
 }

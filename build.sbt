@@ -19,11 +19,12 @@ libraryDependencies ++= Seq(
   "org.webjars" % "jquery" % "1.8.2",
   "org.webjars" % "html5shiv" % "3.7.2",
   "org.webjars" % "prettify" % "4-Mar-2013",
-  anorm,
+  "com.typesafe.play" %% "anorm" % "2.4-SNAPSHOT",
   jdbc,
   filters,
   cache,
-  ws
+  ws,
+  specs2 % "test"
 )
 
 scalaVersion := "2.11.4"

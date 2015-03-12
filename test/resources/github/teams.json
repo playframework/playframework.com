@@ -4,17 +4,17 @@
         "id": 2502,
         "slug": "owners",
         "permission": "admin",
-        "url": "https://api.github.com/teams/2502",
-        "members_url": "https://api.github.com/teams/2502/members{/member}",
-        "repositories_url": "https://api.github.com/teams/2502/repos"
+        "url": "/teams/2502",
+        "members_url": "/teams/2502/members{/member}",
+        "repositories_url": "/teams/2502/repos"
     },
     {
         "name": "Developers",
         "id": 11313,
         "slug": "developers",
         "permission": "push",
-        "url": "https://api.github.com/teams/11313",
-        "members_url": "https://api.github.com/teams/11313/members{/member}",
-        "repositories_url": "https://api.github.com/teams/11313/repos"
+        "url": "/teams/11313",
+        "members_url": "/teams/11313/members{/member}",
+        "repositories_url": "/teams/11313/repos"
     }
 ]

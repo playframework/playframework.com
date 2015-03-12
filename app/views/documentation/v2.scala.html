@@ -1,10 +1,10 @@
-@(context: models.documentation.TranslationContext, page: String = "Documentation", content: Option[String] = None, sidebar: Option[String] = None, source: Option[String] = None)(implicit req : RequestHeader)
+@(messages: MessagesApi, context: models.documentation.TranslationContext, page: String = "Documentation", content: Option[String] = None, sidebar: Option[String] = None, source: Option[String] = None)(implicit req : RequestHeader)
 
 @header(page) {
 
     <aside>
 
-        @nav(context, page, Seq("Scala" -> "scala/index.html", "Java" -> "java/index.html"))
+        @nav(messages, context, page, Seq("Scala" -> "scala/index.html", "Java" -> "java/index.html"))
 
         @for(version <- context.version) {
             <form id="search" method="get" action="//www.google.com/search">
@@ -32,7 +32,7 @@
             @source.map { source =>
               <hr/>
               <p>
-                  @Html(Messages("documentation.contribute.message",
+                  @Html(messages("documentation.contribute.message",
                       s"""<a href="$source">""", "</a>",
                       s"""<a href="${controllers.documentation.ReverseRouter.latest(context.alternateLang, "Documentation")}">""", "</a>"
                   )(context.lang))

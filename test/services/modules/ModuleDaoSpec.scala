@@ -1,18 +1,13 @@
 package services.modules
 
-import java.io.File
+import org.specs2.mutable.Specification
+import play.api.db.evolutions.Evolutions
+import play.api.db.Database
 
-import play.api.mvc.RequestHeader
-import play.api.{Configuration, Environment}
-import play.api.db.{DBApi, Database}
-import play.api.db.evolutions.{DynamicEvolutions, EvolutionsComponents}
-import play.api.test._
-import play.core.{HandleWebCommandSupport, BuildLink, WebCommands}
-import services.modules.Database.SimpleDbApi
-
-object ModuleDaoSpec extends PlaySpecification {
+object ModuleDaoSpec extends Specification {
 
   "The ModuleDao" should {
+    sequential
 
     "find a particular module and revision" in withDao { dao =>
       dao.findById("deadbolt") must beSome.which { moduleVersions =>
@@ -46,61 +41,13 @@ object ModuleDaoSpec extends PlaySpecification {
   }
 
   def withDao[T](block: DbModuleDao => T) = Database.withDatabase(
-    "com.mysql.jdbc.Driver", "jdbc:mysql://localhost:3306/playunittest", Map("user" -> "root")
+    driver = "com.mysql.jdbc.Driver",
+    url = "jdbc:mysql://localhost:3306/playunittest",
+    config = Map("user" -> "root")
   ) { db =>
-    Evolutions.applyEvolutions(db)
-    block(new DbModuleDao(db))
-  }
-
-}
-
-object Database {
-
-  def withInMemory[T](block: Database => T): T = withInMemory()(block)
-
-  def withInMemory[T](options: Map[String, String] = Map.empty)(block: Database => T): T = {
-    val db = play.api.db.Database.inMemory(urlOptions = options)
-    try {
-      block(db)
-    } finally {
-      db.shutdown()
+    Evolutions.withEvolutions(db) {
+      block(new DbModuleDao(db))
     }
   }
 
-  def withDatabase[T](driver: String, url: String, config: Map[String, _ <: Any])(block: Database => T): T = {
-    val db = play.api.db.Database(driver, url, config)
-    try {
-      block(db)
-    } finally {
-      db.shutdown()
-    }
-  }
-
-  class SimpleDbApi(databasesByName: Map[String, Database]) extends DBApi {
-    def databases() = databasesByName.values.toSeq
-
-    def shutdown() = databasesByName.foreach(_._2.shutdown())
-
-    def database(name: String) = databasesByName(name)
-  }
-
-}
-
-object Evolutions {
-  def applyEvolutions(database: Database, name: String = "default") = {
-    new EvolutionsComponents {
-      def dbApi = new SimpleDbApi(Map(name -> database))
-      def environment = Environment.simple()
-      def configuration = Configuration.empty
-      def webCommands = WebCommands.Noop
-      def dynamicEvolutions = new DynamicEvolutions
-    }.applicationEvolutions.start()
-  }
-}
-
-object WebCommands {
-  val Noop = new WebCommands() {
-    def addHandler(handler: HandleWebCommandSupport) = ()
-    def handleWebCommand(request: RequestHeader, buildLink: BuildLink, path: File) = None
-  }
 }
