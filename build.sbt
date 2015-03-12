@@ -19,7 +19,7 @@ libraryDependencies ++= Seq(
   "org.webjars" % "jquery" % "1.8.2",
   "org.webjars" % "html5shiv" % "3.7.2",
   "org.webjars" % "prettify" % "4-Mar-2013",
-  "com.typesafe.play" %% "anorm" % "2.4-SNAPSHOT",
+  "com.typesafe.play" %% "anorm" % "2.4.0-M3",
   jdbc,
   filters,
   cache,
@@ -27,7 +27,7 @@ libraryDependencies ++= Seq(
   specs2 % "test"
 )
 
-scalaVersion := "2.11.4"
+scalaVersion := "2.11.5"
 
 routesGenerator := InjectedRoutesGenerator
 
@@ -53,3 +53,5 @@ sourceGenerators in Compile += Def.task {
 }.taskValue
 
 managedSourceDirectories in Compile += crossTarget.value / "version"
+
+PlayKeys.playOmnidoc := false

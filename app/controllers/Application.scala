@@ -22,7 +22,6 @@ class Application @Inject() (
   cache: CacheApi,
   environment: Environment,
   configuration: Configuration,
-  environment: Environment,
   messages: MessagesApi,
   ws: WSClient) extends Controller with Common {
 

@@ -1,0 +1,9 @@
+language: scala
+
+jdk: oraclejdk8
+
+script:
+  - sbt test
+
+before_script:
+  - mysql -uroot -e 'create database playunittest;'
