@@ -16,4 +16,4 @@ CREATE TABLE ModuleRelease (
  
 # --- !Downs
  
-DROP TABLE Module;
+DROP TABLE ModuleRelease;

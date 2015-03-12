@@ -15,6 +15,17 @@ object DocumentationLoadingActor {
   case class Resource(content: Enumerator[Array[Byte]], size: Long)
 }
 
+/**
+ * The documentation loading actor is responsible for loading and rendering documentation pages.
+ *
+ * All the operations on this actor are intended to be short - ie, load and/or render a single resource.
+ *
+ * In some cases this actor will return enumerators of content, the content is backed by blocking IO streams, but
+ * the enumerator uses this actors own dispatcher to do that blocking IO.
+ *
+ * This actor is designed to be used behind a router, configured with a dedicated thread pool for doing blocking IO
+ * operations.
+ */
 class DocumentationLoadingActor extends Actor {
   import DocumentationLoadingActor._
 

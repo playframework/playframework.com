@@ -1,11 +1,11 @@
-@(context: models.documentation.TranslationContext, page: String, apis: Seq[(String, String)])
+@(messages: MessagesApi, context: models.documentation.TranslationContext, page: String, apis: Seq[(String, String)])
 
 @language(lang: Lang, isDefault: Boolean, version: Option[models.documentation.Version]) = {
     <a href="@version.fold(
         controllers.documentation.ReverseRouter.latest(Some(lang).filterNot(_ => isDefault))
     )( v =>
         controllers.documentation.ReverseRouter.page(Some(lang).filterNot(_ => isDefault), v.name, page)
-    )">@Messages("lang.name")(lang)</a>
+    )">@messages("lang.name")(lang)</a>
 }
 
 <nav id="toolbar">

@@ -6,7 +6,7 @@ import akka.actor.{ ActorSystem, ActorRef }
 import javax.inject.{ Inject, Singleton }
 import models.documentation._
 import play.api._
-import play.api.i18n.Lang
+import play.api.i18n.{MessagesApi, Lang}
 import play.api.libs.concurrent.Akka
 import scala.collection.JavaConversions._
 
@@ -14,9 +14,10 @@ import scala.collection.JavaConversions._
 class Actors @Inject() (
   environment: Environment,
   configuration: Configuration,
-  actorSystem: ActorSystem) {
+  actorSystem: ActorSystem,
+  messages: MessagesApi) {
 
-  val documentationActor: Option[ActorRef] = loadConfig.map(config => actorSystem.actorOf(DocumentationActor.props(config)))
+  val documentationActor: Option[ActorRef] = loadConfig.map(config => actorSystem.actorOf(DocumentationActor.props(messages, config)))
 
   private def loadConfig: Option[DocumentationConfig] = {
     for {

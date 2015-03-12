@@ -1,0 +1,40 @@
+[
+    {
+        "login": "guillaumebort",
+        "id": 94658,
+        "avatar_url": "https://avatars.githubusercontent.com/u/94658?v=3",
+        "gravatar_id": "",
+        "url": "/users/guillaumebort",
+        "html_url": "https://github.com/guillaumebort",
+        "followers_url": "/users/guillaumebort/followers",
+        "following_url": "/users/guillaumebort/following{/other_user}",
+        "gists_url": "/users/guillaumebort/gists{/gist_id}",
+        "starred_url": "/users/guillaumebort/starred{/owner}{/repo}",
+        "subscriptions_url": "/users/guillaumebort/subscriptions",
+        "organizations_url": "/users/guillaumebort/orgs",
+        "repos_url": "/users/guillaumebort/repos",
+        "events_url": "/users/guillaumebort/events{/privacy}",
+        "received_events_url": "/users/guillaumebort/received_events",
+        "type": "User",
+        "site_admin": false
+    },
+    {
+        "login": "jroper",
+        "id": 105833,
+        "avatar_url": "https://avatars.githubusercontent.com/u/105833?v=3",
+        "gravatar_id": "",
+        "url": "/users/jroper",
+        "html_url": "https://github.com/jroper",
+        "followers_url": "/users/jroper/followers",
+        "following_url": "/users/jroper/following{/other_user}",
+        "gists_url": "/users/jroper/gists{/gist_id}",
+        "starred_url": "/users/jroper/starred{/owner}{/repo}",
+        "subscriptions_url": "/users/jroper/subscriptions",
+        "organizations_url": "/users/jroper/orgs",
+        "repos_url": "/users/jroper/repos",
+        "events_url": "/users/jroper/events{/privacy}",
+        "received_events_url": "/users/jroper/received_events",
+        "type": "User",
+        "site_admin": false
+    }
+]

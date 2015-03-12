@@ -1,0 +1,40 @@
+[
+    {
+        "login": "guillaumebort",
+        "id": 94658,
+        "avatar_url": "https://avatars.githubusercontent.com/u/94658?v=3",
+        "gravatar_id": "",
+        "url": "/users/guillaumebort",
+        "html_url": "https://github.com/guillaumebort",
+        "followers_url": "/users/guillaumebort/followers",
+        "following_url": "/users/guillaumebort/following{/other_user}",
+        "gists_url": "/users/guillaumebort/gists{/gist_id}",
+        "starred_url": "/users/guillaumebort/starred{/owner}{/repo}",
+        "subscriptions_url": "/users/guillaumebort/subscriptions",
+        "organizations_url": "/users/guillaumebort/orgs",
+        "repos_url": "/users/guillaumebort/repos",
+        "events_url": "/users/guillaumebort/events{/privacy}",
+        "received_events_url": "/users/guillaumebort/received_events",
+        "type": "User",
+        "site_admin": false
+    },
+    {
+        "login": "hilton",
+        "id": 232614,
+        "avatar_url": "https://avatars.githubusercontent.com/u/232614?v=3",
+        "gravatar_id": "",
+        "url": "/users/hilton",
+        "html_url": "https://github.com/hilton",
+        "followers_url": "/users/hilton/followers",
+        "following_url": "/users/hilton/following{/other_user}",
+        "gists_url": "/users/hilton/gists{/gist_id}",
+        "starred_url": "/users/hilton/starred{/owner}{/repo}",
+        "subscriptions_url": "/users/hilton/subscriptions",
+        "organizations_url": "/users/hilton/orgs",
+        "repos_url": "/users/hilton/repos",
+        "events_url": "/users/hilton/events{/privacy}",
+        "received_events_url": "/users/hilton/received_events",
+        "type": "User",
+        "site_admin": false
+    }
+]

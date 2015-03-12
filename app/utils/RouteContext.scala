@@ -2,6 +2,8 @@ package utils
 
 import java.util.regex.Pattern
 
+import play.api.mvc.RequestHeader
+
 import scala.collection.concurrent.TrieMap
 import scala.util.matching.Regex
 
@@ -29,6 +31,10 @@ object routing {
         }
       }.mkString(Pattern.quote(sc.parts.head), "", "/?").r
     })
+  }
+
+  object Route {
+    def unapply(request: RequestHeader): Option[(String, String)] = Some((request.method, request.path))
   }
 
 }
