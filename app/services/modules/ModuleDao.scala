@@ -14,7 +14,7 @@ trait ModuleDao {
   /**
    * Find all the modules and all releases of the modules
    */
-  def findEverything: Seq[(Module, Seq[Release])]
+  def findEverything(): Seq[(Module, Seq[Release])]
 
   /**
    * Find all modules that have a name like the given keyword
@@ -53,7 +53,7 @@ class DbModuleDao @Inject() (db: Database) extends ModuleDao {
       (Release.apply _).tupled
   }
 
-  def findEverything = db.withConnection { implicit c =>
+  def findEverything() = db.withConnection { implicit c =>
     SQL("""
         select * from Module
         join ModuleRelease on Module.id = ModuleRelease.module_id

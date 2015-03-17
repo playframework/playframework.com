@@ -22,7 +22,7 @@ object ModuleDaoSpec extends Specification {
     }
 
     "find all modules and revisions" in withDao { dao =>
-      val modules = dao.findEverything
+      val modules = dao.findEverything()
       modules must haveSize(124)
       modules.find(_._1.name == "deadbolt") must beSome.which { moduleVersions =>
         val (module, versions) = moduleVersions

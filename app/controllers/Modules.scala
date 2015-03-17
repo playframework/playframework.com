@@ -12,12 +12,12 @@ class Modules @Inject() (
   moduleDao: ModuleDao) extends Controller {
 
   def index(keyword: String) = Action { implicit request =>
-    request.headers.get(ACCEPT) match {
-      case Some("application/json") =>
-        import Module.modulesWrites
-        Ok(Json.toJson(moduleDao.findEverything))
-      case None =>
+    render {
+      case Accepts.Html() =>
         Ok(views.html.modules.list(moduleDao.findAll(keyword)))
+      case Accepts.Json() =>
+        import Module.modulesWrites
+        Ok(Json.toJson(moduleDao.findEverything()))
     }
   }
 

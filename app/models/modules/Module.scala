@@ -23,7 +23,7 @@ object Module {
       (__ \ "versions").write[Seq[Release]]
     ).apply(m => (m._1.name, m._1.fullname, m._2))
 
-    (__ \ "modules").write[Seq[(Module, Seq[Release])]]
+    (__ \ "modules").write(Writes.traversableWrites[(Module, Seq[Release])])
   }
 }
 
