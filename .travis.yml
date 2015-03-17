@@ -6,4 +6,4 @@ script:
   - sbt test
 
 before_script:
-  - mysql -uroot -e 'create database playunittest;'
+  - mysql -uroot -e 'create database playunittest; create database test;'
