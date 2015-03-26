@@ -1,0 +1,128 @@
+@(form: Form[models.certification.CertificationForm])(implicit req: RequestHeader, messages: Messages)
+
+@main("Certification", "certification"){
+    <header id="top">
+        <div class="wrapper">
+            <h1>Certification</h1>
+        </div>
+    </header>
+    <section id="content">
+        <article>
+            <h2>Certified Reactive Application Programmer</h2>
+
+            <p>
+                In today's technology landscape, where companies of every industry are finding that software must be one
+                of their core competencies, it's crucial to differentiate good developers from the rest.  With changing
+                paradigms, new technologies, and an ever evolving landscape of best practices, it can be very hard for
+                organizations to know how to hire good developers.
+            </p>
+
+            <p>
+                To address these difficulties, the Play team is offering a new certification program, with the first
+                certification being the <em>Certified Reactive Application Programmer</em>.
+            </p>
+
+            <p>
+                A Certified Reactive Application Programmer combines the technical rigor of a rock star developer with
+                the leading edge architectural and design practices outlined in
+                <a href="http://www.reactivemanifesto.org">The Reactive Manifesto</a>.  They have been trained and
+                tested not only to be competent at building reactive applications, but to embody the essence of
+                reactive in themselves.
+            </p>
+
+            <p>
+                Training for the Certified Reactive Application Programmer is divided into four sections, matching the
+                four tenets of the <a href="http://www.reactivemanifesto.org">The Reactive Manifesto</a>:
+            </p>
+
+            <h3>Responsive</h3>
+
+            <p>
+                The developer responds in a timely manner if at all possible. Responsiveness is the cornerstone of
+                developer productivity and value, but more than that, responsiveness means that problems may be detected
+                quickly and the developer fired effectively. Responsive developers focus on providing rapid and
+                consistent response times to emails and other communication, establishing reliable upper bounds so they
+                deliver a consistent quality of service. This consistent behaviour in turn simplifies performance
+                reviews, builds manager confidence, and encourages further work delegation.
+            </p>
+
+            <h3>Resilient</h3>
+
+            <p>
+                The developer stays responsive in the face of sickness. This applies not only to highly-available
+                site reliability engineers — any developer that is not resilient will be unresponsive after a sickness.
+                Resilience is achieved by medication, working from home, delegation, and hardening up. Sickness is
+                contained within each team, isolating teams from each other and thereby ensuring that parts of the
+                company can get sick and recover without compromising the company as a whole. Recovery of each team is
+                delegated to an external doctor and high-availability is ensured by medication where necessary. The
+                client of a team is not burdened with handling its sickness.
+            </p>
+
+            <h3>Elastic</h3>
+
+            <p>
+                The developer stays responsive under varying workload. Certified Reactive Application Programmers can
+                react to changes in the work they receive by increasing or decreasing the number of hours they spend at
+                work. This implies people that have no life work balance or regular commitments, resulting in the
+                ability to change working hours and substitute sleep with work. Certified Reactive Application
+                Programmers support predictive, as well as reactive, sleep patterns by providing relevant live
+                performance measures. They achieve elasticity in a cost-effective way on commodity beds and linen.
+            </p>
+
+            <h3>Message Driven</h3>
+
+            <p>
+                Certified Reactive Application Programmers rely on asynchronous message-passing to establish a boundary
+                between teams that ensures loose coupling, isolation, location transparency, and provides the means
+                to delegate employee termination as messages. Employing explicit message-passing enables load management,
+                elasticity, and flow control by shaping and monitoring the performance of the developers and applying
+                discipline when necessary. Location transparent messaging as a means of communication makes it possible
+                for management to fire developers with the same constructs and semantics across business units or in a
+                single office. Non-blocking communication allows developers to only consume resources while awake,
+                leading to less office overhead.
+            </p>
+
+            <h3>Register Interest</h3>
+
+            <p>
+                If you are interested in getting more information about becoming or hiring a Certified Reactive
+                Application Programmer (CRAP™), please fill out the form below:
+            </p>
+
+            @helper.form(routes.Application.interest()) {
+                @helper.inputText(form("name"))
+                @helper.inputText(form("email"))
+                @helper.checkbox(form("developer"))
+                @helper.checkbox(form("organization"))
+                @helper.textarea(form("comments"))
+
+                <input type="submit" value="Submit" name="submit"/>
+            }
+
+            <p>
+                Expressions of interest must be received by COB 1st April, 2015.
+            </p>
+        </article>
+        <aside>
+            <h2>What they're saying</h2>
+
+            <blockquote>
+                With new paradigms come new standards, and with new standards new certifications must follow. The
+                Certified Reactive Application Programmer is the certification for developers of today.
+                <div class="attribution">Grace Hopper<br/>Remington Rand</div>
+            </blockquote>
+
+            <blockquote>
+                We had no idea where to start looking for developers, the Certified Reactive Application Programmer
+                certification answered all our recruiting needs.
+                <div class="attribution">Alan Turing<br/>GC & CS</div>
+            </blockquote>
+
+            <blockquote>
+                Developers need to stay current, becoming a Certified Reactive Application Programmer is the best way
+                they can do that.
+                <div class="attribution">Ada Lovelace<br/>Ockham Park</div>
+            </blockquote>
+        </aside>
+    </section>
+}

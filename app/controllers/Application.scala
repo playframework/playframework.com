@@ -1,9 +1,11 @@
 package controllers
 
 import javax.inject.{ Inject, Singleton }
+import models.certification.Certification
 import play.api._
-import play.api.i18n.{ Lang, MessagesApi }
+import play.api.i18n.{I18nSupport, Lang, MessagesApi}
 import play.api.mvc._
+import services.certification.CertificationDao
 import views._
 import play.twirl.api.Html
 import utils.Markdown
@@ -22,8 +24,9 @@ class Application @Inject() (
   cache: CacheApi,
   environment: Environment,
   configuration: Configuration,
-  messages: MessagesApi,
-  ws: WSClient) extends Controller with Common {
+  val messagesApi: MessagesApi,
+  ws: WSClient,
+  certificationDao: CertificationDao) extends Controller with Common with I18nSupport {
 
   private lazy val releases: PlayReleases = {
     environment.resourceAsStream("playReleases.json").flatMap { is =>
@@ -136,6 +139,20 @@ class Application @Inject() (
     Ok(html.getInvolved())
   }
 
+  def certification = Action { implicit request =>
+    Ok(html.certification(Certification.form))
+  }
+
+  def interest = Action(parse.tolerantFormUrlEncoded) { implicit request =>
+    Certification.form.bindFromRequest().fold(
+      form => BadRequest(html.certification(form)),
+      form => {
+        certificationDao.registerInterest(form.toCertification)
+        Ok(html.interest())
+      }
+    )
+  }
+
   // Deprecated links
   def movedTo(url: String, originalPath: String) = Action {
     MovedPermanently(url)
@@ -150,7 +167,7 @@ class Application @Inject() (
   }
 
   def setPreferedLanguage(lang: String) = Action {
-    messages.setLang(Ok, Lang(lang))
+    messagesApi.setLang(Ok, Lang(lang))
   }
 
 }
