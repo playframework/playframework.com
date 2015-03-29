@@ -15,6 +15,9 @@ GET         /widget                                                  controllers
 GET         /changelog                                               controllers.Application.changelog
 GET         /conduct                                                 controllers.Application.conduct
 
+GET         /outreachy                                               controllers.Outreachy.outreachy
+GET         /outreachy/round10                                       controllers.Outreachy.round10
+
 POST        /preferredLang/:lang                                     controllers.Application.setPreferedLanguage(lang)
 
 # Because I sent the security email with a bad link

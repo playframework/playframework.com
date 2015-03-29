@@ -1,0 +1,88 @@
+@(title: String = "Outreachy")(implicit requestHeader : RequestHeader)
+
+@main(title, "outreachy"){
+    <header id="top">
+        <div class="wrapper">
+            <h1>
+                @title
+            </h1>
+        </div>
+    </header>
+    <section id="content">
+        <article>
+            <h2>Outreachy - Round 10</h2>
+
+            <p>
+                Typesafe and Play Framework are proud to be participating in
+                <a href="https://gnome.org/outreachy/">Outreachy</a>, a program to help groups that are underrepresented
+                in free and open source software get involved.  For detailed information about Outreachy, including how
+                to apply, see the <a href="https://wiki.gnome.org/Outreachy">main program page</a>.
+            </p>
+
+            <p>
+                This is the landing page for Outreachy Play Framework projects.
+            </p>
+
+            <p>
+                Applications for Round 10 Play Framework projects close on the <b>7th of April</b>.
+            </p>
+
+            <h2>Getting started</h2>
+
+            <p>
+                The best way to get started is to read Play's <a href="@routes.Application.getInvolved()">Get Involved</a>
+                page.  From there you can find information about the project issue tracker and mailing lists, links to
+                instructions for building Play from source.
+            </p>
+
+            <h2>Projects</h2>
+
+            <p>
+                Typesafe is sponsoring one intern for Play Framework in Outreachy in Round 10.
+            </p>
+
+            <h3>Dream REST development in Play</h3>
+
+            <p>
+                Mentor: <a href="https://github.com/jroper">James Roper</a>
+            </p>
+
+            <p>
+                While Play makes it very simple to write REST APIs, there are a number of features and improvements that
+                can be added to Play so that out of the box, REST API development in Play Framework is a dream.
+            </p>
+
+            <p>
+                This project consists of a number of small development tasks, as well as some not so small development
+                tasks, plus tutorial style documentation to make the developer experience for writing REST APIs in Play
+                even smoother than it already is.
+            </p>
+
+            <p>
+                The project will start with the small tasks, allowing the intern to get comfortable working in the
+                Play codebase, and work up to bigger tasks.  The exact scope depends on how much the intern is able to
+                get done and what they choose to prioritise, but even with the smaller tasks, the intern will have made
+                a valuable contribution to Play Framework.
+            </p>
+
+            <p>
+                Tasks include:
+            </p>
+
+            <ul>
+                <li>Support for HATEOAS links in Play's JSON API</li>
+                <li>Support for <a href="https://tools.ietf.org/html/rfc6570">RFC 6570</a> URI templates in Play's JSON API</li>
+                <li>RFC 6570 integration in Play's reverse router</li>
+                <li>Support for generating/parsing <a href="https://tools.ietf.org/html/rfc5988">RFC 5988</a> link headers</li>
+                <li>Tutorial style documentation on writing a REST API using Play with Java or Scala</li>
+                <li>CRUD routing capabilities to minimise necessary REST API boilerplate</li>
+                <li>Opinionated action builders that assume JSON bodies and have built in support for paging</li>
+                <li>Plus a number of refactoring/code improvement tasks to facilitate the above tasks along the way</li>
+            </ul>
+
+        </article>
+        <aside>
+            @commonSidebar()
+        </aside>
+    </section>
+}
