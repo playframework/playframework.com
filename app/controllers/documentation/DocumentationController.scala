@@ -1,6 +1,6 @@
 package controllers.documentation
 
-import actors.Actors
+import actors.{DocumentationActor, Actors}
 import actors.DocumentationActor.{ NotFound => DocsNotFound, NotModified => DocsNotModified, _ }
 import akka.actor.ActorRef
 import akka.pattern.ask
@@ -15,6 +15,8 @@ import scala.concurrent.duration._
 
 import play.api.libs.MimeTypes
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
+
+import scala.reflect.ClassTag
 
 @Singleton
 class DocumentationController @Inject() (
@@ -72,6 +74,15 @@ class DocumentationController @Inject() (
     }
   }
 
+  private def actorRequest[T <: DocumentationActor.Response[T]: ClassTag](actor: ActorRef, page: String,
+      msg: DocumentationActor.Request[T])(block: T => Result)(implicit req: RequestHeader): Future[Result] = {
+    (actor ? msg).mapTo[Response[T]].map {
+      case DocsNotFound(context) => pageNotFound(context, page)
+      case DocsNotModified(cacheId) => notModified(cacheId)
+      case t: T => block(t)
+    }
+  }
+
   def index(lang: Option[Lang]) = latest(lang, "Home")
 
   //
@@ -83,9 +94,7 @@ class DocumentationController @Inject() (
   }
 
   def v1Page(lang: Option[Lang], v: String, page: String) = VersionAction(v) { (actor, version) => implicit req =>
-    (actor ? RenderV1Page(lang, version, etag(req), page)).mapTo[Response[RenderedPage]].map {
-      case DocsNotFound(context) => pageNotFound(context, page)
-      case DocsNotModified(cacheId) => notModified(cacheId)
+    actorRequest(actor, page, RenderV1Page(lang, version, etag(req), page)) {
       case RenderedPage(html, _, _, context, cacheId) =>
         val result = Ok(views.html.documentation.v1(messages, context, page, html))
         cacheable(withLangHeaders(result, page, context), cacheId)
@@ -103,9 +112,7 @@ class DocumentationController @Inject() (
   }
 
   def v1Cheatsheet(lang: Option[Lang], v: String, category: String) = VersionAction(v) { (actor, version) => implicit req =>
-    (actor ? RenderV1Cheatsheet(lang, version, etag(req), category)).mapTo[Response[V1Cheatsheet]].map {
-      case DocsNotFound(context) => pageNotFound(context, category)
-      case DocsNotModified(cacheId) => notModified(cacheId)
+    actorRequest(actor, category, RenderV1Cheatsheet(lang, version, etag(req), category)) {
       case V1Cheatsheet(sheets, title, otherCategories, context, cacheId) =>
         cacheable(
           Ok(views.html.documentation.cheatsheet(context, title, otherCategories, sheets)),
@@ -113,6 +120,12 @@ class DocumentationController @Inject() (
         )
     }
   }
+
+  /**
+   * Switch versions. Will check that the requested page exists and redirect to that if found, otherwise, redirects
+   * to the home page.
+   */
+  def v1Switch = switchAction(QueryV1PageExists.apply, "home")
 
   //
   // Play 2 Documentation
@@ -123,9 +136,7 @@ class DocumentationController @Inject() (
   }
 
   def page(lang: Option[Lang], v: String, page: String) = VersionAction(v) { (actor, version) => implicit req =>
-    (actor ? RenderPage(lang, version, etag(req), page)).mapTo[Response[RenderedPage]].map {
-      case DocsNotFound(context) => pageNotFound(context, page)
-      case DocsNotModified(cacheId) => notModified(cacheId)
+    actorRequest(actor, page, RenderPage(lang, version, etag(req), page)) {
       case RenderedPage(html, sidebarHtml, source, context, cacheId) =>
         val result = Ok(views.html.documentation.v2(messages, context, page, Some(html), sidebarHtml, source))
         cacheable(withLangHeaders(result, page, context), cacheId)
@@ -179,6 +190,12 @@ class DocumentationController @Inject() (
     }
   }
 
+  /**
+   * Switch versions. Will check that the requested page exists and redirect to that if found, otherwise, redirects
+   * to the home page.
+   */
+  def switch = switchAction(QueryPageExists.apply, "Home")
+
   private def ResourceAction(version: String, resource: String, message: (Version, Option[String]) => Any, inline: Boolean = true) = {
     VersionAction(version) { (actor, version) => implicit req =>
       (actor ? message(version, etag(req))).mapTo[Response[Resource]].map {
@@ -198,6 +215,18 @@ class DocumentationController @Inject() (
           ), enumerator), cacheId)
       }
     }
+  }
+
+  private def switchAction(msg: (Option[Lang], Version, Option[String], String) => LangRequest[PageExists], home: String) = {
+    (lang: Option[Lang], v: String, page: String) =>
+      VersionAction(v) { (actor, version) => implicit req =>
+        actorRequest(actor, page, msg(lang, version, etag(req), page)) {
+          case PageExists(true, cacheId) =>
+            cacheable(TemporaryRedirect(ReverseRouter.page(lang, version.name, page)), cacheId)
+          case PageExists(false, cacheId) =>
+            cacheable(TemporaryRedirect(ReverseRouter.page(lang, version.name, home)), cacheId)
+        }
+      }
   }
 
   def withLangHeaders(result: Result, page: String, context: TranslationContext)(implicit req: RequestHeader) = {

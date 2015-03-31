@@ -55,6 +55,8 @@ class Router @Inject() (
         case p"/$version<2\.[^/]+>/resources/$path*" => docController.resource(lang, version, path)
         case p"/latest" => docController.latest(lang, "Home")
         case p"/latest/$page" => docController.latest(lang, page)
+        case p"/switch/$version<2\.[^/]+>/$page" => docController.switch(lang, version, page)
+        case p"/switch/$version<1\.[^/]+>/$page" => docController.v1Switch(lang, version, page)
       }
     } else {
       None
@@ -70,6 +72,7 @@ object ReverseRouter {
   def api(version: String, path: String) = instance.api(version, path)
   def latest(lang: Option[Lang], page: String = "Home") = instance.latest(lang, page)
   def cheatsheet(lang: Option[Lang], version: String, category: String) = instance.cheatsheet(lang, version, category)
+  def switch(lang: Option[Lang], version: String, page: String) = instance.switch(lang, version, page)
 }
 
 @Singleton
@@ -92,5 +95,8 @@ class ReverseRouter @Inject() (routerProvider: Provider[Router]) {
   }
   def cheatsheet(lang: Option[Lang], version: String, category: String) = {
     s"${index(lang)}/$version/cheatsheet/$category"
+  }
+  def switch(lang: Option[Lang], version: String, page: String) = {
+    s"${index(lang)}/switch/$version/$page"
   }
 }

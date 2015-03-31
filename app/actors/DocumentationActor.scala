@@ -9,6 +9,7 @@ import play.api.i18n.{MessagesApi, Lang}
 import play.api.libs.iteratee.Enumerator
 import utils.PlayGitRepository
 import scala.concurrent.duration._
+import scala.reflect.ClassTag
 
 /**
  * Protocol for the documentation actor.
@@ -113,6 +114,17 @@ object DocumentationActor {
   case object GetSummary
 
   /**
+   * Check whether the given page exists at the given version.
+   */
+  case class QueryPageExists(lang: Option[Lang], version: Version, cacheId: Option[String], page: String)
+    extends LangRequest[PageExists]
+
+  /**
+   * The queried page exists.
+   */
+  case class PageExists(exists: Boolean, cacheId: String) extends Found[PageExists]
+
+  /**
    * Render a V1 page
    *
    * @param lang The language to render the page for, none for the default language.
@@ -125,6 +137,12 @@ object DocumentationActor {
 
   case class V1Cheatsheet(sheets: Seq[String], title: String, otherCategories: Map[String, String],
                           context: TranslationContext, cacheId: String) extends Found[V1Cheatsheet]
+
+  /**
+   * Check whether the given page exists at the given version.
+   */
+  case class QueryV1PageExists(lang: Option[Lang], version: Version, cacheId: Option[String], page: String)
+    extends LangRequest[PageExists]
 
   /**
    * A summary of the documentation.
@@ -253,7 +271,7 @@ class DocumentationActor(messages: MessagesApi, config: DocumentationConfig) ext
      * @param loaderRequest A function that creates the request message from the given repository
      * @param response A function that creates the response message from the answer, to send back to the sender
      */
-    def loaderRequest[T](incomingRequest: LangRequest[_])(loaderRequest: TranslationVersion => Any)
+    def loaderRequestOpt[T](incomingRequest: LangRequest[_])(loaderRequest: TranslationVersion => Any)
                                 (response: (Lang, Translation, TranslationVersion, T) => Response[_]) = {
       forLang(incomingRequest) { (lang, translation, tv) =>
         val askRequest = for {
@@ -264,6 +282,27 @@ class DocumentationActor(messages: MessagesApi, config: DocumentationConfig) ext
           } getOrElse NotFound(notFoundTranslationContext(lang, translation.displayVersions))
         }
 
+        askRequest pipeTo sender()
+      }
+    }
+
+    /**
+     * Make a loader request for the given language and version.
+     *
+     * The generated message, when asked from the loader, is expected to return the given return type.
+     *
+     * @param incomingRequest The request message
+     * @param loaderRequest A function that creates the request message from the given repository
+     * @param response A function that creates the response message from the answer, to send back to the sender
+     */
+    def loaderRequest[T: ClassTag](incomingRequest: LangRequest[_])(loaderRequest: TranslationVersion => Any)
+                           (response: (Lang, Translation, TranslationVersion, T) => Response[_]) = {
+      forLang(incomingRequest) { (lang, translation, tv) =>
+        val askRequest = for {
+          answer <- (loader ? loaderRequest(tv)).mapTo[T]
+        } yield {
+          response(lang, translation, tv, answer)
+        }
         askRequest pipeTo sender()
       }
     }
@@ -317,7 +356,7 @@ class DocumentationActor(messages: MessagesApi, config: DocumentationConfig) ext
         context.become(documentationLoaded(docs))
 
       case rp @ RenderPage(_, version, _, page) =>
-        loaderRequest[play.doc.RenderedPage](rp) { tv =>
+        loaderRequestOpt[play.doc.RenderedPage](rp) { tv =>
           Loader.RenderPage(page, tv.playDoc)
         } { (lang, translation, tv, page) =>
 
@@ -331,14 +370,14 @@ class DocumentationActor(messages: MessagesApi, config: DocumentationConfig) ext
         }
 
       case rp @ RenderV1Page(_, version, _, page) =>
-        loaderRequest[String](rp) { tv =>
+        loaderRequestOpt[String](rp) { tv =>
           Loader.RenderV1Page(page, tv.repo)
         } { (lang, translation, tv, content) =>
           RenderedPage(content, None, None, translationContext(lang, version, translation), tv.cacheId)
         }
 
       case lr: LoadResource =>
-        loaderRequest[Loader.Resource](lr) { tv =>
+        loaderRequestOpt[Loader.Resource](lr) { tv =>
           Loader.LoadResource(lr.resource, tv.repo)
         } { (_, _, tv, resource) =>
           Resource(resource.content, resource.size, tv.cacheId)
@@ -366,8 +405,22 @@ class DocumentationActor(messages: MessagesApi, config: DocumentationConfig) ext
         sender() ! DocumentationSummary(documentation.default.defaultVersion, documentation.defaultLang, documentation.allLangs,
           documentation.translations.mapValues(_.defaultVersion), notFoundTranslationContext())
 
+      case pe @ QueryPageExists(_, _, _, page) =>
+        loaderRequest[Boolean](pe) { tv =>
+          Loader.PageExists(page, tv.playDoc, tv.repo)
+        } { (_, _, tv, exists) =>
+          PageExists(exists, tv.cacheId)
+        }
+
+      case pe @ QueryV1PageExists(_, _, _, page) =>
+        loaderRequest[Boolean](pe) { tv =>
+          Loader.V1PageExists(page, tv.repo)
+        } { (_, _, tv, exists) =>
+          PageExists(exists, tv.cacheId)
+        }
+
       case rc @ RenderV1Cheatsheet(_, version, _, category) =>
-        loaderRequest[Loader.V1Cheatsheet](rc) { tv =>
+        loaderRequestOpt[Loader.V1Cheatsheet](rc) { tv =>
           Loader.RenderV1Cheatsheet(category, tv.repo)
         } { (lang, translation, tv, cs) =>
           V1Cheatsheet(cs.sheets, cs.title, cs.otherCategories, translationContext(lang, version, translation), tv.cacheId)

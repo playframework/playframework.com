@@ -13,6 +13,8 @@ object DocumentationLoadingActor {
   case class V1Cheatsheet(sheets: Seq[String], title: String, otherCategories: Map[String, String])
   case class LoadResource(file: String, repo: FileRepository)
   case class Resource(content: Enumerator[Array[Byte]], size: Long)
+  case class PageExists(page: String, playDoc: PlayDoc, repo: FileRepository)
+  case class V1PageExists(page: String, repo: FileRepository)
 }
 
 /**
@@ -63,6 +65,17 @@ class DocumentationLoadingActor extends Actor {
       } else {
         sender() ! None
       }
+
+    case PageExists(page, playDoc, repo) =>
+      sender() ! (playDoc.pageIndex match {
+        case Some(index) =>
+          index.get(page).isDefined
+        case None =>
+          repo.findFileWithName(s"$page.md").isDefined
+      })
+
+    case V1PageExists(page, repo) =>
+      sender() ! repo.findFileWithName(s"$page.textile").isDefined
 
   }
 }
