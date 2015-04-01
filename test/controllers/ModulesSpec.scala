@@ -4,6 +4,7 @@ import java.util.Date
 
 import models.modules.{Release, Module}
 import org.specs2.mock.Mockito
+import play.api.inject.guice.GuiceApplicationBuilder
 import play.api.libs.json._
 import play.api.test._
 import services.modules.{ModuleDao, ModulesLookup}
@@ -13,9 +14,13 @@ object ModulesSpec extends PlaySpecification with Mockito {
   val module = Module("name", "Full name", "Some Author", "authorid", "Some Description", "http://www.example.com")
   val release = Release("version", new Date(), "match", true)
 
+  def app = new GuiceApplicationBuilder()
+    .configure("play.modules.evolutions.db.default.enabled" -> false)
+    .build()
+
   "The modules controller" should {
     "render an index page" in {
-      "as html when the client accepts html" in new WithApplication() {
+      "as html when the client accepts html" in new WithApplication(app) {
         val (modules, _, dao) = createModules
         dao.findAll("foo") returns Seq(module)
         val result = modules.index("foo")(FakeRequest().withHeaders(ACCEPT -> "text/html"))
@@ -24,7 +29,7 @@ object ModulesSpec extends PlaySpecification with Mockito {
         contentAsString(result) must contain("Some Description")
       }
 
-      "as json when the client accepts json" in new WithApplication() {
+      "as json when the client accepts json" in new WithApplication(app) {
         val (modules, _, dao) = createModules
         dao.findEverything() returns Seq(module -> Seq(release))
         val result = modules.index("")(FakeRequest().withHeaders(ACCEPT -> "application/json"))

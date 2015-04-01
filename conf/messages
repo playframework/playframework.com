@@ -5,3 +5,10 @@ documentation.contribute.message=Found an error in this documentation? The sourc
 
 documentation.next=Next
 documentation.home=Home
+
+# Certification messages
+name = Name
+email = Email
+developer = Yes! I am interested in becoming a CRAP™ developer!
+organization = Yes! I want my organization to be full of CRAP™ developers!
+comments = Comments
