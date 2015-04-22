@@ -1,11 +1,14 @@
 package actors
 
+import javax.inject.Inject
+
 import akka.actor.{ActorRef, Props, Actor}
 import akka.pattern.{ask, pipe}
 import akka.routing.SmallestMailboxPool
 import akka.util.Timeout
 import models.documentation._
-import play.api.i18n.{MessagesApi, Lang}
+import play.api.i18n.Lang
+import play.api.libs.concurrent.InjectedActorSupport
 import play.api.libs.iteratee.Enumerator
 import utils.PlayGitRepository
 import scala.concurrent.duration._
@@ -162,9 +165,6 @@ object DocumentationActor {
                                    translations: Seq[DocumentationGitRepo])
 
   case class DocumentationGitRepo(config: TranslationConfig, repo: PlayGitRepository)
-
-
-  def props(messages: MessagesApi, config: DocumentationConfig) = Props(new DocumentationActor(messages, config))
 }
 
 /**
@@ -174,7 +174,7 @@ object DocumentationActor {
  * it merely coordinates everything.  It keeps a reference to the current documentation index.  All IO, page rendering,
  * etc is delegated to the other documentation actors.
  */
-class DocumentationActor(messages: MessagesApi, config: DocumentationConfig) extends Actor {
+class DocumentationActor @Inject() (config: DocumentationConfig, pollerFactory: DocumentationPollingActor.Factory) extends Actor with InjectedActorSupport {
 
   import DocumentationActor._
   import actors.{ DocumentationLoadingActor => Loader }
@@ -195,11 +195,7 @@ class DocumentationActor(messages: MessagesApi, config: DocumentationConfig) ext
    * The poller, when it starts, scans all repos and will send the documentation,
    * moving this actor into the documentation loaded state.
    */
-  private val poller = context.actorOf(
-    Props(new DocumentationPollingActor(repos, self, messages))
-      .withDispatcher("polling-dispatcher"),
-    "documentationPoller"
-  )
+  private val poller = injectedChild(pollerFactory(repos, self), "documentationPoller", _.withDispatcher("polling-dispatcher"))
 
   private val loader = context.actorOf(
     Props[DocumentationLoadingActor]

@@ -1,11 +1,11 @@
 package controllers.documentation
 
-import actors.{DocumentationActor, Actors}
+import actors.DocumentationActor
 import actors.DocumentationActor.{ NotFound => DocsNotFound, NotModified => DocsNotModified, _ }
 import akka.actor.ActorRef
 import akka.pattern.ask
 import akka.util.Timeout
-import javax.inject.{ Inject, Singleton }
+import javax.inject.{Named, Inject, Singleton}
 import models.documentation.{AlternateTranslation, TranslationContext, Version}
 import org.joda.time.format.DateTimeFormat
 import play.api.i18n.{MessagesApi, Lang}
@@ -21,7 +21,7 @@ import scala.reflect.ClassTag
 @Singleton
 class DocumentationController @Inject() (
   messages: MessagesApi,
-  actors: Actors) extends Controller {
+  @Named("documentation-actor") documentationActor: ActorRef) extends Controller {
 
   private implicit val timeout = Timeout(5.seconds)
 
@@ -43,9 +43,7 @@ class DocumentationController @Inject() (
   private def notModified(cacheId: String) = cacheable(NotModified, cacheId)
 
   private def DocsAction(action: ActorRef => RequestHeader => Future[Result]) = Action.async(parse.empty) { implicit req =>
-    actors.documentationActor.fold(Future.successful(pageNotFound(EmptyContext, ""))) { actor =>
-      action(actor)(req)
-    }
+    action(documentationActor)(req)
   }
 
   private def VersionAction(version: String)(action: (ActorRef, Version) => RequestHeader => Future[Result]) = DocsAction { actor => implicit req =>

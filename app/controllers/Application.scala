@@ -1,6 +1,10 @@
 package controllers
 
-import javax.inject.{ Inject, Singleton }
+import javax.inject.{Named, Inject, Singleton}
+import actors.ActivatorReleaseActor
+import akka.actor.ActorRef
+import akka.pattern.ask
+import akka.util.Timeout
 import models.certification.Certification
 import play.api._
 import play.api.i18n.{I18nSupport, Lang, MessagesApi}
@@ -12,21 +16,17 @@ import utils.Markdown
 import org.apache.commons.io.IOUtils
 import play.api.libs.json.Json
 import models._
-import scala.concurrent.Future
-import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
-import play.api.cache.CacheApi
-import play.api.libs.ws.WSClient
-import scala.util.Try
 
 @Singleton
 class Application @Inject() (
-  cache: CacheApi,
   environment: Environment,
   configuration: Configuration,
   val messagesApi: MessagesApi,
-  ws: WSClient,
-  certificationDao: CertificationDao) extends Controller with Common with I18nSupport {
+  certificationDao: CertificationDao,
+  @Named("activator-release-actor") activatorReleaseActor: ActorRef
+)(implicit ec: ExecutionContext) extends Controller with Common with I18nSupport {
 
   private lazy val releases: PlayReleases = {
     environment.resourceAsStream("playReleases.json").flatMap { is =>
@@ -80,37 +80,9 @@ class Application @Inject() (
   }
 
   private def latestActivator: Future[ActivatorRelease] = {
-    cache.get[ActivatorRelease]("latest-activator").map(Future.successful).getOrElse {
-      // cache miss
-      play.api.Logger.info("latest activator version cache miss")
-      configuration.getString("activator.latest-url").map { url =>
-        ws.url(url).withRequestTimeout(2000).get().map { response =>
-          response.json.as[ActivatorRelease]
-        } recover {
-          case e =>
-            play.api.Logger.error(s"Failed to get Activator version info ${e.getClass.getName}: ${e.getMessage}")
-            cache.get[ActivatorRelease]("latest-activator-eternal")
-              .getOrElse(defaultActivatorLatest)
-        }
-      } getOrElse Future.successful(defaultActivatorLatest) andThen {
-        case r: Try[ActivatorRelease] =>
-          cache.set("latest-activator", r.get, 10 minutes) // 10 minute cache timeout
-          cache.set("latest-activator-eternal", r.get, Duration.Inf) // eternal in case activator service is down
-      }
-    }
+    implicit val timeout: Timeout = 2.seconds
+    (activatorReleaseActor ? ActivatorReleaseActor.GetVersion).mapTo[ActivatorRelease]
   }
-
-  // this should only happen if we have NEVER succeeded in getting
-  // the activator info since our last restart
-  private val defaultActivatorLatest: ActivatorRelease = ActivatorRelease(
-    version = "(unknown)",
-    url = "https://typesafe.com/platform/getstarted",
-    miniUrl = "https://typesafe.com/platform/getstarted",
-    size = "???M",
-    miniSize = "?M",
-    akkaVersion = "(unknown)",
-    playVersion = "(unknown)",
-    scalaVersion = "(unknown)")
 
   def changelog = markdownAction("public/markdown/changelog.md", { implicit request =>
     views.html.changelog(_)
