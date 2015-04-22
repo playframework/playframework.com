@@ -19,14 +19,7 @@ class GitHubModule extends Module {
           bind[GitHubConfig].to(GitHubConfig(accessToken, gitHubApiUrl, organisation, committerTeams)),
           bind[GitHub].to[DefaultGitHub],
           bind[ContributorsSummariser].qualifiedWith("gitHubContributorsSummariser").to[DefaultContributorsSummariser],
-          bind[ContributorsSummariser].to[CachingContributorsSummariser],
-          // Bind to the execution context lazily
-          bind[ExecutionContext].to(new ExecutionContext {
-            private def delegate = play.api.libs.concurrent.Execution.defaultContext
-            def reportFailure(cause: Throwable) = delegate.reportFailure(cause)
-            def execute(runnable: Runnable) = delegate.execute(runnable)
-            override def prepare() = delegate.prepare()
-          })
+          bind[ContributorsSummariser].to[CachingContributorsSummariser]
         )
       case None =>
         Logger.info("No GitHub access token yet, using fallback contributors")

@@ -54,3 +54,7 @@ sourceGenerators in Compile += Def.task {
 managedSourceDirectories in Compile += crossTarget.value / "version"
 
 PlayKeys.playOmnidoc := false
+
+sources in (Compile, doc) := Seq.empty
+
+publishArtifact in (Compile, packageDoc) := false
