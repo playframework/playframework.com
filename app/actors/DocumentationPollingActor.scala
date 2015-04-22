@@ -1,35 +1,41 @@
 package actors
 
+import javax.inject.Inject
+
 import actors.DocumentationActor.{UpdateDocumentation, DocumentationGitRepo, DocumentationGitRepos}
 import akka.actor.{ActorRef, Actor}
+import com.google.inject.assistedinject.Assisted
 import models.documentation._
 import org.apache.commons.io.IOUtils
 import org.eclipse.jgit.lib.ObjectId
 import org.eclipse.jgit.util.Base64
-import play.api.i18n.{MessagesApi, Lang, Messages}
+import play.api.Logger
+import play.api.i18n.{MessagesApi, Lang}
 import play.doc.{PageIndex, PlayDoc}
 import utils.{PlayGitRepository, AggregateFileRepository}
 import scala.concurrent.duration._
 
 object DocumentationPollingActor {
   case object Tick
+
+  /**
+   * Factory for creating the documentation polling actor
+   */
+  trait Factory {
+    def apply(repos: DocumentationGitRepos, documentationActor: ActorRef): Actor
+  }
 }
 
 /**
  * The documentation polling actor does asynchronous background polling of remote git repositories, as well as the
  * expensive task of scanning/indexing the repo to extract all the available versions and table of contents for the
  * documentation.
- *
- * @param repos
- * @param documentationActor
  */
-class DocumentationPollingActor(repos: DocumentationGitRepos, documentationActor: ActorRef, messages: MessagesApi) extends Actor {
+class DocumentationPollingActor @Inject() (messages: MessagesApi, @Assisted repos: DocumentationGitRepos,
+                                           @Assisted documentationActor: ActorRef) extends Actor {
 
   import DocumentationPollingActor._
   import context.dispatcher
-
-  // Initial scan of documentation
-  scanAndSendDocumentation()
 
   val schedule = context.system.scheduler.schedule(10.minutes, 10.minutes, self, Tick)
 
@@ -37,11 +43,14 @@ class DocumentationPollingActor(repos: DocumentationGitRepos, documentationActor
     schedule.cancel()
   }
 
-  def receive = {
+  // Initial scan of documentation
+  val receive = update(scanAndSendDocumentation(None))
+
+  def update(old: Documentation): Receive = {
     case Tick =>
       repos.default.repo.fetch()
       repos.translations.foreach(_.repo.fetch())
-      scanAndSendDocumentation()
+      context.become(update(scanAndSendDocumentation(Some(old))))
   }
 
   /**
@@ -69,7 +78,7 @@ class DocumentationPollingActor(repos: DocumentationGitRepos, documentationActor
     } yield version -> masterHash
   }
 
-  private def scanAndSendDocumentation() {
+  private def scanAndSendDocumentation(old: Option[Documentation]): Documentation = {
     // First the default (English) translation
 
     // Find all the versions in the repo. The versions are all tags, and all branches that look like a version number.
@@ -88,14 +97,26 @@ class DocumentationPollingActor(repos: DocumentationGitRepos, documentationActor
 
     val allVersions = (defaultVersions ++ defaultMasterVersion).toList.sortBy(_._1).reverse.map {
       case (version, cacheId, repo, symName) =>
-        implicit val lang = repos.default.config.lang
 
-        TranslationVersion(version, repo,
-          new PlayDoc(repo, repo, "resources", version.name,
-            PageIndex.parseFrom(repo, messages("documentation.home"), Some("manual")),
-            messages("documentation.next")
-          ), xorHashes(cacheId, utils.SiteVersion.hash), symName
-        )
+        val newCacheId = xorHashes(cacheId, utils.SiteVersion.hash)
+
+        old.flatMap(_.default.byVersion.get(version)) match {
+          // The version hasn't changed, don't rescan
+          case Some(same: TranslationVersion) if same.cacheId == newCacheId => same
+          case _ =>
+            implicit val lang = repos.default.config.lang
+
+            if (old.isDefined) {
+              Logger.info(s"Updating default documentation for $version: $cacheId")
+            }
+
+            TranslationVersion(version, repo,
+              new PlayDoc(repo, repo, "resources", version.name,
+                PageIndex.parseFrom(repo, messages("documentation.home"), Some("manual")),
+                messages("documentation.next")
+              ), newCacheId, symName
+            )
+        }
     }
 
     val defaultTranslation = Translation(allVersions, repos.default.repo, repos.default.config.gitHubSource)
@@ -112,7 +133,8 @@ class DocumentationPollingActor(repos: DocumentationGitRepos, documentationActor
       val masterVersion = determineMasterVersion(t).map(v => (v._1, v._2, "master"))
 
       implicit val lang = t.config.lang
-      val versions = versionsToTranslations(t.repo, gitTags ++ gitBranches ++ masterVersion, defaultTranslation)
+      val versions = versionsToTranslations(t.repo, gitTags ++ gitBranches ++ masterVersion, defaultTranslation,
+        old.flatMap(_.translations.get(lang)))
 
       t.config.lang -> Translation(versions, t.repo, t.config.gitHubSource)
     }.toMap
@@ -120,6 +142,7 @@ class DocumentationPollingActor(repos: DocumentationGitRepos, documentationActor
     val documentation = Documentation(defaultTranslation, repos.default.config.lang, translations)
 
     documentationActor ! UpdateDocumentation(documentation)
+    documentation
   }
 
   private def parseVersionsFromRefs(refs: Seq[(String, ObjectId)]): Seq[(Version, ObjectId)] = {
@@ -129,7 +152,7 @@ class DocumentationPollingActor(repos: DocumentationGitRepos, documentationActor
   }
 
   private def versionsToTranslations(repo: PlayGitRepository, versions: Seq[(Version, ObjectId, String)],
-                                     aggregate: Translation)(implicit lang: Lang): List[TranslationVersion] = {
+                                     aggregate: Translation, old: Option[Translation])(implicit lang: Lang): List[TranslationVersion] = {
     versions.sortBy(_._1).reverse.map { version =>
       val baseRepo = repo.fileRepoForHash(version._2)
       val aggregateVersion = aggregate.byVersion.get(version._1)
@@ -139,12 +162,18 @@ class DocumentationPollingActor(repos: DocumentationGitRepos, documentationActor
           xorHashes(version._2.name, default.cacheId)
       }
 
-      val playDoc = new PlayDoc(fileRepo, fileRepo, "resources", version._1.name,
-        PageIndex.parseFrom(fileRepo, messages("documentation.home"), Some("manual")),
-        messages("documentation.next")
-      )
+      old.flatMap(_.byVersion.get(version._1)) match {
+        // The version hasn't changed, don't rescan
+        case Some(same: TranslationVersion) if same.cacheId == cacheId => same
+        case _ =>
+          val playDoc = new PlayDoc(fileRepo, fileRepo, "resources", version._1.name,
+            PageIndex.parseFrom(fileRepo, messages("documentation.home"), Some("manual")),
+            messages("documentation.next")
+          )
 
-      TranslationVersion(version._1, fileRepo, playDoc, cacheId, version._3)
+          TranslationVersion(version._1, fileRepo, playDoc, cacheId, version._3)
+      }
+
     }.toList
   }
 

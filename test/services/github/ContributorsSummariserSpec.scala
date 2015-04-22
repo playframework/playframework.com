@@ -5,6 +5,7 @@ import org.specs2.mock.Mockito
 import play.api.test._
 
 import scala.concurrent.Future
+import scala.concurrent.ExecutionContext.Implicits.global
 
 object ContributorsSummariserSpec extends PlaySpecification with Mockito {
   val config = GitHubConfig("", "", "playframework", Seq("Owners", "Developers"))

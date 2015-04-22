@@ -22,7 +22,6 @@ libraryDependencies ++= Seq(
   "com.typesafe.play" %% "anorm" % "2.4.0-M3",
   jdbc,
   filters,
-  cache,
   ws,
   specs2 % "test"
 )

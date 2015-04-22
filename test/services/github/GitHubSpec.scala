@@ -10,8 +10,9 @@ import play.api.routing.sird._
 
 import scala.concurrent.{Future, Await}
 import scala.concurrent.duration._
+import scala.concurrent.ExecutionContext.Implicits.global
 
-object GitHubSpec extends Specification with NoTimeConversions {
+object GitHubSpec extends Specification {
 
   "The GitHub service" should {
     "allow getting an organisation" in withGitHub { gh =>

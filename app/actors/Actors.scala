@@ -3,21 +3,29 @@ package actors
 import java.io.File
 
 import akka.actor.{ ActorSystem, ActorRef }
-import javax.inject.{ Inject, Singleton }
+import javax.inject.{Provider, Inject, Singleton}
+import com.google.inject.AbstractModule
 import models.documentation._
 import play.api._
 import play.api.i18n.{MessagesApi, Lang}
-import play.api.libs.concurrent.Akka
+import play.api.libs.concurrent.{AkkaGuiceSupport, Akka}
 import scala.collection.JavaConversions._
 
-@Singleton
-class Actors @Inject() (
-  environment: Environment,
-  configuration: Configuration,
-  actorSystem: ActorSystem,
-  messages: MessagesApi) {
+class ActorsModule extends AbstractModule with AkkaGuiceSupport {
+  def configure() = {
+    bindActor[DocumentationActor]("documentation-actor")
+    bindActorFactory[DocumentationPollingActor, DocumentationPollingActor.Factory]
+    bind(classOf[DocumentationConfig]).toProvider(classOf[DocumentationConfigProvider])
 
-  val documentationActor: Option[ActorRef] = loadConfig.map(config => actorSystem.actorOf(DocumentationActor.props(messages, config)))
+    bindActor[ActivatorReleaseActor]("activator-release-actor")
+  }
+}
+
+@Singleton
+class DocumentationConfigProvider @Inject() (environment: Environment, configuration: Configuration) extends Provider[DocumentationConfig] {
+
+  lazy val get = loadConfig.getOrElse(DocumentationConfig(
+    TranslationConfig(Lang("en"), environment.rootPath, None, "origin", None, None), Nil))
 
   private def loadConfig: Option[DocumentationConfig] = {
     for {

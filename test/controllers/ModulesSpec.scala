@@ -36,15 +36,15 @@ object ModulesSpec extends PlaySpecification with Mockito {
         status(result) must_== 200
         contentType(result) must beSome("application/json")
         val json = contentAsJson(result)
-        json \ "modules" must beLike {
-          case JsArray(Seq(m)) =>
-            m \ "name" must_== JsString("name")
-            m \ "fullname" must_== JsString("Full name")
-            m \ "versions" must beLike {
-              case JsArray(Seq(r)) =>
-                r \ "version" must_== JsString("version")
-                r \ "matches" must_== JsString("match")
-                r \ "isDefault" must_== JsBoolean(true)
+        (json \ "modules").as[Seq[JsValue]] must beLike {
+          case Seq(m) =>
+            (m \ "name").as[String] must_== "name"
+            (m \ "fullname").as[String] must_== "Full name"
+            (m \ "versions").as[Seq[JsValue]] must beLike {
+              case Seq(r) =>
+                (r \ "version").as[String] must_== "version"
+                (r \ "matches").as[String] must_== "match"
+                (r \ "isDefault").as[Boolean] must beTrue
             }
         }
       }

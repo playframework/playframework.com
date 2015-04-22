@@ -75,10 +75,11 @@ class CachingContributorsSummariser @Inject() (actorSystem: ActorSystem,
     delegate.fetchContributors.onComplete {
       case Failure(t) => Logger.error("Unable to load contributors from GitHub", t)
       case Success(cs) =>
+        if (contributors != cs) {
+          val count = contributors.committers.size + contributors.playOrganisation.size + contributors.contributors.size
+          Logger.info("Loaded " + count + " contributors for GitHub")
+        }
         contributors = cs
-        println(FallbackContributors.dumpContributors(contributors))
-        val count = contributors.committers.size + contributors.playOrganisation.size + contributors.contributors.size
-        Logger.info("Loaded " + count + " contributors for GitHub")
     }
   }
 
