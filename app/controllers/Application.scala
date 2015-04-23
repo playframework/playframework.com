@@ -88,8 +88,16 @@ class Application @Inject() (
     views.html.changelog(_)
   })
   
-  def conduct = markdownAction("public/markdown/code-of-conduct.md", { implicit request =>
-    views.html.conduct(_)
+  def conduct = markdownAction("public/markdown/code-of-conduct.md", { implicit request => markdown =>
+    views.html.markdownPage("Code of conduct", markdown)
+  })
+  
+  def communityProcess = markdownAction("public/markdown/community-process.md", { implicit request => markdown =>
+    views.html.markdownPage("Community process", markdown)
+  })
+  
+  def contributing = markdownAction("public/markdown/contributing.md", { implicit request => markdown =>
+    views.html.markdownPage("Contributing", markdown)
   })
 
   def markdownAction(markdownFile: String, template: RequestHeader => Html => Html) = Action { implicit request =>

@@ -1,9 +1,9 @@
-@(markdown: Html)(implicit requestHeader : RequestHeader)
+@(title: String, markdown: Html)(implicit requestHeader : RequestHeader)
 
-@main("Play code of conduct", "conduct"){
+@main(title, "markdown"){
     <header id="top">
         <div class="wrapper">
-            <h1>Code of conduct</h1>
+            <h1>@title</h1>
         </div>
     </header>
     <section id="content">
