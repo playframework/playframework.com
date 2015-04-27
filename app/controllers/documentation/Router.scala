@@ -3,6 +3,7 @@ package controllers.documentation
 import javax.inject.{ Inject, Provider, Singleton }
 import play.api.i18n.Lang
 import play.api.routing.sird._
+import play.utils.UriEncoding
 
 /**
  * Documentation router
@@ -26,7 +27,13 @@ class Router @Inject() (
 
   def documentation = Nil
 
-  val Language = "^/([A-Za-z]{2}(?:_[A-Za-z]{2})?)((?:/.*)?)$".r
+  private val Language = "^/([A-Za-z]{2}(?:_[A-Za-z]{2})?)((?:/.*)?)$".r
+
+  /**
+   * The * matcher doesn't decode paths because that would lose information (/ vs %2F), but we don't care, we want to
+   * decode it anyway.
+   */
+  private def decodePath(path: String) = UriEncoding.decodePath(path, "UTF-8")
 
   def routes = Function.unlift { rh =>
     // Check the prefix
@@ -41,7 +48,7 @@ class Router @Inject() (
       Some(versionPath).collect {
         case p"" => docController.index(lang)
         case p"/$version<1\.[^/]+>" => docController.v1Home(lang, version)
-        case p"/$version<[0-9]+\.[^/]+>/api/$path*" => docController.api(lang, version, path)
+        case p"/$version<[0-9]+\.[^/]+>/api/$path*" => docController.api(lang, version, decodePath(path))
         // The docs used to be served from this path
         case p"/api/$version/$path*" => docController.apiRedirect(lang, version, path)
         case p"/$version<1\.[^/]+>/$page" => docController.v1Page(lang, version, page)
@@ -52,7 +59,7 @@ class Router @Inject() (
         case p"/$version<2\.[^/]+>" => docController.home(lang, version)
         case p"/$version<2\.[^/]+>/" => docController.home(lang, version)
         case p"/$version<2\.[^/]+>/$page" => docController.page(lang, version, page)
-        case p"/$version<2\.[^/]+>/resources/$path*" => docController.resource(lang, version, path)
+        case p"/$version<2\.[^/]+>/resources/$path*" => docController.resource(lang, version, decodePath(path))
         case p"/latest" => docController.latest(lang, "Home")
         case p"/latest/$path*" => docController.latest(lang, path)
         case p"/switch/$version<2\.[^/]+>/$page" => docController.switch(lang, version, page)
