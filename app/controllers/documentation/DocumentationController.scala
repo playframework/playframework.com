@@ -165,7 +165,7 @@ class DocumentationController @Inject() (
    *   and if it matches one that we have, we redirect them to the latest for that language.
    * - Otherwise, we redirect them to the latest for the default language.
    */
-  def latest(lang: Option[Lang], page: String) = DocsAction { actor => implicit req =>
+  def latest(lang: Option[Lang], path: String) = DocsAction { actor => implicit req =>
     (actor ? GetSummary).mapTo[DocumentationSummary].map { summary =>
       val (selectedLang, version) = lang match {
         // requested the default lang
@@ -183,8 +183,9 @@ class DocumentationController @Inject() (
           }
       }
       version.map { v =>
-        Redirect(ReverseRouter.page(selectedLang, v.name, page)).withHeaders(VARY -> ACCEPT_LANGUAGE)
-      }.getOrElse(pageNotFound(summary.translationContext, page))
+        val url = ReverseRouter.home(selectedLang, v.name)
+        Redirect(s"$url/$path").withHeaders(VARY -> ACCEPT_LANGUAGE)
+      }.getOrElse(pageNotFound(summary.translationContext, path))
     }
   }
 
