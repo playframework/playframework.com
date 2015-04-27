@@ -1,6 +1,6 @@
 package services.github
 
-import javax.inject.Inject
+import javax.inject.{Singleton, Inject}
 
 import akka.actor.ActorSystem
 import com.google.inject.name.Named
@@ -20,6 +20,12 @@ trait ContributorsSummariser {
 
 class DefaultContributorsSummariser @Inject() (gitHub: GitHub, config: GitHubConfig)(implicit ec: ExecutionContext) extends ContributorsSummariser {
 
+  /**
+   * Fetch all the committers. These are people that have commit access to the play repo.
+   *
+   * For committers, we don't just load the basic user details, we load the full user details, which includes their
+   * name.
+   */
   private def fetchCommitters(teams: Seq[Team]) = {
     val committerTeams = teams.filter(team => config.committerTeams.contains(team.name))
     for {
@@ -33,14 +39,20 @@ class DefaultContributorsSummariser @Inject() (gitHub: GitHub, config: GitHubCon
     for {
       contributors <- Future.sequence(contributorRepos.map(gitHub.fetchRepoContributors))
     } yield {
-      contributors
+
+      // All contributors and the number of contributions.
+      // Since we fetch contributors by repositories, contributors may appear multiple times, so group by contributor,
+      // and sum their contributions.
+      val contributorContributions: Seq[(GitHubUser, Int)] = contributors
         .flatten
         .groupBy(_._1.id)
         .map {
         case ((_, contributions @ ((user, _) :: _))) =>
-          user -> contributions.map(_._2).reduce(_ + _)
+          user -> contributions.map(_._2).sum
       }.toSeq
-        .sortBy(_._2)
+
+      // Sort by contributions in reverse.
+      contributorContributions.sortBy(_._2)
         .reverse
         .map(_._1)
     }
@@ -62,11 +74,16 @@ class DefaultContributorsSummariser @Inject() (gitHub: GitHub, config: GitHubCon
       val filteredMembers = members.filterNot(m => committers.exists(_.id == m.id))
       val filteredContributors = contributors.filterNot(c => memberIds.contains(c.id))
 
-      Contributors(committers, filteredMembers, filteredContributors)
+      // Use the ordering from contributors for the ordering of the committers and members
+      val orderedCommitters = contributors.flatMap(ghu => committers.filter(_.id == ghu.id))
+      val orderedMembers = contributors.flatMap(ghu => filteredMembers.filter(_.id == ghu.id))
+
+      Contributors(orderedCommitters, orderedMembers, filteredContributors)
     }
   }
 }
 
+@Singleton
 class CachingContributorsSummariser @Inject() (actorSystem: ActorSystem,
                                                @Named("gitHubContributorsSummariser") delegate: ContributorsSummariser)(implicit ec: ExecutionContext) extends ContributorsSummariser {
   @volatile private var contributors: Contributors = FallbackContributors.contributors
