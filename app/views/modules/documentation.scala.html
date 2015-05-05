@@ -9,11 +9,7 @@
     </section>
     
     <div id="content" class="wrapper">
-        <article>
-            @Html(content)
-        </article>
-        <aside>
-            
+        <aside>    
             <h3>Browse</h3>
             <ul>
                 <li><a href="@routes.Modules.show(module)">Back to module description</a></li>
@@ -24,6 +20,9 @@
             <div id="toc"></div>
             
         </aside>
+        <article>
+            @Html(content)
+        </article>
     </div>
     
     <script type="text/javascript" src="@routes.Assets.versioned("javascripts/modules/navigation.js")" charset="utf-8"></script>

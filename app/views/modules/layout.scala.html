@@ -9,13 +9,6 @@
     </section>
     
     <div id="content" class="wrapper">
-        
-        <article>
-            
-            @content
-            
-        </article>
-        
         <aside>
             <h3>Selected modules</h3>
             <ul>
@@ -29,7 +22,9 @@
                 <li><a href="@routes.Modules.show("search")">Simple search</a></li>
             </ul>
         </aside>
-        
+        <article> 
+            @content   
+        </article>  
     </div>
     
 }
