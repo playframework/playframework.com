@@ -19,7 +19,7 @@ libraryDependencies ++= Seq(
   "org.webjars" % "jquery" % "1.8.2",
   "org.webjars" % "html5shiv" % "3.7.2",
   "org.webjars" % "prettify" % "4-Mar-2013",
-  "com.typesafe.play" %% "anorm" % "2.4.0-M3",
+  "com.typesafe.play" %% "anorm" % "2.4.0-RC2",
   jdbc,
   filters,
   ws,
