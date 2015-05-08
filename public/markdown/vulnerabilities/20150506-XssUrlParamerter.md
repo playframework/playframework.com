@@ -38,9 +38,7 @@ Upgrade to the appropriate version below:
 
 * **Base: 5.8**
  AV:N/AC:M/Au:N/C:P/I:P/A:N
- AV:N/AC:L/Au:N/C:P/I:N/A:P
 * **Temporal: 4.5**
- E:POC/RL:OF/RC:C
  E:POC/RL:OF/RC:C
 * **Environmental: 4.2**
  CDP:ND/TD:M/CR:H/IR:H/AR:ND
@@ -48,4 +46,4 @@ Upgrade to the appropriate version below:
 
 ### Acknowledgements
 
-Credit for finding this vulnerability goes to the 11Paths Team (Spanish security company).
+Credit for finding this vulnerability goes to Ricardo Martín from ElevenPaths.
