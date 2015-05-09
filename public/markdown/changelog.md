@@ -1,3 +1,21 @@
+## Play 2.3.9
+
+*Released 8 May 2015*
+
+**Vulnerabilities fixed**
+
+* [CVE-2015-2156](/security/vulnerability/CVE-2015-2156-HttpOnlyBypass) Http only cookie bypass
+
+**Other changes**
+
+* [3484](https://github.com/playframework/playframework/issues/3484) Fix sub project run
+* [2992](https://github.com/playframework/playframework/issues/2992) Fix IE11 websocket issues
+* [4114](https://github.com/playframework/playframework/pull/4114) Ensure generated routes code doesn't emit scalac warnings
+* [2559](https://github.com/playframework/playframework/pull/2259) Allow routes parameters with default values to be scala keywords
+* [4412](https://github.com/playframework/playframework/pull/4412) Upgrade to Netty 3.9.8
+
+[Full changelog](https://github.com/playframework/playframework/issues?q=milestone%3A2.3.9)
+
 ## Play 2.3.8
 
 *Released 11 February 2015*
