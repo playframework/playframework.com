@@ -21,12 +21,13 @@ libraryDependencies ++= Seq(
   "org.webjars" % "prettify" % "4-Mar-2013",
   "com.typesafe.play" %% "anorm" % "2.4.0-RC2",
   jdbc,
+  evolutions,
   filters,
   ws,
   specs2 % "test"
 )
 
-scalaVersion := "2.11.5"
+scalaVersion := "2.11.6"
 
 routesGenerator := InjectedRoutesGenerator
 
@@ -52,8 +53,6 @@ sourceGenerators in Compile += Def.task {
 }.taskValue
 
 managedSourceDirectories in Compile += crossTarget.value / "version"
-
-PlayKeys.playOmnidoc := false
 
 sources in (Compile, doc) := Seq.empty
 

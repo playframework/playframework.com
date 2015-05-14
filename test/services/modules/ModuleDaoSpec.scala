@@ -2,7 +2,7 @@ package services.modules
 
 import org.specs2.mutable.Specification
 import play.api.db.evolutions.Evolutions
-import play.api.db.Database
+import play.api.db.Databases
 
 object ModuleDaoSpec extends Specification {
 
@@ -40,7 +40,7 @@ object ModuleDaoSpec extends Specification {
     }
   }
 
-  def withDao[T](block: DbModuleDao => T) = Database.withDatabase(
+  def withDao[T](block: DbModuleDao => T) = Databases.withDatabase(
     driver = "com.mysql.jdbc.Driver",
     url = "jdbc:mysql://localhost:3306/playunittest",
     config = Map("user" -> "root")
