@@ -48,7 +48,7 @@ class Router @Inject() (
       Some(versionPath).collect {
         case p"" => docController.index(lang)
         case p"/$version<1\.[^/]+>" => docController.v1Home(lang, version)
-        case p"/$version<[0-9]+\.[^/]+>/api/$path*" => docController.api(lang, version, decodePath(path))
+        case p"/$version<\d+\.[^/]+>/api/$path*" => docController.api(lang, version, decodePath(path))
         // The docs used to be served from this path
         case p"/api/$version/$path*" => docController.apiRedirect(lang, version, path)
         case p"/$version<1\.[^/]+>/$page" => docController.v1Page(lang, version, page)
@@ -56,14 +56,14 @@ class Router @Inject() (
         case p"/$version<1\.[^/]+>/files/$file" => docController.v1File(lang, version, file)
         case p"/$version<1\.[^/]+>/cheatsheet/$category" => docController.v1Cheatsheet(lang, version, category)
 
-        case p"/$version<2\.[^/]+>" => docController.home(lang, version)
-        case p"/$version<2\.[^/]+>/" => docController.home(lang, version)
-        case p"/$version<2\.[^/]+>/$page" => docController.page(lang, version, page)
-        case p"/$version<2\.[^/]+>/resources/$path*" => docController.resource(lang, version, decodePath(path))
+        case p"/$version<\d+\.[^/]+>" => docController.home(lang, version)
+        case p"/$version<\d+\.[^/]+>/" => docController.home(lang, version)
+        case p"/$version<\d+\.[^/]+>/$page" => docController.page(lang, version, page)
+        case p"/$version<\d+\.[^/]+>/resources/$path*" => docController.resource(lang, version, decodePath(path))
         case p"/latest" => docController.latest(lang, "Home")
         case p"/latest/$path*" => docController.latest(lang, path)
-        case p"/switch/$version<2\.[^/]+>/$page" => docController.switch(lang, version, page)
         case p"/switch/$version<1\.[^/]+>/$page" => docController.v1Switch(lang, version, page)
+        case p"/switch/$version<\d+\.[^/]+>/$page" => docController.switch(lang, version, page)
       }
     } else {
       None
