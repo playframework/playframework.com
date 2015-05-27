@@ -1,3 +1,22 @@
+## Play 2.4.0 "Damiya"
+
+*Released 26 May 2015*
+
+* Dependency injection out of the box.
+* Testing is easier thanks to better support for mocking.
+* It is now straightforward to embed Play in your application.
+* You can now aggregate reverse routers from multiple projects.
+* More Java 8 integration —- Java 8 is now required.
+* Choice of standard project layout.
+* Many new anorm features. Anorm is now its own project!
+* Upgraded to Ebean 4. Ebean is (also) its own project!
+* HikariCP is the default connection pool
+* WS supports Server Name Identification (SNI).
+
+[Highlights](https://playframework.com/documentation/2.4.x/Highlights24)
+[Migration Guide](https://playframework.com/documentation/2.4.x/Migration24)
+[Full changelog](https://github.com/playframework/playframework/issues?q=milestone%3A2.4.0)
+
 ## Play 2.3.9
 
 *Released 8 May 2015*
