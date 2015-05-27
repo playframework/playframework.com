@@ -2,7 +2,7 @@ package models
 
 import play.api.libs.json.Json
 
-case class PlayRelease(version: String, url: Option[String], date: Option[String], size: Option[String])
+case class PlayRelease(version: String, url: Option[String], date: Option[String], size: Option[String], name: Option[String])
 
 object PlayRelease {
   implicit val releaseReads = Json.reads[PlayRelease]
