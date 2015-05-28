@@ -35,7 +35,7 @@ class Application @Inject() (
       } finally {
         is.close()
       }
-    }.getOrElse(PlayReleases(PlayRelease("unknown", None, Some("unknown"), None), Nil, Nil))
+    }.getOrElse(PlayReleases(PlayRelease("unknown", None, Some("unknown"), None, None), Nil, Nil))
   }
 
   private val VulnerableVersions = Set(
@@ -61,10 +61,8 @@ class Application @Inject() (
   }
 
 
-  def index = Action.async { implicit request =>
-    latestActivator.map { activator =>
-      Ok(html.index(activator))
-    }
+  def index = Action { implicit request =>
+    Ok(html.index(releases))
   }
 
   def widget(version: Option[String]) = Action { request =>

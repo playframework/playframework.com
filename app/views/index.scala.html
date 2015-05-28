@@ -1,4 +1,4 @@
-@(activator: ActivatorRelease, title: String = "Play Framework - Build Modern & Scalable Web Apps with Java and Scala")(implicit requestHeader : RequestHeader)
+@(releases: PlayReleases, title: String = "Play Framework - Build Modern & Scalable Web Apps with Java and Scala")(implicit requestHeader : RequestHeader)
 
 @main(title) {
     <header id="top">
@@ -13,7 +13,7 @@
     <section id="content">
         <div id="start">
             <h2>Get the latest package</h2>
-                <a href="@routes.Application.download()" class="download">Download @activator.playVersion</a>
+                <a href="@routes.Application.download()" class="download">Download @releases.latest.version@for(name <- releases.latest.name){ "@name"}</a>
             <p>
                 or <a href="@routes.Application.download()#older-versions">browse all versions</a>
             </p>

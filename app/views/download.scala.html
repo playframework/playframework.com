@@ -36,7 +36,7 @@
     <section  id="content">
         <div class="downloads">
             <div class="latest">
-                <h2><a href="@activator.miniUrl" class="cover downloadActivatorLink" data-version="minimal"/>Download Play @activator.playVersion</a></h2>
+                <h2><a href="@activator.miniUrl" class="cover downloadActivatorLink" data-version="minimal"/>Download Play @releases.latest.version@for(name <- releases.latest.name){ "@name"}</a></h2>
                 <p>including Activator @activator.version</p>
                 <p>1MB - Windows, Mac and Linux - JDK6+</p>
             </div>
@@ -59,9 +59,6 @@
                 </div>
             </div>
         </div>
-        <p class="deprecated">
-            The former 'play' command has been replaced by a more general '<code>activator</code>' command. <a href="//groups.google.com/d/msg/play-framework/bTvJbeR_zvU/J3reqk6Xo4AJ">Read the announcement</a>.
-        </p>
 
         <article class="activator">
             <h2>Play with Activator</h2>
