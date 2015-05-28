@@ -8,9 +8,6 @@ version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
-// Work around - won't be necessary once we move to newer 2.4.x
-resolvers += "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases"
-
 libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-doc" % "1.2.2",
   "org.eclipse.jgit" % "org.eclipse.jgit" % "3.0.0.201306101825-r",
@@ -19,7 +16,7 @@ libraryDependencies ++= Seq(
   "org.webjars" % "jquery" % "1.8.2",
   "org.webjars" % "html5shiv" % "3.7.2",
   "org.webjars" % "prettify" % "4-Mar-2013",
-  "com.typesafe.play" %% "anorm" % "2.4.0-RC2",
+  "com.typesafe.play" %% "anorm" % "2.4.0",
   jdbc,
   evolutions,
   filters,
