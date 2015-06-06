@@ -2,9 +2,15 @@
 
 @language(lang: Lang, isDefault: Boolean, version: Option[models.documentation.Version]) = {
     <a href="@version.fold(
-        controllers.documentation.ReverseRouter.latest(Some(lang).filterNot(_ => isDefault))
+        routes.Application.setPreferedLanguage(
+          lang.language,
+          controllers.documentation.ReverseRouter.latest(Some(lang).filterNot(_ => isDefault))
+        )
     )( v =>
-        controllers.documentation.ReverseRouter.page(Some(lang).filterNot(_ => isDefault), v.name, page)
+        routes.Application.setPreferedLanguage(
+          lang.language,
+          controllers.documentation.ReverseRouter.page(Some(lang).filterNot(_ => isDefault), v.name, page)
+        )
     )">@messages("lang.name")(lang)</a>
 }
 
