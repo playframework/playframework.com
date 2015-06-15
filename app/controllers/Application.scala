@@ -144,8 +144,12 @@ class Application @Inject() (
     }
   }
 
-  def setPreferedLanguage(lang: String) = Action {
-    messagesApi.setLang(Ok, Lang(lang))
+  def setPreferedLanguage(lang: String, path: String) = Action {
+    if (path.startsWith("/")) {
+      messagesApi.setLang(Redirect(path, SEE_OTHER), Lang(lang))
+    } else {
+      BadRequest
+    }
   }
 
 }

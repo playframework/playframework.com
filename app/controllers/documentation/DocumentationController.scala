@@ -61,10 +61,15 @@ class DocumentationController @Inject() (
   }
 
   private def preferredLang(langs: Seq[Lang])(implicit request: RequestHeader) = {
-    request.acceptLanguages.collectFirst(Function.unlift { lang =>
+    val maybeLangFromCookie = request.cookies.get(messages.langCookieName).flatMap(c => Lang.get(c.value))
+    val candidateLangs = maybeLangFromCookie match {
+      case Some(cookieLang) => cookieLang +: request.acceptLanguages
+      case None => request.acceptLanguages
+    }
+    candidateLangs.collectFirst(Function.unlift { lang =>
       langs.find(_.satisfies(lang))
     }).orElse {
-      request.acceptLanguages.collect {
+      candidateLangs.collect {
         case Lang(l, c) if c.nonEmpty => Lang(l, "")
       }.collectFirst(Function.unlift { lang =>
         langs.find(_.satisfies(lang))
