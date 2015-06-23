@@ -1,3 +1,23 @@
+## Play 2.4.1 "Damiya"
+
+*Released 23 June 2015*
+
+* [3532](https://github.com/playframework/playframework/issues/3532) Don't throw exceptions from Assets.versioned controller on Windows
+* [4429](https://github.com/playframework/playframework/issues/4429) Ensure message source name is not ignored when messages are passed
+* [4488](https://github.com/playframework/playframework/issues/4488) Support primitive types in CacheApi
+* [4522](https://github.com/playframework/playframework/issues/4522) Exclude externalised resources from application jar
+* [4523](https://github.com/playframework/playframework/issues/4523) Char binding for path/query string parameters in routes
+* [4524](https://github.com/playframework/playframework/issues/4524) Ensure CORS headers get added to failed responses
+* [4616](https://github.com/playframework/playframework/issues/4616) Ensure routes is initialised with the right context classloader
+* [4633](https://github.com/playframework/playframework/issues/4633) Revert changes to Json.deepMerge
+* [4648](https://github.com/playframework/playframework/issues/4648) Improved Call fragment support in form template helpers
+* [4699](https://github.com/playframework/playframework/issues/4699) Ensure Default and ExternalAssets controllers are injectable
+* [4704](https://github.com/playframework/playframework/issues/4704) Ensure entity too long errors go through error handler
+* [4705](https://github.com/playframework/playframework/issues/4705) Add convenience method for handling various 4xx client errors
+* [4706](https://github.com/playframework/playframework/issues/4706) Propogate Java Action context changes to controller
+
+[Full changelog](https://github.com/playframework/playframework/issues?q=milestone%3A2.4.1)
+
 ## Play 2.4.0 "Damiya"
 
 *Released 26 May 2015*
