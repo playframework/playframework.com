@@ -136,8 +136,7 @@ $(function(){
             getStarted = $(".get-started"),
             getStartedBack = $(".back", getStarted);
 
-        // Trigger after a click and its tracking event have finished
-        download.on('trackedClick', function(e) {
+        download.on('click', function(e) {
             getStarted.show();
         });
         getStartedBack.click(function(e) {
@@ -156,9 +155,11 @@ $(function(){
         });
     })
 
-    // Downloads page tracking
+    // This function handles analytics tracking for certain
+    // download links.
     function trackDownload(selector, name) {
-        $(selector).click(function() {
+        var downloadElements = $(selector);
+        downloadElements.click(function() {
             var el = $(this)
             var version = el.data("version");
             if (version) {
@@ -166,26 +167,13 @@ $(function(){
             } else {
                 var label = name;
             }
-            function triggerTrackedClick() {
-                el.trigger('trackedClick');
-            }
-            if (window._gaq) {
-                _gaq.push(
-                    ["_set", "hitCallback", triggerTrackedClick],
-                    ["_trackEvent", "download", "click", label],
-                    ["_set", "hitCallback", null]
-                );
-            } else {
-                // Trigger tracked click immediately if analytics not loaded
-                triggerTrackedClick();
-            }
-            // Stop download for now because it would prevent tracking
-            return false;
-        });
-        // Resume normal click behavior after tracking has happened.
-        $(selector).on('trackedClick', function() {
-            location.href = $(this).attr('href');
+            _gaq.push(["_trackEvent", "download", "click", label]);
+            return true;
         })
+        // Target downloads at an iframe so they don't unload this
+        // page. Unloading the page can interrupt Google Analytics
+        // and mess up our statistics.
+        downloadElements.attr('target', 'download-iframe');
     }
     trackDownload(".downloadActivatorLink", "activator");
     trackDownload(".downloadStandaloneLink", "standalone");
