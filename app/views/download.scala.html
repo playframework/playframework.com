@@ -1,9 +1,9 @@
 @(releases: PlayReleases, activator: ActivatorRelease, platform: Platform.Platform, title: String = "Downloads")(implicit requestHeader : RequestHeader)
 
 @renderRelease(linkClass: String, release: PlayRelease) = {
-    @if(release.url) {
+    @if(release.secureUrl) {
         <td width="250">
-            <a href="@release.url.get" class="@linkClass" data-version="@{release.version}">play-@{release.version}.zip</a>
+            <a href="@release.secureUrl.get" class="@linkClass" data-version="@{release.version}">play-@{release.version}.zip</a>
         </td>
         <td width="200">
             @release.date
@@ -14,7 +14,7 @@
     } else {
         <td width="250">
             Play @release.version
-            <span class="small">(<a href="@activator.miniUrl" class="downloadActivatorLink" data-version="old">activator</a>)</span>
+            <span class="small">(<a href="@activator.miniSecureUrl" class="downloadActivatorLink" data-version="old">activator</a>)</span>
         </td>
         <td width="200">
             @release.date
@@ -36,7 +36,7 @@
     <section  id="content">
         <div class="downloads">
             <div class="latest">
-                <h2><a href="@activator.miniUrl" class="cover downloadActivatorLink" data-version="minimal"/>Download Play @releases.latest.version@for(name <- releases.latest.name){ "@name"}</a></h2>
+                <h2><a href="@activator.miniSecureUrl" class="cover downloadActivatorLink" data-version="minimal"/>Download Play @releases.latest.version@for(name <- releases.latest.name){ "@name"}</a></h2>
                 <p>including Activator @activator.version</p>
                 <p>1MB - Windows, Mac and Linux - JDK8+</p>
             </div>
@@ -44,7 +44,7 @@
                 <div class="cols">
                     <h3>Alternative downloads</h3>
                     <ul>
-                        <li><a href="@activator.url" class="downloadActivatorLink" data-version="offline">Offline Distribution</a> (@activator.size)</li>
+                        <li><a href="@activator.secureUrl" class="downloadActivatorLink" data-version="offline">Offline Distribution</a> (@activator.size)</li>
                         <li><a href="#as-dependency">Play as a dependency</a></li>
                         <li><a href="#older-versions">Older Play releases</a></li>
                     </ul>
