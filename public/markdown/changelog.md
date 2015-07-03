@@ -1,3 +1,15 @@
+## Play 2.4.2 "Damiya"
+
+*Released 3 July 2015*
+
+* [4498](https://github.com/playframework/playframework/issues/4498) Provide JsReadable.validateOpt to replace Option reads
+* [4615](https://github.com/playframework/playframework/issues/4615) Post binary data as is with play-ws client
+* [4707](https://github.com/playframework/playframework/issues/4707) Clean temporary files on app shutdown
+* [4736](https://github.com/playframework/playframework/issues/4736) Fix non extraction of some webjars
+* [4753](https://github.com/playframework/playframework/issues/4753) Ensure flash cookie cleanup doesn't lose other cookies
+
+[Full changelog](https://github.com/playframework/playframework/issues?q=milestone%3A2.4.2)
+
 ## Play 2.4.1 "Damiya"
 
 *Released 23 June 2015*

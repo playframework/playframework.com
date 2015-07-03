@@ -1,12 +1,17 @@
 {
     "latest": {
         "name": "Damiya",
-        "version": "2.4.1",
-        "date": "June 23 2015"
+        "version": "2.4.2",
+        "date": "Jul 3 2015"
     },
     "development": [        
     ],
     "previous": [
+        {
+            "name": "Damiya",
+            "version": "2.4.1",
+            "date": "Jun 23 2015"
+        },
         {
             "name": "Damiya",
             "version": "2.4.0",
