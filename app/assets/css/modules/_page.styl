@@ -27,6 +27,19 @@
             display: block
             height: 540px
             z-index: -1
+    .section-marker
+        position: absolute
+        width: 1em
+        margin-left: -1em
+        display: block
+        text-decoration: none
+        visibility: hidden
+        text-align: center
+        font-weight: normal
+    h1:hover > a, h2:hover > a, h3:hover > a, h4:hover > a, h5:hover > a
+        visibility: visible
+        color: inherit
+        text-decoration: none        
 
 article, aside
     @extend .typo
