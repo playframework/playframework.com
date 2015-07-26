@@ -194,6 +194,12 @@ class DocumentationController @Inject() (
     }
   }
 
+  def sitemap = DocsAction { actor => implicit req =>
+    (actor ? GetSitemap).mapTo[DocumentationSitemap].map { docSitemap =>
+      Ok(docSitemap.sitemap.toXml)
+    }
+  }
+
   /**
    * Switch versions. Will check that the requested page exists and redirect to that if found, otherwise, redirects
    * to the home page.

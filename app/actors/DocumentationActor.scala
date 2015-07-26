@@ -159,6 +159,16 @@ object DocumentationActor {
   case class DocumentationSummary(defaultLatest: Option[Version], defaultLang: Lang, allLangs: Seq[Lang],
                                   translations: Map[Lang, Option[Version]], translationContext: TranslationContext)
 
+  /**
+   * Get a sitemap describing the documentation.
+   */
+  case object GetSitemap
+
+  /**
+   * A sitemap describing all the pages in the documentation.
+   */
+  case class DocumentationSitemap(sitemap: Sitemap)
+
   // Not part of protocol:
 
   case class DocumentationGitRepos(default: DocumentationGitRepo,
@@ -421,6 +431,11 @@ class DocumentationActor @Inject() (config: DocumentationConfig, pollerFactory: 
         } { (lang, translation, tv, cs) =>
           V1Cheatsheet(cs.sheets, cs.title, cs.otherCategories, translationContext(lang, version, translation), tv.cacheId)
         }
+
+      case GetSitemap =>
+        // TODO build this from documentation
+        val sitemap = Sitemap(Seq(SitemapUrl("https://www.playframework.com/documentation/2.4.x/ScalaHome", Priority(1.0))))
+        sender ! DocumentationSitemap(sitemap)
     }
   }
 
