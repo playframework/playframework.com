@@ -2,6 +2,7 @@ package actors
 
 import javax.inject.Inject
 
+import actors.SitemapGeneratingActor.GenerateSitemap
 import akka.actor.{ActorRef, Props, Actor}
 import akka.pattern.{ask, pipe}
 import akka.routing.SmallestMailboxPool
@@ -212,6 +213,12 @@ class DocumentationActor @Inject() (config: DocumentationConfig, pollerFactory: 
       .withRouter(SmallestMailboxPool(nrOfInstances = 4))
       .withDispatcher("loader-dispatcher"),
     "documentationLoaders")
+
+  private val sitemapGenerator = context.actorOf(
+    Props[SitemapGeneratingActor]
+      .withDispatcher("sitemapgenerator-dispatcher"),
+    "sitemapGenerator"
+  )
 
   override def postStop() = {
     repos.default.repo.close()
@@ -433,8 +440,10 @@ class DocumentationActor @Inject() (config: DocumentationConfig, pollerFactory: 
         }
 
       case GetSitemap =>
-        val sitemap = Sitemap(documentation)
-        sender ! DocumentationSitemap(sitemap)
+        (sitemapGenerator ? GenerateSitemap(documentation))
+          .mapTo[Sitemap]
+          .map(DocumentationSitemap)
+          .pipeTo(sender())
     }
   }
 
