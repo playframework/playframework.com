@@ -433,8 +433,7 @@ class DocumentationActor @Inject() (config: DocumentationConfig, pollerFactory: 
         }
 
       case GetSitemap =>
-        // TODO build this from documentation
-        val sitemap = Sitemap(Seq(SitemapUrl("https://www.playframework.com/documentation/2.4.x/ScalaHome", Priority(0.19999999999999996))))
+        val sitemap = Sitemap(documentation)
         sender ! DocumentationSitemap(sitemap)
     }
   }

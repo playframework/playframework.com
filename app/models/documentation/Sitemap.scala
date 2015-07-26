@@ -1,5 +1,9 @@
 package models.documentation
 
+import java.nio.file.Paths
+
+import play.doc.{TocTree, Toc, Page, TocPage}
+
 import scala.xml.Node
 
 case class Priority(value: Double) {
@@ -54,6 +58,69 @@ case class Sitemap(urls: Seq[SitemapUrl]) {
       </url>
     }}
     </urlset>
+  }
+
+}
+
+object Sitemap {
+
+  private object Play2DocPage {
+    def unapply(path: String): Option[String] = {
+      Paths.get(path).getFileName.toString match {
+        case sidebar if sidebar.startsWith("_") => None
+        case markdown if markdown.endsWith(".md") => Some(markdown.dropRight(3))
+        case other => None
+      }
+    }
+  }
+
+  private object Play1DocPage {
+    def unapply(path: String): Option[String] = {
+      Paths.get(path).getFileName.toString match {
+        case textile if textile.endsWith(".textile") => Some(textile.dropRight(8))
+        case other => None
+      }
+    }
+  }
+
+  private def findPages(tv: TranslationVersion): Seq[String] = {
+    def findPagesInToc(toc: TocTree): Seq[String] = toc match {
+      case TocPage(page, title) => Seq(page)
+      case Toc(name, title, nodes, _) => nodes.flatMap(node => findPagesInToc(node._2))
+    }
+
+    // Docs for Play 2.4.0 or newer have a PageIndex with a handy ToC to find the pages for us
+    val fromIndex =
+      for (pageIndex <- tv.playDoc.pageIndex) yield findPagesInToc(pageIndex.toc)
+
+    // For older versions, we need to find the pages the hard way
+    fromIndex getOrElse {
+      tv.repo.listAllFilesInPath("manual").collect {
+        case Play2DocPage(page) => page
+        case Play1DocPage(page) => page
+      }
+    }
+  }
+
+  def apply(documentation: Documentation): Sitemap = {
+    val displayVersions = documentation.default.displayVersions
+
+    val locsByVersion: Seq[(Version, Seq[String])] = for {
+      version <- displayVersions
+      tv <- documentation.default.byVersion.get(version)
+      pages = findPages(tv)
+      locs = pages.map(page => s"https://www.playframework.com/documentation/$version/$page")
+    } yield {
+      (version, locs)
+    }
+
+    val sitemapUrls = for {
+      (version, locs) <- locsByVersion
+      priority = Priority(version, displayVersions)
+      loc <- locs
+    } yield SitemapUrl(loc, priority)
+
+    Sitemap(sitemapUrls)
   }
 
 }
