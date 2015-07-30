@@ -138,7 +138,7 @@ class Application @Inject() (
 
   def onHandlerNotFound(route: String) = Action { implicit request =>
     if (route.endsWith("/")) {
-      MovedPermanently("//" + request.host + "/" + request.path.take(request.path.length - 1).dropWhile(_ == '/'))
+      MovedPermanently("/" + request.path.take(request.path.length - 1).dropWhile(_ == '/'))
     } else {
       notFound
     }
