@@ -153,7 +153,7 @@ class Application @Inject() (
   }
 
   def robots = Action {
-    Ok("Sitemap: https://www.playframework.com/sitemap.xml")
+    Ok("Sitemap: https://www.playframework.com/sitemap-index.xml")
   }
 
 }

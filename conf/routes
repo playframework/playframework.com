@@ -44,7 +44,9 @@ GET         /code/*something                                         controllers
 
 GET         /assets/*file                                            controllers.Assets.versioned(path="/public", file: Asset)
 
-GET         /sitemap.xml                                             controllers.documentation.DocumentationController.sitemap
+GET         /sitemap-index.xml                                       controllers.Assets.at(path="/public", file="sitemap-index.xml")
+GET         /sitemap-main.xml                                        controllers.Assets.at(path="/public", file="sitemap-main.xml")
+GET         /sitemap-documentation.xml                               controllers.documentation.DocumentationController.sitemap
 GET         /robots.txt                                              controllers.Application.robots
 
 GET         /*route                                                  controllers.Application.onHandlerNotFound(route)
