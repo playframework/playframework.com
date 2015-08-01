@@ -15,34 +15,15 @@ case class Priority(value: Double) {
 object Priority {
   val Max = 1.0
   val Min = 0.1 // Note: Google's docs say 0.1, but sitemaps.org says 0.0
-  val Range = Max - Min
-  val Default = 0.5
 
   /**
-   * Calculate a given version's priority in the sitemap.
+   * Docs for the latest Play version get a priority of 0.9,
+   * i.e. high priority but not as high as important pages like the download page.
    *
-   * Priority is calculated as follows:
-   * - priority descends linearly from 1.0 to 0.1 as you go down the list of versions
-   * - unstable versions are penalised by subtracting 0.2
-   * - minimum priority is bounded to 0.1
-   *
-   * @param version The Play version of the documentation page
-   * @param displayVersions The documentation versions that we will display to read from,
-   *                        in the order that they should be displayed in the drop down list
+   * Docs for older versions don't get added to the sitemap,
+   * so they get indexed with the default priority of 0.5.
    */
-  def apply(version: Version, displayVersions: Seq[Version]): Priority = {
-    val maxIndex = displayVersions.length - 1
-    if (maxIndex < 1) {
-      // avoid divide by zero
-      Priority(Default)
-    } else {
-      val index = displayVersions.zipWithIndex.find(_._1 == version).map(_._2)
-      val initialScore = index.map(i => Max - (i * Range / maxIndex)).getOrElse(Default)
-      val rescored = if (version.versionType.isStable) initialScore else initialScore - 0.2
-      val bounded = rescored max Min
-      Priority(bounded)
-    }
-  }
+  val LatestDocumentation = Priority(0.9)
 
 }
 
@@ -83,16 +64,6 @@ object Sitemap {
     }
   }
 
-  /** Extractor for a textile file for a Play 1 documentation page */
-  private object Play1DocPage {
-    def unapply(path: String): Option[String] = {
-      Paths.get(path).getFileName.toString match {
-        case textile if textile.endsWith(".textile") => Some(textile.dropRight(8))
-        case other => None
-      }
-    }
-  }
-
   /**
    * Find all the documentation pages for a given (translation, version) combination.
    * @return The page names, e.g. "ScalaTemplates", "ScalaRouting", ...
@@ -107,11 +78,10 @@ object Sitemap {
     val foundInToC =
       for (pageIndex <- tv.playDoc.pageIndex) yield findPagesInToc(pageIndex.toc)
 
-    // For older versions, we need to find the pages the hard way
+    // If for some reason we don't have a PageIndex, we need to find the pages the hard way
     (foundInToC getOrElse {
       tv.repo.listAllFilesInPath("manual").collect {
         case Play2DocPage(page) => page
-        case Play1DocPage(page) => page
       }
     }).toSet
   }
@@ -133,13 +103,15 @@ object Sitemap {
   /**
    * Generate a sitemap for the given documentation.
    *
+   * Only the pages for the default version are included in the sitemap, all with priority 0.9.
+   *
    * Note: this will perform I/O because it needs to look for files in git repos.
    */
   def apply(documentation: Documentation): Sitemap = {
-    val displayVersions = documentation.default.displayVersions
+    val defaultVersion = documentation.default.defaultVersion.toSeq
 
     val versionedPageLists: Seq[VersionedPageList] = for {
-      version <- displayVersions
+      version <- defaultVersion
       tv <- documentation.default.byVersion.get(version)
       pages = findPages(tv)
       translatedPages = findPageTranslations(documentation.translations, version)
@@ -149,7 +121,6 @@ object Sitemap {
 
     val sitemapUrls = for {
       VersionedPageList(version, pages, pageTranslations) <- versionedPageLists
-      priority = Priority(version, displayVersions)
       page <- pages
     } yield {
       val loc = s"https://www.playframework.com/documentation/$version/$page"
@@ -157,7 +128,7 @@ object Sitemap {
       val alternates = pageTranslations.collect { case (lang, ps) if ps.contains(page) =>
         lang -> s"https://www.playframework.com/documentation/${lang.code}/$version/$page"
       }
-      SitemapUrl(loc, priority, alternates)
+      SitemapUrl(loc, Priority.LatestDocumentation, alternates)
     }
 
     Sitemap(sitemapUrls)
