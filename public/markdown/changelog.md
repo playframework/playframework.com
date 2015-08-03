@@ -49,6 +49,17 @@
 [Migration Guide](https://playframework.com/documentation/2.4.x/Migration24)
 [Full changelog](https://github.com/playframework/playframework/issues?q=milestone%3A2.4.0)
 
+## Play 2.3.10
+
+*Released 3 August 2015*
+
+* [3459](https://github.com/playframework/playframework/issues/3459) Assets controller returns 404 for directories
+* [4240](https://github.com/playframework/playframework/issues/4240) Disabled RC4 ciphers in default WS SSL configuration
+* [4432](https://github.com/playframework/playframework/issues/4432) Fix cookie max age greater than 24 days regression
+* [4719](https://github.com/playframework/playframework/issues/4719) Correctly parse content type in test helpers
+
+[Full changelog](https://github.com/playframework/playframework/issues?q=milestone%3A2.3.10)
+
 ## Play 2.3.9
 
 *Released 8 May 2015*
