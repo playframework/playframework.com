@@ -2,6 +2,7 @@ package actors
 
 import javax.inject.Inject
 
+import actors.SitemapGeneratingActor.GenerateSitemap
 import akka.actor.{ActorRef, Props, Actor}
 import akka.pattern.{ask, pipe}
 import akka.routing.SmallestMailboxPool
@@ -159,6 +160,16 @@ object DocumentationActor {
   case class DocumentationSummary(defaultLatest: Option[Version], defaultLang: Lang, allLangs: Seq[Lang],
                                   translations: Map[Lang, Option[Version]], translationContext: TranslationContext)
 
+  /**
+   * Get a sitemap describing the documentation.
+   */
+  case object GetSitemap
+
+  /**
+   * A sitemap describing all the pages in the documentation.
+   */
+  case class DocumentationSitemap(sitemap: Sitemap)
+
   // Not part of protocol:
 
   case class DocumentationGitRepos(default: DocumentationGitRepo,
@@ -202,6 +213,12 @@ class DocumentationActor @Inject() (config: DocumentationConfig, pollerFactory: 
       .withRouter(SmallestMailboxPool(nrOfInstances = 4))
       .withDispatcher("loader-dispatcher"),
     "documentationLoaders")
+
+  private val sitemapGenerator = context.actorOf(
+    Props[SitemapGeneratingActor]
+      .withDispatcher("sitemapgenerator-dispatcher"),
+    "sitemapGenerator"
+  )
 
   override def postStop() = {
     repos.default.repo.close()
@@ -421,6 +438,12 @@ class DocumentationActor @Inject() (config: DocumentationConfig, pollerFactory: 
         } { (lang, translation, tv, cs) =>
           V1Cheatsheet(cs.sheets, cs.title, cs.otherCategories, translationContext(lang, version, translation), tv.cacheId)
         }
+
+      case GetSitemap =>
+        (sitemapGenerator ? GenerateSitemap(documentation))
+          .mapTo[Sitemap]
+          .map(DocumentationSitemap)
+          .pipeTo(sender())
     }
   }
 
