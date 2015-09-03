@@ -28,5 +28,11 @@ object ActivatorRelease {
 }
 
 private[models] object SecurifyUrl {
-  def securify(url: String): String = url.replaceFirst("http", "https")
+  def securify(url: String): String = {
+    if (url.startsWith("https")) {
+      url
+    } else {
+      url.replaceFirst("http", "https")
+    }
+  }
 }
