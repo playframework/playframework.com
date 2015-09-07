@@ -3,7 +3,6 @@ import JsEngineKeys._
 JsEngineKeys.engineType := JsEngineKeys.EngineType.Node
 
 name := "playframework"
-
 version := "1.0-SNAPSHOT"
 
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
@@ -26,12 +25,11 @@ libraryDependencies ++= Seq(
   specs2 % "test"
 )
 
-scalaVersion := "2.11.6"
+scalaVersion := "2.11.7"
 
 routesGenerator := InjectedRoutesGenerator
 
 StylusKeys.useNib in Assets := true
-
 StylusKeys.compress in Assets := true
 
 pipelineStages := Seq(digest, gzip)
@@ -52,7 +50,5 @@ sourceGenerators in Compile += Def.task {
 }.taskValue
 
 managedSourceDirectories in Compile += crossTarget.value / "version"
-
 sources in (Compile, doc) := Seq.empty
-
 publishArtifact in (Compile, packageDoc) := false

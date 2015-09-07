@@ -1,3 +1,19 @@
+## Play 2.4.3 "Damiya"
+
+*Released 7 September 2015*
+
+* [2188](https://github.com/playframework/playframework/issues/2188) Allow Authenticator for Security.Authenticated to be injected
+* [4649](https://github.com/playframework/playframework/issues/4649) Fixes for dev mode memory leaks
+* [4834](https://github.com/playframework/playframework/issues/4834) Made Helpers.invokeWithContext static
+* [4792](https://github.com/playframework/playframework/issues/4792) Netty upgrade from 3.10.3 to 3.10.4
+* [4935](https://github.com/playframework/playframework/issues/4935) Scala JSON Reads for java.time.Instant
+* [4939](https://github.com/playframework/playframework/issues/4939) Fix packaging when externalizeResources or executableScriptName settings are used
+* [4940](https://github.com/playframework/playframework/issues/4940) Support for HikariCP connectionInitSql
+* [4975](https://github.com/playframework/playframework/issues/4975) Akka-http upgrade from 1.0-RC2 to 1.0
+* [5025](https://github.com/playframework/playframework/issues/5025) Demoted akka initialization logging to debug level
+
+[Full changelog](https://github.com/playframework/playframework/issues?q=milestone%3A2.4.3)
+
 ## Play 2.4.2 "Damiya"
 
 *Released 3 July 2015*
