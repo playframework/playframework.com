@@ -101,7 +101,7 @@ class Application @Inject() (
   def markdownAction(markdownFile: String, template: RequestHeader => Html => Html) = Action { implicit request =>
     environment.resourceAsStream(markdownFile).map { is =>
       try {
-        Ok(template(request)(Html(Markdown.toHtml(IOUtils.toString(is), link => (link, link)))))
+        Ok(template(request)(Html(Markdown.toHtml(IOUtils.toString(is, "utf-8"), link => (link, link)))))
           .withHeaders(CACHE_CONTROL -> "max-age=10000")
       } finally {
         is.close()

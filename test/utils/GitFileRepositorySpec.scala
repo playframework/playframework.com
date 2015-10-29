@@ -62,7 +62,7 @@ class GitFileRepositorySpec extends Specification {
     }
 
     "load a file" in withGitRepo { gitRepo =>
-      gitRepo.loadFile("working/scalaGuide/ScalaHome.md")(IOUtils.toString) must beSome("Hello!")
+      gitRepo.loadFile("working/scalaGuide/ScalaHome.md")(IOUtils.toString(_, "utf-8")) must beSome("Hello!")
     }
 
     "find all tags" in withPlayRepo { playRepo =>
@@ -74,15 +74,15 @@ class GitFileRepositorySpec extends Specification {
     }
 
     "work with relative paths" in withGitRepo { gitRepo =>
-      gitRepo.loadFile("working/scalaGuide/main/async/../http/code/ScalaActions.scala")(IOUtils.toString) must beSome("Action")
+      gitRepo.loadFile("working/scalaGuide/main/async/../http/code/ScalaActions.scala")(IOUtils.toString(_, "utf-8")) must beSome("Action")
     }
 
     "work with doubly relative paths" in withGitRepo { gitRepo =>
-      gitRepo.loadFile("working/scalaGuide/main/async/code/../../http/code/ScalaActions.scala")(IOUtils.toString) must beSome("Action")
+      gitRepo.loadFile("working/scalaGuide/main/async/code/../../http/code/ScalaActions.scala")(IOUtils.toString(_, "utf-8")) must beSome("Action")
     }
 
     "not escape outside the base path" in withGitRepo { gitRepo =>
-      gitRepo.loadFile("../../framework/build.sbt")(IOUtils.toString) must beNone
+      gitRepo.loadFile("../../framework/build.sbt")(IOUtils.toString(_, "utf-8")) must beNone
     }
 
   }

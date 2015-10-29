@@ -10,7 +10,7 @@ lazy val root = (project in file(".")).enablePlugins(PlayScala)
 resolvers += "Scalaz Bintray Repo" at "http://dl.bintray.com/scalaz/releases"
 
 libraryDependencies ++= Seq(
-  "com.typesafe.play" %% "play-doc" % "1.2.3",
+  "com.typesafe.play" %% "play-doc" % "1.2.4",
   "org.eclipse.jgit" % "org.eclipse.jgit" % "3.0.0.201306101825-r",
   "mysql" % "mysql-connector-java" % "5.1.18", // TODO: 5.1.34
   "com.damnhandy" % "handy-uri-templates" % "2.0.2",

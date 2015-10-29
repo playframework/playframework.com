@@ -49,7 +49,7 @@ object GitFileRepositoryPerformanceTest extends App {
 
           def loadFile(path: String) = {
             val start = System.nanoTime()
-            val result = fileRepo.loadFile(path)(IOUtils.toString)
+            val result = fileRepo.loadFile(path)(IOUtils.toString(_, "utf-8"))
             loadFileTiming.addAndGet(System.nanoTime() - start)
             result
           }

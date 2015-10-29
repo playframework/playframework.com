@@ -62,7 +62,7 @@ class DocumentationPollingActor @Inject() (messages: MessagesApi, @Assisted repo
     def fileContents(hash: ObjectId, file: String): Option[String] = {
       repo.repo.loadFile(hash, file).map {
         case (size, is) => try {
-          IOUtils.toString(is)
+          IOUtils.toString(is, "utf-8")
         } finally {
           is.close()
         }

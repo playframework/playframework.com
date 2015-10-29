@@ -44,7 +44,7 @@ class DocumentationLoadingActor extends Actor {
       sender() ! resource
 
     case RenderV1Page(page, repo) =>
-      val content = repo.loadFile(s"manual/$page.textile")(IOUtils.toString)
+      val content = repo.loadFile(s"manual/$page.textile")(IOUtils.toString(_, "utf-8"))
       val html = content.map(Textile.toHTML)
       sender() ! html
 
@@ -55,7 +55,7 @@ class DocumentationLoadingActor extends Actor {
       val sortedSheets = CheatSheetHelper.sortSheets(sheetFiles.filter(_.endsWith(".textile")).toArray)
       if (sortedSheets.nonEmpty) {
         val sheets = sortedSheets.flatMap { file =>
-          repo.loadFile(s"cheatsheets/$category/$file")(is => Textile.toHTML(IOUtils.toString(is)))
+          repo.loadFile(s"cheatsheets/$category/$file")(is => Textile.toHTML(IOUtils.toString(is, "utf-8")))
         }
         val title = CheatSheetHelper.getCategoryTitle(category)
         val otherCategories = CheatSheetHelper.listCategoriesAndTitles(repo.listAllFilesInPath("cheatsheets")

@@ -19,7 +19,7 @@ class Security @Inject() (environment: Environment) extends Controller with Comm
       notFound
     } else {
       environment.resourceAsStream(path + ".md").map { is =>
-        val content = IOUtils.toString(is)
+        val content = IOUtils.toString(is, "utf-8")
 
         try {
           Ok(views.html.security("Play Framework Security Advisory", Html(Markdown.toHtml(content, link => (link, link)))))
