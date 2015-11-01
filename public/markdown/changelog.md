@@ -499,6 +499,33 @@ A complete list of what was fixed for 2.2.2 can be found on [Github](https://git
 * Stopped plugins in reverse order to started
 * Removed circular dependencies in dev mode ClassLoaders
 
+## Play 1.4.0
+
+*Released 30 October 2015*
+
+* Compatible Java 7. No longer support for Java 6
+* Upgrade to async-http-client v1.9.31
+* Upgrade to netty 3.10.4
+* Update HtmlUnit to v2.16
+
+## Play 1.3.2
+
+*Released 30 October 2015*
+
+* Add ability to define the timeout in testRunner module
+* Add ability to manually set the VirtualHost of WS
+* Improve performance of Router.reverse()
+* Allow upload a 0B file
+* add '--server' arg to install command commands python to specify just ONE custom repository for module installation
+* Fix redirect to wrong domain and port behind apache
+* Customize JSON rendering by passing the Gson serializer object json render
+* Getting Static Initialization Deadlock in class DataParser dataparser
+* Allow zero-length blobs binder
+* OpenID discovery fails in 1.3.x in some cases openid
+* Problem to run specific tests selenium testrunner tests
+* 500.html template rendering issue
+* play.libs.image.crop don't close the OutputStream image
+
 ## Play 1.3.0
 
 *Released 15 January 2015*
