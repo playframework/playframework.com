@@ -6,6 +6,7 @@ import akka.actor.ActorRef
 import akka.pattern.ask
 import akka.util.Timeout
 import javax.inject.{Named, Inject, Singleton}
+import models.PlayReleases
 import models.documentation.{AlternateTranslation, TranslationContext, Version}
 import org.joda.time.format.DateTimeFormat
 import play.api.http.HttpEntity
@@ -20,9 +21,12 @@ import play.api.libs.concurrent.Execution.Implicits.defaultContext
 import scala.reflect.ClassTag
 
 @Singleton
-class DocumentationController @Inject() (
+class DocumentationController @Inject()(
   messages: MessagesApi,
-  @Named("documentation-actor") documentationActor: ActorRef) extends Controller {
+  @Named("documentation-actor") documentationActor: ActorRef,
+  releases: PlayReleases) extends Controller {
+
+  import DocumentationController._
 
   private implicit val timeout = Timeout(5.seconds)
 
@@ -140,11 +144,16 @@ class DocumentationController @Inject() (
   }
 
   def page(lang: Option[Lang], v: String, page: String) = VersionAction(v) { (actor, version) => implicit req =>
-    actorRequest(actor, page, RenderPage(lang, version, etag(req), page)) {
+    val linkFuture = canonicalLinkHeader(page)
+    val resultFuture = actorRequest(actor, page, RenderPage(lang, version, etag(req), page)) {
       case RenderedPage(html, sidebarHtml, source, context, cacheId) =>
         val result = Ok(views.html.documentation.v2(messages, context, page, Some(html), sidebarHtml, source))
         cacheable(withLangHeaders(result, page, context), cacheId)
     }
+    for {
+      link <- linkFuture
+      result <- resultFuture
+    } yield result.withHeaders(link: _*)
   }
 
   def resource(lang: Option[Lang], v: String, resource: String) =
@@ -225,6 +234,20 @@ class DocumentationController @Inject() (
     }
   }
 
+  private def canonicalLinkHeader(page: String) = {
+    val Array(epoch, major, minor) = releases.latest.version.split("\\.", 4)
+    val latestVersion = Version.parse(s"$epoch.$major.x").get
+    val queryPageExists = QueryPageExists(None, latestVersion, None, page)
+    (documentationActor ? queryPageExists).map {
+      case PageExists(true, _) =>
+        val canonicalUrl = s"https://www.playframework.com/documentation/$latestVersion/$page"
+        val link = s"""<$canonicalUrl>; rel="canonical""""
+        Seq(LINK -> link)
+      case other =>
+        Seq.empty
+    }
+  }
+
   private def switchAction(msg: (Option[Lang], Version, Option[String], String) => LangRequest[PageExists], home: String) = {
     (lang: Option[Lang], v: String, page: String) =>
       VersionAction(v) { (actor, version) => implicit req =>
@@ -249,4 +272,8 @@ class DocumentationController @Inject() (
       result.withHeaders(CONTENT_LANGUAGE -> context.lang.code)
     }
   }
+}
+
+object DocumentationController {
+  val LINK = "Link"
 }
