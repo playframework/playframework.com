@@ -1,8 +1,8 @@
 {
     "latest": {
         "name": "Damiya",
-        "version": "2.4.4",
-        "date": "Nov 19 2015"
+        "version": "2.4.6",
+        "date": "Dec 14 2015"
     },
     "development": [        
         {
@@ -22,6 +22,11 @@
             "url": "https://github.com/playframework/play1/releases/download/1.3.2/play-1.3.2.zip",
             "date": "Oct 30 2015",
             "size": "71.5M"
+        },
+        {
+            "name": "Damiya",
+            "version": "2.4.4",
+            "date": "Nov 19 2015"
         },
         {
             "name": "Damiya",

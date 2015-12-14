@@ -1,3 +1,26 @@
+## Play 2.4.6 "Damiya"
+
+*Released 14 December 2015*
+
+* [5326](https://github.com/playframework/playframework/pull/5326) Fixes to forward header parsing
+* [5364](https://github.com/playframework/playframework/pull/5364) Build routes compiler library for Scala 2.11
+* [5368](https://github.com/playframework/playframework/pull/5368) Allow CSRF to be configured with compile-time dependency injection
+
+## Play 2.4.5 "Damiya"
+
+*Unreleased*
+
+## Play 2.4.4 "Damiya"
+
+*Released 19 November 2015*
+
+* [Support infinite WS request timeouts](https://github.com/playframework/playframework/commit/d5e42a5db6e3335a3728949cf46fd5de167d5134)
+* [Updated typetools version to support latest JDK](https://github.com/playframework/playframework/commit/baeceb8337d37d81f08a8f5f0b5b87e794104ece)
+* [Support for temporary files with compile-time dependency injection](https://github.com/playframework/playframework/commit/45b8188451d282c758c5a66643b3ecc3bbd3eb31)
+* [Use SHA256-RSA for self-signed certificates](https://github.com/playframework/playframework/commit/c599afd96c391d1f1a6f556e7635c215f78ff604)
+* [Exclude some transitive dependencies from Maven POM](https://github.com/playframework/playframework/commit/c876d215afc7291f08b51a18aa349588a001e73d)
+* [Improved Forward and X-Forwarded handling](https://github.com/playframework/playframework/commit/48f6772c857a851617c7170a74b8fa630ca4994c)
+
 ## Play 2.4.3 "Damiya"
 
 *Released 7 September 2015*
