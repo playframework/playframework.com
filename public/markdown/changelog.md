@@ -522,6 +522,24 @@ A complete list of what was fixed for 2.2.2 can be found on [Github](https://git
 * Stopped plugins in reverse order to started
 * Removed circular dependencies in dev mode ClassLoaders
 
+## Play 1.4.1
+
+*Released 30 December 2015*
+
+**Vulnerabilities fixed**
+
+* [20151230-SessionHijack](/security/vulnerability/20151230-SessionHijack) Session hijack
+
+**Other changes**
+
+* Add PATCH support
+* Update to htmlUnit v 2.19
+* Add ability to define enabled ssl protocols
+* Make DB properties configurable
+* Fix putting property to customer DB configuration
+* Add method Plugin.onActionInvocationFinally()
+* Fix javadoc tools errors
+
 ## Play 1.4.0
 
 *Released 30 October 2015*
@@ -530,6 +548,22 @@ A complete list of what was fixed for 2.2.2 can be found on [Github](https://git
 * Upgrade to async-http-client v1.9.31
 * Upgrade to netty 3.10.4
 * Update HtmlUnit to v2.16
+
+## Play 1.3.3
+
+*Released 30 December 2015*
+
+**Vulnerabilities fixed**
+
+* [20151230-SessionHijack](/security/vulnerability/20151230-SessionHijack) Session hijack
+
+**Other changes**
+
+* Add ability to define enabled ssl protocols
+* Make DB properties configurable
+* Fix putting property to customer DB configuration
+* Add method Plugin.onActionInvocationFinally()
+* Fix javadoc tools errors
 
 ## Play 1.3.2
 
@@ -576,3 +610,21 @@ A complete list of what was fixed for 2.2.2 can be found on [Github](https://git
 **Known issues**
 
 * Cobertura does not work
+
+## Play 1.2.6.2
+
+*Released 30 December 2015*
+
+**Vulnerabilities fixed**
+
+* [20151230-SessionHijack](/security/vulnerability/20151230-SessionHijack) Session hijack
+
+
+## Play 1.2.5.6
+
+*Released 30 December 2015*
+
+**Vulnerabilities fixed**
+
+* [20151230-SessionHijack](/security/vulnerability/20151230-SessionHijack) Session hijack
+
