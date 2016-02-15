@@ -79,7 +79,7 @@ class DefaultGitHub @Inject() (ws: WSClient, config: GitHubConfig)(implicit ec: 
   private def responseFailure(response: WSResponse): Exception = response.status match {
     case 403 => new RuntimeException("Request forbidden, GitHub quota rate limit is probably exceeded: " + response.body)
     case error => new RuntimeException("Request failed with " + response.status + " " +
-      response.underlying[com.ning.http.client.Response].getStatusText)
+      response.underlying[org.asynchttpclient.Response].getStatusText)
   }
 
   private def checkSuccess(response: WSResponse): WSResponse = response.status match {
