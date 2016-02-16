@@ -1,8 +1,9 @@
 package actors
 
 import akka.actor.Actor
+import akka.stream.scaladsl.{StreamConverters, Source}
+import akka.util.ByteString
 import org.apache.commons.io.IOUtils
-import play.api.libs.iteratee.Enumerator
 import play.doc.{PlayDoc, FileRepository}
 import utils._
 
@@ -12,7 +13,7 @@ object DocumentationLoadingActor {
   case class RenderV1Cheatsheet(category: String, repo: ExtendedFileRepository)
   case class V1Cheatsheet(sheets: Seq[String], title: String, otherCategories: Map[String, String])
   case class LoadResource(file: String, repo: FileRepository)
-  case class Resource(content: Enumerator[Array[Byte]], size: Long)
+  case class Resource(content: Source[ByteString, _], size: Long)
   case class PageExists(page: String, playDoc: PlayDoc, repo: FileRepository)
   case class V1PageExists(page: String, repo: FileRepository)
 }
@@ -31,15 +32,13 @@ object DocumentationLoadingActor {
 class DocumentationLoadingActor extends Actor {
   import DocumentationLoadingActor._
 
-  import context.dispatcher
-
   def receive = {
     case RenderPage(page, playDoc) =>
       sender() ! playDoc.renderPage(page)
 
     case LoadResource(file, repo) =>
       val resource = repo.handleFile(file) { handle =>
-        Resource(Enumerator.fromStream(handle.is).onDoneEnumerating(handle.close()), handle.size)
+        Resource(StreamConverters.fromInputStream(() => handle.is), handle.size)
       }
       sender() ! resource
 

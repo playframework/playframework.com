@@ -6,11 +6,11 @@ import actors.SitemapGeneratingActor.GenerateSitemap
 import akka.actor.{ActorRef, Props, Actor}
 import akka.pattern.{ask, pipe}
 import akka.routing.SmallestMailboxPool
-import akka.util.Timeout
+import akka.stream.scaladsl.Source
+import akka.util.{ByteString, Timeout}
 import models.documentation._
 import play.api.i18n.Lang
 import play.api.libs.concurrent.InjectedActorSupport
-import play.api.libs.iteratee.Enumerator
 import utils.PlayGitRepository
 import scala.concurrent.duration._
 import scala.reflect.ClassTag
@@ -103,7 +103,7 @@ object DocumentationActor {
    * @param content The content of the resource.
    * @param size The size of the resource.
    */
-  case class Resource(content: Enumerator[Array[Byte]], size: Long, cacheId: String) extends Found[Resource]
+  case class Resource(content: Source[ByteString, _], size: Long, cacheId: String) extends Found[Resource]
 
   /**
    * Update the documentation.

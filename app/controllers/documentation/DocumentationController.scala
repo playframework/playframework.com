@@ -8,6 +8,7 @@ import akka.util.Timeout
 import javax.inject.{Named, Inject, Singleton}
 import models.documentation.{AlternateTranslation, TranslationContext, Version}
 import org.joda.time.format.DateTimeFormat
+import play.api.http.HttpEntity
 import play.api.i18n.{MessagesApi, Lang}
 import play.api.mvc._
 import scala.concurrent.Future
@@ -211,18 +212,15 @@ class DocumentationController @Inject() (
       (actor ? message(version, etag(req))).mapTo[Response[Resource]].map {
         case DocsNotFound(context) => pageNotFound(context, resource)
         case DocsNotModified(cacheId) => notModified(cacheId)
-        case Resource(enumerator, size, cacheId) =>
+        case Resource(source, size, cacheId) =>
           val fileName = resource.drop(resource.lastIndexOf('/') + 1)
           val contentDisposition = if (inline) {
-            Map.empty
+            Nil
           } else {
-            Map(CONTENT_DISPOSITION -> s"""attachment; filename="$fileName"""")
+            Seq(CONTENT_DISPOSITION -> s"""attachment; filename="$fileName"""")
           }
-          cacheable(Result(ResponseHeader(OK, Map[String, String](
-            CONTENT_LENGTH -> size.toString,
-            CONTENT_TYPE -> MimeTypes.forFileName(fileName).getOrElse(BINARY)
-          ) ++ contentDisposition
-          ), enumerator), cacheId)
+          val entity = HttpEntity.Streamed(source, Some(size), Some(MimeTypes.forFileName(fileName).getOrElse(BINARY)))
+          cacheable(Ok.sendEntity(entity).withHeaders(contentDisposition: _*), cacheId)
       }
     }
   }

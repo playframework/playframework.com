@@ -2,8 +2,7 @@ package utils
 
 import java.net.URI
 import javax.inject.{ Inject, Singleton }
-import play.api.Play
-import play.api.libs.iteratee.Done
+import play.api.libs.streams.Accumulator
 import play.api.mvc.{Results, EssentialAction, EssentialFilter}
 import play.core.PlayVersion
 import play.api.libs.concurrent.Execution.Implicits.defaultContext
@@ -53,7 +52,7 @@ class ServerHeaderFilter @Inject() extends EssentialFilter {
         Results.MovedPermanently("https://" + req.host + uri)
       }
 
-      Done(redirect.withHeaders(headers: _*))
+      Accumulator.done(redirect.withHeaders(headers: _*))
     } else {
       next(req).map { result =>
         result.withHeaders(headers: _*)
