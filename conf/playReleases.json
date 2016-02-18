@@ -6,8 +6,8 @@
     },
     "development": [        
         {
-            "version": "2.5.0-M2",
-            "date": "Jan 19 2016"
+            "version": "2.5.0-RC1",
+            "date": "Feb 18 2016"
         } 
     ],
     "previous": [
