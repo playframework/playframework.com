@@ -37,7 +37,7 @@ class DocumentationPollingActor @Inject() (messages: MessagesApi, @Assisted repo
   import DocumentationPollingActor._
   import context.dispatcher
 
-  val schedule = context.system.scheduler.schedule(10.minutes, 10.minutes, self, Tick)
+  val schedule = context.system.scheduler.schedule(1.minute, 10.minutes, self, Tick)
 
   override def postStop() = {
     schedule.cancel()
