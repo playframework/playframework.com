@@ -1,16 +1,17 @@
 {
     "latest": {
-        "name": "Damiya",
-        "version": "2.4.6",
-        "date": "Dec 14 2015"
+        "name": "Streamy",
+        "version": "2.5.0",
+        "date": "Mar 4 2016"
     },
     "development": [        
-        {
-            "version": "2.5.0-RC1",
-            "date": "Feb 18 2016"
-        } 
     ],
     "previous": [
+        {
+            "name": "Damiya",
+            "version": "2.4.6",
+            "date": "Dec 14 2015"
+        },
         {
             "version": "1.4.1",
             "url": "http://downloads.typesafe.com/play/1.4.1/play-1.4.1.zip",

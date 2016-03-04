@@ -1,3 +1,16 @@
+## Play 2.5.0 "Streamy"
+
+*Released 4 March 2016*
+
+* Switched from iteratees to Akka streams for all asynchronous IO and streaming
+* Replaced Play functional types such as `Promise` and `Option` with Java 8 functional types such as `CompletionStage` and `Optional`
+* Introduced equivalent Java APIs for features that previously only existing in the Scala API, such as implementing filters and custom body parsers
+* Increased performance by up to 20%
+
+[Highlights](https://playframework.com/documentation/2.5.x/Highlights25)
+[Migration Guide](https://playframework.com/documentation/2.5.x/Migration25)
+[Full changelog](https://github.com/playframework/playframework/issues?q=milestone%3A2.5.0)
+
 ## Play 2.4.6 "Damiya"
 
 *Released 14 December 2015*
