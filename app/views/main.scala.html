@@ -81,10 +81,10 @@
 
 @*
         @if(requestHeader.session.data.get("github")) {
-            welcome, @requestHeader.session.data("github") 
+            welcome, @requestHeader.session.data("github")
             <img src="@requestHeader.session.data("github_avatar")"></img>
-        } else { 
-          <a href="https://github.com/login/oauth/authorize?client_id=@models.Github.clientId&scope=repo,user">login via Github</a>	
+        } else {
+          <a href="https://github.com/login/oauth/authorize?client_id=@models.Github.clientId&scope=repo,user">login via Github</a>
         }
 *@
 
@@ -152,7 +152,7 @@
             </div>
         </footer>
 
-        <a href="http://www.reactivemanifesto.org/">
+        <a href="http://www.reactivemanifesto.org/" id="reactive_ribbon">
             <img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000"
                 src="//d379ifj7s9wntv.cloudfront.net/reactivemanifesto/images/ribbons/we-are-reactive-black-right.png">
         </a>
@@ -178,7 +178,6 @@
           s.onload = initMunchkin;
           document.getElementsByTagName('head')[0].appendChild(s);
         })();
-        </script>        
+        </script>
     </body>
 </html>
-
