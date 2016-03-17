@@ -1,0 +1,9 @@
+@(page: String)(implicit messages: MessagesApi, context: models.documentation.TranslationContext)
+
+@import Helpers._
+
+@if(isNotMostRecentVersion) {
+  <div id="version-header">
+    @displayVersionMessage(page)
+  </div>
+}

@@ -35,14 +35,9 @@ case class Translation(availableVersions: List[TranslationVersion], repo: PlayGi
    */
   private def calculateDisplayVersions(versions: List[Version]): List[Version] = {
     versions.find(_.versionType.isStable).map { currentStable =>
-      val mostRecentDevelopment = versions.filter(!_.versionType.isStable).filter(_ > currentStable).take(2)
-      val currentPatchVersions = versions.filter(v => v.sameMajor(currentStable) && (v.versionType.isStable
-        || v.versionType.isLatest))
-      val previousMostRecentVersions = versions
-        .filter(v => (v.versionType.isStable || v.versionType.isLatest) && v.earlierMajorThan(currentStable))
-        .foldLeft(List[Version]()) { (vs, v) =>
-        if (!vs.exists(_.sameMajor(v))) vs :+ v else vs
-      }
+      val mostRecentDevelopment = Version.findMostRecentDevelopment(versions, currentStable)
+      val currentPatchVersions = Version.findCurrentPatchVersions(versions, currentStable)
+      val previousMostRecentVersions = Version.findPreviousMostRecentVersions(versions, currentStable)
       // Ensure that the most recent Play 1 version, even if it's an RC, is in there
       val mostRecent1 = versions.find(_.era == 1).toSeq
 
@@ -53,12 +48,7 @@ case class Translation(availableVersions: List[TranslationVersion], repo: PlayGi
   /**
    * The default version to render
    */
-  lazy val defaultVersion: Option[Version] = {
-    // Find the most recent stable version, and then the latest version that matches that
-    displayVersions.find(_.versionType.isStable).flatMap { stable =>
-      displayVersions.find(v => v.sameMajor(stable) && (v.versionType.isLatest || v.versionType.isStable))
-    }.orElse(displayVersions.headOption)
-  }
+  lazy val defaultVersion: Option[Version] = Version.findDefaultVersion(displayVersions)
 
 }
 
@@ -111,6 +101,35 @@ case class Version(name: String, era: Int, major: Int, minor: Int, patch: Int, v
 }
 
 object Version {
+
+  def findMostRecentDevelopment(versions: Seq[Version], currentStable: Version): Seq[Version] = {
+    versions.filter(!_.versionType.isStable).filter(_ > currentStable).take(2)
+  }
+
+  def findCurrentPatchVersions(versions: Seq[Version], currentStable: Version): Seq[Version] = {
+    versions.filter(v => v.sameMajor(currentStable) && (v.versionType.isStable || v.versionType.isLatest))
+  }
+
+  def findPreviousMostRecentVersions(versions: Seq[Version], currentStable: Version) = {
+    versions
+      .filter(v => (v.versionType.isStable || v.versionType.isLatest) && v.earlierMajorThan(currentStable))
+      .foldLeft(List[Version]()) { (vs, v) =>
+        if (!vs.exists(_.sameMajor(v))) vs :+ v else vs
+      }
+  }
+
+  /**
+    * Finds the most recent stable version, and then the latest version that matches that
+    *
+    * @param displayVersions the list of display versions.
+    * @return the default version.
+    */
+  def findDefaultVersion(displayVersions: Seq[Version]): Option[Version] = {
+      displayVersions.find(_.versionType.isStable).flatMap { stable =>
+        displayVersions.find(v => v.sameMajor(stable) && (v.versionType.isLatest || v.versionType.isStable))
+      }.orElse(displayVersions.headOption)
+  }
+
   def parse(name: String): Option[Version] = {
     try {
       val splitted = name.split("\\.", 4)

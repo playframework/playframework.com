@@ -1,5 +1,15 @@
 lang.name=English
 
+documentation.unstable.message=You are viewing the documentation for the {0} development release.
+
+documentation.current.latest.message=The latest stable release series is {0}.
+
+documentation.current.release.message=You are viewing the documentation for the {0} release.
+
+documentation.old.release.message=You are viewing the documentation for the {0} release in the {1} series of releases.
+
+documentation.old.latest.message=You are viewing the documentation for the {0} release series.
+
 documentation.contribute.message=Found an error in this documentation? The source code for this page can be found \
   {0}here{1}.  After reading the {2}documentation guidelines{3}, please feel free to contribute a pull request.
 
