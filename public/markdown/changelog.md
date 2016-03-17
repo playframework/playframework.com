@@ -535,6 +535,42 @@ A complete list of what was fixed for 2.2.2 can be found on [Github](https://git
 * Stopped plugins in reverse order to started
 * Removed circular dependencies in dev mode ClassLoaders
 
+## Play 1.4.2
+
+*Released 16 March 2016*
+
+**Vulnerabilities fixed**
+
+* [20160301-XssSecureModule](/security/vulnerability/20160301-XssSecureModule) XSS vulnerability in the Secure module login page.
+
+**Other changes**
+
+* [#2008](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2008-error-while-binding-an-enumset) Error while binding an EnumSet 
+* [#2011](https://play.lighthouseapp.com/projects/57987/tickets/2011-support-double-semicolon-escaping-in-evolution-scripts) Support "double semicolon" escaping in evolution scripts 
+* [#2007](https://play.lighthouseapp.com/projects/57987/tickets/2007) JPA classloader issues with precompiled app 
+* [#2014](https://play.lighthouseapp.com/projects/57987/tickets/2014) Message not appear corretly in secure module 
+* [#1939](https://play.lighthouseapp.com/projects/57987/tickets/1939-update-to-groovy-24x) chore(lib): Update to groovy from 2.3.9 to 2.4.5
+* [#1934](https://play.lighthouseapp.com/projects/57987/tickets/1934) feat(controller): Support for non-static controller methods - they are easier to mock/unit-test
+* [#2009](https://play.lighthouseapp.com/projects/57987/tickets/2009) Field name detection in 'attachment' 
+* [#2017](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2017) Use StringBuilder instead of StringBuffer 
+* [#2016](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2016) default value of "XForwardedOverwriteDomainAndPort" setting should be false 
+* [#1979](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/1979) Improve performance of Play! 
+* [#2021](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2021) Optimize usage of StringBuilder  
+* [#2022](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2022) Add missing @Override annotations 
+* [#2020](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2020) Avoid multiple creation of new arrays/maps 
+* [#2029](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2029) Upgrade to groovy 2.4.6 
+* [#2027](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2027) Cache method Lang.getLocale() 
+* [#2015](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2015) i18n tag only restore the first % character 
+* [#2034](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2034) add hibernate-ehcache jar to be able to use ehcache as second level cache
+* [#2026](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2026) Blob: missing methods implemented to support (2nd level) caching
+* [#1947](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/1948) Job::withinFilter Only Calls First PlayPlugin Filter It Finds. (Invoker Calls All Filters) 
+* [#1948](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/1948) Invoker.Invocation::run executes action once per plugin 
+* [#2035](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2035) MakeWS.getString() returning same result on every call 
+* [#2019](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2019) Make method Cache.clear() null-safe 
+* [#2018](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2018) Class caches added 
+* [#2036](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2036) Force secure reverse routes config 
+* [#2039](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2039) Update some libraires
+
 ## Play 1.4.1
 
 *Released 30 December 2015*
@@ -561,6 +597,40 @@ A complete list of what was fixed for 2.2.2 can be found on [Github](https://git
 * Upgrade to async-http-client v1.9.31
 * Upgrade to netty 3.10.4
 * Update HtmlUnit to v2.16
+
+## Play 1.3.4
+
+*Released 16 March 2016*
+
+**Vulnerabilities fixed**
+
+* [20160301-XssSecureModule](/security/vulnerability/20160301-XssSecureModule) XSS vulnerability in the Secure module login page.
+
+**Other changes**
+
+* [#2008](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2008-error-while-binding-an-enumset) Error while binding an EnumSet 
+* [#2011](https://play.lighthouseapp.com/projects/57987/tickets/2011-support-double-semicolon-escaping-in-evolution-scripts) Support "double semicolon" escaping in evolution scripts
+* [#2007](https://play.lighthouseapp.com/projects/57987/tickets/2007) JPA classloader issues with precompiled app 
+* [#2014](https://play.lighthouseapp.com/projects/57987/tickets/2014) Message not appear corretly in secure module 
+* [#1934](https://play.lighthouseapp.com/projects/57987/tickets/1934) feat(controller): Support for non-static controller methods - they are easier to mock/unit-test
+* [#2009](https://play.lighthouseapp.com/projects/57987/tickets/2009)  Field name detection in 'attachment' 
+* [#2017](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2017) Use StringBuilder instead of StringBuffer 
+* [#2016](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2016) default value of "XForwardedOverwriteDomainAndPort" setting should be false 
+* [#1979](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/1979) Improve performance of Play!
+* [#2021](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2021) Optimize usage of StringBuilder  
+* [#2022](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2022) Add missing @Override annotations 
+* [#2020](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2020) Avoid multiple creation of new arrays/maps 
+* [#2027](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2027) Cache method Lang.getLocale() 
+* [#2015](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2015) i18n tag only restore the first % character 
+* [#2034](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2034) add hibernate-ehcache jar to be able to use ehcache as second level cache
+* [#2026](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2026) Blob: missing methods implemented to support (2nd level) caching
+* [#1947](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/1948) Job::withinFilter Only Calls First PlayPlugin Filter It Finds. (Invoker Calls All Filters) 
+* [#1948](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/1948) Invoker.Invocation::run executes action once per plugin 
+* [#2035](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2035) MakeWS.getString() returning same result on every call 
+* [#2019](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2019) Make method Cache.clear() null-safe 
+* [#2018](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2018) Class caches added 
+* [#2036](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2036) Force secure reverse routes config
+
 
 ## Play 1.3.3
 
