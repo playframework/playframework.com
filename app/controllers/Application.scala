@@ -14,7 +14,6 @@ import views._
 import play.twirl.api.Html
 import utils.Markdown
 import org.apache.commons.io.IOUtils
-import play.api.libs.json.Json
 import models._
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
@@ -25,18 +24,9 @@ class Application @Inject() (
   configuration: Configuration,
   val messagesApi: MessagesApi,
   certificationDao: CertificationDao,
-  @Named("activator-release-actor") activatorReleaseActor: ActorRef
+  @Named("activator-release-actor") activatorReleaseActor: ActorRef,
+  releases: PlayReleases
 )(implicit ec: ExecutionContext) extends Controller with Common with I18nSupport {
-
-  private lazy val releases: PlayReleases = {
-    environment.resourceAsStream("playReleases.json").flatMap { is =>
-      try {
-        Json.fromJson[PlayReleases](Json.parse(IOUtils.toByteArray(is))).asOpt
-      } finally {
-        is.close()
-      }
-    }.getOrElse(PlayReleases(PlayRelease("unknown", None, Some("unknown"), None, None), Nil, Nil))
-  }
 
   private val VulnerableVersions = Set(
     "2.0", "2.0.1", "2.0.2", "2.0.3", "2.0.4", "2.0.5",
