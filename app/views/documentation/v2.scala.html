@@ -27,6 +27,8 @@
 
     <article>
         @content.map { html =>
+            @versionInfo(page)(messages, context)
+
             @Html(html)
 
             @source.map { source =>
