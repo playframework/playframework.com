@@ -1,17 +1,15 @@
 @(messages: MessagesApi, context: models.documentation.TranslationContext, page: String = "Documentation", content: Option[String] = None, sidebar: Option[String] = None, source: Option[String] = None)(implicit req : RequestHeader)
 
-@header(page) {
+@header(page, Some(context)) {
 
     <aside>
 
         @nav(messages, context, page, Seq("Scala" -> "scala/index.html", "Java" -> "java/index.html"))
 
         @for(version <- context.version) {
-            <form id="search" method="get" action="//www.google.com/search">
-                <input type="search" name="q" placeholder="Search @version docs" results="10">
-                <input type="hidden" name="sitesearch" value="@req.host@controllers.documentation.ReverseRouter.home(context.alternateLang, version.name)">
-                <button type="submit">Search</button>
-            </form>
+          <form id="search">
+            <input id="search-input" type="text" autocomplete="off" spellcheck="false" autocorrect="off" placeholder="Search @version docs"/>
+          </form>
         }
 
         @sidebar.map(Html.apply)

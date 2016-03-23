@@ -1,4 +1,4 @@
-@(page: String)(content: Html)(implicit req: RequestHeader)
+@(page: String, maybeContext: Option[models.documentation.TranslationContext] = None)(content: Html)(implicit req: RequestHeader)
 
 @main(page, "documentation") {
 
@@ -19,5 +19,9 @@
             // On start, check if flex mod is enabled
             if (localStorage && localStorage['flex'] == "true" ) document.body.className += " flex"
         </script>
+
+        @maybeContext.map { context =>
+          @algolia(context)
+        }
     </section>
 }

@@ -1,0 +1,12 @@
+@(context: models.documentation.TranslationContext)
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script>
+<script type="text/javascript"> docsearch({
+    apiKey: 'a0b34e68c804cf96e76adcb02d47159b',
+    indexName: 'playframework',
+    inputSelector: '#search-input',
+    algoliaOptions: {
+        'facetFilters': ["version: @{context.version.get.name}"]
+    }
+});
+</script>
