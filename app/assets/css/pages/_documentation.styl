@@ -30,6 +30,10 @@ hr.clear
             background: white
             border-right: 1px solid sand
 
+            #search
+                input:focus
+                    outline-color: green;
+
             // Align content, limit content width
             p, li, table
                 max-width: 840px
@@ -227,6 +231,23 @@ hr.clear
         #content.plus
             width: 1000px
 
+        #content
+            article
+                #search
+                    margin: 10px 0
+                    input
+                        width: 600px
+                        height: 40px
+                        font-size: 22px !important
+                        padding: 10px 10px 10px 10px
+                        border: 1px solid green
+
+                    select
+                        width: 60px
+
+                    button
+                        position: absolute
+                        top: -500px
 
         #extend
             display: block
@@ -261,6 +282,25 @@ hr.clear
                 > *
                     padding-left: 10px
                     padding-right: 10px
+
+                #search
+                    // Clean up the algolia autocomplete on responsive systems
+                    .algolia-autocomplete
+                        display: flex !important
+
+                    flex: 1 auto;
+                    justify-content: center
+                    margin-top: 5px
+                    margin-bottom: 5px
+                    input
+                        padding: 5px
+                        font-size: 2em
+                        flex: 1 auto;
+                        border: 1px solid green
+
+                    button
+                        position: absolute
+                        top: -500px
 
             aside
                 // don't display menus on phones

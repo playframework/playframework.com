@@ -6,12 +6,6 @@
 
         @nav(messages, context, page, Seq("Scala" -> "scala/index.html", "Java" -> "java/index.html"))
 
-        @for(version <- context.version) {
-          <form id="search">
-            <input id="search-input" type="text" autocomplete="off" spellcheck="false" autocorrect="off" placeholder="Search @version docs"/>
-          </form>
-        }
-
         @sidebar.map(Html.apply)
 
         <h3>Books</h3>
@@ -26,6 +20,13 @@
     <article>
         @content.map { html =>
             @versionInfo(page)(messages, context)
+
+            @for(version <- context.version) {
+                <form id="search">
+                    <input id="search-input" type="text" autocomplete="off" spellcheck="false" autocorrect="off" placeholder="Search @version docs"/>
+                    <button type="submit">Search</button>
+                </form>
+            }
 
             @Html(html)
 
