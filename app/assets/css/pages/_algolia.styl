@@ -1,39 +1,55 @@
+// See https://github.com/algolia/docsearch/blob/master/src/styles/main.scss
+// for the reference on these overrides.
+
 /* Bottom border of each suggestion */
 .algolia-docsearch-suggestion {
   border-bottom-color: white
 }
-/* Main category headers */
-.algolia-docsearch-suggestion--category-header {
-  background-color: green
-  color: white
-}
+
 /* Highlighted search terms */
-.algolia-docsearch-suggestion--highlight {
-  background-color: green-alt
-  color: white
-}
-/* Highligted search terms in the main category headers */
-.algolia-docsearch-suggestion--category-header .algolia-docsearch-suggestion--highlight  {
+.algolia-docsearch-suggestion--highlight
   background-color: white
-  color: green-alt
-}
+  color: black
+  text-decoration: underline
+
+/* Main category headers */
+.algolia-docsearch-suggestion--category-header
+  background-color: green-dark
+  color: white
+
+  /* Highlighted search terms */
+  .algolia-docsearch-suggestion--highlight
+    background-color: green-dark
+    color: white
+
 /* Currently selected suggestion */
 .aa-cursor .algolia-docsearch-suggestion--content {
   color: white
 }
-.aa-cursor .algolia-docsearch-suggestion {
-  background: green-alt
-}
 
-/* For bigger screens, when displaying results in two columns */
-@media (min-width: 768px) {
-  /* Bottom border of each suggestion */
-  .algolia-docsearch-suggestion {
-    border-bottom-color: green
-  }
-  /* Left column, with secondary category header */
-  .algolia-docsearch-suggestion--subcategory-column {
+.aa-cursor .algolia-docsearch-suggestion
+  background-color: green-alt
+
+  .algolia-docsearch-suggestion--highlight
     background-color: green-alt
     color: white
-  }
-}
+
+/* For bigger screens, when displaying results in two columns */
+@media (min-width: 768px)
+  /* Bottom border of each suggestion */
+  .algolia-docsearch-suggestion
+    border-bottom-color: green
+
+  /* Left column, with secondary category header */
+  .algolia-docsearch-suggestion--subcategory-column
+     background-color: green
+     color: white
+
+     .algolia-docsearch-suggestion--highlight
+        background-color: green
+        color: white
+
+  .aa-cursor .algolia-docsearch-suggestion--subcategory-column .algolia-docsearch-suggestion--highlight
+     background-color: green
+     color: white
+
