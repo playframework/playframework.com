@@ -42,14 +42,19 @@
 
   /* Left column, with secondary category header */
   .algolia-docsearch-suggestion--subcategory-column
-     background-color: green
-     color: white
+    background-color: green
+    color: white
 
-     .algolia-docsearch-suggestion--highlight
-        background-color: green
-        color: white
+    .algolia-docsearch-suggestion--highlight
+      background-color: green
+      color: white
 
+  // These are horrible hacks, but when you select an item from
+  // the list, you have to override the background color all over again.
   .aa-cursor .algolia-docsearch-suggestion--subcategory-column .algolia-docsearch-suggestion--highlight
-     background-color: green
-     color: white
+    background-color: green
+    color: white
 
+  .aa-cursor .algolia-docsearch-suggestion--category-header .algolia-docsearch-suggestion--highlight
+    background-color: green-dark
+    color: white
