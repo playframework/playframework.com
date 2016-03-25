@@ -6,7 +6,10 @@
     indexName: 'playframework',
     inputSelector: '#search-input',
     algoliaOptions: {
-        'facetFilters': ["version: @{context.version.get.name}"]
+        'facetFilters': [
+            "version: @{context.version.get.name}",
+            "tags: @{context.lang.language}"
+        ]
     }
 });
 </script>
