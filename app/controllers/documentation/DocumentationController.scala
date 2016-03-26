@@ -34,8 +34,8 @@ class DocumentationController @Inject()(
 
   private val EmptyContext = TranslationContext(Lang("en"), true, None, Nil, Nil)
 
-  private def pageNotFound(context: TranslationContext, title: String)(implicit req: RequestHeader) =
-    NotFound(views.html.documentation.v2(messages, context, title))
+  private def pageNotFound(context: TranslationContext, title: String, alternateVersions: Seq[Version])(implicit req: RequestHeader) =
+    NotFound(views.html.documentation.v2(messages, context, title, alternateVersions = alternateVersions))
 
   private def cacheable(result: Result, cacheId: String) = {
     result.withHeaders(
@@ -52,7 +52,7 @@ class DocumentationController @Inject()(
   }
 
   private def VersionAction(version: String)(action: (ActorRef, Version) => RequestHeader => Future[Result]) = DocsAction { actor => implicit req =>
-    Version.parse(version).fold(Future.successful(pageNotFound(EmptyContext, ""))) { v =>
+    Version.parse(version).fold(Future.successful(pageNotFound(EmptyContext, "", Nil))) { v =>
       action(actor, v)(req)
     }
   }
@@ -84,10 +84,25 @@ class DocumentationController @Inject()(
 
   private def actorRequest[T <: DocumentationActor.Response[T]: ClassTag](actor: ActorRef, page: String,
       msg: DocumentationActor.Request[T])(block: T => Result)(implicit req: RequestHeader): Future[Result] = {
-    (actor ? msg).mapTo[Response[T]].map {
-      case DocsNotFound(context) => pageNotFound(context, page)
-      case DocsNotModified(cacheId) => notModified(cacheId)
-      case t: T => block(t)
+    (actor ? msg).mapTo[Response[T]].flatMap {
+      case DocsNotFound(context) =>
+        val future = Future.sequence(context.displayVersions.map(pageExists(_, page)))
+        future.map(l => pageNotFound(context, page, l.flatten))
+      case DocsNotModified(cacheId) =>
+        Future.successful(notModified(cacheId))
+      case t: T =>
+        Future.successful(block(t))
+    }
+  }
+
+  def pageExists(version: Version, page: String): Future[Option[Version]] = {
+    import akka.pattern.ask
+    val queryPageExists = QueryPageExists(None, version, None, page)
+    (documentationActor ? queryPageExists).map {
+      case PageExists(true, _) =>
+        Some(version)
+      case other =>
+        None
     }
   }
 
@@ -200,7 +215,7 @@ class DocumentationController @Inject()(
       version.map { v =>
         val url = ReverseRouter.home(selectedLang, v.name)
         Redirect(s"$url/$path").withHeaders(VARY -> ACCEPT_LANGUAGE)
-      }.getOrElse(pageNotFound(summary.translationContext, path))
+      }.getOrElse(pageNotFound(summary.translationContext, path, Nil))
     }
   }
 
@@ -219,7 +234,7 @@ class DocumentationController @Inject()(
   private def ResourceAction(version: String, resource: String, message: (Version, Option[String]) => Any, inline: Boolean = true) = {
     VersionAction(version) { (actor, version) => implicit req =>
       (actor ? message(version, etag(req))).mapTo[Response[Resource]].map {
-        case DocsNotFound(context) => pageNotFound(context, resource)
+        case DocsNotFound(context) => pageNotFound(context, resource, Nil)
         case DocsNotModified(cacheId) => notModified(cacheId)
         case Resource(source, size, cacheId) =>
           val fileName = resource.drop(resource.lastIndexOf('/') + 1)
