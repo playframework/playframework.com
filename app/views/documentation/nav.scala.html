@@ -17,7 +17,7 @@
 <nav id="toolbar">
     <h3>Browse versions</h3>
     <div class="switch">
-        @for(version <- context.version) {
+        @for(version <- Helpers.latestCurrent(context)) {
             <a href="@controllers.documentation.ReverseRouter.switch(context.alternateLang, version.name, page)">@version.name</a>
         }
         <dl class="dropdown">
