@@ -7,7 +7,8 @@
     inputSelector: '#search-input',
     algoliaOptions: {
         'facetFilters': [
-            "version: @{context.version.get.name}",
+            @* Possible to have None version if the page does not exist in the given version /2.5.x/HttpApi *@
+            "version: @{context.version.map(_.name).getOrElse("none")}",
             "tags: @{context.lang.language}"
         ]
     }
