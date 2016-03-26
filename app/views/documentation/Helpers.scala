@@ -81,7 +81,7 @@ object Helpers {
   }
 
   /** Returns the most current version, i.e. 2.5.x. */
-  private def latestCurrent(implicit context: TranslationContext): Option[Version] = {
+  def latestCurrent(implicit context: TranslationContext): Option[Version] = {
     Version.findDefaultVersion(context.displayVersions)
   }
 
