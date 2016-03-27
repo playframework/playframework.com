@@ -8,7 +8,7 @@ version := "1.0-SNAPSHOT"
 lazy val root = (project in file(".")).enablePlugins(PlayScala)
 
 libraryDependencies ++= Seq(
-  "com.typesafe.play" %% "play-doc" % "1.2.4",
+  "com.typesafe.play" %% "play-doc" % "1.4.0",
   "org.eclipse.jgit" % "org.eclipse.jgit" % "3.0.0.201306101825-r",
   "mysql" % "mysql-connector-java" % "5.1.18", // TODO: 5.1.34
   "com.damnhandy" % "handy-uri-templates" % "2.0.2",
