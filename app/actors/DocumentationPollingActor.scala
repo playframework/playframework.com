@@ -2,17 +2,18 @@ package actors
 
 import javax.inject.Inject
 
-import actors.DocumentationActor.{UpdateDocumentation, DocumentationGitRepo, DocumentationGitRepos}
-import akka.actor.{ActorRef, Actor}
+import actors.DocumentationActor.{DocumentationGitRepo, DocumentationGitRepos, UpdateDocumentation}
+import akka.actor.{Actor, ActorRef}
 import com.google.inject.assistedinject.Assisted
 import models.documentation._
 import org.apache.commons.io.IOUtils
 import org.eclipse.jgit.lib.ObjectId
 import org.eclipse.jgit.util.Base64
 import play.api.Logger
-import play.api.i18n.{MessagesApi, Lang}
-import play.doc.{PageIndex, PlayDoc}
-import utils.{PlayGitRepository, AggregateFileRepository}
+import play.api.i18n.{Lang, MessagesApi}
+import play.doc.{PageIndex, PlayDoc, TranslatedPlayDocTemplates}
+import utils.{AggregateFileRepository, PlayGitRepository}
+
 import scala.concurrent.duration._
 
 object DocumentationPollingActor {
@@ -110,12 +111,16 @@ class DocumentationPollingActor @Inject() (messages: MessagesApi, @Assisted repo
               Logger.info(s"Updating default documentation for $version: $cacheId")
             }
 
-            TranslationVersion(version, repo,
-              new PlayDoc(repo, repo, "resources", version.name,
-                PageIndex.parseFrom(repo, messages("documentation.home"), Some("manual")),
-                messages("documentation.next")
-              ), newCacheId, symName
+            val playDoc = new PlayDoc(
+              markdownRepository = repo,
+              codeRepository = repo,
+              resources = "resources",
+              playVersion = version.name,
+              pageIndex = PageIndex.parseFrom(repo, messages("documentation.home"), Some("manual")),
+              templates = new TranslatedPlayDocTemplates(messages("documentation.next")),
+              pageExtension = None
             )
+            TranslationVersion(version, repo, playDoc, newCacheId, symName)
         }
     }
 
@@ -166,11 +171,17 @@ class DocumentationPollingActor @Inject() (messages: MessagesApi, @Assisted repo
         // The version hasn't changed, don't rescan
         case Some(same: TranslationVersion) if same.cacheId == cacheId => same
         case _ =>
-          val playDoc = new PlayDoc(fileRepo, fileRepo, "resources", version._1.name,
-            PageIndex.parseFrom(fileRepo, messages("documentation.home"), Some("manual")),
-            messages("documentation.next")
-          )
 
+
+          val playDoc = new PlayDoc(
+            markdownRepository = fileRepo,
+            codeRepository = fileRepo,
+            resources = "resources",
+            playVersion = version._1.name,
+            pageIndex = PageIndex.parseFrom(fileRepo, messages("documentation.home"), Some("manual")),
+            templates = new TranslatedPlayDocTemplates(messages("documentation.next")),
+            pageExtension = None
+          )
           TranslationVersion(version._1, fileRepo, playDoc, cacheId, version._3)
       }
 
