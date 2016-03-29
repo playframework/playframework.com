@@ -1,12 +1,17 @@
 {
     "latest": {
         "name": "Streamy",
-        "version": "2.5.0",
-        "date": "Mar 4 2016"
+        "version": "2.5.1",
+        "date": "Mar 29 2016"
     },
-    "development": [        
+    "development": [
     ],
     "previous": [
+         {
+            "name": "Streamy",
+            "version": "2.5.0",
+            "date": "Mar 4 2016"
+         },
          {
             "version": "1.4.2",
             "url": "http://downloads.typesafe.com/play/1.4.2/play-1.4.2.zip",
