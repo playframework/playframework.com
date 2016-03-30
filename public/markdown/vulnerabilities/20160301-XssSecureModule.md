@@ -21,19 +21,19 @@ Any application that uses the default login page of the Secure module .
 ### Workarounds
 
 Change modules\secure\app\views\Secure\login.html
-```groovy
+```
 &{flash.error} 
 ```
 to 
-```groovy
+```
 ${messages.get(flash.error)}
 ```
 and 
-```groovy
+```
 &{flash.success} 
 ```
 to 
-```groovy
+```
 ${messages.get(flash.success)}
 ```
 
