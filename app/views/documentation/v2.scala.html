@@ -1,4 +1,4 @@
-@(messages: MessagesApi, context: models.documentation.TranslationContext, page: String = "Documentation", content: Option[String] = None, sidebar: Option[String] = None, source: Option[String] = None, alternateVersions: Seq[models.documentation.Version] = Nil)(implicit req : RequestHeader)
+@(messages: MessagesApi, context: models.documentation.TranslationContext, page: String = "Documentation", content: Option[String] = None, sidebar: Option[String] = None, source: Option[String] = None, alternateVersions: Seq[models.documentation.Version] = Nil, breadcrumbs: Option[String] = None)(implicit req : RequestHeader)
 
 @header(page, Some(context)) {
 
@@ -27,6 +27,8 @@
                     <button type="submit">Search</button>
                 </form>
             }
+
+            @breadcrumbs.map(Html.apply)
 
             @Html(html)
 

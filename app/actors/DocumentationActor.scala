@@ -73,11 +73,12 @@ object DocumentationActor {
    *
    * @param pageHtml The HTML of the page.
    * @param sidebarHtml The HTML of the sidebar, if it exists.
+   * @param breadcrumbsHtml the HTML of the breadcrumbs, if it exists.
    * @param source The GitHub source of the page.
    * @param translationContext The translation context.
    * @param cacheId The cacheid.
    */
-  case class RenderedPage(pageHtml: String, sidebarHtml: Option[String], source: Option[String],
+  case class RenderedPage(pageHtml: String, sidebarHtml: Option[String], breadcrumbsHtml: Option[String], source: Option[String],
                           translationContext: TranslationContext, cacheId: String) extends Found[RenderedPage]
 
   /**
@@ -379,14 +380,26 @@ class DocumentationActor @Inject() (config: DocumentationConfig, pollerFactory: 
             }
           } else None
 
-          RenderedPage(page.html, page.sidebarHtml, source, translationContext(lang, version, translation), tv.cacheId)
+          RenderedPage(
+            pageHtml = page.html,
+            sidebarHtml = page.sidebarHtml,
+            breadcrumbsHtml = page.breadcrumbsHtml,
+            source = source,
+            translationContext =  translationContext(lang, version, translation),
+            cacheId = tv.cacheId)
         }
 
       case rp @ RenderV1Page(_, version, _, page) =>
         loaderRequestOpt[String](rp) { tv =>
           Loader.RenderV1Page(page, tv.repo)
         } { (lang, translation, tv, content) =>
-          RenderedPage(content, None, None, translationContext(lang, version, translation), tv.cacheId)
+          RenderedPage(
+            pageHtml = content,
+            sidebarHtml = None,
+            breadcrumbsHtml = None,
+            source = None,
+            translationContext = translationContext(lang, version, translation),
+            cacheId = tv.cacheId)
         }
 
       case lr: LoadResource =>
