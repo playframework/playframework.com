@@ -118,7 +118,7 @@ class DocumentationController @Inject()(
 
   def v1Page(lang: Option[Lang], v: String, page: String) = VersionAction(v) { (actor, version) => implicit req =>
     actorRequest(actor, page, RenderV1Page(lang, version, etag(req), page)) {
-      case RenderedPage(html, _, _, context, cacheId) =>
+      case RenderedPage(html, _, _, _, context, cacheId) =>
         val result = Ok(views.html.documentation.v1(messages, context, page, html))
         cacheable(withLangHeaders(result, page, context), cacheId)
     }
@@ -161,8 +161,8 @@ class DocumentationController @Inject()(
   def page(lang: Option[Lang], v: String, page: String) = VersionAction(v) { (actor, version) => implicit req =>
     val linkFuture = canonicalLinkHeader(page)
     val resultFuture = actorRequest(actor, page, RenderPage(lang, version, etag(req), page)) {
-      case RenderedPage(html, sidebarHtml, source, context, cacheId) =>
-        val result = Ok(views.html.documentation.v2(messages, context, page, Some(html), sidebarHtml, source))
+      case RenderedPage(html, sidebarHtml, breadcrumbsHtml, source, context, cacheId) =>
+        val result = Ok(views.html.documentation.v2(messages, context, page, Some(html), sidebarHtml, source, breadcrumbs = breadcrumbsHtml))
         cacheable(withLangHeaders(result, page, context), cacheId)
     }
     for {

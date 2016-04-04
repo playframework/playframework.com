@@ -133,6 +133,28 @@ hr.clear
         width: 300px
         padding: 0 content-gap
 
+#breadcrumb
+    font-size: 10px
+    list-style: none
+
+    li:first-child:before
+        content: ""
+
+    li
+        padding: 6px 0 4px 10px // override 20px left padding
+        width: 50px;
+        white-space: nowrap;
+        display: inline;
+        text-overflow: ellipsis;
+
+        + li:before
+            font-size: 10px // make sure content arrow is same size
+            content: "►"
+
+      a:after // no links in breadcrumbs
+        content: none
+        background: none
+
 #version-header
     padding: 10px 0 0
     color: #999
