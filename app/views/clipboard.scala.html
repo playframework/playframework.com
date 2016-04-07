@@ -1,0 +1,39 @@
+<script type="text/javascript" charset="utf-8" src="@routes.Assets.versioned("lib/clipboard.js/clipboard.js")"></script>
+<script type="text/javascript">
+(function(){
+    var pre = document.getElementsByClassName('prettyprint');
+    for (var i = 0; i < pre.length; i++) {
+        var button = document.createElement('button');
+        button.className = 'copy-button';
+
+        pre[i].appendChild(button);
+    }
+
+    // Run Clipboard
+    var copyCode = new Clipboard('.copy-button', {
+        target: function(trigger) {
+            return trigger.previousElementSibling;
+        }
+    });
+
+    // On success:
+    copyCode.on('success', function(event) {
+        event.clearSelection();
+        event.trigger.textContent = ' Success';
+        window.setTimeout(function() {
+            event.trigger.textContent = '';
+        }, 2000);
+    });
+
+    // On error (Safari):
+    // - Change the  "Press Ctrl+C to copy"
+    // - Swap it to "Copy" in 2s.
+    copyCode.on('error', function(event) {
+        event.trigger.textContent = 'Press "Ctrl + C" to copy';
+        window.setTimeout(function() {
+            event.trigger.textContent = '';
+        }, 5000);
+    });
+
+})();
+</script>
