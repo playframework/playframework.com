@@ -15,6 +15,7 @@ libraryDependencies ++= Seq(
   "org.webjars" % "jquery" % "1.8.2",
   "org.webjars" % "html5shiv" % "3.7.2",
   "org.webjars" % "prettify" % "4-Mar-2013",
+  "org.webjars" % "clipboard.js" % "1.5.5",
   "com.typesafe.play" %% "anorm" % "2.4.0",
   jdbc,
   evolutions,
