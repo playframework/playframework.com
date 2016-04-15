@@ -1,13 +1,26 @@
+## Play 2.5.2 "Streamy"
+
+*Released 14 April 2016*
+
+* [5974](https://github.com/playframework/playframework/pull/5974): Add idleTimeout support for 2.5.x
+* [5982](https://github.com/playframework/playframework/pull/5982): Better implementation of Accumulator.flatten
+* [5984](https://github.com/playframework/playframework/pull/5984): Upgrade Akka to version 2.4.3
+* [6003](https://github.com/playframework/playframework/pull/6003): Made it possible to specify a Content-Length header for a StreamedBody
+* [6009](https://github.com/playframework/playframework/pull/6009): Add check for play.editor setting
+* [6022](https://github.com/playframework/playframework/pull/6022): Replace PushStage based methods with GraphStage in WebSocketHandler
+* [6031](https://github.com/playframework/playframework/pull/6031): Don't catch exceptions in LogbackLoggerConfigurator
+* [6032](https://github.com/playframework/playframework/pull/6032): Fix header parsing in Akka server
+* [6037](https://github.com/playframework/playframework/pull/6037): Upgrade AsyncHttpClient to 2.0.0
+
 ## Play 2.5.1 "Streamy"
 
 *Released 29 March 2016*
 
-* [5860](https://github.com/playframework/playframework/pull/5860): Ensure data parts don't take 5 seconds to parse.
-* [5963](https://github.com/playframework/playframework/pull/5963), [5899](https://github.com/playframework/playframework/pull/5899): Update netty-reactive-streams (Fixes [5821](https://github.com/playframework/playframework/issues/5821), [5874](https://github.com/playframework/playframework/issues/5874)).
-* [5926](https://github.com/playframework/playframework/pull/5926): Make sure Context is set for Java WebSocket methods.
+* [5860](https://github.com/playframework/playframework/pull/5860): Ensure data parts don't take 5 seconds to parse
+* [5963](https://github.com/playframework/playframework/pull/5963), [5899](https://github.com/playframework/playframework/pull/5899): Update netty-reactive-streams (Fixes [5821](https://github.com/playframework/playframework/issues/5821), [5874](https://github.com/playframework/playframework/issues/5874))
+* [5926](https://github.com/playframework/playframework/pull/5926): Make sure Context is set for Java WebSocket methods
 * [5856](https://github.com/playframework/playframework/pull/5856): Fix runtime injector provided by BuiltInComponents so that Crypto is injectable
-* [5920](https://github.com/playframework/playframework/pull/5920): Fix default charset in Java FormUrlEncoded parser.
-
+* [5920](https://github.com/playframework/playframework/pull/5920): Fix default charset in Java FormUrlEncoded parser
 * [5698](https://github.com/playframework/playframework/pull/5698): Add WS method for POSTing multipart/form-data
 
 ## Play 2.5.0 "Streamy"
