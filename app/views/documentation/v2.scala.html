@@ -1,5 +1,7 @@
 @(messages: MessagesApi, context: models.documentation.TranslationContext, page: String = "Documentation", content: Option[String] = None, sidebar: Option[String] = None, source: Option[String] = None, alternateVersions: Seq[models.documentation.Version] = Nil, breadcrumbs: Option[String] = None)(implicit req : RequestHeader)
 
+@import Helpers._
+
 @header(page, Some(context)) {
 
     <aside>
@@ -50,10 +52,43 @@
             <h1>Page not found [ @page ]</h1>
 
             <p>
-            This page does not exist in the current version of the documentation.
+              This page does not exist in that version of the documentation.  You can still use the <span style="font-weight: bold">search box above</span> to look for for that particular word or phrase.
+
+            <p>
+            If you are looking for <span style="font-weight: bold">latest</span> documentation, the following links are helpful:
+
+            <ul>
+                <li>
+                    <span><a href="@{controllers.documentation.ReverseRouter.latest(context.alternateLang,  "Home")}">Documentation Home</a></span>: Table of Contents for Play
+                </li>
+                <li>
+                    <span><a href="@{controllers.documentation.ReverseRouter.latest(context.alternateLang, "Installing")}">Getting Started</a></span>: Installing Play, Running Play, Using Play with an IDE.
+                </li>
+                <li>
+                    <span><a href="@{controllers.documentation.ReverseRouter.latest(context.alternateLang, "ScalaHome")}">Working With Scala</a></span>: Using Play with the Scala API.
+                </li>
+                <li>
+                    <span><a href="@{controllers.documentation.ReverseRouter.latest(context.alternateLang, "JavaHome")}">Working With Java</a></span>: Using Play with the Java API.
+                </li>
+                <li>
+                    <span><a href="@{controllers.documentation.ReverseRouter.latest(context.alternateLang, "Tutorials")}">Tutorials</a></span>: Example Play Applications and Third Party Walkthroughs.
+                </li>
+            </ul>
+
+            <p>
+            If you are looking for the <span style="font-weight: bold">latest</span> API documentation:
+
+            <ul>
+                <li>
+                    <a href="@{controllers.documentation.ReverseRouter.api("latest", "scala/index.html")}">Scala API</a>
+                </li>
+                <li>
+                    <a href="@{controllers.documentation.ReverseRouter.api("latest", "java/index.html")}">Java API</a>
+                </li>
+            </ul>
 
             @if(alternateVersions.nonEmpty) {
-                <p>Good news though!  This page was found in other versions:</p>
+                <p>This page was found in other versions of the documentation:</p>
 
                 <ul>
                 @for(version <- alternateVersions) {
@@ -62,8 +97,6 @@
                     </li>
                 }
                 </ul>
-            }else{
-                <p>The page "@page" was not found in any version of the documentation.  You can still search the documentation for that particular word or phrase.</p>
             }
         }
     </article>
