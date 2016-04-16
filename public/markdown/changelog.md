@@ -5,6 +5,7 @@
 * [5974](https://github.com/playframework/playframework/pull/5974): Add idleTimeout support for 2.5.x
 * [5982](https://github.com/playframework/playframework/pull/5982): Better implementation of Accumulator.flatten
 * [5984](https://github.com/playframework/playframework/pull/5984): Upgrade Akka to version 2.4.3
+* [5995](https://github.com/playframework/playframework/pull/5995): Range requests support
 * [6003](https://github.com/playframework/playframework/pull/6003): Made it possible to specify a Content-Length header for a StreamedBody
 * [6009](https://github.com/playframework/playframework/pull/6009): Add check for play.editor setting
 * [6022](https://github.com/playframework/playframework/pull/6022): Replace PushStage based methods with GraphStage in WebSocketHandler
