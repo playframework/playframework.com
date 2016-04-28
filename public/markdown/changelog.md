@@ -1,3 +1,23 @@
+## Play 2.5.3 "Streamy"
+
+*Released 27 April 2016*
+
+* [6050](https://github.com/playframework/playframework/pull/6050): Upgrade Akka to version 2.4.4
+* [6051](https://github.com/playframework/playframework/pull/6051): Add withCookies to Java Result API
+* [6052](https://github.com/playframework/playframework/pull/6052): Optional entity length for range requests
+* [6053](https://github.com/playframework/playframework/pull/6053): Refactoring to use Java 8 streams API
+* [6058](https://github.com/playframework/playframework/pull/6058): Do not add Content-Disposition header when serving assets
+* [6068](https://github.com/playframework/playframework/pull/6068): Doc fix: Correctly look up validation errors in messages
+* [6069](https://github.com/playframework/playframework/pull/6069): Fixed/improved ning deprecation messages
+* [6072](https://github.com/playframework/playframework/pull/6072): Get host properly even if full URI is invalid
+* [6077](https://github.com/playframework/playframework/pull/6077): Allow request filters to modify outbound request
+* [6080](https://github.com/playframework/playframework/pull/6080): Update compile-time DI docs
+* [6083](https://github.com/playframework/playframework/pull/6083): Handle null response headers
+* [6087](https://github.com/playframework/playframework/pull/6087): Upgrade async-http-client to version 2.0.2
+* [6092](https://github.com/playframework/playframework/pull/6092): Support non-ISO8859-1 filename in Content-Disposition header
+* [6093](https://github.com/playframework/playframework/pull/6093): Trigger 400 error if path is null
+* [6095](https://github.com/playframework/playframework/pull/6095): Don't throw NPE when variables in a Form or a Field are null
+
 ## Play 2.5.2 "Streamy"
 
 *Released 14 April 2016*
