@@ -51,3 +51,21 @@ sourceGenerators in Compile += Def.task {
 managedSourceDirectories in Compile += crossTarget.value / "version"
 sources in (Compile, doc) := Seq.empty
 publishArtifact in (Compile, packageDoc) := false
+
+import ByteConversions._
+
+BundleKeys.nrOfCpus := 1.0
+BundleKeys.memory := 1.GiB
+BundleKeys.diskSpace := 4.GiB
+BundleKeys.roles := Set("users.human")
+
+BundleKeys.endpoints := Map(
+  "web" -> Endpoint("http", services = Set(URI("http://www.playframework.com"), URI("http://playframework.com")))
+)
+
+inConfig(Bundle)(Seq(
+  bintrayVcsUrl := Some("https://github.com/playframework/playframework.com"),
+  bintrayOrganization := Some("typesafe"),
+  bintrayRepository := "internal-bundle",
+  bintrayReleaseOnPublish := true
+))
