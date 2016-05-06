@@ -1,37 +1,16 @@
-package services.modules
+package modules
 
 import javax.inject.{Inject, Singleton}
 
-import com.google.inject.ImplementedBy
 import models.modules._
 import play.api.db.Database
-
-/**
- * DAO for accessing modules
- */
-@ImplementedBy(classOf[DbModuleDao])
-trait ModuleDao {
-  /**
-   * Find all the modules and all releases of the modules
-   */
-  def findEverything(): Seq[(Module, Seq[Release])]
-
-  /**
-   * Find all modules that have a name like the given keyword
-   */
-  def findAll(keyword: String = ""): Seq[Module]
-
-  /**
-   * Find the given module and all its releases
-   */
-  def findById(name: String): Option[(Module, Seq[Release])]
-}
+import services.modules.ModuleDao
 
 @Singleton
 class DbModuleDao @Inject() (db: Database) extends ModuleDao {
 
-  import anorm._
   import anorm.SqlParser._
+  import anorm._
 
   private val moduleParser = {
     get[String]("Module.name") ~

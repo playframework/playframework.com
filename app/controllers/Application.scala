@@ -1,11 +1,12 @@
 package controllers
 
-import javax.inject.{Named, Inject, Singleton}
+import javax.inject.{Inject, Named, Singleton}
+
 import actors.ActivatorReleaseActor
 import akka.actor.ActorRef
 import akka.pattern.ask
 import akka.util.Timeout
-import models.certification.Certification
+import models.certification.{Certification, CertificationForm}
 import play.api._
 import play.api.i18n.{I18nSupport, Lang, MessagesApi}
 import play.api.mvc._
@@ -15,6 +16,7 @@ import play.twirl.api.Html
 import utils.Markdown
 import org.apache.commons.io.IOUtils
 import models._
+
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
 
@@ -108,11 +110,11 @@ class Application @Inject() (
   }
 
   def certification = Action { implicit request =>
-    Ok(html.certification(Certification.form))
+    Ok(html.certification(CertificationForm.form))
   }
 
   def interest = Action(parse.tolerantFormUrlEncoded) { implicit request =>
-    Certification.form.bindFromRequest().fold(
+    CertificationForm.form.bindFromRequest().fold(
       form => BadRequest(html.certification(form)),
       form => {
         certificationDao.registerInterest(form.toCertification)

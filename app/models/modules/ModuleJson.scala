@@ -3,12 +3,7 @@ package models.modules
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
 
-/**
- * A module
- */
-case class Module(name: String, fullname: String, author: String, authorId: String, description: String, homePage: String)
-
-object Module {
+object ModuleJson {
   implicit val modulesWrites: Writes[Seq[(Module, Seq[Release])]] = {
 
     implicit val releaseWrites: Writes[Release] = (
@@ -26,8 +21,3 @@ object Module {
     (__ \ "modules").write(Writes.traversableWrites[(Module, Seq[Release])])
   }
 }
-
-/**
- * A release of a module
- */
-case class Release(version: String, date: java.util.Date, frameworkMatch: String, isDefault: Boolean)

@@ -2,29 +2,13 @@ package services.certification
 
 import javax.inject.{Inject, Singleton}
 
+
 import anorm.SqlParser._
 import anorm._
-import com.google.inject.ImplementedBy
+
 import models.certification.Certification
 import org.joda.time.DateTime
 import play.api.db.Database
-
-/**
- * DAO for accessing certifications
- */
-@ImplementedBy(classOf[DbCertificationDao])
-trait CertificationDao {
-
-  /**
-   * Someone has registered interest in certification
-   */
-  def registerInterest(certification: Certification): Unit
-
-  /**
-   * Find all people that have registered interest in certification
-   */
-  def findAllInterested(): Seq[Certification]
-}
 
 @Singleton
 class DbCertificationDao @Inject() (db: Database) extends CertificationDao {

@@ -16,7 +16,7 @@ class Modules @Inject() (
       case Accepts.Html() =>
         Ok(views.html.modules.list(moduleDao.findAll(keyword)))
       case Accepts.Json() =>
-        import Module.modulesWrites
+        import ModuleJson.modulesWrites
         Ok(Json.toJson(moduleDao.findEverything()))
     }
   }

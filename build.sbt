@@ -5,26 +5,53 @@ JsEngineKeys.engineType := JsEngineKeys.EngineType.Node
 name := "playframework"
 version := "1.0-SNAPSHOT"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
+lazy val utils = (project in file("modules/utils"))
+
+lazy val certificationApi = (project in file("modules/certification/api"))
+
+lazy val certificationDb = (project in file("modules/certification/db"))
+  .dependsOn(certificationApi)
+  .aggregate(certificationApi)
+  .settings(
+    libraryDependencies ++= Seq(
+      jdbc,
+      "com.typesafe.play" %% "anorm" % "2.4.0"
+    )
+  )
+
+lazy val moduleApi = (project in file("modules/module/api"))
+
+lazy val moduleDb = (project in file("modules/module/db"))
+  .dependsOn(moduleApi, utils)
+  .aggregate(moduleApi, utils)
+  .settings(
+    libraryDependencies ++= Seq(
+      jdbc,
+      "com.typesafe.play" %% "anorm" % "2.4.0"
+    )
+  )
+
+lazy val root = (project in file("."))
+  .enablePlugins(PlayScala)
+  .dependsOn(utils, certificationApi, moduleApi, certificationDb, moduleDb)
+  .aggregate(utils, certificationApi, moduleApi, certificationDb, moduleDb)
 
 libraryDependencies ++= Seq(
-  "com.typesafe.play" %% "play-doc" % "1.5.0",
-  "org.eclipse.jgit" % "org.eclipse.jgit" % "3.0.0.201306101825-r",
   "mysql" % "mysql-connector-java" % "5.1.18", // TODO: 5.1.34
   "com.damnhandy" % "handy-uri-templates" % "2.0.2",
   "org.webjars" % "jquery" % "1.8.2",
   "org.webjars" % "html5shiv" % "3.7.2",
   "org.webjars" % "prettify" % "4-Mar-2013",
   "org.webjars" % "clipboard.js" % "1.5.5",
-  "com.typesafe.play" %% "anorm" % "2.4.0",
-  jdbc,
   evolutions,
   filters,
   ws,
   specs2 % "test"
 )
 
-scalaVersion := "2.11.8"
+Common.settings
+
+libraryDependencies ++= Common.libraryDependencies
 
 routesGenerator := InjectedRoutesGenerator
 
@@ -51,3 +78,21 @@ sourceGenerators in Compile += Def.task {
 managedSourceDirectories in Compile += crossTarget.value / "version"
 sources in (Compile, doc) := Seq.empty
 publishArtifact in (Compile, packageDoc) := false
+
+import ByteConversions._
+
+BundleKeys.nrOfCpus := 1.0
+BundleKeys.memory := 1.GiB
+BundleKeys.diskSpace := 4.GiB
+BundleKeys.roles := Set("users.human")
+
+BundleKeys.endpoints := Map(
+  "web" -> Endpoint("http", services = Set(URI("http://www.playframework.com"), URI("http://playframework.com")))
+)
+
+inConfig(Bundle)(Seq(
+  bintrayVcsUrl := Some("https://github.com/playframework/playframework.com"),
+  bintrayOrganization := Some("typesafe"),
+  bintrayRepository := "internal-bundle",
+  bintrayReleaseOnPublish := true
+))
