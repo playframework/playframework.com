@@ -1,5 +1,6 @@
 package services.modules
 
+import modules.DbModuleDao
 import org.specs2.mutable.Specification
 import play.api.db.evolutions.Evolutions
 import play.api.db.Databases

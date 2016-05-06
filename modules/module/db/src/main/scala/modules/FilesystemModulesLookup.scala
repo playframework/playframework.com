@@ -1,4 +1,10 @@
-package services.modules
+package modules
+
+import java.util.zip.ZipFile
+import javax.inject.Inject
+
+import play.api.Environment
+import services.modules.ModulesLookup
 
 import java.io.File
 import java.util.zip.ZipFile
@@ -10,27 +16,7 @@ import utils.Textile
 
 import scala.io.Source
 
-/**
- * Provides utilities for looking up modules for download and interogation
- */
-@ImplementedBy(classOf[FilesystemModulesLookup])
-trait ModulesLookup {
-
-  /**
-   * Find the file for the module, if it exists.
-   */
-  def findModule(name: String, version: String): Option[File]
-
-  /**
-   * Load the documentation for the given page of the module, if it exists.
-   */
-  def loadModuleDocumentation(name: String, version: String, page: String): Option[String]
-
-  /**
-   * Find the dependencies yaml file for the given module, if it exists.
-   */
-  def findDependencies(name: String, version: String): Option[String]
-}
+import scala.io.Source
 
 class FilesystemModulesLookup @Inject() (environment: Environment) extends ModulesLookup {
 

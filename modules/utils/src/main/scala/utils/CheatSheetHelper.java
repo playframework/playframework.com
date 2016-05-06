@@ -7,8 +7,6 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import play.Play;
-
 public class CheatSheetHelper {
 
     public static String[] sortSheets(String[] sheetFiles) {

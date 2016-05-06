@@ -11,6 +11,7 @@ import org.eclipse.jgit.lib.{FileMode, ObjectId, RepositoryBuilder, Constants}
 import org.eclipse.jgit.api.ListBranchCommand.ListMode
 import org.eclipse.jgit.transport.TagOpt
 
+
 class PlayGitRepository(val gitDir: File, val remote: String = "origin", basePath: Option[String] = None) {
   private val repository = new RepositoryBuilder().setGitDir(new File(gitDir, ".git")).build()
   private val git = new Git(repository)

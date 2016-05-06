@@ -1,18 +1,14 @@
 package models.certification
 
 import org.joda.time.DateTime
-import play.api.data._
+import play.api.data.Form
 import play.api.data.Forms._
 
-/**
- * Interest in a certification
- */
-case class Certification(registered: DateTime, name: String, email: String, developer: Boolean, organization: Boolean, comments: String)
 case class CertificationForm(name: String, email: String, developer: Boolean, organization: Boolean, comments: String) {
   def toCertification = Certification(DateTime.now(), name, email, developer, organization, comments)
 }
 
-object Certification {
+object CertificationForm {
   val form = Form(
     mapping(
       "name" -> text,
