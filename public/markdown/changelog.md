@@ -1,3 +1,48 @@
+## Play 2.5.4 "Streamy"
+
+* [6231](https://github.com/playframework/playframework/pull/6231): [doc] Backport tutorials
+* [6230](https://github.com/playframework/playframework/pull/6230): Fix double-encoding of RequestBuilder params
+* [6226](https://github.com/playframework/playframework/pull/6226): Build.scala import for routesGenerator configuration
+* [6222](https://github.com/playframework/playframework/pull/6222): Updated to 2.5.x (play.routing.JavaScriptReverseRouter)
+* [6216](https://github.com/playframework/playframework/pull/6216): added a warning inside the play ws ssl config parser (#6179)
+* [6214](https://github.com/playframework/playframework/pull/6214): Clarify how to use evolutions with compile-time DI
+* [6194](https://github.com/playframework/playframework/pull/6194): Fix generated to original source position mapping in dev mode
+* [6206](https://github.com/playframework/playframework/pull/6206): Use the built in typesafe Repo resolver
+* [6210](https://github.com/playframework/playframework/pull/6210): Better Result error handling
+* [6208](https://github.com/playframework/playframework/pull/6208): Make sure constraints keep declaration order
+* [6192](https://github.com/playframework/playframework/pull/6192): Properly set underlying request in AddCSRFToken
+* [6130](https://github.com/playframework/playframework/pull/6130): Only display a constraints which matches a used validation group
+* [6202](https://github.com/playframework/playframework/pull/6202): Add an example showing a custom FilePartHandler
+* [6197](https://github.com/playframework/playframework/pull/6197): Fix reference to FrameFormatter
+* [6201](https://github.com/playframework/playframework/pull/6201): update netty-reactive-streams to 1.0.6
+* [6195](https://github.com/playframework/playframework/pull/6195): Properly forward the persistence unit name
+* [6187](https://github.com/playframework/playframework/pull/6187): added some more documentation around Modules (#6185)
+* [6150](https://github.com/playframework/playframework/pull/6150): jdbcdslog is now enabled at the connection pool / data source level
+* [6169](https://github.com/playframework/playframework/pull/6169): Documentation fix: Action should not be static anymore
+* [6170](https://github.com/playframework/playframework/pull/6170): Fixes #4796 disables jsse and adds a loose context for acceptAnyCertificate
+* [6165](https://github.com/playframework/playframework/pull/6165): Negate predicate for logging media range parsing errors
+* [6164](https://github.com/playframework/playframework/pull/6164): Close prepared statements in EvolutionsApi
+* [6158](https://github.com/playframework/playframework/pull/6158): Add note pointing out that WebSocket does not implement SOP
+* [6143](https://github.com/playframework/playframework/pull/6143): Fixed #6133 added some docs for routes provider
+* [6160](https://github.com/playframework/playframework/pull/6160): Clean deprecation warnings in spec code
+* [6155](https://github.com/playframework/playframework/pull/6155): Update the API for JDK 1.8 and add links
+* [6154](https://github.com/playframework/playframework/pull/6154): Remove references to DB.getDatabase() from documentation
+* [6148](https://github.com/playframework/playframework/pull/6148): Move environment definition into code example
+* [6146](https://github.com/playframework/playframework/pull/6146): [doc] Replace invalid link to Jackson documentation (#5953)
+* [6137](https://github.com/playframework/playframework/pull/6137): Add Play I18n HOCON module to module directory
+* [6136](https://github.com/playframework/playframework/pull/6136): Add note about LoggerConfigurator with custom ApplicationLoader (#6136)
+* [6134](https://github.com/playframework/playframework/pull/6134): Trim \r in PlayException interestingLines
+* [6125](https://github.com/playframework/playframework/pull/6125): Group(s) in form should take an array/varargs
+* [6005](https://github.com/playframework/playframework/pull/6005): Use logger.url system property for logger configuration
+* [6122](https://github.com/playframework/playframework/pull/6122): docs: fix typos
+* [6119](https://github.com/playframework/playframework/pull/6119): Supplier returns type; it does not take an argument
+* [6114](https://github.com/playframework/playframework/pull/6114): Prefer constructor injection in documentation
+* [6117](https://github.com/playframework/playframework/pull/6117): Provide helper for creating HttpFilters
+* [6112](https://github.com/playframework/playframework/pull/6112): Simplify logback dependencies
+* [6113](https://github.com/playframework/playframework/pull/6113): ErrorHandlers should be singletons in docs
+* [6106](https://github.com/playframework/playframework/pull/6106): remove redunant call to deprecated API in TestingWebServices docs
+* [6103](https://github.com/playframework/playframework/pull/6103): Fix @deprecated annotations
+
 ## Play 2.5.3 "Streamy"
 
 *Released 27 April 2016*
