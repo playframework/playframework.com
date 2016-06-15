@@ -19,7 +19,7 @@ Before making a contribution, it is important to make sure that the change you w
 
 ### Procedure
 
-1. Make sure you have signed the [Typesafe CLA](http://www.typesafe.com/contribute/cla); if not, sign it online.
+1. Make sure you have signed the [Lightbend CLA](http://www.lightbend.com/contribute/cla); if not, sign it online.
 2. Ensure that your contribution meets the following guidelines:
     1. Live up to the current code standard:
         - Not violate [DRY](http://programmer.97things.oreilly.com/wiki/index.php/Don%27t_Repeat_Yourself).
@@ -41,7 +41,7 @@ Before making a contribution, it is important to make sure that the change you w
         * Features are forever, always think about whether a new feature really belongs to the core framework or if it should be implemented as a module
         * Code must conform to standard style guidelines and pass all tests (see [validatePullRequest](https://github.com/playframework/playframework/blob/master/framework/validatePullRequest))
     6. New files must:
-        * Have a Typesafe copyright header in the style of ``Copyright (C) 2009-2016 Typesafe Inc. <http://www.typesafe.com>``.
+        * Have a Lightbend copyright header in the style of ``Copyright (C) 2009-2016 Lightbend Inc. <http://www.lightbend.com>``.
         * Not use ``@author`` tags since it does not encourage [Collective Code Ownership](http://www.extremeprogramming.org/rules/collective.html).
 3. Ensure that your commits are squashed.  See [working with git](/documentation/latest/WorkingWithGit) for more information.
 4. Submit a pull request.
@@ -57,7 +57,7 @@ Generally, all bug fixes, improvements and new features will go to the master br
 * The change only affects the documentation
 * The change fixes a regression that was introduced in a previous stable release from that branch
 * The change fixes a bug that impacts significant number of members of the open source community with no simple work arounds available
-* Any other reason that Typesafe deems appropriate
+* Any other reason that Lightbend deems appropriate
 
 All backports and other commits to stable branches, in addition to satisfying the regular contributor guidelines, must also be binary and source compatible with previous releases on that branch.  The only exception to this is if a serious bug is impossible to fix without breaking the API, for example, a particular feature is not possible to use due to flaws in the API.
 

@@ -31,8 +31,8 @@ class ActivatorReleaseActor @Inject() (ws: WSClient, configuration: Configuratio
   def receive = withRelease(
     ActivatorRelease(
       version = "(unknown)",
-      url = "https://typesafe.com/platform/getstarted",
-      miniUrl = "https://typesafe.com/platform/getstarted",
+      url = "https://lightbend.com/platform/getstarted",
+      miniUrl = "https://lightbend.com/platform/getstarted",
       size = "???M",
       miniSize = "?M",
       akkaVersion = "(unknown)",

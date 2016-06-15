@@ -9,13 +9,13 @@ The goal of this page is to increase community contribution and sense of ownersh
 
 ## Project ownership
 
-The Play project source code is owned and licensed by [Typesafe](https://www.typesafe.com).  Typesafe employees a team of developers who work on Play full time, and has the final say on both product decisions and technical decisions for the project.
+The Play project source code is owned and licensed by [Lightbend](https://www.lightbend.com).  Lightbend employees a team of developers who work on Play full time, and has the final say on both product decisions and technical decisions for the project.
 
-Though Typesafe wholly owns the Play project and has the final say in any decisions made, Typesafe does not own the Play community, nor does Typesafe take for granted its existence.  The Play community is arguably just as important, if not more important, than the Play project itself.  With over 400 community contributors to the core of Play, and hundreds more to the broader Play ecosystem, the Play community could easily survive without or in spite of Typesafe, if it ever came to that.
+Though Lightbend wholly owns the Play project and has the final say in any decisions made, Lightbend does not own the Play community, nor does Lightbend take for granted its existence.  The Play community is arguably just as important, if not more important, than the Play project itself.  With over 400 community contributors to the core of Play, and hundreds more to the broader Play ecosystem, the Play community could easily survive without or in spite of Lightbend, if it ever came to that.
 
-For this reason, Typesafe's relationship to the Play project is best described as a stewardship, Typesafe manages the Play project, but is held accountable by the Play community.
+For this reason, Lightbend's relationship to the Play project is best described as a stewardship, Lightbend manages the Play project, but is held accountable by the Play community.
 
-For a statement of how Typesafe views open source, see the [Typesafe Open Source Position Statement](http://typesafe.com/open-source-position-statement).
+For a statement of how Lightbend views open source, see the [Lightbend Open Source Position Statement](http://lightbend.com/open-source-position-statement).
 
 ## Definitions
 
@@ -67,18 +67,18 @@ Whether a pull request is merged or not depends on many factors, including:
 
 The primary place for discussion about the design of Play and how the Play project is run is the [play-framework-dev](https://groups.google.com/forum/#!forum/play-framework-dev) mailing list.  All major new features, refactorings or changes to the project should first be discussed in this forum.  The aim of the discussions is to reach an understanding on whether the task will be done, and how it will be done.  When a new topic is posted, interested parties are encouraged to comment with their affirmation or concerns.
 
-While Typesafe ultimately has the last word on all decisions here, as much as possible we will endeavor to reach a consensus in the majority of the community.
+While Lightbend ultimately has the last word on all decisions here, as much as possible we will endeavor to reach a consensus in the majority of the community.
 
 ## Integrator selection
 
-Integrator selection is made by Typesafe.  Typesafe will offer contributors integrator status based on the following criteria:
+Integrator selection is made by Lightbend.  Lightbend will offer contributors integrator status based on the following criteria:
 
 * The contributor has made substantial contributions to Play.  What makes a substantial contribution is subjective, but for example, recent new integrators have been reviewing 3 or more pull requests per week, making one or more pull request per week, and triaging 3 or more issues a week.
 * The contributor is an exemplar of both Play's [code of conduct](/conduct) and [contributor guidelines](/contributing).
 * The contributor is well respected by other members of the Play community.
-* The contributor agrees to the rules set out by Typesafe below for integrators.
+* The contributor agrees to the rules set out by Lightbend below for integrators.
 
-Typesafe may also select integrators from its own staff.
+Lightbend may also select integrators from its own staff.
 
 If an integrator stops contributing regularly to Play, their write access may be removed, though their membership in the Play GitHub organisation will still be maintained.
 
@@ -89,7 +89,7 @@ All integrators should follow the processes outlined on this page, and should be
 * An integrator must never push directly to a repository in the GitHub organisation.  All contributions, no matter how small, must be made through pull requests.  The only exceptions to this are when backporting changes, and changes that arise from cutting a release.
 * Generally, pull requests should be made from integrators' personal forks, not from branches push to repositories in the playframework GitHub organisation.
 * An integrator must never merge their own pull requests.  All pull requests must be reviewed and merged by another integrator.
-* Documentation changes may be backported between releases as desired, however all other changes must by approved by Typesafe.
-* Integrators must enforce Typesafe's CLA requirements when merging pull requests.
+* Documentation changes may be backported between releases as desired, however all other changes must by approved by Lightbend.
+* Integrators must enforce Lightbend's CLA requirements when merging pull requests.
 * When closing issues or pull requests, remember that we are dealing with people.  Be kind and helpful, pointing people in the right direction.  For example, if someone raises an issue that is really a question, when closing the issue, direct them to the mailing list, providing a link to the mailing list, and if possible, a brief answer to the question.
 
