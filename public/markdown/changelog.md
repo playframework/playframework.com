@@ -102,6 +102,29 @@
 [Migration Guide](https://playframework.com/documentation/2.5.x/Migration25)
 [Full changelog](https://github.com/playframework/playframework/issues?q=milestone%3A2.5.0)
 
+## Play 2.4.7 "Damiya"
+
+*Released 20 June 2016*
+
+* [6223](https://github.com/playframework/playframework/pull/6223): Better result error handling
+* [6240](https://github.com/playframework/playframework/pull/6240): Backport for 2.4.x #6235: Bump slf4j minor version to fix a memory leak issue (SLF4J-364)
+* [6165](https://github.com/playframework/playframework/pull/6165): Negate predicate for logging media range parsing errors
+* [6083](https://github.com/playframework/playframework/pull/6083): Handle null response headers
+* [4860](https://github.com/playframework/playframework/pull/4860): Added SubTypesScanner to Reflections factory in Classpath
+* [5612](https://github.com/playframework/playframework/pull/5612): Improve the case of when to display the logger configuration deprecation message
+* [5764](https://github.com/playframework/playframework/pull/5764): Add zip protocol to isDirectory
+* [5948](https://github.com/playframework/playframework/pull/5948): Add idleTimeout support for Netty
+* [5945](https://github.com/playframework/playframework/pull/5945): Explicitly throw error when no application is in scope for Crypto
+* [5940](https://github.com/playframework/playframework/pull/5940): Upgrade to AHC 1.9.36
+* [5723](https://github.com/playframework/playframework/pull/5723): Make CORS filter treat http and https as different origins
+* [5673](https://github.com/playframework/playframework/pull/5763): Update ProductionConfiguration.md
+* [5692](https://github.com/playframework/playframework/pull/5692): Make Akka.system use the system field on app
+* [5228](https://github.com/playframework/playframework/pull/5228): Only parse the form body on oauth sign
+* [5629](https://github.com/playframework/playframework/pull/5629): Update 2.4.x to AHC 1.9.33
+* [5623](https://github.com/playframework/playframework/pull/5623): Mockito is not included in build by default
+* [5486](https://github.com/playframework/playframework/pull/5486): Keys.devSettings to PlayKeys.devSettings
+* [5468](https://github.com/playframework/playframework/pull/5468): Fixed typo, missing word added
+
 ## Play 2.4.6 "Damiya"
 
 *Released 14 December 2015*

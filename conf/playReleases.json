@@ -8,6 +8,11 @@
     ],
     "previous": [
          {
+            "name": "Damiya",
+            "version": "2.4.7",
+            "date": "Jun 20 2016"
+         },
+         {
             "name": "Streamy",
             "version": "2.5.3",
             "date": "Apr 27 2016"
