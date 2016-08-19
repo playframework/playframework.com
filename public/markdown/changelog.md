@@ -1,3 +1,62 @@
+## Play 2.5.5 "Streamy"
+
+* [6458](https://github.com/playframework/playframework/pull/6458): fixes the 2.5.x branch
+* [6441](https://github.com/playframework/playframework/pull/6441): Set content length when invoking action with a test body.
+* [6455](https://github.com/playframework/playframework/pull/6455): Ensure that custom signature calculator works in Java
+* [6453](https://github.com/playframework/playframework/pull/6453): Add tests of ServerResultUtils#validateResult to make sure an empty body is sent for 1xx, 204 and 304 responses
+* [6452](https://github.com/playframework/playframework/pull/6452): Add note about HTTP execution context
+* [6449](https://github.com/playframework/playframework/pull/6449): shutdown hooks will now be called correctly in dev mode (#6437)
+* [6442](https://github.com/playframework/playframework/pull/6442): Add line breaks in examples to reduce horizontal scrolling (#6439)
+* [6435](https://github.com/playframework/playframework/pull/6435): Fix #5384 - Support of generic case class for the JSON macros
+* [6421](https://github.com/playframework/playframework/pull/6421): applied_at in evolutions filled as timestamp (#6420)
+* [6409](https://github.com/playframework/playframework/pull/6409): Disallow users to send a message-body and Content-Length header field for 1xx, 204 and 304 responses
+* [6407](https://github.com/playframework/playframework/pull/6407): fix #6131 (#6284)
+* [6406](https://github.com/playframework/playframework/pull/6406): Clarify how encoding of parameters works in generated routes
+* [6389](https://github.com/playframework/playframework/pull/6389): removed scalaz repository in play-scala template
+* [6391](https://github.com/playframework/playframework/pull/6391): Closing leaked connection when there is a problem in checkEvolutionsDtate()
+* [6392](https://github.com/playframework/playframework/pull/6392): [doc] Add SIRD routing documentation
+* [6395](https://github.com/playframework/playframework/pull/6395): remove file log appenders from default configs - fixes #6361
+* [6394](https://github.com/playframework/playframework/pull/6394): Add a delegating file part handler for Java (#6369)
+* [6381](https://github.com/playframework/playframework/pull/6381): Avoid OutOfMemoryError when writing JSON BigDecimals
+* [6375](https://github.com/playframework/playframework/pull/6375): Updated dependencies for 2.5.x
+* [6374](https://github.com/playframework/playframework/pull/6374): Added advice for production env variables
+* [6371](https://github.com/playframework/playframework/pull/6371): Fix HttpRequestHandler docs to add JavaHandlerComponents
+* [6357](https://github.com/playframework/playframework/pull/6357): Add async try-with-resources for java api
+* [6366](https://github.com/playframework/playframework/pull/6366): append fragment in Results.Redirect(call, status)
+* [6362](https://github.com/playframework/playframework/pull/6362): Fixes #6351 made the parameter onClose of sendFile working again
+* [6363](https://github.com/playframework/playframework/pull/6363): Append fragment (use Call.path instead of Call.url) when redirecting
+* [6355](https://github.com/playframework/playframework/pull/6355): Update JavaRoutingDsl.md
+* [6335](https://github.com/playframework/playframework/pull/6335): Add an example of the FakeRequest being explained
+* [6346](https://github.com/playframework/playframework/pull/6346): Fixed incorrect config reference in scala doc [#6341] (#6343)
+* [6344](https://github.com/playframework/playframework/pull/6344): fix doc error
+* [6337](https://github.com/playframework/playframework/pull/6337): Fix incorrect form mime types in documentation
+* [6331](https://github.com/playframework/playframework/pull/6331): Clear up the 'other' files in AssetsLess.md
+* [6327](https://github.com/playframework/playframework/pull/6327): Fix range result pattern match bug
+* [6330](https://github.com/playframework/playframework/pull/6330): Fixed #6318 made the documentation about customizing a object mapper better
+* [6326](https://github.com/playframework/playframework/pull/6326): Fixed #6271 removes PlayHttpContentDecompressor
+* [6138](https://github.com/playframework/playframework/pull/6138): Add option to prevent Play from creating bound caches
+* [6317](https://github.com/playframework/playframework/pull/6317): Fixed #6316 encoding will be applied to asXml
+* [6272](https://github.com/playframework/playframework/pull/6272): Set Form value even when form has errors
+* [6291](https://github.com/playframework/playframework/pull/6291): Don't try to use minified asset in DEV mode
+* [6273](https://github.com/playframework/playframework/pull/6273): Read play.editor via PLAY_EDITOR from environment variables as fallback
+* [6311](https://github.com/playframework/playframework/pull/6311): Upgrade to Akka 2.4.8
+* [6306](https://github.com/playframework/playframework/pull/6306): Backport for 2.5.x #6289: Apply Netty's cookie encoder/decoder updates.
+* [6274](https://github.com/playframework/playframework/pull/6274): Fixes #5838 by correcting pattern match on termination message
+* [6283](https://github.com/playframework/playframework/pull/6283): Fix parsing in play.mvc.Result#charset()
+* [6288](https://github.com/playframework/playframework/pull/6288): Validate charset when we send JSON results (#6287)
+* [6281](https://github.com/playframework/playframework/pull/6281): Fix typo in documentation for WS
+* [6257](https://github.com/playframework/playframework/pull/6257): Fixes #6152 by customizing the HttpContentDecompressor
+* [6269](https://github.com/playframework/playframework/pull/6269): fix typo
+* [5270](https://github.com/playframework/playframework/pull/5270): Update application.conf
+* [6262](https://github.com/playframework/playframework/pull/6262): Fix version pattern
+* [6256](https://github.com/playframework/playframework/pull/6256): Update 2.5.x dependencies
+* [6249](https://github.com/playframework/playframework/pull/6249): Add Form mapping support for java.time Types
+* [6241](https://github.com/playframework/playframework/pull/6241): Suggestion: validating bin compatibility with all the patch versions in 2.5 series
+* [6233](https://github.com/playframework/playframework/pull/6233): update doc for play-json DefaultInstantReads
+* [6243](https://github.com/playframework/playframework/pull/6243): remove logback depencency from iteratees. fix #6242
+* [6238](https://github.com/playframework/playframework/pull/6238) modified: stream collector to generate properly typed array instead of casting array result
+* [6239](https://github.com/playframework/playframework/pull/6239) Bump slf4j minor version to fix a memory leak issue (SLF4J-364)
+
 ## Play 2.5.4 "Streamy"
 
 * [6231](https://github.com/playframework/playframework/pull/6231): [doc] Backport tutorials

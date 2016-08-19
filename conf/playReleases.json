@@ -1,12 +1,17 @@
 {
     "latest": {
         "name": "Streamy",
-        "version": "2.5.4",
-        "date": "Jun 9 2016"
+        "version": "2.5.5",
+        "date": "Aug 18 2016"
     },
     "development": [
     ],
     "previous": [
+         {
+            "name": "Streamy",
+            "version": "2.5.5",
+            "date": "Aug 18 2016"
+         },
          {
             "name": "Damiya",
             "version": "2.4.8",
