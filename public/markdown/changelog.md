@@ -1,3 +1,11 @@
+## Play 2.5.6 "Streamy"
+
+* [6481](https://github.com/playframework/playframework/pull/6481): Upgrade akka to 2.4.9
+* [6477](https://github.com/playframework/playframework/pull/6477): Fix config file name in Clever Cloud deployment docs
+* [6475](https://github.com/playframework/playframework/pull/6475): Fix minor typo in default templates
+* [6457](https://github.com/playframework/playframework/pull/6457): Add more clarification to router docs
+* [6470](https://github.com/playframework/playframework/pull/6470): stop hooks won't be called when Play.stop(app) was called (#6469)
+
 ## Play 2.5.5 "Streamy"
 
 * [6458](https://github.com/playframework/playframework/pull/6458): fixes the 2.5.x branch
