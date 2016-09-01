@@ -722,6 +722,34 @@ A complete list of what was fixed for 2.2.2 can be found on [Github](https://git
 * Stopped plugins in reverse order to started
 * Removed circular dependencies in dev mode ClassLoaders
 
+## Play 1.4.3
+
+*Released 16 August 2016*
+
+
+* [#2040](https://play.lighthouseapp.com/projects/57987/tickets/2040-concurrentmodificationexception-in-groovytemplatecompilerendtag) ConcurrentModificationException in GroovyTemplateCompiler.endTag 
+* [#2042](https://play.lighthouseapp.com/projects/57987/tickets/2042) Upgrade dependencies 
+* [#2044](https://play.lighthouseapp.com/projects/57987/tickets/2044) support empty values in validation error 
+arguments 
+* [#2049](https://play.lighthouseapp.com/projects/57987/tickets/2049) Some resultsets are not close in Evolutions causing some leak
+* [#2050](https://play.lighthouseapp.com/projects/57987/tickets/2050) Update dep for netty and async-http
+* [#2051, #1667](https://play.lighthouseapp.com/projects/57987/tickets/2051) Avoid to call @Util and @Catch controller methods directly using a http request 
+* [#2055](https://play.lighthouseapp.com/projects/57987/tickets/2055) Upgrade dependency joda-time (from 2.9.2 to 2.9.4) 
+* [#2056](https://play.lighthouseapp.com/projects/57987/tickets/2056) Upgrade Groovy to 2.4.7 
+* [#2057](https://play.lighthouseapp.com/projects/57987/tickets/2057) Remove dependency on commons-collections 
+* [#2052](https://play.lighthouseapp.com/projects/57987/tickets/2052) session.put() works incorrectly with null objects 
+* [#2058](https://play.lighthouseapp.com/projects/57987/tickets/2058) KeyError: 'disable_random_jpda' in application.check_jpda
+* [#984](https://github.com/playframework/play1/issues/984) Play framework should log every time when application restart happens (in dev mode)
+* [#982](https://github.com/playframework/play1/issues/982) `play build-module` command should exit with error code if build failed
+* fix UnexpectedException.getErrorDescription(): write error message in any case
+* [#2059](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2059) Rework place of release note of documentation 
+* Upgrade Apache Ant 1.9.6 -> 1.9.7
+* [#987](https://github.com/playframework/play1/pull/987) Don't swallow exceptions in binder
+* [#2048](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2048) upgrade to cglib 3.2.2 
+* [#986](https://github.com/playframework/play1/issues/986) Update selenium to 2.53
+* [#2053](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2053) flash method should handle value as a key message
+
+
 ## Play 1.4.2
 
 *Released 16 March 2016*
