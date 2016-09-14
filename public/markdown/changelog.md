@@ -1,5 +1,7 @@
 ## Play 2.5.7 "Streamy"
 
+*Released 12 Sep 2016*
+
 * [6520](https://github.com/playframework/playframework/pull/6520): Document Default controller in routing docs
 * [6531](https://github.com/playframework/playframework/pull/6531): Fixes serialization of big decimals to json (#6530)
 * [6541](https://github.com/playframework/playframework/pull/6541): adds a note about h2 while developing
@@ -13,6 +15,8 @@
 
 ## Play 2.5.6 "Streamy"
 
+*Released 23 Aug 2016*
+
 * [6481](https://github.com/playframework/playframework/pull/6481): Upgrade akka to 2.4.9
 * [6477](https://github.com/playframework/playframework/pull/6477): Fix config file name in Clever Cloud deployment docs
 * [6475](https://github.com/playframework/playframework/pull/6475): Fix minor typo in default templates
@@ -20,6 +24,8 @@
 * [6470](https://github.com/playframework/playframework/pull/6470): stop hooks won't be called when Play.stop(app) was called (#6469)
 
 ## Play 2.5.5 "Streamy"
+
+*Released 18 Aug 2016*
 
 * [6458](https://github.com/playframework/playframework/pull/6458): fixes the 2.5.x branch
 * [6441](https://github.com/playframework/playframework/pull/6441): Set content length when invoking action with a test body.
@@ -79,6 +85,8 @@
 * [6239](https://github.com/playframework/playframework/pull/6239) Bump slf4j minor version to fix a memory leak issue (SLF4J-364)
 
 ## Play 2.5.4 "Streamy"
+
+*Released 9 Jun 2016*
 
 * [6231](https://github.com/playframework/playframework/pull/6231): [doc] Backport tutorials
 * [6230](https://github.com/playframework/playframework/pull/6230): Fix double-encoding of RequestBuilder params
