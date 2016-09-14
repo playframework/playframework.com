@@ -1,3 +1,12 @@
+## Play 2.5.8 "Streamy"
+
+*Released 14 Sep 2016*
+
+* [6557](https://github.com/playframework/playframework/pull/6557): Upgrade HikariCP to 2.5.0
+* [6539](https://github.com/playframework/playframework/pull/6539): Trim digest of asset after reading it. fixes #6538
+* [6556](https://github.com/playframework/playframework/pull/6556): makes the documentation tests work again
+* [6554](https://github.com/playframework/playframework/pull/6554): fixes some problems with query strings
+
 ## Play 2.5.7 "Streamy"
 
 *Released 12 Sep 2016*
