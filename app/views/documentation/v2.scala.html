@@ -2,7 +2,11 @@
 
 @import Helpers._
 
-@header(page, Some(context)) {
+@title = {
+  @page @context.version.map(" - " + _).getOrElse("")
+}
+
+@header(title.toString, Some(context)) {
 
     <aside>
 

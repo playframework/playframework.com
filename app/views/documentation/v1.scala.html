@@ -1,6 +1,10 @@
 @(messages: MessagesApi, context: models.documentation.TranslationContext, page: String, content: String)(implicit req: RequestHeader)
 
-@header(page) {
+@title = {
+  @page @context.version.map(" - " + _).getOrElse("")
+}
+
+@header(title.toString) {
 
     <aside>
 
