@@ -75,7 +75,7 @@ class DocumentationController @Inject()(
       langs.find(_.satisfies(lang))
     }).orElse {
       candidateLangs.collect {
-        case Lang(l, c) if c.nonEmpty => Lang(l, "")
+        case lang: Lang if lang.country.nonEmpty => Lang(lang.language)
       }.collectFirst(Function.unlift { lang =>
         langs.find(_.satisfies(lang))
       })

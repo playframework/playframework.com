@@ -1,4 +1,5 @@
-@(releases: PlayReleases, activator: ActivatorRelease, platform: Platform.Platform, title: String = "Downloads")(implicit requestHeader : RequestHeader)
+@(releases: PlayReleases, examples: PlayExampleProjects, activator: ActivatorRelease, platform: Platform.Platform,
+        title: String = "Downloads")(implicit requestHeader : RequestHeader)
 
 @renderRelease(linkClass: String, release: PlayRelease) = {
     @if(release.secureUrl) {
@@ -14,7 +15,6 @@
     } else {
         <td width="250">
             Play @release.version
-            <span class="small">(<a href="@activator.miniSecureUrl" class="downloadActivatorLink" data-version="old">activator</a>)</span>
         </td>
         <td width="200">
             @release.date
@@ -60,6 +60,37 @@
             </div>
         </div>
 
+        <article class="starter">
+            <h2>Play starter projects</h2>
+            <h3>One download to get started</h3>
+        </article>
+
+        <hr />
+
+        <article id="examples" class="example-projects">
+            <p>
+                These projects all include an <a href="http://www.scala-sbt.org/index.html">SBT</a> launcher that can
+                be run with <code>./sbt</code>. Edit <code>build.sbt</code> to change your project name and settings,
+                and use <code>./sbt run</code> to run your project.
+            </p>
+
+            <table>
+            @examples.byVersion.map { case (version, projects) =>
+                <tbody>
+                    <tr><th><h4>Play @version</h4></th></tr>
+                    @projects.map { project =>
+                        <tr>
+                            <td><strong><a href="@project.downloadUrl" target="_blank">@project.name</a></strong></td>
+                            <td><a href="@project.downloadUrl" target="_blank">Download (zip)</a></td>
+                            <td><a href="@project.githubUrl" target="_blank">View on GitHub</a></td>
+                        </tr>
+                    }
+                </tbody>
+            }
+            </table>
+
+        </article>
+        <hr/>
         <article class="activator">
             <h2>Play with Activator</h2>
             <h3>Install and run Play projects with Activator</h3>
@@ -67,7 +98,7 @@
         <hr/>
         <article class="cli">
             <img src="@routes.Assets.versioned("images/download/cli.png")">
-            <h2>Play from the command line</h2>
+            <h3>Activator from the command line</h3>
             <p><a href="@controllers.documentation.ReverseRouter.latest(None, "Installing")">Add activator your PATH</a> to have the command available in your cli.</p>
             <p>Create a new project from the command line:</p>
             <pre>activator new</pre>
@@ -79,25 +110,25 @@
         <hr/>
         <article class="ui">
             <img src="@routes.Assets.versioned("images/download/ui.png")">
-            <h2>Activator’s ui and tutorials</h2>
-            <h3 class="moto">Learn. Compile. Test. Run.</h3>
-            <p>Activator comes with a ui for learning Play. Launch the ui by double clicking the activator executable or using the following command in your terminal:</p>
+            <h3>Activator’s UI and tutorials</h3>
+            <p>Activator comes with a user interface for learning Play. Launch the ui by double clicking the activator
+                executable or using the following command in your terminal:</p>
             <pre>activator ui</pre>
             <p>A webpage will open in your browser, then follow the instructions to choose and open a tutorial.</p>
             <p>Read more about <a href="@controllers.documentation.ReverseRouter.latest(None, "Tutorials")">Activator Tutorials</a> for Play.</p>
-        </article>
-        <hr/>
-        <article class="activator">
-            <h2>More about Activator</h2>
-            <p>Lightbend Activator gets you started with Play and the <a href="//lightbend.com/products/lightbend-reactive-platform" target="_blank">Lightbend Reactive Platform</a>. It is a hub for developers that want to build reactive applications, providing both a command line and an in browser environment for creating new applications.</p>
-            <p>Getting started is a snap, please refer to the following instructions or the complete <a href="//lightbend.com/activator/download" target="_blank">Getting Started</a> page, including an introduction video.</p>
         </article>
         <hr/>
         <article id="alternatives">
             <h2>Alternative downloads</h2>
             <section>
             <p>
-                The Traditional Play Zip provides a <code>play</code> command to create new applications, run tests, and run the application.  Check out the Play docs for <a href="@controllers.documentation.ReverseRouter.latest(None, "Installing")">Installation instructions</a>.
+                The Traditional Play Zip provides a <code>play</code> command to create new applications, run tests,
+                and run the application. After 2.3.0 the <code>play</code> command is no longer used. Projects can be
+                created from an existing example project or through Activator, as described above.
+            </p>
+            <p>
+                Check out the Play docs for
+                <a href="@controllers.documentation.ReverseRouter.latest(None, "Installing")">installation instructions</a>.
             </p>
 
             @if(releases.development.nonEmpty) {
@@ -117,30 +148,31 @@
             }
 
             <hr/>
+
             <h3 id="older-versions">Previous releases</h3>
 
             <p class="changelogLink"><a href="@routes.Application.changelog()">Changelog</a></p>
 
+            <table class="releases">
             @releases.previous.groupBy(_.version.slice(0,3)).toSeq.sortBy(_._1).reverse.map { group =>
-                <div class="version">
-                    <h3 colspan="3">@group._1</h3>
-                    <table>
+                <tbody class="version">
+                    <tr><th colspan="3"><h4>@group._1</h4></th></tr>
                     @group._2.map { release =>
-                        <tr>
+                        <tr class="release">
                             @renderRelease("downloadPreviousLink", release)
                         </tr>
                     }
-                    </table>
-                    <span class="show-all-versions">Show all versions</span>
-                </div>
+                    <tr><td class="show-all-versions">Show all versions</td></tr>
+                </tbody>
             }
+            </table>
         </section>
         <section>
             <h3 id="as-dependency">Play as a dependency</h3>
             <p>You can find instructions on how to create a Play application with sbt in the last section of the <a href="@controllers.documentation.ReverseRouter.latest(None, "NewApplication")">creating a new application</a> page.</p>
             <hr/>
             <h3 id="from-source">Build from source</h3>
-            <p>The source code is hosted on Github, you can follow the instructions on the <a href="@controllers.documentation.ReverseRouter.latest(None, "BuildingFromSource")">Build from the sources</a> page.</p>
+            <p>The source code is hosted on Github. You can follow the instructions on the <a href="@controllers.documentation.ReverseRouter.latest(None, "BuildingFromSource")">Building from source</a> page.</p>
         </section>
 
         </article>

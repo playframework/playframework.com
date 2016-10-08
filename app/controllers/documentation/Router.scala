@@ -71,16 +71,9 @@ class Router @Inject() (
   }
 }
 
-object ReverseRouter {
-  private def instance: ReverseRouter = play.api.Play.current.injector.instanceOf[ReverseRouter]
-  def index(lang: Option[Lang]) = instance.index(lang)
-  def home(lang: Option[Lang], version: String) = instance.home(lang, version)
-  def page(lang: Option[Lang], version: String, page: String = "Home") = instance.page(lang, version, page)
-  def api(version: String, path: String) = instance.api(version, path)
-  def latest(lang: Option[Lang], page: String = "Home") = instance.latest(lang, page)
-  def cheatsheet(lang: Option[Lang], version: String, category: String) = instance.cheatsheet(lang, version, category)
-  def switch(lang: Option[Lang], version: String, page: String) = instance.switch(lang, version, page)
-}
+object ReverseRouter extends ReverseRouter(new Provider[Router] {
+  def get = play.api.Play.current.injector.instanceOf[Router]
+})
 
 @Singleton
 class ReverseRouter @Inject() (routerProvider: Provider[Router]) {

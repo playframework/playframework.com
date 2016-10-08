@@ -147,7 +147,7 @@ $(function(){
         var versions = $("#alternatives .version");
 
         versions.each(function(i, el) {
-            var list = $("tr", el).slice(3).hide();
+            var list = $(".release", el).slice(3).hide();
             $(".show-all-versions", el).click(function() {
                 list.show();
                 $(this).hide();
