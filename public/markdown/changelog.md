@@ -1,3 +1,18 @@
+## Play 2.5.9 "Streamy"
+
+*Released 8 Oct 2016*
+
+* [6631](https://github.com/playframework/playframework/pull/6631): Backport documentation mappings
+* [6594](https://github.com/playframework/playframework/pull/6594): [doc] Add example of using WS from main
+* [6627](https://github.com/playframework/playframework/pull/6627): Updated Streaming HTTP responses documentation
+* [6617](https://github.com/playframework/playframework/pull/6617): Update HikariCP to 2.5.1
+* [6597](https://github.com/playframework/playframework/pull/6597): fix failed evolutions with query parameter
+* [6587](https://github.com/playframework/playframework/pull/6587): Fix incorrect level header (#6585)
+* [6553](https://github.com/playframework/playframework/pull/6553): Update JavaActionsComposition doc - Action.call doesn't throw
+* [6560](https://github.com/playframework/playframework/pull/6560): reverts matrix params in query strings
+* [6564](https://github.com/playframework/playframework/pull/6564): Fix unsafe usage of WS client in tests
+* [6575](https://github.com/playframework/playframework/pull/6575): Fixes #4695 (#6571)
+
 ## Play 2.5.8 "Streamy"
 
 *Released 14 Sep 2016*
