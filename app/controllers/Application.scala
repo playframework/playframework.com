@@ -25,7 +25,8 @@ class Application @Inject() (
   val messagesApi: MessagesApi,
   certificationDao: CertificationDao,
   @Named("activator-release-actor") activatorReleaseActor: ActorRef,
-  releases: PlayReleases
+  releases: PlayReleases,
+  exampleProjects: PlayExampleProjects
 )(implicit ec: ExecutionContext) extends Controller with Common with I18nSupport {
 
   private val VulnerableVersions = Set(
@@ -63,7 +64,7 @@ class Application @Inject() (
     val selectedPlatform = Platform(platform.orElse(request.headers.get("User-Agent")))
 
     latestActivator.map { activator =>
-      Ok(html.download(releases, activator, selectedPlatform))
+      Ok(html.download(releases, exampleProjects, activator, selectedPlatform))
     }
   }
 
@@ -75,15 +76,15 @@ class Application @Inject() (
   def changelog = markdownAction("public/markdown/changelog.md", { implicit request =>
     views.html.changelog(_)
   })
-  
+
   def conduct = markdownAction("public/markdown/code-of-conduct.md", { implicit request => markdown =>
     views.html.markdownPage("Code of conduct", markdown)
   })
-  
+
   def communityProcess = markdownAction("public/markdown/community-process.md", { implicit request => markdown =>
     views.html.markdownPage("Community process", markdown)
   })
-  
+
   def contributing = markdownAction("public/markdown/contributing.md", { implicit request => markdown =>
     views.html.markdownPage("Contributing", markdown)
   })

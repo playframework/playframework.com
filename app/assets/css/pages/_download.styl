@@ -17,7 +17,7 @@
 .download
     @extend .split-page
 
-    #content h1 
+    #content h1
         height: 80px
         line-height: 80px
         color: white
@@ -32,9 +32,9 @@
     .deprecated
         background: yellow
         padding: 30px
-    hr 
+    hr
         width: 70%
-        border: none 
+        border: none
         border-top: 1px solid #ddd
 
     .downloads
@@ -139,10 +139,9 @@
         margin: 10px 0 20px
 
 
-    .activator, .cli, .ui
+    .activator, .starter, .cli, .ui, .example-projects
         position: relative
         min-height: 300px
-        margin: 50px auto
         img
             position: absolute
             top: -10px
@@ -150,10 +149,22 @@
             margin: 14px 0 4px
         pre
             margin: 4px 0 14px
-    .activator
+    .activator, .starter
+        margin: 40px auto
         min-height: 10px
         width: 530px
         text-align: center
+    .cli, .ui
+        margin: 50px auto
+    .example-projects
+        margin: 0 150px 20px
+        table
+            tbody
+                border-top: 1px dotted #ccc
+                th
+                    padding: 5px 0
+                td
+                    border-bottom: 1px dotted #ccc
     .cli
         margin-left: 400px
         img
@@ -164,7 +175,7 @@
             right: -430px
 
     @media only screen and (max-width: 960px)
-        .activator, .cli, .ui
+        .activator, .cli, .ui, .sbt, .example-projects
             width: auto
             min-height: 10px
             margin: 10px
@@ -174,8 +185,7 @@
                 left: 0
                 right: 0
                 margin: 20px auto
-    .moto
-        color: green
+
 
 
 .get-started
@@ -223,5 +233,5 @@
     .bold
         font-size: 18px
         font-weight: bold
-        a 
+        a
             color: blue

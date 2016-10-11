@@ -1,0 +1,58 @@
+{
+  "projects": [
+    {
+      "name": "Play Scala Seed",
+      "playVersion": "2.5.x",
+      "githubUrl": "https://github.com/playframework/play-scala",
+      "downloadUrl": "https://example.lightbend.com/v1/download/play-2.5.x-scala"
+    },
+    {
+      "name": "Play Java Seed",
+      "playVersion": "2.5.x",
+      "githubUrl": "https://github.com/playframework/play-java",
+      "downloadUrl": "https://example.lightbend.com/v1/download/play-2.5.x-java"
+    },
+    {
+      "name": "Play Scala with Slick",
+      "playVersion": "2.5.x",
+      "githubUrl": "https://github.com/playframework/play-scala-intro",
+      "downloadUrl": "https://example.lightbend.com/v1/download/play-2.5.x-scala-intro"
+    },
+    {
+      "name": "Play Java with JPA",
+      "playVersion": "2.5.x",
+      "githubUrl": "https://github.com/playframework/play-java-intro",
+      "downloadUrl": "https://example.lightbend.com/v1/download/play-2.5.x-java-intro"
+    },
+    {
+      "name": "Play Scala Seed",
+      "playVersion": "2.4.x",
+      "githubUrl": "https://github.com/playframework/play-scala",
+      "downloadUrl": "https://example.lightbend.com/v1/download/play-2.4.x-scala"
+    },
+    {
+      "name": "Play Java Seed",
+      "playVersion": "2.4.x",
+      "githubUrl": "https://github.com/playframework/play-java",
+      "downloadUrl": "https://example.lightbend.com/v1/download/play-2.4.x-java"
+    },
+    {
+      "name": "Play Scala with Slick",
+      "playVersion": "2.4.x",
+      "githubUrl": "https://github.com/playframework/play-scala-intro",
+      "downloadUrl": "https://example.lightbend.com/v1/download/play-2.4.x-scala-intro"
+    },
+    {
+      "name": "Play Java with JPA",
+      "playVersion": "2.4.x",
+      "githubUrl": "https://github.com/playframework/play-java-intro",
+      "downloadUrl": "https://example.lightbend.com/v1/download/play-2.4.x-java-intro"
+    },
+    {
+      "name": "Play Rest API",
+      "playVersion": "2.5.x",
+      "githubUrl": "https://github.com/playframework/play-rest-api",
+      "downloadUrl": "https://example.lightbend.com/v1/download/play-rest-api"
+    }
+  ]
+}
