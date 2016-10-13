@@ -80,9 +80,9 @@
                     <tr><th><h4>Play @version</h4></th></tr>
                     @projects.map { project =>
                         <tr>
-                            <td><strong><a href="@project.downloadUrl" target="_blank">@project.name</a></strong></td>
+                            <td><strong><a href="@project.downloadUrl" target="_blank">@project.displayName</a></strong></td>
                             <td><a href="@project.downloadUrl" target="_blank">Download (zip)</a></td>
-                            <td><a href="@project.githubUrl" target="_blank">View on GitHub</a></td>
+                            <td><a href="@project.gitHubUrl" target="_blank">View on GitHub</a></td>
                         </tr>
                     }
                 </tbody>
