@@ -26,7 +26,7 @@ class Application @Inject() (
   certificationDao: CertificationDao,
   @Named("activator-release-actor") activatorReleaseActor: ActorRef,
   releases: PlayReleases,
-  exampleProjects: PlayExampleProjects
+  exampleProjectsService: PlayExampleProjectsService
 )(implicit ec: ExecutionContext) extends Controller with Common with I18nSupport {
 
   private val VulnerableVersions = Set(
@@ -51,7 +51,6 @@ class Application @Inject() (
     message.toSeq.map(Html.apply)
   }
 
-
   def index = Action { implicit request =>
     Ok(html.index(releases))
   }
@@ -63,8 +62,17 @@ class Application @Inject() (
   def download(platform: Option[String] = None) = Action.async { implicit request =>
     val selectedPlatform = Platform(platform.orElse(request.headers.get("User-Agent")))
 
-    latestActivator.map { activator =>
-      Ok(html.download(releases, exampleProjects, activator, selectedPlatform))
+    latestActivator.flatMap { activator =>
+      exampleProjectsService.cached() match {
+        case Some(cached) =>
+          Future.successful {
+            Ok(html.download(releases, cached, activator, selectedPlatform))
+          }
+        case None =>
+          exampleProjectsService.examples().map { live =>
+            Ok(html.download(releases, live, activator, selectedPlatform))
+          }
+      }
     }
   }
 
