@@ -18,6 +18,7 @@ libraryDependencies ++= Seq(
   "org.webjars" % "clipboard.js" % "1.5.5",
   "com.typesafe.play" %% "anorm" % "2.4.0",
   jdbc,
+  cache,
   evolutions,
   filters,
   ws,
