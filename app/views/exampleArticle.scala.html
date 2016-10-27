@@ -1,0 +1,32 @@
+@(downloads: PlayExamples)
+
+@renderProject(project: ExampleProject) = {
+<tr>
+  <td><strong><a href="@project.downloadUrl" target="_blank">@project.displayName</a></strong></td>
+  <td><a href="@project.downloadUrl" target="_blank">Download (zip)</a></td>
+  <td><a href="@project.gitHubUrl" target="_blank">View on GitHub</a></td>
+</tr>
+}
+
+<article id="examples" class="example-projects">
+  <p>
+    These projects all include an <a href="http://www.scala-sbt.org/index.html">SBT</a> launcher that can
+    be run with <code>./sbt</code>. Edit <code>build.sbt</code> to change your project name and settings,
+    and use <code>./sbt run</code> to run your project.
+  </p>
+
+  <table>
+    @downloads.sections.map { case (version, section) =>
+      <tbody>
+      <tr><th><h4>Play @version Seeds</h4></th></tr>
+        @section.seeds.map { seedProject =>
+          @renderProject(seedProject)
+        }
+      <tr><th><h4>Play @version Examples</h4></th></tr>
+        @section.examples.map { exampleProject =>
+          @renderProject(exampleProject)
+        }
+      </tbody>
+    }
+  </table>
+</article>

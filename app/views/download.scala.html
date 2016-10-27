@@ -1,4 +1,4 @@
-@(releases: PlayReleases, examples: PlayExampleProjects, activator: ActivatorRelease, platform: Platform.Platform,
+@(releases: PlayReleases, examples: PlayExamples, activator: ActivatorRelease, platform: Platform.Platform,
         title: String = "Downloads")(implicit requestHeader : RequestHeader)
 
 @renderRelease(linkClass: String, release: PlayRelease) = {
@@ -67,29 +67,8 @@
 
         <hr />
 
-        <article id="examples" class="example-projects">
-            <p>
-                These projects all include an <a href="http://www.scala-sbt.org/index.html">SBT</a> launcher that can
-                be run with <code>./sbt</code>. Edit <code>build.sbt</code> to change your project name and settings,
-                and use <code>./sbt run</code> to run your project.
-            </p>
+        @exampleArticle(examples)
 
-            <table>
-            @examples.byVersion.map { case (version, projects) =>
-                <tbody>
-                    <tr><th><h4>Play @version</h4></th></tr>
-                    @projects.map { project =>
-                        <tr>
-                            <td><strong><a href="@project.downloadUrl" target="_blank">@project.displayName</a></strong></td>
-                            <td><a href="@project.downloadUrl" target="_blank">Download (zip)</a></td>
-                            <td><a href="@project.gitHubUrl" target="_blank">View on GitHub</a></td>
-                        </tr>
-                    }
-                </tbody>
-            }
-            </table>
-
-        </article>
         <hr/>
         <article class="activator">
             <h2>Play with Activator</h2>

@@ -65,12 +65,14 @@ class Application @Inject() (
     latestActivator.flatMap { activator =>
       exampleProjectsService.cached() match {
         case Some(cached) =>
+          val examples = toExamples(cached)
           Future.successful {
-            Ok(html.download(releases, cached, activator, selectedPlatform))
+            Ok(html.download(releases, examples, activator, selectedPlatform))
           }
         case None =>
           exampleProjectsService.examples().map { live =>
-            Ok(html.download(releases, live, activator, selectedPlatform))
+            val examples = toExamples(live)
+            Ok(html.download(releases, examples, activator, selectedPlatform))
           }
       }
     }
@@ -155,4 +157,26 @@ class Application @Inject() (
     Ok("Sitemap: https://www.playframework.com/sitemap-index.xml")
   }
 
+  // Set up the presentation object
+  private def toExamples(projects: Seq[ExampleProject]): PlayExamples = {
+    def playVersion(exampleProject: ExampleProject): String = {
+      exampleProject.keywords.find(k => exampleProjectsService.validPlayVersions.contains(k)).get
+    }
+
+    def byVersion: Seq[(String, Seq[ExampleProject])] = {
+      projects.groupBy(playVersion).toSeq.sortBy(_._1).reverse
+    }
+
+    val sections = byVersion.map { case (v, p) =>
+      val seeds: Seq[ExampleProject] = p.filter(_.keywords.contains("seed"))
+      val examples: Seq[ExampleProject] = p.filterNot(_.keywords.contains("seed"))
+      v -> PlayExampleSection(seeds, examples)
+    }
+    PlayExamples(sections)
+  }
 }
+
+case class PlayExamples(sections: Seq[(String, PlayExampleSection)])
+
+case class PlayExampleSection(seeds: Seq[ExampleProject],
+                              examples: Seq[ExampleProject])
