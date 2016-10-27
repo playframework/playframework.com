@@ -167,9 +167,24 @@ class Application @Inject() (
       projects.groupBy(playVersion).toSeq.sortBy(_._1).reverse
     }
 
+    def byLanguage(exampleProject: ExampleProject): String = {
+      exampleProject.keywords match {
+        case javaKeywords if javaKeywords.contains("java") =>
+          "java"
+        case scala =>
+          "scala"
+      }
+    }
+
     val sections = byVersion.map { case (v, p) =>
-      val seeds: Seq[ExampleProject] = p.filter(_.keywords.contains("seed"))
-      val examples: Seq[ExampleProject] = p.filterNot(_.keywords.contains("seed"))
+      val seeds = p.filter(_.keywords.contains("seed"))
+        .groupBy(byLanguage)
+        .mapValues(_.sortBy(_.displayName))
+
+      val examples = p.filterNot(_.keywords.contains("seed"))
+        .groupBy(byLanguage)
+        .mapValues(_.sortBy(_.displayName))
+
       v -> PlayExampleSection(seeds, examples)
     }
     PlayExamples(sections)
@@ -178,5 +193,5 @@ class Application @Inject() (
 
 case class PlayExamples(sections: Seq[(String, PlayExampleSection)])
 
-case class PlayExampleSection(seeds: Seq[ExampleProject],
-                              examples: Seq[ExampleProject])
+case class PlayExampleSection(seeds: Map[String, Seq[ExampleProject]],
+                              examples: Map[String, Seq[ExampleProject]])
