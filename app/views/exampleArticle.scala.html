@@ -19,12 +19,21 @@
     @downloads.sections.map { case (version, section) =>
       <tbody>
       <tr><th><h4>Play @version Seeds</h4></th></tr>
-        @section.seeds.map { seedProject =>
-          @renderProject(seedProject)
+        @section.seeds("java").map { (project) =>
+          @renderProject(project)
+        }
+        @section.seeds("scala").map { (project) =>
+          @renderProject(project)
         }
       <tr><th><h4>Play @version Examples</h4></th></tr>
-        @section.examples.map { exampleProject =>
-          @renderProject(exampleProject)
+        <tr><th><h5>Java Projects</h5></th></tr>
+        @section.examples("java").map { (project) =>
+          @renderProject(project)
+        }
+
+        <tr><th><h5>Scala Projects</h5></th></tr>
+        @section.examples("scala").map { (project) =>
+          @renderProject(project)
         }
       </tbody>
     }
