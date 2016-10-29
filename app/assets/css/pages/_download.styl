@@ -139,7 +139,7 @@
         margin: 10px 0 20px
 
 
-    .activator, .starter, .cli, .ui, .example-projects
+    .activator, .starter, .cli, .ui, .example-projects, .seed-projects
         position: relative
         min-height: 300px
         img
@@ -156,6 +156,15 @@
         text-align: center
     .cli, .ui
         margin: 50px auto
+    .seed-projects
+        margin: 0 150px 20px
+        table
+            tbody
+                border-top: 1px dotted #ccc
+                th
+                    padding: 5px 0
+                td
+                    border-bottom: 1px dotted #ccc
     .example-projects
         margin: 0 150px 20px
         table
@@ -175,7 +184,7 @@
             right: -430px
 
     @media only screen and (max-width: 960px)
-        .activator, .cli, .ui, .sbt, .example-projects
+        .activator, .cli, .ui, .sbt, .example-projects, .seed-projects
             width: auto
             min-height: 10px
             margin: 10px

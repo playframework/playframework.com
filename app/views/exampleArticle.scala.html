@@ -18,7 +18,7 @@
   <table>
     @downloads.sections.map { case (version, section) =>
       <tbody>
-      <tr><th><h4>Play @version Seeds</h4></th></tr>
+      <tr><th><h4>Play @version Starter Projects</h4></th></tr>
         @section.seeds("java").map { (project) =>
           @renderProject(project)
         }

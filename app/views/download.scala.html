@@ -61,7 +61,32 @@
         </div>
 
         <article class="starter">
-            <h2>Play starter projects</h2>
+            <h2>Play Giter8 Templates</h2>
+            <h3>The Fast Way To Play</h3>
+        </article>
+
+        <hr />
+
+        <article id="seeds" class="seed-projects">
+            <p>
+                If you have <a href="http://scala-sbt.org">sbt 0.13.13 or higher</a> installed, you can create your own Play project using <code>sbt new</code> using a minimal <a href="http://foundweekends.org/giter8">giter8</a> template (roughly like a maven archetype).  This is a good choice if you already know Play and want to create a new project immediately.
+            </p>
+            <p>
+                Use <code>sbt run</code> and then go to <a href="http://localhost:9000">http://localhost:9000</a> to see the running server.
+            </p>
+            <p>
+                Type <code>g8Scaffold form</code> from sbt to create the scaffold controller, template and tests needed to process a form.
+            </p>
+
+            <h4>Play Java Seed</h4>
+            <pre><code>sbt new playframework/play-java-seed.g8</code></pre>
+
+            <h4>Play Scala Seed</h4>
+            <pre><code>sbt new playframework/play-scala-seed.g8</code></pre>
+        </article>
+
+        <article class="starter">
+            <h2>Play Example Projects</h2>
             <h3>One download to get started</h3>
         </article>
 
@@ -80,11 +105,11 @@
             <h3>Activator from the command line</h3>
             <p><a href="@controllers.documentation.ReverseRouter.latest(None, "Installing")">Add activator your PATH</a> to have the command available in your cli.</p>
             <p>Create a new project from the command line:</p>
-            <pre>activator new</pre>
+            <pre><code>activator new</code></pre>
             <p>Run an existing project from its directory:</p>
-            <pre>activator run</pre>
+            <pre><code>activator run</code></pre>
             <p>Enter the interactive cli (in project directory):</p>
-            <pre>activator</pre>
+            <pre><code>activator</code></pre>
         </article>
         <hr/>
         <article class="ui">
@@ -92,7 +117,7 @@
             <h3>Activator’s UI and tutorials</h3>
             <p>Activator comes with a user interface for learning Play. Launch the ui by double clicking the activator
                 executable or using the following command in your terminal:</p>
-            <pre>activator ui</pre>
+            <pre><code>activator ui</code></pre>
             <p>A webpage will open in your browser, then follow the instructions to choose and open a tutorial.</p>
             <p>Read more about <a href="@controllers.documentation.ReverseRouter.latest(None, "Tutorials")">Activator Tutorials</a> for Play.</p>
         </article>
