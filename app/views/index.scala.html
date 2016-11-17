@@ -13,28 +13,27 @@
     <section id="content">
         <div id="start">
             <h2>Get the latest package</h2>
-                <a href="@routes.Application.download()" class="download">Download @releases.latest.version@for(name <- releases.latest.name){ "@name"}</a>
+                <a href="@routes.Application.download()" class="download">Download <br> @releases.latest.version@for(name <- releases.latest.name){ "@name"}</a>
             <p>
                 or <a href="@routes.Application.download()#older-versions">browse all versions</a>
             </p>
-
         </div>
 
         <div id="docs">
             <h2>Read the Docs</h2>
 
-            <a href="@controllers.documentation.ReverseRouter.index(None)" class="dochome">Documentation for @releases.latest.version</a>
+            <a href="@controllers.documentation.ReverseRouter.index(None)" class="dochome">Documentation <br> @releases.latest.version@for(name <- releases.latest.name){ "@name"}</a>
             <p>
-              or go to <a href="@controllers.documentation.ReverseRouter.latest(None, "JavaHome")">Java</a> or <a href="@controllers.documentation.ReverseRouter.latest(None, "ScalaHome")">Scala</a>
+              or go to <a href="@controllers.documentation.ReverseRouter.latest(None, "JavaHome")">Java docs</a> or <a href="@controllers.documentation.ReverseRouter.latest(None, "ScalaHome")">Scala docs</a>
             </p>
 
         </div>
 
         <div id="tutorials">
             <h2>Play with Tutorials</h2>
-            <a href='@controllers.documentation.ReverseRouter.latest(None, "Tutorials")' class="tutpage">Tutorials for @releases.latest.version</a>
+            <a href='@controllers.documentation.ReverseRouter.latest(None, "Tutorials")' class="tutpage">Tutorials <br> @releases.latest.version@for(name <- releases.latest.name){ "@name"}</a>
             <p>
-                to see example projects and blog posts
+                or <a href="/documentation/latest/Tutorials#Third-Party-Tutorials-and-Templates">community projects and blog posts</a>
             </p>
 
         </div>
