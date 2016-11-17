@@ -17,21 +17,28 @@
             <p>
                 or <a href="@routes.Application.download()#older-versions">browse all versions</a>
             </p>
-            <h2>Get started with</h2>
-                <a href='@controllers.documentation.ReverseRouter.latest(None, "Tutorials")' class="download">Tutorials</a>
+
+        </div>
+
+        <div id="docs">
+            <h2>Read the Docs</h2>
+
+            <a href="@controllers.documentation.ReverseRouter.index(None)" class="dochome">Documentation for @releases.latest.version</a>
             <p>
-                or <a href="@controllers.documentation.ReverseRouter.index(None)">read full documentation</a>
+              or go to <a href="@controllers.documentation.ReverseRouter.latest(None, "JavaHome")">Java</a> or <a href="@controllers.documentation.ReverseRouter.latest(None, "ScalaHome")">Scala</a>
             </p>
+
         </div>
-        <div id="video">
-            <h3>Video introduction to Play Framework</h3>
-            <div class="lang-switch">
-                <span class="play-play"></span>
-                <a href="//www.youtube.com/watch?v=eNCerkVyQdc" data-id="eNCerkVyQdc" class="play-scala">Scala</a>
-                <a href="//www.youtube.com/watch?v=bLrmnjPQsZc" data-id="bLrmnjPQsZc" class="play-java">Java</a>
-            </div>
-            <div id="videoframe"></div>
+
+        <div id="tutorials">
+            <h2>Play with Tutorials</h2>
+            <a href='@controllers.documentation.ReverseRouter.latest(None, "Tutorials")' class="tutpage">Tutorials for @releases.latest.version</a>
+            <p>
+                to see example projects and blog posts
+            </p>
+
         </div>
+
         <article class="hat">
             <h1>Play Framework makes it easy to build web applications with Java & Scala.</h1>
             <p>

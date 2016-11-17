@@ -59,13 +59,14 @@
 
 #start
     float: left
-    width: 230px
+    width: 260px
     h2
         margin: 30px 0 10px
         color: grey-dark
         text: title big uppercase
 
     .download
+        height: 75px
         button: green
 
     .getting-started
@@ -102,68 +103,52 @@
                 color: grey-text - #222
                 text: no-underline
 
-#video
-    position: relative
-    float: right
-    width: 610px
-    height: 343px
-    margin: -40px 0 30px
-    color: #fff
-    background: url(/assets/images/home/video.png)
-    h3
-        text: title big
-        line-height: 50px
-        text-align: center
-    &:after
-        content: " "
-        absolute: top 100% left 0
-        width: inherit
-        height: 16px
-        background: image("home/video-shadow@2x.png") center top no-repeat
-    .lang-switch
-        position: absolute
-        top: 143px
-        left: 160px
-        width: 290px
-        height: 60px
-        z-index: 10
-    &.playing
-        .lang-switch
-            display: none
-        &:hover .lang-switch
-            display: block
-    a
-        display: block
-        position: absolute
-        top: 0
-        width: 170px
-        height: 60px
-        padding: 0 20px
-        text: title uppercase
-        font-size: 22px
-        border-radius: 60px
-        background: rgba(#fff, .3) url(/assets/images/home/video-play.png) 0 0 no-repeat
-        transition: background 300ms linear
-        color: #333
-        line-height: 60px
-        text-align: center
-        &:hover
-            background-color: #fff
-    .play-scala
-        left: 0
-        padding-right: 60px
-        background-position: 120px 0px
-    .play-java
-        padding-left: 60px
-        right: 0
-    &.play-scala .play-scala, &.play-java .play-java
-        background-color: #fff
+#docs
+    float: left
+    margin-left: 50px
+    width: 260px
+    h2
+        margin: 30px 0 10px
+        color: grey-dark
+        text: title big uppercase
 
-#videoframe
-    position: absolute
-    top: 0
-    left: 0
-    z-index: 5
+    .dochome
+        height: 75px
+        button: green
+
+    p
+        margin: 10px 0
+        text: center
+        a
+            color: grey-text
+            text: underline
+            &:hover
+                color: grey-text - #222
+                text: no-underline
+
+#tutorials
+    float: left
+    margin-left: 50px
+    width: 260px
+    h2
+        margin: 30px 0 10px
+        color: grey-dark
+        text: title big uppercase
+
+    .tutpage
+        height: 75px
+        button: green
+
+    p
+        margin: 10px 0
+        text: center
+        a
+            color: grey-text
+            text: underline
+            &:hover
+                color: grey-text - #222
+                text: no-underline
+
 
 #workflow
     absolute: top 0px left 0
