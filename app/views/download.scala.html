@@ -1,204 +1,183 @@
 @(releases: PlayReleases, examples: PlayExamples, activator: ActivatorRelease, platform: Platform.Platform,
-        title: String = "Downloads")(implicit requestHeader : RequestHeader)
+        title: String = "Downloads")(implicit requestHeader: RequestHeader)
 
 @renderRelease(linkClass: String, release: PlayRelease) = {
-    @if(release.secureUrl) {
-        <td width="250">
-            <a href="@release.secureUrl.get" class="@linkClass" data-version="@{release.version}">play-@{release.version}.zip</a>
-        </td>
-        <td width="200">
-            @release.date
-        </td>
-        <td width="100">
-            @release.size.get
-        </td>
-    } else {
-        <td width="250">
-            Play @release.version
-        </td>
-        <td width="200">
-            @release.date
-        </td>
-        <td width="100">
-        </td>
-    }
+@if(release.secureUrl) {
+  <td width="250">
+    <a href="@release.secureUrl.get" class="@linkClass" data-version="@{release.version}">play-@{release.version}.zip</a>
+  </td>
+  <td width="200">
+  @release.date
+  </td>
+  <td width="100">
+  @release.size.get
+  </td>
+} else {
+  <td width="250">
+    Play @release.version
+  </td>
+  <td width="200">
+  @release.date
+  </td>
+  <td width="100">
+  </td>
+}
 }
 
-@main(title, "download"){
+@main(title, "download") {
 
-    <header id="top">
-        <div class="wrapper">
-            <h1>
-                @title
-            </h1>
-        </div>
-    </header>
-    <section  id="content">
-        <div class="downloads">
-            <div class="latest">
-                <h2><a href="@activator.miniSecureUrl" class="cover downloadActivatorLink" data-version="minimal"/>Download Play @releases.latest.version@for(name <- releases.latest.name){ "@name"}</a></h2>
-                <p>including Activator @activator.version</p>
-                <p>1MB - Windows, Mac and Linux - JDK8+</p>
-            </div>
-            <div class="row">
-                <div class="cols">
-                    <h3>Alternative downloads</h3>
-                    <ul>
-                        <li><a href="@activator.secureUrl" class="downloadActivatorLink" data-version="offline">Offline Distribution</a> (@activator.size)</li>
-                        <li><a href="#as-dependency">Play as a dependency</a></li>
-                        <li><a href="#older-versions">Older Play releases</a></li>
-                    </ul>
-                </div>
-                <div class="cols">
-                    <h3>Other links</h3>
-                    <ul>
-                        <li><a href="@controllers.documentation.ReverseRouter.latest(None, "NewApplication")">Get Started</a></li>
-                        <li><a href="@controllers.documentation.ReverseRouter.latest(None, "Tutorials")">Tutorials</a></li>
-                        <li><a href="@routes.Application.changelog()">Change log</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <article class="starter">
-            <h2>Play Giter8 Templates</h2>
-            <h3>The Fast Way To Play</h3>
-        </article>
-
-        <hr />
-
-        <article id="seeds" class="seed-projects">
-            <p>
-                If you have <a href="http://scala-sbt.org">sbt 0.13.13 or higher</a> installed, you can create your own Play project using <code>sbt new</code> using a minimal <a href="http://foundweekends.org/giter8">giter8</a> template (roughly like a maven archetype).  This is a good choice if you already know Play and want to create a new project immediately.
-            </p>
-            <p>
-                Use <code>sbt run</code> and then go to <a href="http://localhost:9000">http://localhost:9000</a> to see the running server.
-            </p>
-            <p>
-                Type <code>g8Scaffold form</code> from sbt to create the scaffold controller, template and tests needed to process a form.
-            </p>
-
-            <h4>Play Java Seed</h4>
-            <pre><code>sbt new playframework/play-java-seed.g8</code></pre>
-
-            <h4>Play Scala Seed</h4>
-            <pre><code>sbt new playframework/play-scala-seed.g8</code></pre>
-        </article>
-
-        <article class="starter">
-            <h2>Play Example Projects</h2>
-            <h3>One download to get started</h3>
-        </article>
-
-        <hr />
-
-        @exampleArticle(examples)
-
-        <hr/>
-        <article class="activator">
-            <h2>Play with Activator</h2>
-            <h3>Install and run Play projects with Activator</h3>
-        </article>
-        <hr/>
-        <article class="cli">
-            <img src="@routes.Assets.versioned("images/download/cli.png")">
-            <h3>Activator from the command line</h3>
-            <p><a href="@controllers.documentation.ReverseRouter.latest(None, "Installing")">Add activator your PATH</a> to have the command available in your cli.</p>
-            <p>Create a new project from the command line:</p>
-            <pre><code>activator new</code></pre>
-            <p>Run an existing project from its directory:</p>
-            <pre><code>activator run</code></pre>
-            <p>Enter the interactive cli (in project directory):</p>
-            <pre><code>activator</code></pre>
-        </article>
-        <hr/>
-        <article class="ui">
-            <img src="@routes.Assets.versioned("images/download/ui.png")">
-            <h3>Activator’s UI and tutorials</h3>
-            <p>Activator comes with a user interface for learning Play. Launch the ui by double clicking the activator
-                executable or using the following command in your terminal:</p>
-            <pre><code>activator ui</code></pre>
-            <p>A webpage will open in your browser, then follow the instructions to choose and open a tutorial.</p>
-            <p>Read more about <a href="@controllers.documentation.ReverseRouter.latest(None, "Tutorials")">Activator Tutorials</a> for Play.</p>
-        </article>
-        <hr/>
-        <article id="alternatives">
-            <h2>Alternative downloads</h2>
-            <section>
-            <p>
-                The Traditional Play Zip provides a <code>play</code> command to create new applications, run tests,
-                and run the application. After 2.3.0 the <code>play</code> command is no longer used. Projects can be
-                created from an existing example project or through Activator, as described above.
-            </p>
-            <p>
-                Check out the Play docs for
-                <a href="@controllers.documentation.ReverseRouter.latest(None, "Installing")">installation instructions</a>.
-            </p>
-
-            @if(releases.development.nonEmpty) {
-                <hr/>
-                <h3>Development versions</h3>
-                <p>
-                    Previews of releases in the pipeline.
-                </p>
-                <p class="changelogLink"><a href="@routes.Application.changelog()">Changelog</a></p>
-                <table>
-                    @for(release <- releases.development) {
-                        <tr>
-                            @renderRelease("downloadDevelopmentLink", release)
-                        </tr>
-                    }
-                </table>
-            }
-
-            <hr/>
-
-            <h3 id="older-versions">Previous releases</h3>
-
-            <p class="changelogLink"><a href="@routes.Application.changelog()">Changelog</a></p>
-
-            <table class="releases">
-            @releases.previous.groupBy(_.version.slice(0,3)).toSeq.sortBy(_._1).reverse.map { group =>
-                <tbody class="version">
-                    <tr><th colspan="3"><h4>@group._1</h4></th></tr>
-                    @group._2.map { release =>
-                        <tr class="release">
-                            @renderRelease("downloadPreviousLink", release)
-                        </tr>
-                    }
-                    <tr><td class="show-all-versions">Show all versions</td></tr>
-                </tbody>
-            }
-            </table>
-        </section>
-        <section>
-            <h3 id="as-dependency">Play as a dependency</h3>
-            <p>You can find instructions on how to create a Play application with sbt in the last section of the <a href="@controllers.documentation.ReverseRouter.latest(None, "NewApplication")">creating a new application</a> page.</p>
-            <hr/>
-            <h3 id="from-source">Build from source</h3>
-            <p>The source code is hosted on Github. You can follow the instructions on the <a href="@controllers.documentation.ReverseRouter.latest(None, "BuildingFromSource")">Building from source</a> page.</p>
-        </section>
-
-        </article>
-
-    </section>
-
-    <div class="get-started" style="display:none">
-        <div class="back"></div>
-        <div class="wrapped typo">
-            <q>Your download will begin shortly...</q>
-            <h3>What's next?</h3>
-            <ul>
-                <li><a href="@controllers.documentation.ReverseRouter.latest(None, "Installing")">Installation</a></li>
-                <li class="bold"><a href="@controllers.documentation.ReverseRouter.latest(None, "NewApplication")">Get started</a></li>
-                <li><a href="@routes.Application.download()">Read the complete documentation</a></li>
-                <li><a href="@routes.Application.getInvolved">Get involved</a></li>
-                <li><a href="//twitter.com/playframework">Follow us on Twitter</a></li>
-                <li><a href="//stackoverflow.com/questions/tagged/playframework">Ask questions on StackOverflow</a></li>
-            </ul>
-        </div>
+  <header id="top">
+    <div class="wrapper">
+      <h1>
+      @title
+      </h1>
     </div>
+  </header>
+  <section id="content">
+
+    <article class="starter">
+      <h2>Play Giter8 Templates</h2>
+      <h3>The Fast Way To Play</h3>
+    </article>
+
+    <hr />
+
+    <article id="seeds" class="seed-projects">
+      <p>
+        If you have <a href="http://scala-sbt.org">sbt 0.13.13 or higher</a>
+        installed, you can create your own Play project using <code>sbt new</code>
+        using a minimal <a href="http://foundweekends.org/giter8">giter8</a>
+        template (roughly like a maven archetype).  This is a good choice if you already know Play and want to create a new project immediately.
+      </p>
+      <p>
+        Use <code>sbt run</code> and then go to <a href="http://localhost:9000">http://localhost:9000</a>
+        to see the running server.
+      </p>
+      <p>
+        Type <code>g8Scaffold form</code>
+        from sbt to create the scaffold controller, template and tests needed to process a form.
+      </p>
+
+      <h4>Play Java Seed</h4>
+      <pre><code>sbt new playframework/play-java-seed.g8</code></pre>
+
+      <h4>Play Scala Seed</h4>
+      <pre><code>sbt new playframework/play-scala-seed.g8</code></pre>
+    </article>
+
+    <article class="starter">
+      <h2>Play Example Projects</h2>
+      <h3>One download to get started</h3>
+    </article>
+
+    <hr />
+
+    @exampleArticle(examples)
+
+    <hr/>
+    <article class="activator">
+      <h2>Play with Activator</h2>
+      <div>
+        <a href="@activator.secureUrl" class="downloadActivatorLink" data-version="offline">
+          Activator @activator.version including Play @releases.latest.version</a> (@activator.size) &mdash;
+        requires JDK 1.8
+      </div>
+    </article>
+    <hr/>
+    <article class="cli">
+      <img src="@routes.Assets.versioned("images/download/cli.png")">
+      <h3>Activator from the command line</h3>
+      <p><a href="@controllers.documentation.ReverseRouter.latest(None, "Installing")">Add activator to your PATH</a>
+        to have the command available in your CLI.</p>
+      <p>Create a new project from the command line:</p>
+      <pre><code>activator new</code></pre>
+      <p>Run an existing project from its directory:</p>
+      <pre><code>activator run</code></pre>
+      <p>Enter the interactive cli (in project directory):</p>
+      <pre><code>activator</code></pre>
+    </article>
+    <hr/>
+    <article class="ui">
+      <img src="@routes.Assets.versioned("images/download/ui.png")">
+      <h3>Activator’s UI and tutorials</h3>
+      <p>Activator comes with a user interface for learning Play. Launch the UI by double clicking the activator
+        executable or using the following command in your terminal:</p>
+      <pre><code>activator ui</code></pre>
+      <p>A webpage will open in your browser, then follow the instructions to choose and open a tutorial.</p>
+      <p>Read more about <a href="@controllers.documentation.ReverseRouter.latest(None, "Tutorials")">
+        Activator Tutorials</a> for Play.</p>
+    </article>
+    <hr/>
+    <article id="alternatives">
+      <h2>Alternative downloads</h2>
+
+      <p>
+        The Traditional Play Zip provides a <code>play</code> command to create new applications, run tests,
+        and run the application. After 2.3.0 the <code>play</code> command is no longer used. Projects can be
+        created from an existing example project or through Activator, as described above.
+      </p>
+      <p>
+        Check out the Play docs for
+        <a href="@controllers.documentation.ReverseRouter.latest(None, "Installing")">installation instructions</a>.
+      </p>
+
+      @if(releases.development.nonEmpty) {
+        <hr/>
+        <h3>Development versions</h3>
+        <p>
+          Previews of releases in the pipeline.
+        </p>
+        <p class="changelogLink"><a href="@routes.Application.changelog()">Changelog</a></p>
+        <table>
+        @for(release <- releases.development) {
+          <tr>
+          @renderRelease("downloadDevelopmentLink", release)
+          </tr>
+        }
+        </table>
+      }
+
+      <hr/>
+
+      <h3 id="older-versions">Previous releases</h3>
+
+      <p class="changelogLink"><a href="@routes.Application.changelog()">Changelog</a></p>
+
+      <table class="releases">
+      @releases.previous.groupBy(_.version.slice(0, 3)).toSeq.sortBy(_._1).reverse.map { group =>
+        <tbody class="version">
+          <tr><th colspan="3"><h4>@group._1</h4></th></tr>
+          @group._2.map { release =>
+            <tr class="release">
+              @renderRelease("downloadPreviousLink", release)
+            </tr>
+          }
+          <tr><td class="show-all-versions">Show all versions</td></tr>
+        </tbody>
+      }
+      </table>
+
+    </article>
+
+  </section>
+
+  <div class="get-started" style="display: none">
+    <div class="back"></div>
+    <div class="wrapped typo">
+      <q>Your download will begin shortly...</q>
+      <h3>What's next?</h3>
+      <ul>
+        <li><a href="@controllers.documentation.ReverseRouter.latest(None, "Installing")">Installation</a></li>
+        <li class="bold"><a href="@controllers.documentation.ReverseRouter.latest(None, "NewApplication")">
+          Get started</a></li>
+        <li><a href="@routes.Application.download()">Read the complete documentation</a></li>
+        <li><a href="@routes.Application.getInvolved">Get involved</a></li>
+        <li><a href="//twitter.com/playframework">Follow us on Twitter</a></li>
+        <li><a href="//stackoverflow.com/questions/tagged/playframework">Ask questions on StackOverflow</a></li>
+      </ul>
+    </div>
+  </div>
 
     <!-- Downloads are targeted at this iframe -->
-    <iframe name="download-iframe" style="display:none" src="data:,">
+  <iframe name="download-iframe" style="display: none" src="data:," />
 }
