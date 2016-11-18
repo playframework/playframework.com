@@ -1,3 +1,28 @@
+## Play 2.5.10 "Streamy"
+
+*Released 17 Nov 2016*
+
+* [6748](https://github.com/playframework/playframework/pull/6748): Update dependencies
+* [6741](https://github.com/playframework/playframework/pull/6741): Update tutorials page
+* [6726](https://github.com/playframework/playframework/pull/6726): uses the new trusty image for travis
+* [6731](https://github.com/playframework/playframework/pull/6731): Fix Multipart form data parts with optional quotes
+* [6730](https://github.com/playframework/playframework/pull/6730): Change deprecated 'application.secret' from docs
+* [6711](https://github.com/playframework/playframework/pull/6631): Add bindings for Java i18n classes
+* [6720](https://github.com/playframework/playframework/pull/6720): Fix documentation error (usage of noop setContentType)
+* [6698](https://github.com/playframework/playframework/pull/6698): Parse IPv4-mapped IPv6 addresses in forward headers
+* [6682](https://github.com/playframework/playframework/pull/6682): fixes the NettyIdleClientTimeoutSpec by removing the regex on the exception message
+* [6684](https://github.com/playframework/playframework/pull/6684): Add Timeout trait to play.api.libs.concurrent (#6459)
+* [6697](https://github.com/playframework/playframework/pull/6697): Add Play Pagelets
+* [6693](https://github.com/playframework/playframework/pull/6693): documentation: clarify how the child actor get its name
+* [6678](https://github.com/playframework/playframework/pull/6678): Use trampoline EC in Action#asJava
+* [6673](https://github.com/playframework/playframework/pull/6673): Use the Akka ExecutionContext to execute actions
+* [6669](https://github.com/playframework/playframework/pull/6669): Summarize the JSON package and provide relevant links
+* [6619](https://github.com/playframework/playframework/pull/6619): Remove play-java dependency from filters-helpers
+* [6668](https://github.com/playframework/playframework/pull/6668): Fix reference to default mappings in sbt-native-packager docs (#6664)
+* [6637](https://github.com/playframework/playframework/pull/6637):  De-emphasize activator in docs and refer to sample templates
+* [6650](https://github.com/playframework/playframework/pull/6650): More clarifications to docs to explain how Play's DI system works
+* [6614](https://github.com/playframework/playframework/pull/6614): Do not suppress throwables on DefaultHttpErrorHandler initialization
+
 ## Play 2.5.9 "Streamy"
 
 *Released 8 Oct 2016*
