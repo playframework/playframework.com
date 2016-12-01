@@ -57,64 +57,20 @@
             text: title bold
             font-size: 1.2em
 
-#start
-    float: left
-    width: 260px
+#actions
+    text-align: center
+    &>div
+        display: inline-block
+        width: 260px
+        margin: 20px 10px
     h2
         text-align: center
-        margin: 30px 0 10px
-        color: grey-dark
-        text: title big uppercase
-
-    .download
-        height: 75px
-        button: green
-
-    .getting-started
-        position: relative
-        clear: after
-        a
-            float: left
-            width: 50%
-            button: green
-            border-left: 1px solid green + #111
-            border-right: 1px solid green - #111
-            &:first-child
-                border-radius: 5px 0 0 5px
-                border-left: none
-            &:last-child
-                border-radius: 0 5px 5px 0
-                border-right: none
-        &:before
-            content: "&"
-            absolute: top 50% left 50%
-            circle: 20px
-            margin: -12px 0 0 -10px
-            background: green - #444
-            box-shadow: inset 0 1px 5px rgba(#000, .3), 0 1px 0 rgba(#fff, .5)
-            color: white
-
-    p
         margin: 10px 0
-        text: center
-        a
-            color: grey-text
-            text: underline
-            &:hover
-                color: grey-text - #222
-                text: no-underline
-
-#docs
-    float: left
-    margin-left: 50px
-    width: 260px
-    h2
-        text-align: center
-        margin: 30px 0 10px
         color: grey-dark
+        padding-top: 10px
         text: title big uppercase
 
-    .dochome
+    .button
         height: 75px
         button: green
 
@@ -127,31 +83,6 @@
             &:hover
                 color: grey-text - #222
                 text: no-underline
-
-#tutorials
-    float: left
-    margin-left: 50px
-    width: 260px
-    h2
-        text-align: center
-        margin: 30px 0 10px
-        color: grey-dark
-        text: title big uppercase
-
-    .tutpage
-        height: 75px
-        button: green
-
-    p
-        margin: 10px 0
-        text: center
-        a
-            color: grey-text
-            text: underline
-            &:hover
-                color: grey-text - #222
-                text: no-underline
-
 
 #workflow
     absolute: top 0px left 0
@@ -314,14 +245,15 @@
                 height: auto
                 margin: 0
                 padding-left: 0
+                text-align: center
                 background: none
 
         #content
             margin: 0
 
-        #video, #start
-            float: none
-            margin: 20px auto
+        #actions>div
+            margin-top: 0
+            margin-bottom: 0
         article.feature
             padding: 0 !important
             height: auto !important
@@ -334,5 +266,5 @@
             width: auto
 
 @media only screen and (max-width: 700px)
-    #video, #start
+    #actions
         display: none

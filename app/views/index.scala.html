@@ -11,30 +11,32 @@
         </div>
     </header>
     <section id="content">
-        <div id="start">
-            <h2>Get the latest package</h2>
-                <a href="@routes.Application.download()" class="download">Download <br> @releases.latest.version@for(name <- releases.latest.name){ "@name"}</a>
-            <p>
-                or <a href="@routes.Application.download()#older-versions">browse all versions</a>
-            </p>
-        </div>
+        <div id="actions">
+            <div id="start">
+                <h2>Get the latest package</h2>
+                    <a href="@routes.Application.download()" class="button">Download <br> @releases.latest.version@for(name <- releases.latest.name){ "@name"}</a>
+                <p>
+                    or <a href="@routes.Application.download()#older-versions">browse all versions</a>
+                </p>
+            </div>
 
-        <div id="docs">
-            <h2>Read the Docs</h2>
+            <div id="docs">
+                <h2>Read the Docs</h2>
 
-            <a href="@controllers.documentation.ReverseRouter.index(None)" class="dochome">Documentation <br> @releases.latest.version@for(name <- releases.latest.name){ "@name"}</a>
-            <p>
-              or go to <a href="@controllers.documentation.ReverseRouter.latest(None, "JavaHome")">Java docs</a> or <a href="@controllers.documentation.ReverseRouter.latest(None, "ScalaHome")">Scala docs</a>
-            </p>
+                <a href="@controllers.documentation.ReverseRouter.index(None)" class="button">Documentation <br> @releases.latest.version@for(name <- releases.latest.name){ "@name"}</a>
+                <p>
+                  or go to <a href="@controllers.documentation.ReverseRouter.latest(None, "JavaHome")">Java docs</a> or <a href="@controllers.documentation.ReverseRouter.latest(None, "ScalaHome")">Scala docs</a>
+                </p>
 
-        </div>
+            </div>
 
-        <div id="tutorials">
-            <h2>Play with Tutorials</h2>
-            <a href='@controllers.documentation.ReverseRouter.latest(None, "Tutorials")' class="tutpage">Tutorials <br> @releases.latest.version@for(name <- releases.latest.name){ "@name"}</a>
-            <p>
-                or <a href="/documentation/latest/Tutorials#Third-Party-Tutorials-and-Templates">blog posts</a> or <a href="@controllers.documentation.ReverseRouter.latest(None, "ModuleDirectory")">modules</a>
-            </p>
+            <div id="tutorials">
+                <h2>Play with Tutorials</h2>
+                <a href='@controllers.documentation.ReverseRouter.latest(None, "Tutorials")' class="button">Tutorials<br> @releases.latest.version@for(name <- releases.latest.name){ "@name"}</a>
+                <p>
+                    or <a href="/documentation/latest/Tutorials#Third-Party-Tutorials-and-Templates">blog posts</a> or <a href="@controllers.documentation.ReverseRouter.latest(None, "ModuleDirectory")">modules</a>
+                </p>
+            </div>
         </div>
 
         <article class="hat">
