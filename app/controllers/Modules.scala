@@ -46,7 +46,7 @@ class Modules @Inject() (
   def dependencies(name: String, version: String) = Action { implicit request =>
     modulesLookup.findDependencies(name, version) match {
       case Some(yml) => Ok(yml)
-      case None => Ok("self: play -> " + name + " " + version)
+      case None => PageNotFound
     }
   }
 
