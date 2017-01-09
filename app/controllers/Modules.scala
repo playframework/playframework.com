@@ -6,10 +6,13 @@ import play.api.libs.json._
 import services.modules._
 import models.modules._
 
+import scala.concurrent.ExecutionContext
+
 @Singleton
 class Modules @Inject() (
   modulesLookup: ModulesLookup,
-  moduleDao: ModuleDao) extends Controller {
+  moduleDao: ModuleDao,
+  components: ControllerComponents)(implicit ec: ExecutionContext) extends AbstractController(components) {
 
   def index(keyword: String) = Action { implicit request =>
     render {

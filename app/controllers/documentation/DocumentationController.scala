@@ -12,11 +12,9 @@ import org.joda.time.format.DateTimeFormat
 import play.api.http.HttpEntity
 import play.api.i18n.{MessagesApi, Lang}
 import play.api.mvc._
-import scala.concurrent.Future
+import scala.concurrent.{ ExecutionContext, Future }
 import scala.concurrent.duration._
 
-import play.api.libs.MimeTypes
-import play.api.libs.concurrent.Execution.Implicits.defaultContext
 
 import scala.reflect.ClassTag
 
@@ -25,9 +23,9 @@ class DocumentationController @Inject()(
   messages: MessagesApi,
   documentationRedirects: DocumentationRedirects,
   @Named("documentation-actor") documentationActor: ActorRef,
-  releases: PlayReleases) extends Controller {
-
-  import DocumentationController._
+  releases: PlayReleases,
+  components: ControllerComponents,
+  reverseRouter: ReverseRouter)(implicit executionContext: ExecutionContext) extends AbstractController(components) {
 
   private implicit val timeout = Timeout(5.seconds)
 
@@ -114,7 +112,7 @@ class DocumentationController @Inject()(
   //
 
   def v1Home(lang: Option[Lang], version: String) = Action {
-    Redirect(ReverseRouter.page(lang, version, "home"))
+    Redirect(reverseRouter.page(lang, version, "home"))
   }
 
   def v1Page(lang: Option[Lang], v: String, page: String) = VersionAction(v) { (actor, version) => implicit req =>
@@ -156,7 +154,7 @@ class DocumentationController @Inject()(
   //
 
   def home(lang: Option[Lang], version: String) = Action {
-    Redirect(ReverseRouter.page(lang, version, "Home"))
+    Redirect(reverseRouter.page(lang, version))
   }
 
   def page(lang: Option[Lang], v: String, page: String) = VersionAction(v) { (actor, version) => implicit req =>
@@ -192,14 +190,14 @@ class DocumentationController @Inject()(
 
   // -- API
   def v1Api(lang: Option[Lang], version: String) = Action {
-    Redirect(ReverseRouter.api(version, "index.html"))
+    Redirect(reverseRouter.api(version, "index.html"))
   }
 
   def api(lang: Option[Lang], v: String, path: String) =
     ResourceAction(v, path, (version, etag) => LoadApi(version, etag, path))
 
   def apiRedirect(lang: Option[Lang], version: String, path: String) =
-    Action(MovedPermanently(ReverseRouter.api(version, path)))
+    Action(MovedPermanently(reverseRouter.api(version, path)))
 
   // -- Latest
 
@@ -229,7 +227,7 @@ class DocumentationController @Inject()(
           }
       }
       version.map { v =>
-        val url = ReverseRouter.home(selectedLang, v.name)
+        val url = reverseRouter.home(selectedLang, v.name)
         Redirect(s"$url/$path").withHeaders(VARY -> ACCEPT_LANGUAGE)
       }.getOrElse(pageNotFound(summary.translationContext, path, Nil))
     }
@@ -259,7 +257,7 @@ class DocumentationController @Inject()(
           } else {
             Seq(CONTENT_DISPOSITION -> s"""attachment; filename="$fileName"""")
           }
-          val entity = HttpEntity.Streamed(source, Some(size), Some(MimeTypes.forFileName(fileName).getOrElse(BINARY)))
+          val entity = HttpEntity.Streamed(source, Some(size), Some(fileMimeTypes.forFileName(fileName).getOrElse(BINARY)))
           cacheable(Ok.sendEntity(entity).withHeaders(contentDisposition: _*), cacheId)
       }
     }
@@ -284,9 +282,9 @@ class DocumentationController @Inject()(
       VersionAction(v) { (actor, version) => implicit req =>
         actorRequest(actor, page, msg(lang, version, etag(req), page)) {
           case PageExists(true, cacheId) =>
-            cacheable(TemporaryRedirect(ReverseRouter.page(lang, version.name, page)), cacheId)
+            cacheable(TemporaryRedirect(reverseRouter.page(lang, version.name, page)), cacheId)
           case PageExists(false, cacheId) =>
-            cacheable(TemporaryRedirect(ReverseRouter.page(lang, version.name, home)), cacheId)
+            cacheable(TemporaryRedirect(reverseRouter.page(lang, version.name, home)), cacheId)
         }
       }
   }
@@ -294,7 +292,7 @@ class DocumentationController @Inject()(
   def withLangHeaders(result: Result, page: String, context: TranslationContext)(implicit req: RequestHeader) = {
     val linkHeader = context.alternatives.filterNot(_.lang == context.lang).collect {
       case AlternateTranslation(l, isDefault, Some(v)) =>
-        val url = Call("GET", ReverseRouter.page(Some(l).filterNot(_ => isDefault), v.name, page)).absoluteURL()
+        val url = Call("GET", reverseRouter.page(Some(l).filterNot(_ => isDefault), v.name, page)).absoluteURL()
         s"""<$url>; rel="alternate"; hreflang="${l.code}""""
     }.mkString(", ")
     if (linkHeader.nonEmpty) {

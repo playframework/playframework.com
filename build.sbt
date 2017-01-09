@@ -8,7 +8,7 @@ version := "1.0-SNAPSHOT"
 lazy val root = (project in file(".")).enablePlugins(PlayScala, NewRelic)
 
 libraryDependencies ++= Seq(
-  "com.typesafe.play" %% "play-doc" % "1.5.0",
+  "com.typesafe.play" %% "play-doc" % "1.7.0",
   "org.eclipse.jgit" % "org.eclipse.jgit" % "3.0.0.201306101825-r",
   "mysql" % "mysql-connector-java" % "5.1.18", // TODO: 5.1.34
   "com.damnhandy" % "handy-uri-templates" % "2.0.2",
@@ -16,7 +16,8 @@ libraryDependencies ++= Seq(
   "org.webjars" % "html5shiv" % "3.7.2",
   "org.webjars" % "prettify" % "4-Mar-2013",
   "org.webjars" % "clipboard.js" % "1.5.5",
-  "com.typesafe.play" %% "anorm" % "2.4.0",
+  "com.typesafe.play" %% "anorm" % "2.6.0-SNAPSHOT",
+  guice,
   jdbc,
   cache,
   evolutions,
@@ -25,7 +26,7 @@ libraryDependencies ++= Seq(
   specs2 % "test"
 )
 
-scalaVersion := "2.11.11"
+scalaVersion := "2.12.4"
 
 routesGenerator := InjectedRoutesGenerator
 

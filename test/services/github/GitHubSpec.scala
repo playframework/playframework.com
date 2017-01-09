@@ -1,5 +1,8 @@
 package services.github
 
+import org.specs2.mutable.Specification
+import play.api.http.{DefaultFileMimeTypesProvider, FileMimeTypesConfiguration}
+
 import play.api.mvc.Results._
 import play.api.mvc.Action
 import play.api.test.{ WsTestClient, PlaySpecification }
@@ -9,6 +12,8 @@ import play.api.routing.sird.{ GET => Get, _ }
 import scala.concurrent.ExecutionContext.Implicits.global
 
 object GitHubSpec extends PlaySpecification {
+
+  implicit val fileMimeTypes = new DefaultFileMimeTypesProvider(FileMimeTypesConfiguration(Map("json" -> "application/json"))).get
 
   "The GitHub service" should {
     "allow getting an organisation" in withGitHub { gh =>
