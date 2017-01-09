@@ -74,7 +74,6 @@ class Router @Inject() (
   }
 }
 
-@deprecated("Inject an instance of ReverseRouter instead", "2.6.0")
 object ReverseRouter extends ReverseRouter(new Provider[Router] {
   def get = play.api.Play.current.injector.instanceOf[Router]
 })

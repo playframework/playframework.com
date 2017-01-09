@@ -1,9 +1,9 @@
 package utils
 
-import play.doc.{FileHandle, FileRepository}
+import play.doc.FileHandle
 import java.io.{InputStream, File}
 import org.eclipse.jgit.api.Git
-import scala.collection.JavaConversions._
+import scala.collection.JavaConverters._
 import org.eclipse.jgit.revwalk.RevWalk
 import org.eclipse.jgit.treewalk.TreeWalk
 import org.eclipse.jgit.treewalk.filter.{PathSuffixFilter, TreeFilter, PathFilter}
@@ -19,11 +19,11 @@ class PlayGitRepository(val gitDir: File, val remote: String = "origin", basePat
     new GitFileRepository(this, hash, basePath)
   }
 
-  def close() = repository.close()
-  def allTags: Seq[(String, ObjectId)] = git.tagList().call().map(tag =>
+  def close(): Unit = repository.close()
+  def allTags: Seq[(String, ObjectId)] = git.tagList().call().asScala.map(tag =>
     tag.getName.stripPrefix("refs/tags/") -> tag.getLeaf.getObjectId
   )
-  def allBranches: Seq[(String, ObjectId)] = git.branchList().setListMode(ListMode.REMOTE).call().collect {
+  def allBranches: Seq[(String, ObjectId)] = git.branchList().setListMode(ListMode.REMOTE).call().asScala.collect {
     case origin if origin.getName.startsWith("refs/remotes/" + remote + "/") =>
       origin.getName.stripPrefix("refs/remotes/" + remote + "/") -> origin.getLeaf.getObjectId
   }
@@ -69,23 +69,23 @@ class PlayGitRepository(val gitDir: File, val remote: String = "origin", basePat
 
   // A tree filter that finds files with the given name under the given base path
   private class FileWithNameFilter(basePath: String, name: String) extends TreeFilter {
-    val pathRaw = Constants.encode(basePath)
+    private val pathRaw = Constants.encode(basePath)
 
     // Due to this bug: https://bugs.eclipse.org/bugs/show_bug.cgi?id=411999
     // we have to supply a byte array that has one dummy byte at the front of it.
     // As soon as that bug is fixed, this code will break, just remove the #.
-    val nameRaw = Constants.encode("#/" + name)
+    private val nameRaw = Constants.encode("#/" + name)
 
     def shouldBeRecursive() = false
 
-    def include(walker: TreeWalk) = {
+    def include(walker: TreeWalk): Boolean = {
       // The way include works is if it's a subtree (directory), then we return true if we want to descend into it,
       // and if it's not, then we return true if the file is the one we want.
       walker.isPathPrefix(pathRaw, pathRaw.length) == 0 &&
         (walker.isSubtree || walker.isPathSuffix(nameRaw, nameRaw.length))
     }
 
-    override def clone() = this
+    override def clone(): FileWithNameFilter = this
   }
 
   def findFileWithName(hash: ObjectId, basePath: Option[String], name: String): Option[String] = {

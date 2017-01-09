@@ -55,19 +55,16 @@ class PlayExampleProjectsService @Inject()(
   ws: WSClient,
   cache: CacheApi
 )(implicit ec: ExecutionContext) {
-  import scala.collection.JavaConverters._
 
-  val validPlayVersions: Seq[String] = configuration.getStringList("examples.playVersions").get.asScala
+  val validPlayVersions: Seq[String] = configuration.get[Seq[String]]("examples.playVersions")
 
   private val logger = org.slf4j.LoggerFactory.getLogger(this.getClass)
 
-  private val examplesUrl =
-    configuration.getString("examples.apiUrl").get
+  private val examplesUrl = configuration.get[String]("examples.apiUrl")
 
   // NOTE: TTL is really just a safety measure here.
   // We should re-deploy when we make major changes to projects
-  private val examplesCacheTtl =
-    configuration.getMilliseconds("examples.cache.ttl").get.milliseconds
+  private val examplesCacheTtl = configuration.getMillis("examples.cache.ttl").milliseconds
 
   private def playQueryString(version: String): Seq[(String, String)] = {
     Seq("keyword" -> "play", "keyword" -> version)

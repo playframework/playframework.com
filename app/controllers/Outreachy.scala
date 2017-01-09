@@ -1,11 +1,13 @@
 package controllers
 
-import play.api.mvc._
+import javax.inject.Inject
+
+import play.api.mvc.{ AbstractController, ControllerComponents }
 
 /**
  * The outreachy controller
  */
-class Outreachy extends Controller {
+class Outreachy @Inject() (components: ControllerComponents) extends AbstractController(components) {
 
   def outreachy = Action(Redirect(routes.Outreachy.round15()))
 

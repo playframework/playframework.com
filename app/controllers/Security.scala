@@ -1,15 +1,16 @@
 package controllers
 
-import javax.inject.{ Inject, Singleton }
-import play.api.mvc.{Action, Controller}
-import play.api.{Environment, Play}
+import javax.inject.{Inject, Singleton}
+
+import play.api.mvc.{AbstractController, Action, Controller, ControllerComponents}
+import play.api.Environment
 import play.twirl.api.Html
 import utils.Markdown
 import org.apache.commons.io.IOUtils
 import java.io.File
 
 @Singleton
-class Security @Inject() (environment: Environment) extends Controller with Common {
+class Security @Inject() (environment: Environment, components: ControllerComponents) extends AbstractController(components) with Common {
 
   def vulnerability(name: String) = Action { implicit req =>
     val path = "public/markdown/vulnerabilities/" + name

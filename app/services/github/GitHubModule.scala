@@ -3,8 +3,6 @@ package services.github
 import play.api.{Logger, Configuration, Environment}
 import play.api.inject.Module
 
-import scala.concurrent.ExecutionContext
-
 class GitHubModule extends Module {
 
   def bindings(environment: Environment, configuration: Configuration) = {
@@ -13,7 +11,7 @@ class GitHubModule extends Module {
     val organisation = configuration.underlying.getString("github.organisation")
     val gitHubApiUrl = configuration.underlying.getString("github.apiUrl")
 
-    configuration.getString("github.access.token") match {
+    configuration.getOptional[String]("github.access.token") match {
       case Some(accessToken) =>
         Seq(
           bind[GitHubConfig].to(GitHubConfig(accessToken, gitHubApiUrl, organisation, committerTeams)),

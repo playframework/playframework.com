@@ -3,7 +3,7 @@ package controllers
 import play.api.mvc._
 
 trait Common {
-  self: Controller =>
+  self: BaseController =>
 
   def notFound(implicit request: RequestHeader) = NotFound(views.html.notfound())
 }
