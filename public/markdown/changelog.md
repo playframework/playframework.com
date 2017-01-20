@@ -1,3 +1,26 @@
+## Play 2.5.11 "Streamy"
+
+*Released 20 Jan 2017*
+
+* [6901](https://github.com/playframework/playframework/pull/6901): Upgrade Apache httpclient dependency
+* [6839](https://github.com/playframework/playframework/pull/6839): parses the path and the query string from our uri
+* [6883](https://github.com/playframework/playframework/pull/6883): Preserve headers, cookies, flash and session when gzipping
+* [6897](https://github.com/playframework/playframework/pull/6897): Fix cookie max-age computation
+* [6861](https://github.com/playframework/playframework/pull/6861): Add explicit binding for JPAEntityManagerContext
+* [6860](https://github.com/playframework/playframework/pull/6860): use Json.mapper().getFactory() instead of creating a new JsonFactory StatusHeader.sendJson
+* [6842](https://github.com/playframework/playframework/pull/6842): Fix mima issues in 2.5.x
+* [6840](https://github.com/playframework/playframework/pull/6840): Fix compilation error on configError
+* [6824](https://github.com/playframework/playframework/pull/6824): Handle null ConfigOrigins in Configuration.configError
+* [6800](https://github.com/playframework/playframework/pull/6800): Create ValidatorFactory just once
+* [6799](https://github.com/playframework/playframework/pull/6799): Added dependency on play.db.DBApi to play.db.jpa.DefaultJPAApi.JPAApiProvider
+* [6780](https://github.com/playframework/playframework/pull/6780): Use correct classloader when loading logger configurator class (#6779)
+* [6655](https://github.com/playframework/playframework/pull/6655): Fix path to activator in document
+* [6665](https://github.com/playframework/playframework/pull/6665): Update ModuleDirectory.md
+* [6768](https://github.com/playframework/playframework/pull/6768): Update to Akka 2.4.14, materializer is not public API and changed a bit (#6767)
+* [6762](https://github.com/playframework/playframework/pull/6762): Rename 'method' to 'field' in java akka docs (#6751)
+* [6714](https://github.com/playframework/playframework/pull/6714): Update Tutorials.md
+
+
 ## Play 2.5.10 "Streamy"
 
 *Released 17 Nov 2016*
