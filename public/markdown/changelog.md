@@ -262,6 +262,21 @@
 [Migration Guide](https://playframework.com/documentation/2.5.x/Migration25)
 [Full changelog](https://github.com/playframework/playframework/issues?q=milestone%3A2.5.0)
 
+## Play 2.4.9 "Damiya"
+
+*Released 20 Jan 2017*
+
+* [6902](https://github.com/playframework/playframework/pull/6902): Upgrade Apache HTTP client
+* [6213](https://github.com/playframework/playframework/pull/6213): Fix generated to original source position mapping in case of runtime error while running in dev mode
+* [6824](https://github.com/playframework/playframework/pull/6824): Handle null ConfigOrigins in Configuration.configError
+* [6595](https://github.com/playframework/playframework/pull/6595): 2.4.x Backport to fix issue #6272
+* [6498](https://github.com/playframework/playframework/pull/6498): upgrade specs2 to 3.6.6
+* [6480](https://github.com/playframework/playframework/pull/6480): Fix thread leak caused by idle-timeout support
+* [6457](https://github.com/playframework/playframework/pull/6457): Add more clarification to router docs
+* [6406](https://github.com/playframework/playframework/pull/6406): Clarify how encoding of parameters works in generated routes
+* [6365](https://github.com/playframework/playframework/pull/6365): Append fragment (use Call.path instead of Call.url) when redirecting (#6363)
+* [6269](https://github.com/playframework/playframework/pull/6269): fix typo
+
 ## Play 2.4.8 "Damiya"
 
 *Released 22 June 2016*
