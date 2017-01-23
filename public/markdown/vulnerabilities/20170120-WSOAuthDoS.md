@@ -14,7 +14,7 @@ If a WS request uses OAuth and is over an HTTPS connection and if the server doe
 
 ## Impact
 
-Signpost OAuth itself is not multi-threaded, so the call itself is a blocking operation. Given the right parameters, this could lead to a denial of service attack to the remote service, as all the WS request handling threads are exhausted.  
+Signpost OAuth itself is not multi-threaded, so the call itself is a blocking operation. Given the right parameters, this could lead to a denial of service attack to the remote service, as all the WS request handling threads are exhausted.
 
 This vulnerability is filed as CVE-2015-5262.
 
@@ -32,7 +32,7 @@ libraryDependencies += "org.apache.httpcomponents" % "httpclient" % "4.5.2"
 
 ## Fixes
 
-Upgrade to Play 2.5.11 or 2.4.9, or upgrade the library if you are on previous versions of Play.
+Upgrade to Play 2.5.12 or 2.4.10, or upgrade the library if you are on previous versions of Play.
 
 ## Acknowledgements
 

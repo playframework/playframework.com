@@ -1,3 +1,10 @@
+
+## Play 2.5.12 "Streamy"
+
+*Released 22 Jan 2017*
+
+* [6904](https://github.com/playframework/playframework/pull/6904): added httpcore dependency
+
 ## Play 2.5.11 "Streamy"
 
 *Released 20 Jan 2017*
@@ -261,6 +268,12 @@
 [Highlights](https://playframework.com/documentation/2.5.x/Highlights25)
 [Migration Guide](https://playframework.com/documentation/2.5.x/Migration25)
 [Full changelog](https://github.com/playframework/playframework/issues?q=milestone%3A2.5.0)
+
+## Play 2.4.9 "Damiya"
+
+*Released 22 Jan 2017*
+
+* [6904](https://github.com/playframework/playframework/pull/6904): added httpcore dependency
 
 ## Play 2.4.9 "Damiya"
 
