@@ -8,6 +8,12 @@
     ],
     "previous": [
         {
+            "version": "1.4.4",
+            "url": "http://downloads.typesafe.com/play/1.4.4/play-1.4.4.zip",
+            "date": "Jan 24 2017",
+            "size": "73.1M"
+        },
+        {
             "name": "Streamy",
             "version": "2.5.12",
             "date": "Jan 22 2017"
@@ -92,12 +98,12 @@
             "version": "2.5.0",
             "date": "Mar 4 2016"
          },
-		 {
+         {
             "version": "1.4.3",
             "url": "http://downloads.typesafe.com/play/1.4.3/play-1.4.3.zip",
             "date": "Aug 16 2016",
             "size": "72.3M"
-        },
+         },
          {
             "version": "1.4.2",
             "url": "http://downloads.typesafe.com/play/1.4.2/play-1.4.2.zip",
