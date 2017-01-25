@@ -38,22 +38,20 @@ class PlayExampleProjectsService @Inject()(configuration: Configuration,
 
   private val logger = org.slf4j.LoggerFactory.getLogger(this.getClass)
 
-  val templatesUrl = configuration.getString("examples.apiUrl").get
+  private val templatesUrl = configuration.getString("examples.apiUrl").get
 
   val validPlayVersions: Set[String] = configuration.getStringList("examples.playVersions").get.asScala.toSet
 
-  // remove this once filtering works in example service...
-  def playProject(p: ExampleProject): Boolean = {
-    p.keywords.contains("play") &&
-      (p.keywords.toSet & validPlayVersions).nonEmpty
+  def playQueryString: Seq[(String, String)] = {
+    Seq("keyword" -> "play") ++ validPlayVersions.map("keyword" -> _)
   }
 
   def examples(): Future[Seq[ExampleProject]] = {
-    ws.url(templatesUrl).withQueryString("keyword" -> "play").get().map { r =>
+    ws.url(templatesUrl).withQueryString(playQueryString: _*).get().map { r =>
       val json: JsValue = r.json
       Json.fromJson[Seq[ExampleProject]](json) match {
         case JsSuccess(allProjects, _) =>
-          val playProjects = allProjects.filter(playProject)
+          val playProjects = allProjects
           cache.set("example.projects", playProjects)
           playProjects
         case JsError(errors: Seq[(JsPath, Seq[ValidationError])]) =>
