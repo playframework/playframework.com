@@ -1,0 +1,35 @@
+@(downloads: PlayExamples)
+
+@renderProject(project: ExampleProject) = {
+<tr>
+  <td><strong><a href="@project.downloadUrl" target="_blank">@project.displayName</a></strong></td>
+  <td><a href="@project.downloadUrl" target="_blank">Download (zip)</a></td>
+  <td><a href="@project.gitHubUrl" target="_blank">View on GitHub</a></td>
+</tr>
+}
+
+<article class="starter">
+  <h2>Play Starter Projects</h2>
+  <h3>New to Play?  See the starter projects.</h3>
+</article>
+
+<article id="starter" class="example-projects">
+  <p>
+    If you've never used Play before, download a starter project.
+    The starter projects have lots of comments explaining how everything works and have links to documentation that goes more in depth.
+  </p>
+
+  <table>
+    @downloads.sections.map { case (version, section) =>
+      <tbody>
+      <tr><th><h4>Play @version Starter Projects</h4></th></tr>
+        @section.seeds("java").map { (project) =>
+          @renderProject(project)
+        }
+        @section.seeds("scala").map { (project) =>
+          @renderProject(project)
+        }
+      </tbody>
+    }
+  </table>
+</article>

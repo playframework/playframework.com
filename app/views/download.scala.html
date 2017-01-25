@@ -36,54 +36,56 @@
   <section id="content">
 
     <article class="starter">
-      <h2>Play Giter8 Templates</h2>
-      <h3>The Fast Way To Play</h3>
+      <h2>Downloads</h2>
+      
+      <p>
+        To get started on a project:
+      </p>
+
+      <table style="vertical-align: center">
+        <tbody>
+        <tr>
+          <td>&bullet; <span style="font-weight: bold"><a href="#starters">Download a starter project (for newbies)</a></span></td>
+        </tr>
+        <tr>
+          <td>&bullet; <span style="font-weight: bold"><a href="#seeds">Create a project with a seed template (for experts)</a></span></td>
+        </tr>
+        <tr>
+          <td>&bullet; <span style="font-weight: bold"><a href="#examples">Play with demos and examples (for everyone)</a></span></td>
+        </tr>
+        </tbody>        
+      </table>
+
+      <p>
+        The following download options are also available:
+      </p>
+
+      <table style="vertical-align: center">
+        <tbody>
+        <tr>
+          <td>&bullet; <a href="#activator">Play with Activator</a></td>
+        </tr>
+        <tr>
+          <td>&bullet; <a href="#older-versions">Alternative Downloads</a></td>
+        </tr>        
+        </tbody>        
+      </table>
+     
     </article>
+    
+    @starterDownload(examples)
 
     <hr />
 
-    <article id="seeds" class="seed-projects">
-      <p>
-        If you have <a href="http://scala-sbt.org">sbt 0.13.13 or higher</a>
-        installed, you can create your own Play project using <code>sbt new</code>
-        using a minimal <a href="http://foundweekends.org/giter8">giter8</a>
-        template (roughly like a maven archetype).  
-      </p>
-
-      <p>
-        This is a good choice if you already know Play and want to create a new project immediately.  Also
-        seeds are already configured with CSRF and security headers filters, whereas the example projects only
-        showcase the functionality.
-      </p>
-
-      <p>
-        Use <code>sbt run</code> and then go to <a href="http://localhost:9000">http://localhost:9000</a>
-        to see the running server.
-      </p>
-      <p>
-        Type <code>g8Scaffold form</code>
-        from sbt to create the scaffold controller, template and tests needed to process a form.
-      </p>
-
-      <h4>Play Java Seed</h4>
-      <pre><code>sbt new playframework/play-java-seed.g8</code></pre>
-
-      <h4>Play Scala Seed</h4>
-      <pre><code>sbt new playframework/play-scala-seed.g8</code></pre>
-    </article>
-
-    <article class="starter">
-      <h2>Play Example Projects</h2>
-      <h3>One download to get started</h3>
-    </article>
+    @seedDownload()
 
     <hr />
 
-    @exampleArticle(examples)
+    @exampleDownload(examples)
 
     <hr/>
     <article class="activator">
-      <h2>Play with Activator</h2>
+      <h2 id="activator">Play with Activator</h2>
       <div>
         <a href="@activator.secureUrl" class="downloadActivatorLink" data-version="offline">
           Activator @activator.version including Play @releases.latest.version</a> (@activator.size) &mdash;
