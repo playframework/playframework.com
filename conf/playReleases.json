@@ -8,12 +8,6 @@
     ],
     "previous": [
         {
-            "version": "1.4.4",
-            "url": "http://downloads.typesafe.com/play/1.4.4/play-1.4.4.zip",
-            "date": "Jan 24 2017",
-            "size": "73.1M"
-        },
-        {
             "name": "Streamy",
             "version": "2.5.12",
             "date": "Jan 22 2017"
@@ -42,69 +36,75 @@
             "name": "Streamy",
             "version": "2.5.7",
             "date": "Sep 12 2016"
-         },
-         {
+        },
+        {
             "name": "Streamy",
             "version": "2.5.6",
             "date": "Aug 23 2016"
-         },
-         {
+        },
+        {
             "name": "Streamy",
             "version": "2.5.5",
             "date": "Aug 18 2016"
-         },
-         {
+        },
+        {
             "name": "Damiya",
             "version": "2.4.10",
             "date": "Jan 22 2017"
-         },
-         {
+        },
+        {
             "name": "Damiya",
             "version": "2.4.9",
             "date": "Jan 20 2017"
-         },
-         {
+        },
+        {
             "name": "Damiya",
             "version": "2.4.8",
             "date": "Jun 22 2016"
-         },
-         {
+        },
+        {
             "name": "Damiya",
             "version": "2.4.7",
             "date": "Jun 20 2016"
-         },
-         {
+        },
+        {
             "name": "Streamy",
             "version": "2.5.4",
             "date": "Jun 9 2016"
-         },
-         {
+        },
+        {
             "name": "Streamy",
             "version": "2.5.3",
             "date": "Apr 27 2016"
-         },
-         {
+        },
+        {
             "name": "Streamy",
             "version": "2.5.2",
             "date": "Apr 14 2016"
-         },
-         {
+        },
+        {
             "name": "Streamy",
             "version": "2.5.1",
             "date": "Mar 29 2016"
-         },
-         {
+        },
+        {
             "name": "Streamy",
             "version": "2.5.0",
             "date": "Mar 4 2016"
-         },
-         {
+        },
+        {
+            "version": "1.4.4",
+            "url": "http://downloads.typesafe.com/play/1.4.4/play-1.4.4.zip",
+            "date": "Jan 24 2017",
+            "size": "73.1M"
+        },
+        {
             "version": "1.4.3",
             "url": "http://downloads.typesafe.com/play/1.4.3/play-1.4.3.zip",
             "date": "Aug 16 2016",
             "size": "72.3M"
-         },
-         {
+        },
+        {
             "version": "1.4.2",
             "url": "http://downloads.typesafe.com/play/1.4.2/play-1.4.2.zip",
             "date": "Mar 16 2016",
