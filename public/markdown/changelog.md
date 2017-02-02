@@ -269,7 +269,7 @@
 [Migration Guide](https://playframework.com/documentation/2.5.x/Migration25)
 [Full changelog](https://github.com/playframework/playframework/issues?q=milestone%3A2.5.0)
 
-## Play 2.4.9 "Damiya"
+## Play 2.4.10 "Damiya"
 
 *Released 22 Jan 2017*
 
