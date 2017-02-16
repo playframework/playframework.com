@@ -5,6 +5,10 @@
         "date": "Jan 22 2017"
     },
     "development": [
+        {
+            "version": "2.6.0-M1",
+            "date": "Feb 15 2017"
+        }
     ],
     "previous": [
         {
