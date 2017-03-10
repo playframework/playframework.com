@@ -1,3 +1,21 @@
+## Play 2.5.13 "Streamy"
+
+*Released 10 Mar 2017*
+
+* [#7040](https://github.com/playframework/playframework/pull/7040): Add @helper.repeatWithIndex(...) helper
+* [#7033](https://github.com/playframework/playframework/pull/7033): Fix XHTML mime type
+* [#7013](https://github.com/playframework/playframework/pull/7013): Add note to Migration25 about Lucidchart blog
+* [#6966](https://github.com/playframework/playframework/pull/6966): Fix documentation code NPE
+* [#6954](https://github.com/playframework/playframework/pull/6954): Update Typesafe Config to 1.3.1
+* [#6934](https://github.com/playframework/playframework/pull/6934): Update docs with more information about sbt new
+* [#6948](https://github.com/playframework/playframework/pull/6948): Remove images that related to activator
+* [#6944](https://github.com/playframework/playframework/pull/6944): Add Scalate as a library for Play support  documentation
+* [#6933](https://github.com/playframework/playframework/pull/6933): Add immutable header to aggressiveCacheControl
+* [#6925](https://github.com/playframework/playframework/pull/6925): Upgrade sbt-native-packager to latest stable version
+* [#6874](https://github.com/playframework/playframework/pull/6874): Update Deploying.md
+* [#6908](https://github.com/playframework/playframework/pull/6908): Remove unnecessary println call
+* [#6906](https://github.com/playframework/playframework/pull/6906): added play-guard (Scala) to module directory
+* [#6850](https://github.com/playframework/playframework/pull/6850): Reference to play-redis module in Module directory in the documentation
 
 ## Play 2.5.12 "Streamy"
 
@@ -268,6 +286,14 @@
 [Highlights](https://playframework.com/documentation/2.5.x/Highlights25)
 [Migration Guide](https://playframework.com/documentation/2.5.x/Migration25)
 [Full changelog](https://github.com/playframework/playframework/issues?q=milestone%3A2.5.0)
+
+## Play 2.4.11 "Damiya"
+
+*Released 10 Mar 2017*
+
+[#7004](https://github.com/playframework/playframework/pull/7004): 204/304 response should also trigger onDoneEnumerating for the body
+[#7039](https://github.com/playframework/playframework/pull/7039): Fix build test
+[#7048](https://github.com/playframework/playframework/pull/7048): Fix dependency conflicts
 
 ## Play 2.4.10 "Damiya"
 
