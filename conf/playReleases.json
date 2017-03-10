@@ -6,11 +6,20 @@
     },
     "development": [
         {
+            "version": "2.6.0-M2",
+            "date": "Mar 10 2017"
+        },
+        {
             "version": "2.6.0-M1",
             "date": "Feb 15 2017"
         }
     ],
     "previous": [
+        {
+            "name": "Streamy",
+            "version": "2.5.13",
+            "date": "Mar 10 2017"
+        },
         {
             "name": "Streamy",
             "version": "2.5.12",
@@ -50,6 +59,11 @@
             "name": "Streamy",
             "version": "2.5.5",
             "date": "Aug 18 2016"
+        },
+        {
+            "name": "Damiya",
+            "version": "2.4.11",
+            "date": "Mar 10 2017"
         },
         {
             "name": "Damiya",
