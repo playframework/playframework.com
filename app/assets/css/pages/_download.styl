@@ -17,6 +17,9 @@
 .download
     @extend .split-page
 
+    #alternatives
+        margin: 0 10px
+
     #content h1
         height: 80px
         line-height: 80px
@@ -138,7 +141,8 @@
         font-size: 0.9em
         margin: 10px 0 20px
 
-
+    .cli, .ui
+        margin: 50px auto
     .activator, .starter, .cli, .ui, .starter-projects, .example-projects, .seed-projects
         position: relative
         img
@@ -154,8 +158,6 @@
         min-height: 10px
         width: 530px
         text-align: center
-    .cli, .ui
-        margin: 50px auto
     .starter-projects
         margin: 0 150px 20px
         table
@@ -193,7 +195,7 @@
             right: -430px
 
     @media only screen and (max-width: 960px)
-        .activator, .cli, .ui, .sbt, .example-projects, .seed-projects
+        .activator, .cli, .ui, .sbt, .example-projects, .seed-projects, .starter-projects
             width: auto
             min-height: 10px
             margin: 10px
