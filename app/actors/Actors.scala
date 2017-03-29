@@ -16,8 +16,6 @@ class ActorsModule extends AbstractModule with AkkaGuiceSupport {
     bindActor[DocumentationActor]("documentation-actor")
     bindActorFactory[DocumentationPollingActor, DocumentationPollingActor.Factory]
     bind(classOf[DocumentationConfig]).toProvider(classOf[DocumentationConfigProvider])
-
-    bindActor[ActivatorReleaseActor]("activator-release-actor")
   }
 }
 

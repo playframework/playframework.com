@@ -1,4 +1,4 @@
-@(releases: PlayReleases, examples: PlayExamples, activator: ActivatorRelease, platform: Platform.Platform,
+@(releases: PlayReleases, examples: PlayExamples, platform: Platform.Platform,
         title: String = "Downloads")(implicit requestHeader: RequestHeader)
 
 @renderRelease(linkClass: String, release: PlayRelease) = {
@@ -51,9 +51,6 @@
         </tr>
 
         <tr>
-          <td>&bullet; <span style="font-weight: bold"><a href="#activator">Play with Activator</a></span></td>
-        </tr>
-        <tr>
           <td>&bullet; <span style="font-weight: bold"><a href="#alternatives">Alternative Downloads</a></span></td>
         </tr>
         </tbody>
@@ -72,17 +69,13 @@
     @exampleDownload(examples)
 
     <hr/>
-
-    @activatorDownload(activator, releases.latest)
-
-    <hr/>
     <article id="alternatives">
       <h2>Alternative downloads</h2>
 
       <p>
         The Traditional Play Zip provides a <code>play</code> command to create new applications, run tests,
         and run the application. After 2.3.0 the <code>play</code> command is no longer used. Projects can be
-        created from an existing example project or through Activator, as described above.
+        created from an example project or template, as described above.
       </p>
       <p>
         Check out the Play docs for

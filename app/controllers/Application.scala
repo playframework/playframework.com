@@ -1,7 +1,6 @@
 package controllers
 
 import javax.inject.{Named, Inject, Singleton}
-import actors.ActivatorReleaseActor
 import akka.actor.ActorRef
 import akka.pattern.ask
 import akka.util.Timeout
@@ -24,7 +23,6 @@ class Application @Inject() (
   configuration: Configuration,
   val messagesApi: MessagesApi,
   certificationDao: CertificationDao,
-  @Named("activator-release-actor") activatorReleaseActor: ActorRef,
   releases: PlayReleases,
   exampleProjectsService: PlayExampleProjectsService
 )(implicit ec: ExecutionContext) extends Controller with Common with I18nSupport {
@@ -62,25 +60,18 @@ class Application @Inject() (
   def download(platform: Option[String] = None) = Action.async { implicit request =>
     val selectedPlatform = Platform(platform.orElse(request.headers.get("User-Agent")))
 
-    latestActivator.flatMap { activator =>
-      exampleProjectsService.cached() match {
-        case Some(cached) =>
-          val examples = toExamples(cached)
-          Future.successful {
-            Ok(html.download(releases, examples, activator, selectedPlatform))
-          }
-        case None =>
-          exampleProjectsService.examples().map { live =>
-            val examples = toExamples(live)
-            Ok(html.download(releases, examples, activator, selectedPlatform))
-          }
-      }
+    exampleProjectsService.cached() match {
+      case Some(cached) =>
+        val examples = toExamples(cached)
+        Future.successful {
+          Ok(html.download(releases, examples, selectedPlatform))
+        }
+      case None =>
+        exampleProjectsService.examples().map { live =>
+          val examples = toExamples(live)
+          Ok(html.download(releases, examples, selectedPlatform))
+        }
     }
-  }
-
-  private def latestActivator: Future[ActivatorRelease] = {
-    implicit val timeout: Timeout = 2.seconds
-    (activatorReleaseActor ? ActivatorReleaseActor.GetVersion).mapTo[ActivatorRelease]
   }
 
   def changelog = markdownAction("public/markdown/changelog.md", { implicit request =>
