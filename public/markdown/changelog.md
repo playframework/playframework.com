@@ -1,3 +1,16 @@
+## Play 2.5.14 "Streamy"
+
+*Released 6 Apr 2017*
+
+* [7200](https://github.com/playframework/playframework/pull/7200): Upgrade akka and akka-http
+* [7182](https://github.com/playframework/playframework/pull/7182): Upgrade logback dependency to fix 5 secs delays in unittests
+* [7129](https://github.com/playframework/playframework/pull/7129): Small fix to wording in SBTDependencies.md
+* [7126](https://github.com/playframework/playframework/pull/7126): Fix statement about empty List when using validate()
+* [7080](https://github.com/playframework/playframework/pull/7080): Make play.Environment injectable
+* [7077](https://github.com/playframework/playframework/pull/7077): Typo fixed from CRSF.getToken to CSRF.getToken
+* [7057](https://github.com/playframework/playframework/pull/7057): WebSocket endpoints returning 400 for HEAD requests
+* [7029](https://github.com/playframework/playframework/pull/7029): Fix empty query string parse
+
 ## Play 2.5.13 "Streamy"
 
 *Released 10 Mar 2017*
@@ -875,17 +888,17 @@ A complete list of what was fixed for 2.2.2 can be found on [Github](https://git
 
 
 * [#1007](https://github.com/playframework/play1/pull/1007) Calculate template rendering time, so it can be logged/profiled
-* [#983](https://github.com/playframework/play1/issues/983) feat(DependenciesManager): sync option should be ON by default. 
+* [#983](https://github.com/playframework/play1/issues/983) feat(DependenciesManager): sync option should be ON by default.
 * [#2072](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2072) add method Binder.unregister()
 * [#2071](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2071) Precompile additional templates
 * [#1007](https://github.com/playframework/play1/issues/1007) Calculate template rendering time, so it can be logged/profiled
 * [#1005](https://github.com/playframework/play1/issues/1005) feat(fixture): add id/type in log when loading a fixture file throw exception
-* [#1009](https://github.com/playframework/play1/pull/1009) fix(templates): not log error and exception when compiling a template with a non GroovyInlineTag 
+* [#1009](https://github.com/playframework/play1/pull/1009) fix(templates): not log error and exception when compiling a template with a non GroovyInlineTag
 * [#1014](https://github.com/playframework/play1/pull/1014) chore(travis): fix buffer overflow exception
-* fix h2.jar binary 
-* [#995](https://github.com/playframework/play1/pull/995) use hamcrest-all 1.3 instead of hamcrest-core 1.3 
-* [#1011](https://github.com/playframework/play1/pull/1011) upgrade to cglib 3.2.4 
-* [#1008](https://github.com/playframework/play1/pull/1008) fix(ConfigurationChangeWatcherPlugin): initialized configLastModified on application start 
+* fix h2.jar binary
+* [#995](https://github.com/playframework/play1/pull/995) use hamcrest-all 1.3 instead of hamcrest-core 1.3
+* [#1011](https://github.com/playframework/play1/pull/1011) upgrade to cglib 3.2.4
+* [#1008](https://github.com/playframework/play1/pull/1008) fix(ConfigurationChangeWatcherPlugin): initialized configLastModified on application start
 * [#2066](https://play.lighthouseapp.com/projects/57987/tickets/2066) fix open file on 500 error pages for modules
 * [#998](https://github.com/playframework/play1/pull/998) fix(router): allow to have space when defining static args in routes
 * [#1025](https://github.com/playframework/play1/pull/1025) fix(DB): Detect changed for JNDI datasource which using jndi: prefix
@@ -911,7 +924,7 @@ A complete list of what was fixed for 2.2.2 can be found on [Github](https://git
 * [#998](https://github.com/playframework/play1/issues/998) fix open file on 500 error pages for modules
 * [#2066](https://play.lighthouseapp.com/projects/57987-play-framework/tickets/2066) fix open file on 500 error pages for modules
 * [#1005](https://github.com/playframework/play1/issues/1005) add id/type in log when loading a fixture file throw exception
-* [#998](https://github.com/playframework/play1/issues/998) Routes 'Assign static args' only work for first argument 
+* [#998](https://github.com/playframework/play1/issues/998) Routes 'Assign static args' only work for first argument
 * [#985](https://github.com/playframework/play1/issues/985) Play should NOT clear cache after every code change
 
 
