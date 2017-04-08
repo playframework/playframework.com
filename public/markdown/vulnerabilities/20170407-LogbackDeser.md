@@ -10,7 +10,7 @@ A deserialization vulnerability has been [found](https://logback.qos.ch/news.htm
 
 Play includes integration with Logback through SLF4J.  Logback has functionality that enables logging events to be sent over a network, using Java Serialization.
 
-Using Logback in Play itself does not result in vulnerability as per the [default Play configuration](https://www.playframework.com/documentation/2.5.x/SettingsLogger), but if Logback has been specifically configuration to use SocketAppender or ServerSocketReceiver, then Play is vulnerable.
+Using Logback in Play itself does not result in vulnerability as per the [default Play configuration](https://www.playframework.com/documentation/2.5.x/SettingsLogger), but if Logback has been specifically configured to use SocketAppender or ServerSocketReceiver, then Play is vulnerable.
 
 ## Impact
 
