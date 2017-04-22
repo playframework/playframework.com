@@ -27,22 +27,24 @@
 
   <pre><code>./sbt run</code></pre>
 
-  <p>  
+  <p>
     If you type <code>./sbt</code> by itself, then you can run it in <a href="http://www.scala-sbt.org/1.0/docs/Howto-Interactive-Mode.html">interactive mode</a> -- see <a href="https://www.playframework.com/documentation/latest/PlayConsole">Using the Play Console</a> for more detail of how to run Play and the <a href="http://www.scala-sbt.org/1.0/docs">sbt documentation</a> for more about SBT.
-  </p>  
+  </p>
 
   <p>
     Please see the <a href="https://playframework.com/documentation/latest/Home">documentation</a>, chat with the <a href="https://playframework.com/get-involved">community</a>, and check out the <a href="https://playframework.com/documentation/latest/Tutorials">tutorials</a> for more examples and blog posts!
-  </p>  
+  </p>
 
   <table>
     @downloads.sections.map { case (version, section) =>
+      <thead>
+        <tr><th><h4>Play @version Starter Projects</h4></th></tr>
+      </thead>
       <tbody>
-      <tr><th><h4>Play @version Starter Projects</h4></th></tr>
-        @section.seeds("java").map { (project) =>
+        @section.seeds.getOrElse("java", Seq.empty).map { (project) =>
           @renderProject(project)
         }
-        @section.seeds("scala").map { (project) =>
+        @section.seeds.getOrElse("scala", Seq.empty).map { (project) =>
           @renderProject(project)
         }
       </tbody>
