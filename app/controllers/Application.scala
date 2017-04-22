@@ -168,15 +168,16 @@ class Application @Inject() (
     }
 
     val sections = byVersion.map { case (v, p) =>
-      val seeds = p.filter(_.keywords.contains("seed"))
+      val StarterKeyword = "starter" // this MUST be in the project keywords for this to work
+      val starters = p.filter(_.keywords.contains(StarterKeyword))
         .groupBy(byLanguage)
         .mapValues(_.sortBy(_.displayName))
 
-      val examples = p.filterNot(_.keywords.contains("seed"))
+      val examples = p.filterNot(_.keywords.contains(StarterKeyword))
         .groupBy(byLanguage)
         .mapValues(_.sortBy(_.displayName))
 
-      v -> PlayExampleSection(seeds, examples)
+      v -> PlayExampleSection(starters, examples)
     }
     PlayExamples(sections)
   }
@@ -184,5 +185,5 @@ class Application @Inject() (
 
 case class PlayExamples(sections: Seq[(String, PlayExampleSection)])
 
-case class PlayExampleSection(seeds: Map[String, Seq[ExampleProject]],
+case class PlayExampleSection(starters: Map[String, Seq[ExampleProject]],
                               examples: Map[String, Seq[ExampleProject]])
