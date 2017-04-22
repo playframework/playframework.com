@@ -30,15 +30,15 @@
 
   <table>
     @downloads.sections.map { case (version, section) =>
-      <tbody>      
+      <tbody>
       <tr><th><h4>Play @version Examples</h4></th></tr>
         <tr><th><h5>Java Projects</h5></th></tr>
-        @section.examples("java").map { (project) =>
+        @section.examples.getOrElse("java", Seq.empty).map { (project) =>
           @renderProject(project)
         }
 
         <tr><th><h5>Scala Projects</h5></th></tr>
-        @section.examples("scala").map { (project) =>
+        @section.examples.getOrElse("scala", Seq.empty).map { (project) =>
           @renderProject(project)
         }
       </tbody>
