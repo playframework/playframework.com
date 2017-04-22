@@ -41,10 +41,10 @@
         <tr><th><h4>Play @version Starter Projects</h4></th></tr>
       </thead>
       <tbody>
-        @section.seeds.getOrElse("java", Seq.empty).map { (project) =>
+        @section.starters.getOrElse("java", Seq.empty).map { (project) =>
           @renderProject(project)
         }
-        @section.seeds.getOrElse("scala", Seq.empty).map { (project) =>
+        @section.starters.getOrElse("scala", Seq.empty).map { (project) =>
           @renderProject(project)
         }
       </tbody>
