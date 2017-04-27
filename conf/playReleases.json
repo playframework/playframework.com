@@ -6,6 +6,10 @@
     },
     "development": [
         {
+            "version": "2.6.0-M5",
+            "date": "Apr 26 2017"
+        },
+        {
             "version": "2.6.0-M4",
             "date": "Apr 7 2017"
         },
