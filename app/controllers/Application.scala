@@ -1,21 +1,19 @@
 package controllers
 
-import javax.inject.{Named, Inject, Singleton}
-import akka.actor.ActorRef
-import akka.pattern.ask
-import akka.util.Timeout
+import javax.inject.{Inject, Singleton}
+
+import models._
 import models.certification.Certification
+import org.apache.commons.io.IOUtils
 import play.api._
 import play.api.i18n.{I18nSupport, Lang, MessagesApi}
 import play.api.mvc._
-import services.certification.CertificationDao
-import views._
 import play.twirl.api.Html
+import services.certification.CertificationDao
 import utils.Markdown
-import org.apache.commons.io.IOUtils
-import models._
+import views._
+
 import scala.concurrent.{ExecutionContext, Future}
-import scala.concurrent.duration._
 
 @Singleton
 class Application @Inject() (
@@ -173,11 +171,15 @@ class Application @Inject() (
         .groupBy(byLanguage)
         .mapValues(_.sortBy(_.displayName))
 
-      val examples = p.filterNot(_.keywords.contains(StarterKeyword))
+      val examples = p.filter(p => !p.keywords.contains(StarterKeyword) && !p.hasParams)
         .groupBy(byLanguage)
         .mapValues(_.sortBy(_.displayName))
 
-      v -> PlayExampleSection(starters, examples)
+      val templates = p.filter(_.hasParams)
+        .groupBy(byLanguage)
+        .mapValues(_.sortBy(_.displayName))
+
+      v -> PlayExampleSection(starters, templates, examples)
     }
     PlayExamples(sections)
   }
@@ -186,4 +188,5 @@ class Application @Inject() (
 case class PlayExamples(sections: Seq[(String, PlayExampleSection)])
 
 case class PlayExampleSection(starters: Map[String, Seq[ExampleProject]],
+                              templates: Map[String, Seq[ExampleProject]],
                               examples: Map[String, Seq[ExampleProject]])

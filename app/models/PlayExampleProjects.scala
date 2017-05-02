@@ -12,29 +12,47 @@ import play.api.libs.ws.WSClient
 import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 
+case class TemplateParameter(
+  query: String,
+  displayName: String,
+  required: Boolean,
+  pattern: Option[String],
+  format: Option[String]
+)
+
+object TemplateParameter {
+  implicit val format: Format[TemplateParameter] = Json.format
+}
+
 case class ExampleProject(
   displayName: String,
   downloadUrl: String,
-   gitHubRepo: String,
-    gitHubUrl: String,
-     keywords: Seq[String],
- templateName: String
-)
+  gitHubRepo: String,
+  gitHubUrl: String,
+  keywords: Seq[String],
+  templateName: String,
+  parameters: Option[Seq[TemplateParameter]]
+) {
+  def hasParams: Boolean = parameters.nonEmpty
+  def params: Seq[TemplateParameter] = parameters.toSeq.flatten
+}
 
 object ExampleProject {
-  implicit val format = Json.format[ExampleProject]
+  implicit val format: Format[ExampleProject] = Json.format
 }
 
 class ExamplesModule extends AbstractModule {
   override def configure() = {
-    bind(classOf[PlayExampleProjectsService]).in(classOf[Singleton])
+    bind(classOf[PlayExampleProjectsService]).asEagerSingleton()
   }
 }
 
 @Singleton
-class PlayExampleProjectsService @Inject()(configuration: Configuration,
-                                           ws: WSClient,
-                                           cache: CacheApi)(implicit ec: ExecutionContext) {
+class PlayExampleProjectsService @Inject()(
+  configuration: Configuration,
+  ws: WSClient,
+  cache: CacheApi
+)(implicit ec: ExecutionContext) {
   import scala.collection.JavaConverters._
 
   private val logger = org.slf4j.LoggerFactory.getLogger(this.getClass)
