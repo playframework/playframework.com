@@ -13,9 +13,11 @@ import scala.concurrent.duration._
 import scala.concurrent.{ExecutionContext, Future}
 
 case class TemplateParameter(
+  `type`: String,
   query: String,
   displayName: String,
   required: Boolean,
+  defaultValue: Option[String],
   pattern: Option[String],
   format: Option[String]
 )
