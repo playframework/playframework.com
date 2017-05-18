@@ -1,3 +1,20 @@
+## Play 2.5.15 "Streamy"
+
+*Released 18 May 2017*
+
+* [7358](https://github.com/playframework/playframework/pull/7358): Unlock Akka 2.5 upgrade
+* [7345](https://github.com/playframework/playframework/pull/7345): Make sure context.withRequest maintains original session and flash
+* [7321](https://github.com/playframework/playframework/pull/7321): Line 85, changed "It" to "In"
+* [7305](https://github.com/playframework/playframework/pull/7305): Typo  "You should se your changes.." =>  "You should see your changes.."
+* [7272](https://github.com/playframework/playframework/pull/7272): Remove references to `play` command
+* [7247](https://github.com/playframework/playframework/pull/7247): Backport "Remove FileInputStream/FileOutputStream"
+* [7245](https://github.com/playframework/playframework/pull/7245): Replace DB.getConnection with db.getConnection
+* [7241](https://github.com/playframework/playframework/pull/7241): Make it possible to disable the reverse router (#7189)
+* [7123](https://github.com/playframework/playframework/pull/7123): Resolve issue #6041
+* [7239](https://github.com/playframework/playframework/pull/7239): added play-webpack plugin informations
+* [7237](https://github.com/playframework/playframework/pull/7237): link to sbt-native-packager 1.1.5 docs (#7217) (#7227)
+* [7219](https://github.com/playframework/playframework/pull/7219): Include changes to Http.Context in Result from RoutingDsl (#7214)
+
 ## Play 2.5.14 "Streamy"
 
 *Released 6 Apr 2017*
