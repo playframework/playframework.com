@@ -44,7 +44,7 @@ object ExampleProject {
 }
 
 class ExamplesModule extends AbstractModule {
-  override def configure() = {
+  override def configure(): Unit = {
     bind(classOf[PlayExampleProjectsService]).asEagerSingleton()
   }
 }
@@ -64,7 +64,8 @@ class PlayExampleProjectsService @Inject()(
 
   // NOTE: TTL is really just a safety measure here.
   // We should re-deploy when we make major changes to projects
-  private val examplesCacheTtl = configuration.getMillis("examples.cache.ttl").milliseconds
+  private val examplesCacheTtl =
+  configuration.getMillis("examples.cache.ttl").milliseconds
 
   private def playQueryString(version: String): Seq[(String, String)] = {
     Seq("keyword" -> "play", "keyword" -> version)
