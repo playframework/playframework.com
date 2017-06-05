@@ -1,4 +1,5 @@
-@(form: Form[models.certification.CertificationForm])(implicit req: RequestHeader, messages: Messages)
+@import controllers.documentation.ReverseRouter
+@(form: Form[models.certification.CertificationForm])(implicit req: RequestHeader, messages: Messages, reverseRouter: ReverseRouter)
 
 @main("Certification", "certification"){
     <header id="top">

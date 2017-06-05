@@ -9,7 +9,7 @@ import scala.concurrent.ExecutionContext
 
 class Code @Inject() (
   contributorsSummariser: ContributorsSummariser,
-  components: ControllerComponents)(implicit executionContext: ExecutionContext) extends AbstractController(components) {
+  components: ControllerComponents)(implicit executionContext: ExecutionContext, reverseRouter: documentation.ReverseRouter) extends AbstractController(components) {
 
   def index = Action.async { implicit req =>
     contributorsSummariser.fetchContributors.map { contributors =>

@@ -1,4 +1,5 @@
- @(title: String, scope: String = "home")(content: Html)(implicit requestHeader : RequestHeader)
+@import controllers.documentation.ReverseRouter
+@(title: String, scope: String = "home")(content: Html)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -54,7 +55,7 @@
                 <a href="/" id="logo">Lightbend</a>
                 <nav id="sections">
                     <a href="@routes.Application.gettingStarted()">Try Play</a>
-                    <a href="@controllers.documentation.ReverseRouter.index(None)">Documentation</a>
+                    <a href="@reverseRouter.index(None)">Documentation</a>
                     <a href="@routes.Application.support()">Support</a>
                     <a href="@routes.Application.getInvolved()">Get Involved</a>
                     <a href="//blog.playframework.com/">Blog</a>
@@ -139,8 +140,8 @@
                     <h3>Play Framework</h3>
                     <ul>
                         <li><a href="@routes.Application.download()">Try Play</a></li>
-                        <li><a href="@controllers.documentation.ReverseRouter.latest(None, "Tutorials")">Tutorials</a></li>
-                        <li><a href="@controllers.documentation.ReverseRouter.index(None)">Documentation</a></li>
+                        <li><a href="@reverseRouter.latest(None, "Tutorials")">Tutorials</a></li>
+                        <li><a href="@reverseRouter.index(None)">Documentation</a></li>
                     </ul>
                 </div>
                 <div>

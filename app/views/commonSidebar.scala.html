@@ -1,10 +1,11 @@
-@(hn: String = "h3")
+@import controllers.documentation.ReverseRouter
+@(hn: String = "h3")(implicit reverseRouter: ReverseRouter)
 
 <@hn>Documentation</@hn>
 <ul>
-    <li><a href="@controllers.documentation.ReverseRouter.latest(None, "Requirements")">Play Requirements</a></li>
-    <li><a href="@controllers.documentation.ReverseRouter.latest(None, "NewApplication")">Build your first app</a></li>
-    <li><a href="@controllers.documentation.ReverseRouter.index(None)">Full documentation</a></li>
+    <li><a href="@reverseRouter.latest(None, "Requirements")">Play Requirements</a></li>
+    <li><a href="@reverseRouter.latest(None, "NewApplication")">Build your first app</a></li>
+    <li><a href="@reverseRouter.index(None)">Full documentation</a></li>
     <li><a href="@routes.Application.changelog()">Change log</a></li>
     <li><a href="@routes.Security.index()">Security advisories</a></li>
 </ul>

@@ -7,7 +7,7 @@ import play.api.mvc.{ AbstractController, ControllerComponents }
 /**
  * The outreachy controller
  */
-class Outreachy @Inject() (components: ControllerComponents) extends AbstractController(components) {
+class Outreachy @Inject() (components: ControllerComponents)(implicit reverseRouter: documentation.ReverseRouter) extends AbstractController(components) {
 
   def outreachy = Action(Redirect(routes.Outreachy.round15()))
 

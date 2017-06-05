@@ -74,10 +74,6 @@ class Router @Inject() (
   }
 }
 
-object ReverseRouter extends ReverseRouter(new Provider[Router] {
-  def get = play.api.Play.current.injector.instanceOf[Router]
-})
-
 @Singleton
 class ReverseRouter @Inject() (routerProvider: Provider[Router]) {
   private def router: Router = routerProvider.get

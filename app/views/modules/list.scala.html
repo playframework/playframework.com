@@ -1,6 +1,6 @@
 @import models.modules._
-
-@(modules: Seq[Module])(implicit requestHeader : RequestHeader)
+@import controllers.documentation.ReverseRouter
+@(modules: Seq[Module])(implicit req: RequestHeader, reverseRouter: ReverseRouter)
 
 @layout {
             

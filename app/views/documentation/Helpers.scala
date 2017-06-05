@@ -1,5 +1,6 @@
 package views.html.documentation
 
+import controllers.documentation.ReverseRouter
 import models.documentation.{Milestone, ReleaseCandidate, TranslationContext, Version}
 import play.api.i18n.{Lang, MessagesApi}
 import play.twirl.api.Html
@@ -10,7 +11,7 @@ object Helpers {
     ! context.version.equals(latestCurrent)
   }
 
-  def displayVersionMessage(page: String)(implicit messagesApi: MessagesApi, context: TranslationContext): Html = {
+  def displayVersionMessage(page: String)(implicit messagesApi: MessagesApi, context: TranslationContext, reverseRouter: ReverseRouter): Html = {
     implicit val lang = context.alternateLang.getOrElse(Lang.defaultLang)
     val version = context.version.get
     if (isDevelopmentVersion(version)) {
@@ -34,7 +35,7 @@ object Helpers {
     }
   }
 
-  private def upgrade(originalHtml: Html, page: String)(implicit messagesApi: MessagesApi, context: TranslationContext): Html = {
+  private def upgrade(originalHtml: Html, page: String)(implicit messagesApi: MessagesApi, context: TranslationContext, reverseRouter: ReverseRouter): Html = {
     import scala.collection.immutable.Seq
     new Html(Seq(originalHtml, Html(" "), displayUpgradeMessage(page)))
   }
@@ -69,12 +70,12 @@ object Helpers {
     Html(messagesApi("documentation.old.latest.message", seriesLink.toString()))
   }
 
-  private def link(version: Version, page: String)(implicit alternateLang: Lang): Html = {
-    val url = controllers.documentation.ReverseRouter.page(Option(alternateLang), version.toString, page)
+  private def link(version: Version, page: String)(implicit alternateLang: Lang, reverseRouter: ReverseRouter): Html = {
+    val url = reverseRouter.page(Option(alternateLang), version.toString, page)
     Html(s"""<a href="$url">${version.toString}</a>""")
   }
 
-  private def displayUpgradeMessage(page: String)(implicit messagesApi: MessagesApi, context: TranslationContext): Html = {
+  private def displayUpgradeMessage(page: String)(implicit messagesApi: MessagesApi, context: TranslationContext, reverseRouter: ReverseRouter): Html = {
     val version = latestCurrent.get
     implicit val lang = context.alternateLang.getOrElse(Lang.defaultLang)
     currentLatestMessage(link(version, page))

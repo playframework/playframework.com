@@ -28,7 +28,7 @@ class Application @Inject() (
   exampleProjectsService: PlayExampleProjectsService,
   components: ControllerComponents,
   cacheApi: CacheApi
-)(implicit ec: ExecutionContext) extends AbstractController(components) with Common with I18nSupport {
+)(implicit ec: ExecutionContext, val reverseRouter: documentation.ReverseRouter) extends AbstractController(components) with Common with I18nSupport {
 
   private val VulnerableVersions = Set(
     "2.0", "2.0.1", "2.0.2", "2.0.3", "2.0.4", "2.0.5",

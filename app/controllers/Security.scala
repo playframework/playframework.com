@@ -2,7 +2,7 @@ package controllers
 
 import javax.inject.{Inject, Singleton}
 
-import play.api.mvc.{AbstractController, Action, Controller, ControllerComponents}
+import play.api.mvc.{BaseController, ControllerComponents}
 import play.api.Environment
 import play.twirl.api.Html
 import utils.Markdown
@@ -10,7 +10,8 @@ import org.apache.commons.io.IOUtils
 import java.io.File
 
 @Singleton
-class Security @Inject() (environment: Environment, components: ControllerComponents) extends AbstractController(components) with Common {
+class Security @Inject() (environment: Environment, val controllerComponents: ControllerComponents)
+                         (implicit val reverseRouter: documentation.ReverseRouter) extends BaseController with Common {
 
   def vulnerability(name: String) = Action { implicit req =>
     val path = "public/markdown/vulnerabilities/" + name
@@ -33,7 +34,7 @@ class Security @Inject() (environment: Environment, components: ControllerCompon
   }
 
   def index = Action { implicit req =>
-    Ok(views.html.vulnerabilities(req)).withHeaders(CACHE_CONTROL -> "max-age=1000")
+    Ok(views.html.vulnerabilities()).withHeaders(CACHE_CONTROL -> "max-age=1000")
   }
 
 }

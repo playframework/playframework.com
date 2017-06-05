@@ -1,4 +1,5 @@
-@(messages: MessagesApi, context: models.documentation.TranslationContext, page: String, content: String)(implicit req: RequestHeader)
+@import controllers.documentation.ReverseRouter
+@(messages: MessagesApi, context: models.documentation.TranslationContext, page: String, content: String)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
 
 @title = {
   @page @context.version.map(" - " + _).getOrElse("")
@@ -13,7 +14,7 @@
         @for(version <- context.version) {
             <form id="search" method="get" action="//www.google.com/search">
                 <input type="search" name="q" placeholder="Search @version docs" results="10">
-                <input type="hidden" name="sitesearch" value="@req.host@controllers.documentation.ReverseRouter.home(context.alternateLang, version.name)">
+                <input type="hidden" name="sitesearch" value="@req.host@reverseRouter.home(context.alternateLang, version.name)">
                 <button type="submit">Search</button>
             </form>
         }
@@ -50,7 +51,7 @@
 
     @for(version <- context.version) {
       // Fix API link
-      $('a[href="/@@api/index.html"]').attr('href', '@controllers.documentation.ReverseRouter.api(version.name, "index.html")');
+      $('a[href="/@@api/index.html"]').attr('href', '@reverseRouter.api(version.name, "index.html")');
     }
 </script>
 

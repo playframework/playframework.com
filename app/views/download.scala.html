@@ -1,0 +1,157 @@
+@import controllers.documentation.ReverseRouter
+@(releases: PlayReleases, examples: PlayExamples, platform: Platform.Platform,
+        title: String = "Downloads")(implicit req: RequestHeader, reverseRouter: ReverseRouter)
+
+@renderRelease(linkClass: String, release: PlayRelease) = {
+@if(release.secureUrl) {
+  <td width="250">
+    <a href="@release.secureUrl.get" class="@linkClass" data-version="@{release.version}">play-@{release.version}.zip</a>
+  </td>
+  <td width="200">
+  @release.date
+  </td>
+  <td width="100">
+  @release.size.get
+  </td>
+} else {
+  <td width="250">
+    Play @release.version
+  </td>
+  <td width="200">
+  @release.date
+  </td>
+  <td width="100">
+  </td>
+}
+}
+
+@versionAtLeast(v1: String, v2: String) = @{
+  import math.Ordering.Implicits._
+  v1.split('.').toSeq >= v2.split('.').toSeq
+}
+
+@main(title, "download") {
+
+  <header id="top">
+    <div class="wrapper">
+      <h1>
+      @title
+      </h1>
+    </div>
+  </header>
+  <section id="content">
+
+    <article class="starter">
+      <h2>Start Here</h2>
+
+      <table style="vertical-align: center">
+        <tbody>
+        <tr>
+          <td>&bullet; <span style="font-weight: bold"><a href="#starters">Download a starter project (for newbies)</a></span></td>
+        </tr>
+        <tr>
+          <td>&bullet; <span style="font-weight: bold"><a href="#seeds">Create a project with a seed template (for experts)</a></span></td>
+        </tr>
+        <tr>
+          <td>&bullet; <span style="font-weight: bold"><a href="#examples">Play with demos and examples (for everyone)</a></span></td>
+        </tr>
+
+        <tr>
+          <td>&bullet; <span style="font-weight: bold"><a href="#alternatives">Alternative Downloads</a></span></td>
+        </tr>
+        </tbody>
+      </table>
+
+    </article>
+
+    @starterDownload(examples)
+
+    <hr />
+
+    @seedDownload(examples)
+
+    <hr />
+
+    @exampleDownload(examples)
+
+    <hr/>
+    <article id="alternatives">
+      <h2>Alternative downloads</h2>
+
+      <p>
+        The Traditional Play Zip provides a <code>play</code> command to create new applications, run tests,
+        and run the application. After 2.3.0 the <code>play</code> command is no longer used. Projects can be
+        created from an example project or template, as described above.
+      </p>
+      <p>
+        Check out the Play docs for
+        <a href="@reverseRouter.latest(None, "Installing")">installation instructions</a>.
+      </p>
+
+      @if(releases.development.nonEmpty) {
+        <hr/>
+        <h3>Development versions</h3>
+        <p>
+          Previews of releases in the pipeline.
+        </p>
+        <p class="changelogLink"><a href="@routes.Application.changelog()">Changelog</a></p>
+        <table>
+        @for(release <- releases.development) {
+          <tr>
+          @renderRelease("downloadDevelopmentLink", release)
+          </tr>
+        }
+        </table>
+      }
+
+      <hr/>
+
+      <h3 id="older-versions">Previous releases</h3>
+
+      <p class="changelogLink"><a href="@routes.Application.changelog()">Changelog</a></p>
+
+      <table class="releases">
+      @releases.previous.groupBy(_.version.split('.').take(2).mkString(".")).toSeq.sortBy(_._1).reverse.map { group =>
+        <tbody class="version">
+          <tr>
+            <th colspan="3">
+              <h4 class="previousVersionHeading">@group._1</h4>
+              @if(versionAtLeast(group._1, "1.2")) {
+                <a href="@controllers.documentation.ReverseRouter.page(None, group._1 + ".x", if(versionAtLeast(group._1, "2.0")) "Installing" else "install")" class="instructionLink"> Setup Instructions</a>
+              }
+            </th>
+          </tr>
+          @group._2.map { release =>
+            <tr class="release">
+              @renderRelease("downloadPreviousLink", release)
+            </tr>
+          }
+          <tr><td class="show-all-versions">Show all versions</td></tr>
+        </tbody>
+      }
+      </table>
+
+    </article>
+
+  </section>
+
+  <div class="get-started" style="display: none">
+    <div class="back"></div>
+    <div class="wrapped typo">
+      <q>Your download will begin shortly...</q>
+      <h3>What's next?</h3>
+      <ul>
+        <li><a href="@reverseRouter.latest(None, "Installing")">Installation</a></li>
+        <li class="bold"><a href="@reverseRouter.latest(None, "NewApplication")">
+          Get started</a></li>
+        <li><a href="@routes.Application.download()">Read the complete documentation</a></li>
+        <li><a href="@routes.Application.getInvolved">Get involved</a></li>
+        <li><a href="//twitter.com/playframework">Follow us on Twitter</a></li>
+        <li><a href="//stackoverflow.com/questions/tagged/playframework">Ask questions on StackOverflow</a></li>
+      </ul>
+    </div>
+  </div>
+
+    <!-- Downloads are targeted at this iframe -->
+  <iframe name="download-iframe" style="display: none" src="data:," />
+}

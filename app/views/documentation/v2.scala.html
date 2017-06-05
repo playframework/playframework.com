@@ -1,4 +1,5 @@
-@(messages: MessagesApi, context: models.documentation.TranslationContext, page: String = "Documentation", content: Option[String] = None, sidebar: Option[String] = None, source: Option[String] = None, alternateVersions: Seq[models.documentation.Version] = Nil, breadcrumbs: Option[String] = None)(implicit req : RequestHeader)
+@import controllers.documentation.ReverseRouter
+@(messages: MessagesApi, context: models.documentation.TranslationContext, page: String = "Documentation", content: Option[String] = None, sidebar: Option[String] = None, source: Option[String] = None, alternateVersions: Seq[models.documentation.Version] = Nil, breadcrumbs: Option[String] = None)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
 
 @import Helpers._
 
@@ -24,7 +25,7 @@
 
     <article>
         @content.map { html =>
-            @versionInfo(page)(messages, context)
+            @versionInfo(page)(messages, context, reverseRouter)
 
             @for(version <- context.version) {
                 <form id="search">
@@ -42,7 +43,7 @@
               <p>
                   @Html(messages("documentation.contribute.message",
                       s"""<a href="$source">""", "</a>",
-                      s"""<a href="${controllers.documentation.ReverseRouter.latest(context.alternateLang, "Documentation")}">""", "</a>"
+                      s"""<a href="${reverseRouter.latest(context.alternateLang, "Documentation")}">""", "</a>"
                   )(context.lang))
               </p>
             }
@@ -62,19 +63,19 @@
 
             <ul>
                 <li>
-                    <span><a href="@{controllers.documentation.ReverseRouter.latest(context.alternateLang,  "Home")}">Documentation Home</a></span>: Table of Contents for Play
+                    <span><a href="@reverseRouter.latest(context.alternateLang,  "Home")">Documentation Home</a></span>: Table of Contents for Play
                 </li>
                 <li>
-                    <span><a href="@{controllers.documentation.ReverseRouter.latest(context.alternateLang, "Installing")}">Getting Started</a></span>: Installing Play, Running Play, Using Play with an IDE.
+                    <span><a href="@reverseRouter.latest(context.alternateLang, "Installing")">Getting Started</a></span>: Installing Play, Running Play, Using Play with an IDE.
                 </li>
                 <li>
-                    <span><a href="@{controllers.documentation.ReverseRouter.latest(context.alternateLang, "ScalaHome")}">Working With Scala</a></span>: Using Play with the Scala API.
+                    <span><a href="@reverseRouter.latest(context.alternateLang, "ScalaHome")">Working With Scala</a></span>: Using Play with the Scala API.
                 </li>
                 <li>
-                    <span><a href="@{controllers.documentation.ReverseRouter.latest(context.alternateLang, "JavaHome")}">Working With Java</a></span>: Using Play with the Java API.
+                    <span><a href="@reverseRouter.latest(context.alternateLang, "JavaHome")">Working With Java</a></span>: Using Play with the Java API.
                 </li>
                 <li>
-                    <span><a href="@{controllers.documentation.ReverseRouter.latest(context.alternateLang, "Tutorials")}">Tutorials</a></span>: Example Play Applications and Third Party Walkthroughs.
+                    <span><a href="@reverseRouter.latest(context.alternateLang, "Tutorials")">Tutorials</a></span>: Example Play Applications and Third Party Walkthroughs.
                 </li>
             </ul>
 
@@ -83,10 +84,10 @@
 
             <ul>
                 <li>
-                    <a href="@{controllers.documentation.ReverseRouter.api("latest", "scala/index.html")}">Scala API</a>
+                    <a href="@reverseRouter.api("latest", "scala/index.html")">Scala API</a>
                 </li>
                 <li>
-                    <a href="@{controllers.documentation.ReverseRouter.api("latest", "java/index.html")}">Java API</a>
+                    <a href="@reverseRouter.api("latest", "java/index.html")">Java API</a>
                 </li>
             </ul>
 
@@ -96,7 +97,7 @@
                 <ul>
                 @for(version <- alternateVersions) {
                     <li>
-                        <a href="@{controllers.documentation.ReverseRouter.page(context.alternateLang, version.name, page)}">Found page @page in version @{version.name}</a>.
+                        <a href="@reverseRouter.page(context.alternateLang, version.name, page)">Found page @page in version @{version.name}</a>.
                     </li>
                 }
                 </ul>

@@ -57,3 +57,6 @@ publishArtifact in (Compile, packageDoc) := false
 // NewRelic settings
 newrelicVersion := "4.1.0"
 newrelicAppName := "playframework.com"
+
+scalacOptions += "-deprecation"
+

@@ -1,4 +1,5 @@
-@(title: String = "Support")(implicit requestHeader : RequestHeader)
+@import controllers.documentation.ReverseRouter
+@(title: String = "Support")(implicit req: RequestHeader, reverseRouter: ReverseRouter)
 
 @main(title, "support") {
     <header id="top">

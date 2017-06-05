@@ -1,4 +1,5 @@
-@(module: String, content: String)(implicit requestHeader : RequestHeader)
+@import controllers.documentation.ReverseRouter
+@(module: String, content: String)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
 
 @main("Modules", "documentation") {
     

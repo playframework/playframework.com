@@ -24,8 +24,7 @@ class DocumentationController @Inject()(
   documentationRedirects: DocumentationRedirects,
   @Named("documentation-actor") documentationActor: ActorRef,
   releases: PlayReleases,
-  components: ControllerComponents,
-  reverseRouter: ReverseRouter)(implicit executionContext: ExecutionContext) extends AbstractController(components) {
+  components: ControllerComponents)(implicit executionContext: ExecutionContext, reverseRouter: ReverseRouter) extends AbstractController(components) {
 
   private implicit val timeout = Timeout(5.seconds)
 

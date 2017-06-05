@@ -12,7 +12,7 @@ import scala.concurrent.ExecutionContext
 class Modules @Inject() (
   modulesLookup: ModulesLookup,
   moduleDao: ModuleDao,
-  components: ControllerComponents)(implicit ec: ExecutionContext) extends AbstractController(components) {
+  components: ControllerComponents)(implicit ec: ExecutionContext, reverseRouter: documentation.ReverseRouter) extends AbstractController(components) {
 
   def index(keyword: String) = Action { implicit request =>
     render {

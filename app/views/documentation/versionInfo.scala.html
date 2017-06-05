@@ -1,4 +1,5 @@
-@(page: String)(implicit messages: MessagesApi, context: models.documentation.TranslationContext)
+@import controllers.documentation.ReverseRouter
+@(page: String)(implicit messages: MessagesApi, context: models.documentation.TranslationContext, reverseRouter: ReverseRouter)
 
 @import Helpers._
 

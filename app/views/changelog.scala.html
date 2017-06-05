@@ -1,4 +1,5 @@
-@(markdown: Html)(implicit requestHeader : RequestHeader)
+@import controllers.documentation.ReverseRouter
+@(markdown: Html)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
 
 @main("Play Change Log", "changelog"){
     <header id="top">
