@@ -16,17 +16,6 @@ object PlayReleases {
   implicit val playReleasesReads = Json.reads[PlayReleases]
 }
 
-case class ActivatorRelease(version: String, private val url: String, private val miniUrl: String, size: String, miniSize: String,
-  playVersion: String, akkaVersion: String, scalaVersion: String) {
-
-  lazy val secureUrl: String = SecurifyUrl.securify(url)
-  lazy val miniSecureUrl: String = SecurifyUrl.securify(miniUrl)
-}
-
-object ActivatorRelease {
-  implicit val activatorReads = Json.reads[ActivatorRelease]
-}
-
 private[models] object SecurifyUrl {
   def securify(url: String): String = {
     if (url.startsWith("https")) {

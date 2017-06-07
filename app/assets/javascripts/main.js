@@ -175,7 +175,6 @@ $(function(){
         // and mess up our statistics.
         downloadElements.attr('target', 'download-iframe');
     }
-    trackDownload(".downloadActivatorLink", "activator");
     trackDownload(".downloadStandaloneLink", "standalone");
     trackDownload(".downloadDevelopmentLink", "development");
     trackDownload(".downloadPreviousLink", "previous");
