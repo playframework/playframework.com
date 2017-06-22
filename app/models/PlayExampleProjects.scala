@@ -57,6 +57,8 @@ class PlayExampleProjectsService @Inject()(
 )(implicit ec: ExecutionContext) {
   import scala.collection.JavaConverters._
 
+  val validPlayVersions: Seq[String] = configuration.getStringList("examples.playVersions").get.asScala
+
   private val logger = org.slf4j.LoggerFactory.getLogger(this.getClass)
 
   private val examplesUrl =
@@ -67,26 +69,30 @@ class PlayExampleProjectsService @Inject()(
   private val examplesCacheTtl =
     configuration.getMilliseconds("examples.cache.ttl").get.milliseconds
 
-  val validPlayVersions: Set[String] = configuration.getStringList("examples.playVersions").get.asScala.toSet
+  private def playQueryString(version: String): Seq[(String, String)] = {
+    Seq("keyword" -> "play", "keyword" -> version)
+  }
 
-  def playQueryString: Seq[(String, String)] = {
-    Seq("keyword" -> "play") ++ validPlayVersions.map("keyword" -> _)
+  private def convertExampleProjects(version: String, json: JsValue): Seq[ExampleProject] = {
+    Json.fromJson[Seq[ExampleProject]](json) match {
+      case JsSuccess(allProjects, _) =>
+        val playProjects = allProjects
+        if (examplesCacheTtl.length > 0) {
+          cache.set("example.projects", playProjects, examplesCacheTtl)
+        }
+        playProjects
+      case JsError(errors: Seq[(JsPath, Seq[ValidationError])]) =>
+        logger.error(s"Cannot parse example projects for $version\n$errors")
+        Seq.empty
+    }
   }
 
   def examples(): Future[Seq[ExampleProject]] = {
-    ws.url(examplesUrl).withQueryString(playQueryString: _*).get().map { r =>
-      val json: JsValue = r.json
-      Json.fromJson[Seq[ExampleProject]](json) match {
-        case JsSuccess(allProjects, _) =>
-          val playProjects = allProjects
-          if (examplesCacheTtl.length > 0) {
-            cache.set("example.projects", playProjects, examplesCacheTtl)
-          }
-          playProjects
-        case JsError(errors: Seq[(JsPath, Seq[ValidationError])]) =>
-          logger.error(s"Cannot parse example projects\n${errors}")
-          Seq.empty
-      }
+    Future.sequence(validPlayVersions.map { version =>
+      ws.url(examplesUrl).withQueryString(playQueryString(version): _*).get()
+        .map(response => (version, response.json))
+    }).map { response =>
+      response.flatMap((convertExampleProjects _).tupled)
     }
   }
 

@@ -1,3 +1,22 @@
+## Play 2.6.0
+
+*Released 23 Jun 2016*
+
+ * [Akka HTTP](https://www.playframework.com/documentation/2.6.x/AkkaHttpServer) is now the default server backend. We still will support the [Netty server](https://www.playframework.com/documentation/2.6.x/NettyServer) backend but plan to implement most new features on Akka HTTP.
+ * Experimental HTTP/2 support on Akka HTTP.
+ * No internal use of the global application instance (`Play.current`). It's now deprecated and possible to disable completely using `play.allowGlobalApplication = false`.
+ * [Request attributes](https://www.playframework.com/documentation/2.6.x/Highlights26#Request-attributes) for attaching arbitrary typed data to requests
+ * Twirl templates now can have a constructor for passing application dependencies. This allows for [injectable templates](https://www.playframework.com/documentation/2.6.x/Highlights26#Injectable-Twirl-Templates)
+ * [Support for SLF4J markers](https://www.playframework.com/documentation/2.6.x/Highlights26#Logging-Marker-API) in both the Java and Scala API, and a special [security marker](https://www.playframework.com/documentation/2.6.x/Highlights26#Security-Logging) for security-related operations.
+ * [Configuration improvements](https://www.playframework.com/documentation/2.6.x/Highlights26#Configuration-improvements) in the Scala API, using typeclasses for reading arbitrary types, and removal of the Java configuration API in favor of standard Typesafe `Config`.
+ * Support for [compile-time dependency injection in Java](https://www.playframework.com/documentation/2.6.x/JavaCompileTimeDependencyInjection), allowing you to create a full Play application in Java without Guice or any dependency injection framework. We have an [example using Dagger 2](https://github.com/playframework/play-java-dagger2-example/tree/2.6.x)
+ * [Play WS](https://github.com/playframework/play-ws) is now a separate module, and contains [several useful improvements](https://www.playframework.com/documentation/2.6.x/Highlights26#Play-WS-Improvements) including HTTP caching support.
+ * Full support for Scala 2.12
+
+[Highlights](https://playframework.com/documentation/2.6.x/Highlights26)
+[Migration Guide](https://playframework.com/documentation/2.6.x/Migration26)
+[Full changelog](https://github.com/playframework/playframework/compare/2.5.x...2.6.0/)
+
 ## Play 2.5.15 "Streamy"
 
 *Released 18 May 2017*

@@ -80,7 +80,7 @@ object Helpers {
     currentLatestMessage(link(version, page))
   }
 
-  /** Returns the most current version, i.e. 2.5.x. */
+  /** Returns the most current version, i.e. 2.6.x. */
   def latestCurrent(implicit context: TranslationContext): Option[Version] = {
     Version.findDefaultVersion(context.displayVersions)
   }

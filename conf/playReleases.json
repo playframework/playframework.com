@@ -1,40 +1,14 @@
 {
     "latest": {
-            "name": "Streamy",
-            "version": "2.5.15",
-            "date": "May 18 2017"
+            "version": "2.6.0",
+            "date": "Jun 23 2017"
     },
-    "development": [
-        {
-            "version": "2.6.0-RC2",
-            "date": "Jun 3 2017"
-        },
-        {
-            "version": "2.6.0-RC1",
-            "date": "May 22 2017"
-        },
-        {
-            "version": "2.6.0-M5",
-            "date": "Apr 26 2017"
-        },
-        {
-            "version": "2.6.0-M4",
-            "date": "Apr 7 2017"
-        },
-        {
-            "version": "2.6.0-M3",
-            "date": "Mar 24 2017"
-        },
-        {
-            "version": "2.6.0-M2",
-            "date": "Mar 10 2017"
-        },
-        {
-            "version": "2.6.0-M1",
-            "date": "Feb 15 2017"
-        }
-    ],
+    "development": [],
     "previous": [
+        {
+            "version": "2.6.0",
+            "date": "Jun 23 2017"
+        },
         {
             "name": "Streamy",
             "version": "2.5.15",
