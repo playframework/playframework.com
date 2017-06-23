@@ -73,12 +73,14 @@ class PlayExampleProjectsService @Inject()(
     Seq("keyword" -> "play", "keyword" -> version)
   }
 
+  private def cacheKey(version: String): String = s"example.projects.$version"
+
   private def convertExampleProjects(version: String, json: JsValue): Seq[ExampleProject] = {
     Json.fromJson[Seq[ExampleProject]](json) match {
       case JsSuccess(allProjects, _) =>
         val playProjects = allProjects
         if (examplesCacheTtl.length > 0) {
-          cache.set("example.projects", playProjects, examplesCacheTtl)
+          cache.set(cacheKey(version), playProjects, examplesCacheTtl)
         }
         playProjects
       case JsError(errors: Seq[(JsPath, Seq[ValidationError])]) =>
@@ -97,7 +99,11 @@ class PlayExampleProjectsService @Inject()(
   }
 
   def cached(): Option[Seq[ExampleProject]] = {
-    cache.get[Seq[ExampleProject]]("example.projects")
+    validPlayVersions.foldLeft(Option(Seq.empty[ExampleProject])) { (result, version) =>
+      result.fold(result) { projects =>
+        cache.get[Seq[ExampleProject]](cacheKey(version)).map(projects ++ _)
+      }
+    }
   }
 
   // preload the cache...
