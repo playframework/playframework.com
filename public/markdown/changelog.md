@@ -1,3 +1,10 @@
+## Play 2.6.1
+
+*Released 6 Jul 2016*
+
+[All changes](https://github.com/playframework/playframework/compare/2.6.0...2.6.1/)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/57?closed=1)
+
 ## Play 2.6.0
 
 *Released 23 Jun 2016*
