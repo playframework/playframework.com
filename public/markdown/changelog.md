@@ -1,13 +1,13 @@
 ## Play 2.6.1
 
-*Released 6 Jul 2016*
+*Released 6 Jul 2017*
 
 [All changes](https://github.com/playframework/playframework/compare/2.6.0...2.6.1/)
 [GitHub milestone](https://github.com/playframework/playframework/milestone/57?closed=1)
 
 ## Play 2.6.0
 
-*Released 23 Jun 2016*
+*Released 23 Jun 2017*
 
  * [Akka HTTP](https://www.playframework.com/documentation/2.6.x/AkkaHttpServer) is now the default server backend. We still will support the [Netty server](https://www.playframework.com/documentation/2.6.x/NettyServer) backend but plan to implement most new features on Akka HTTP.
  * Experimental HTTP/2 support on Akka HTTP.
