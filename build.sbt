@@ -25,7 +25,7 @@ libraryDependencies ++= Seq(
   specs2 % "test"
 )
 
-scalaVersion := "2.11.8"
+scalaVersion := "2.11.11"
 
 routesGenerator := InjectedRoutesGenerator
 
