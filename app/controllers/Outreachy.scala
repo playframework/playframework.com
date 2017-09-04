@@ -13,7 +13,7 @@ class Outreachy extends Controller {
     Ok(views.html.outreachy.round10())
   }
 
-  def round11 = Action { implicit req =>
-    Ok(views.html.outreachy.round11())
+  def round15 = Action { implicit req =>
+    Ok(views.html.outreachy.round15())
   }
 }
