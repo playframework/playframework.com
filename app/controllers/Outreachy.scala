@@ -7,7 +7,7 @@ import play.api.mvc._
  */
 class Outreachy extends Controller {
 
-  def outreachy = Action(Redirect(routes.Outreachy.round11()))
+  def outreachy = Action(Redirect(routes.Outreachy.round15()))
 
   def round10 = Action { implicit req =>
     Ok(views.html.outreachy.round10())
