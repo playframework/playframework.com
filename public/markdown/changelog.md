@@ -49,6 +49,13 @@
 [Migration Guide](https://playframework.com/documentation/2.6.x/Migration26)
 [Full changelog](https://github.com/playframework/playframework/compare/2.5.x...2.6.0/)
 
+## Play 2.5.17 "Streamy"
+
+*Released 22 Sep 2017*
+
+[All changes](https://github.com/playframework/playframework/compare/2.5.16...2.5.17/)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/60?closed=1)
+
 ## Play 2.5.16 "Streamy"
 
 *Released 19 Jul 2017*
