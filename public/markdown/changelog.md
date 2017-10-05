@@ -1,3 +1,12 @@
+## Play 2.6.6
+
+*Released 5 Oct 2017*
+
+Adds support for sbt 1.0
+
+[All changes](https://github.com/playframework/playframework/compare/2.6.5...2.6.6/)
+[Github milestone](https://github.com/playframework/playframework/milestone/62?closed=1)
+
 ## Play 2.6.5
 
 *Released 14 Sep 2017*
