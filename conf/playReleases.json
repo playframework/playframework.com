@@ -149,6 +149,18 @@
             "version": "2.5.0",
             "date": "Mar 4 2016"
         },
+		{
+            "version": "1.5.0",
+            "url": "http://downloads.typesafe.com/play/1.5.0/play-1.5.0.zip",
+            "date": "Sep 29 2017",
+            "size": "79M"
+        },
+		 {
+            "version": "1.4.5",
+            "url": "http://downloads.typesafe.com/play/1.4.5/play-1.4.5.zip",
+            "date": "Sep 29 2017",
+            "size": "74.6M"
+        },
         {
             "version": "1.4.4",
             "url": "http://downloads.typesafe.com/play/1.4.4/play-1.4.4.zip",
