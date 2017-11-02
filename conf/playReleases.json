@@ -1,10 +1,14 @@
 {
     "latest": {
-            "version": "2.6.6",
-            "date": "Oct 5 2017"
+            "version": "2.6.7",
+            "date": "Nov 1 2017"
     },
     "development": [],
     "previous": [
+        {
+            "version": "2.6.7",
+            "date": "Nov 1 2017"
+        },
         {
             "version": "2.6.6",
             "date": "Oct 5 2017"

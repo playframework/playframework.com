@@ -1,3 +1,11 @@
+
+## Play 2.6.7
+
+*Released 1 Nov 2017*
+
+[All changes](https://github.com/playframework/playframework/compare/2.6.6...2.6.7/)
+[Github milestone](https://github.com/playframework/playframework/milestone/64?closed=1)
+
 ## Play 2.6.6
 
 *Released 5 Oct 2017*
@@ -997,10 +1005,10 @@ A complete list of what was fixed for 2.2.2 can be found on [Github](https://git
 * [#1112](https://github.com/playframework/play1/issues/1112) : Allow to limit the size of whole request or the size of one uploaded file in a request.
 * [#1111](https://github.com/playframework/play1/issues/1111) : Websockets documentation
 * [#1105](https://github.com/playframework/play1/issues/1105) : Play calls action method in parent class instead of child class
-* [#1103](https://github.com/playframework/play1/issues/1103) : Make it possible to exclude DocViewer in dev mode 
-* [#1097](https://github.com/playframework/play1/issues/1097) : Support for Java8 parameters instead of slow additional enhancement in LocalvariablesNamesEnhancer. 
+* [#1103](https://github.com/playframework/play1/issues/1103) : Make it possible to exclude DocViewer in dev mode
+* [#1097](https://github.com/playframework/play1/issues/1097) : Support for Java8 parameters instead of slow additional enhancement in LocalvariablesNamesEnhancer.
 * [#1096](https://github.com/playframework/play1/issues/1096) : Drop support for java version prior to 1.8 documentation
-* [#1095](https://github.com/playframework/play1/issues/1095) : Allow custom implementation of base Controller 
+* [#1095](https://github.com/playframework/play1/issues/1095) : Allow custom implementation of base Controller
 * [#1043](https://github.com/playframework/play1/issues/1043) : Use `-parameters` compiler option instead of enhancing classes
 * [#2122](https://play.lighthouseapp.com/projects/57987/tickets/2122) : FastTagsTest: Comparison Failure: differences only in line separators tests
 * [#2125](https://play.lighthouseapp.com/projects/57987/tickets/2125) : testLogLevelsAndLog4jConfig TIMEOUT waitFor 'I am a debug message' tests
@@ -1019,7 +1027,7 @@ A complete list of what was fixed for 2.2.2 can be found on [Github](https://git
 * [#1155](https://github.com/playframework/play1/pull/1155) : fix loaded entity classes in hibernate from #1114
 * [#1152](https://github.com/playframework/play1/pull/1152) :finds classes in precompiled folder too
 * [#1144](https://github.com/playframework/play1/pull/1144) , [#1142](https://github.com/playframework/play1/pull/1142) : use "application.statusKey" instead of "application.secret"
-* [#2121](https://play.lighthouseapp.com/projects/57987/tickets/2121) : JPABase.equals() invokes _key() before checking null/ref equality 
+* [#2121](https://play.lighthouseapp.com/projects/57987/tickets/2121) : JPABase.equals() invokes _key() before checking null/ref equality
 * [#2120](https://play.lighthouseapp.com/projects/57987/tickets/2120) : Add support for (special) hibernate properties through application
 * [#1138](https://github.com/playframework/play1/pull/1138) : Make it possible to load plugins from single `play.plugins` file
 
