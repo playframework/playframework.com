@@ -205,34 +205,26 @@
         retina("home/mac.png", 332px 310px)
 
 #references
-    clear: both
-    clear: after
     text-align: center
+    img
+        margin: 0 .75rem
     h2
         text: bigger title
         color: grey-dark
         margin: 10px
     a
-        display: inline-block
-        margin: 10px
-        height 45px
-        background: image("home/references.png") no-repeat
-        retina("home/references.png", 960px 45px)
-        text-indent: -9999em
-        &.linkedin
-            width: 165px
-        &.klout
-            width: 120px
-            background-position: -178px
-        &.guardian
-            width: 201px
-            background-position: -315px 0
-        &.gilt
-            width: 90px
-            background-position: -534px 0
-        &.egraphs
-            width: 132px
-            background-position: -643px 0
+        position: relative
+        span
+            display: block
+            color: green
+            text-align: center
+            margin-top: -30px
+            color: white
+            text: title bold
+            font-size: 1.2em
+        &:hover span
+            color: #50b4a2
+    
 
 @media only screen and (max-width: 960px)
     .home
