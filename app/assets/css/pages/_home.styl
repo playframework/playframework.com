@@ -112,22 +112,18 @@
     .terminal
         background-image: image('home/workflow/terminal.png')
         retina('home/workflow/terminal.png', cover)
-    .editor
-        background-image: image('home/workflow/editor.png')
-        retina('home/workflow/editor.png', cover)
-    .browser
-        background-image: image('home/workflow/browser.png')
-        retina('home/workflow/browser.png', cover)
-
-    .terminal
         transform: translate3d(0,0,0px)
         background-position: 0 0
     .editor
-        transform: translate3d(0,250px,0) rotateX(-20deg)
+        background-image: image('home/workflow/editor.png')
+        retina('home/workflow/editor.png', cover)
+        transform: translate3d(0,250px,0)
         background-position: 0 0
     .browser
+        background-image: image('home/workflow/browser.png')
+        retina('home/workflow/browser.png', cover)
+        transform: translate3d(0,300px,0)
         background-position: 0 0
-        transform: translate3d(0,300px,0) rotateX(-20deg)
 
 #scale
     absolute: top 50px right 0
