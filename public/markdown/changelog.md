@@ -1,3 +1,20 @@
+## Play 2.6.10
+
+*Released 21 Dec 2017*
+
+[All changes](https://github.com/playframework/playframework/compare/2.6.9...2.6.10/)
+[Github milestone](https://github.com/playframework/playframework/milestone/68?closed=1)
+
+## Play 2.6.9
+
+*Released 8 Dec 2017*
+
+[All changes](https://github.com/playframework/playframework/compare/2.6.7...2.6.9/)
+[Github milestone](https://github.com/playframework/playframework/milestone/65?closed=1)
+
+## Play 2.6.8
+
+*Unreleased*. Some artifacts were not published for this version, so it should not be used.
 
 ## Play 2.6.7
 
