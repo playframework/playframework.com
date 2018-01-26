@@ -1,15 +1,5 @@
+//.support
+//    @extends .split-page
+
 .support
-    @extends .split-page
-    #content
-        padding: 0
-        section
-            background-image: image("support/community.png")
-            @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2),only screen and (min-device-pixel-ratio: 2),only screen and (min-resolution: 192dpi),only screen and (min-resolution: 2dppx)
-                background-image: image("support/community@2x.png")
-            &:last-child
-                background-image: image("support/pro.png")
-            @media only screen and (-webkit-min-device-pixel-ratio: 2), only screen and (min--moz-device-pixel-ratio: 2),only screen and (min-device-pixel-ratio: 2),only screen and (min-resolution: 192dpi),only screen and (min-resolution: 2dppx)
-                &:last-child
-                    background-image: image("support/pro@2x.png")
-            p
-                text-align: center
+  @extend .content-column
