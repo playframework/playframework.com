@@ -1,8 +1,8 @@
 .code
   @extends .content-column
 
-  .coreteam
-    h2
+  .committers
+    h2, h3
       clear: both
       padding-top: 20px
     a
@@ -10,19 +10,11 @@
         content: none
         display: none
       img
-        height: 64px
         display: block
         float: left
 
-  .contributors
-    h3
-      clear: both
-      padding-top: 20px
-    a
-      &:after
-        content: none
-        display: none
-      img
-        height: 32px
-        display: block
-        float: left
+  .coreteam a img
+    height: 64px
+
+  .contributors a img
+    height: 32px
