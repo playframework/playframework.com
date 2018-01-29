@@ -7,9 +7,11 @@
     if (url.contains("?")) url + "&size=" + doubleSize else url + "?size=" + doubleSize
 }
 
-@renderContributors(contributors: Seq[GitHubUser]) = {
+@renderContributors(contributors: Seq[GitHubUser], avatarSize: Int = 32, coreteam: Boolean = false) = {
     @for(contributor <- contributors) {
-        <a href="@contributor.htmlUrl"><img src="@avatar(contributor.avatarUrl, 32)" alt="@contributor.login" title="@contributor.login"/></a>
+        <a href="@contributor.htmlUrl">
+            <img src="@avatar(contributor.avatarUrl, avatarSize)" alt="@contributor.login" title="@contributor.name.getOrElse(contributor.login)" @{"class=coreteam".when(coreteam)} />
+        </a>
     }
 }
 
@@ -37,34 +39,25 @@
                 <h2>Licence</h2>
                 <p>The Play Framework source code is released under the <a href="//www.apache.org/licenses/LICENSE-2.0.html">Apache 2 licence</a>.</p>
 
-                @commonSidebar("h2")
+                <div class="committers coreteam">
+                    <h2>Integrators</h2>
+                    @renderContributors(contributors.committers, 64, coreteam = true)
+                </div>
 
-            </section>
-            <section>
-                <h1>Integrators</h1>
+                <div class="committers contributors">
 
-                @for(contributor <- contributors.committers) {
-                    <div class="coreteam">
-                        <a href="@contributor.htmlUrl">
-                            <img src="@avatar(contributor.avatarUrl, 80)"/>
-                            <h2>@contributor.name.getOrElse(contributor.login)</h2>
-                        </a>
-                    </div>
-                }
+                    <h3>Play organisation members</h3>
+                    @renderContributors(contributors.playOrganisation)
 
-                <div class="contributors">
-
-                <h2>Play organisation members</h2>
-
-                @renderContributors(contributors.playOrganisation)
-
-                <h2>Other contributors</h2>
-
-                @renderContributors(contributors.contributors)
+                    <h3>Other contributors</h3>
+                    @renderContributors(contributors.contributors)
                 </div>
 
             </section>
         </article>
+        <aside>
+            @commonSidebar()
+        </aside>
     </section>
 }
 

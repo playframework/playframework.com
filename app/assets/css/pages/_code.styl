@@ -1,0 +1,20 @@
+.code
+  @extends .content-column
+
+  .committers
+    h2, h3
+      clear: both
+      padding-top: 20px
+    a
+      &:after
+        content: none
+        display: none
+      img
+        display: block
+        float: left
+
+  .coreteam a img
+    height: 64px
+
+  .contributors a img
+    height: 32px
