@@ -16,28 +16,28 @@
 <article class="example-projects">
   <p>
     Play has many features, so rather than pack them all into one project,
-    we've organized many example projects that showcase a feature or use
-    case of Play so that you can see Play at work.
+    we've organized many example projects that each showcase a feature or a use
+    case so that you can see Play at work. You must have <code>sbt</code> installed to run these examples.
+  </p>
+  <p>
+    After you have downloaded and unzipped a project, change into the top level project directory and enter <code>./sbt run</code> to run your project.
+  </p>
+  <p>
+    <span style="font-weight: bold">Note:</span> These example projects are not configured for out of the box security. To start your own project and include security, use the <a href="#seeds">Seed templates</a>.
   </p>
 
-  <p>
-    Note that these example projects are not configured for out of the box security, and are intended to showcase particular areas of Play functionality.
-  </p>
-
-  <p>
-    Download SBT and type <code>./sbt run</code> to run your project.
-  </p>
+  
 
   <table>
     @downloads.sections.map { case (version, section) =>
       <tbody>
-      <tr><th><h4>Play @version Examples</h4></th></tr>
-        <tr><th><h5>Java Projects</h5></th></tr>
+      <tr><th><h3>Play @version Examples</h3></th></tr>
+        <tr><th><h4>Java Projects</h4></th></tr>
         @section.examples.getOrElse("java", Seq.empty).map { (project) =>
           @renderProject(project)
         }
 
-        <tr><th><h5>Scala Projects</h5></th></tr>
+        <tr><th><h4>Scala Projects</h4></th></tr>
         @section.examples.getOrElse("scala", Seq.empty).map { (project) =>
           @renderProject(project)
         }
