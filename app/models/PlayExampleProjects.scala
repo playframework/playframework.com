@@ -89,7 +89,7 @@ class PlayExampleProjectsService @Inject()(
 
   def examples(): Future[Seq[ExampleProject]] = {
     Future.sequence(validPlayVersions.map { version =>
-      ws.url(examplesUrl).withQueryString(playQueryString(version): _*).get()
+      ws.url(examplesUrl).withQueryStringParameters(playQueryString(version): _*).get()
         .map(response => (version, response.json))
     }).map { response =>
       response.flatMap((convertExampleProjects _).tupled)
