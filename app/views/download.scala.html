@@ -41,139 +41,15 @@
   <section id="content">
 
     <article class="starter">
-      <h2>How to Get Started</h2>
-      <p>For your first experience with Play, we suggest a starter project. Starter projects include the <code>sbt</code> build tool, so you don't have to install it.</p> 
-      <p>With <code>sbt</code> installed, you can check out the Play example projects to learn more. Example projects showcase a particular feature or illustrate how to satisfy a common use case.</p>
-      <p>When you are ready to build your own app, use a seed template. A template will set up the appropriate project structure and dev environment to save time. </p>
-      <p>After checking the prerequisites, choose your path to becoming a Play expert:</p>  
-
-      <table style="vertical-align: center">
-        <tbody>
-        
-        <tr>
-          <td>&bullet; <span style="font-weight: bold"><a href="#starters">Starter projects</a></span> </td>
-        </tr>
-        <tr>
-          <td>&bullet; <span style="font-weight: bold"><a href="#examples">Play example projects</a></span> </td>
-        </tr>
-        <tr>
-          <td>&bullet; <span style="font-weight: bold"><a href="#seeds">Seed templates</a></span></td>
-        </tr>
-        <tr>
-          <td>&bullet; <span style="font-weight: bold"><a href="#alternatives">Archive of previous releases</a></span></td>
-        </tr>
-        </tbody>
-      </table>
-      
-      <h3>Prerequisites</h3>
-      <p>To develop a Play app or use one of the examples, you will need the correct version of Java. Unless you are using a Starter Project, you will also need a build tool. You can build Play projects with sbt or Gradle. Since <code>sbt</code> works particularly well with Play, we recommend using it with the examples. Play requires:</p>
-
-      <table style="vertical-align: center">
-      <tbody>
-      <tr>
-       <td>&bullet; Java Software Developer's Kit (SE) 1.8 or higher </td>
-      </tr>
-      <tr>
-        <td>&bullet; sbt 0.13.13 or higher </td>
-      </tr>
-     </tbody>
-     </table>
-      
-      <p>To check your Java version, enter the following in a command window:</p>
-      <p><code>
-      java -version
-      </code></p>
-      
-    <p>To check your sbt version, enter the following in a command window:</p>
-      
-      <p><code>
-      sbt sbt-version
-      </code>
-     </p>
-      
-      <p>If you do not have the required versions, follow these links to obtain them:</p>
-      
-    <table style="vertical-align: center">
-      <tbody>
-      <tr>
-      <td>&bullet; <span style="font-weight: bold"><a href="https://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank"> Java SE</a></span> </td>
-      </tr>
-      <tr>
-        <td>&bullet; <span style="font-weight: bold"><a href="https://www.scala-sbt.org/download.html" target="_blank">sbt</a></span> </td>
-      </tr>
-      </tbody>
-    </table>
-  </article>
-
-    @starterDownload(examples)
-
-    <hr />
-
-    @exampleDownload(examples)
-
-    <hr/>
+      <h2>It's quick and easy to get started with Play</h2>
+      <p>Lightbend Tech Hub generates a variety of <a href="https://developer.lightbend.com/start/?group=play" target="_blank">Play example projects</a>. Just unzip, build, and run the projects using <code>sbt</code> or Gradle. The build tool automatically downloads everything you need to start working with Play, including an HTTP server.</p>
+      <p>For your first experience with Play, we suggest the Starter Example for <a href="https://developer.lightbend.com/start/?group=play&project=play-java-starter-example" target="_blank">Java</a> or <a href="https://developer.lightbend.com/start/?group=play&project=play-scala-starter-example" target="_blank">Scala</a>.  The other examples available from <a href="https://developer.lightbend.com/start/?group=play" target="_blank">Tech Hub</a> showcase a particular feature or illustrate how to satisfy a common use case. When you are ready to build your own app, use a <a href="@controllers.documentation.ReverseRouter.latest(None, "NewApplication")">seed template</a> that sets up the appropriate project structure and dev environment for you. </p>
     
-    @seedDownload(examples)
-
-    <hr />
-    
-    <article id="alternatives">
-      <h2>Previous Releases</h2>
-
-      <p>
-        Versions of Play older than 2.2 are packaged in zip files. The traditional Play zip provides a <code>play</code> command to create new applications, run tests,
-        and run the application. After 2.3.0, the <code>play</code> command was replaced with <code>sbt</code>. Version 2.5.x and 2.6.x projects can be
-        created from an example project or template, as described above.
-      </p>
-      <p>
-        Check out the Play docs for
-        <a href="@controllers.documentation.ReverseRouter.latest(None, "Installing")">installation instructions</a>.
-      </p>
-
-      @if(releases.development.nonEmpty) {
-        <hr/>
-        <h3>Development versions</h3>
-        <p>
-          Previews of releases in the pipeline.
-        </p>
-        <p class="changelogLink"><a href="@routes.Application.changelog()">Changelog</a></p>
-        <table>
-        @for(release <- releases.development) {
-          <tr>
-          @renderRelease("downloadDevelopmentLink", release)
-          </tr>
-        }
-        </table>
-      }
-
-      <hr/>
-
-      <h3 id="older-versions">Previous releases</h3>
-
-      <p class="changelogLink"><a href="@routes.Application.changelog()">Changelog</a></p>
-
-      <table class="releases">
-      @releases.previous.groupBy(_.version.split('.').take(2).mkString(".")).toSeq.sortBy(_._1).reverse.map { group =>
-        <tbody class="version">
-          <tr>
-            <th colspan="3">
-              <h4 class="previousVersionHeading">@group._1</h4>
-              @if(versionAtLeast(group._1, "1.2")) {
-                <a href="@controllers.documentation.ReverseRouter.page(None, group._1 + ".x", if(versionAtLeast(group._1, "2.0")) "Installing" else "install")" class="instructionLink"> Setup Instructions</a>
-              }
-            </th>
-          </tr>
-          @group._2.map { release =>
-            <tr class="release">
-              @renderRelease("downloadPreviousLink", release)
-            </tr>
-          }
-          <tr><td class="show-all-versions">Show all versions</td></tr>
-        </tbody>
-      }
-      </table>
-
-    </article>
+      
+      <p>Note: To develop a Play app or use one of the examples, you will need Java Java Software Developer's Kit (SE) 1.8 or higher. If you do not have the required version, you can obtain it from: <span style="font-weight: bold"><a href="https://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank"> Java SE</a></span>.
+      
+      
+  
 
   </section>
 

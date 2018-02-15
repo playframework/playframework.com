@@ -27,7 +27,8 @@ class Modules @Inject() (
       case None => PageNotFound
     }
   }
-
+ 
+    
   def documentation(name: String, version: String, page: String) = Action { implicit request =>
     modulesLookup.loadModuleDocumentation(name, version, page) match {
       case Some(content) =>
@@ -35,6 +36,8 @@ class Modules @Inject() (
       case None => PageNotFound
     }
   }
+  
+              
 
   def show(name: String) = Action { implicit request =>
     moduleDao.findById(name) match {

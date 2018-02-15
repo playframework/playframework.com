@@ -72,6 +72,23 @@ class Application @Inject() (
     }
   }
 
+  def allreleases(platform: Option[String] = None) = Action.async { implicit request =>
+    val selectedPlatform = Platform(platform.orElse(request.headers.get("User-Agent")))
+  
+    exampleProjectsService.cached() match {
+      case Some(cached) =>
+        val examples = toExamples(cached)
+        Future.successful {
+          Ok(html.allreleases(releases, examples, selectedPlatform))
+        }
+      case None =>
+        exampleProjectsService.examples().map { live =>
+          val examples = toExamples(live)
+          Ok(html.allreleases(releases, examples, selectedPlatform))
+        }
+    }
+  }
+  
   def changelog = markdownAction("public/markdown/changelog.md", { implicit request =>
     views.html.changelog(_)
   })
