@@ -2,26 +2,17 @@
         title: String = "Play Releases")(implicit requestHeader: RequestHeader)
 
 @renderRelease(linkClass: String, release: PlayRelease) = {
-@if(release.secureUrl) {
-  <td width="250">
-    <a href="@release.secureUrl.get" class="@linkClass" data-version="@{release.version}">play-@{release.version}.zip</a>
-  </td>
-  <td width="200">
-  @release.date
-  </td>
-  <td width="100">
-  @release.size.get
-  </td>
-} else {
-  <td width="250">
-    Play @release.version
-  </td>
-  <td width="200">
-  @release.date
-  </td>
-  <td width="100">
-  </td>
-}
+  @if(release.secureUrl) {
+    <td width="250">
+      <a href="@release.secureUrl.get" class="@linkClass" data-version="@{release.version}">play-@{release.version}.zip</a>
+    </td>
+    <td width="200">@release.date</td>
+    <td width="100">@release.size.get</td>
+  } else {
+    <td width="250">Play @release.version</td>
+    <td width="200">@release.date</td>
+    <td width="100"></td>
+  }
 }
 
 @versionAtLeast(v1: String, v2: String) = @{
@@ -29,19 +20,16 @@
   v1.split('.').toSeq >= v2.split('.').toSeq
 }
 
-@main(title, "releases") {
+@main(title, "alternatives") {
 
   <header id="top">
     <div class="wrapper">
-      <h1>
-      @title
-      </h1>
+      <h1>@title</h1>
     </div>
   </header>
   <section id="content">
 
-    
-    <article id="alternatives">
+    <article>
       <h2>Release List</h2>
 
       <p>
@@ -72,9 +60,6 @@
       <hr/>
 
       <h3 id="older-versions">Previous releases</h3>
-
-      
-
       <table class="releases">
       @releases.previous.groupBy(_.version.split('.').take(2).mkString(".")).toSeq.sortBy(_._1).reverse.map { group =>
         <tbody class="version">
@@ -98,25 +83,9 @@
 
     </article>
 
+    <aside>
+        @commonSidebar()
+    </aside>
+
   </section>
-
-  <div class="get-started" style="display: none">
-    <div class="back"></div>
-    <div class="wrapped typo">
-      <q>Your download will begin shortly...</q>
-      <h3>What's next?</h3>
-      <ul>
-        <li><a href="@controllers.documentation.ReverseRouter.latest(None, "Installing")">Installation</a></li>
-        <li class="bold"><a href="@controllers.documentation.ReverseRouter.latest(None, "NewApplication")">
-          Get started</a></li>
-        <li><a href="@routes.Application.download()">Read the complete documentation</a></li>
-        <li><a href="@routes.Application.getInvolved">Get involved</a></li>
-        <li><a href="//twitter.com/playframework">Follow us on Twitter</a></li>
-        <li><a href="//stackoverflow.com/questions/tagged/playframework">Ask questions on StackOverflow</a></li>
-      </ul>
-    </div>
-  </div>
-
-    <!-- Downloads are targeted at this iframe -->
-  <iframe name="download-iframe" style="display: none" src="data:," />
 }

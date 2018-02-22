@@ -55,10 +55,15 @@ class Application @Inject() (
     Ok(views.html.widget(news(version)))
   }
 
+  // This used to be the download/getting-started page. We are keeping
+  // the URL for SEO purposes only.
   def download = Action { implicit request =>
-    Ok(html.download())
+    MovedPermanently(routes.Application.gettingStarted.path)
   }
-  
+
+  def gettingStarted = Action { implicit request =>
+    Ok(html.gettingStarted())
+  }
 
   def allreleases(platform: Option[String] = None) = Action.async { implicit request =>
     val selectedPlatform = Platform(platform.orElse(request.headers.get("User-Agent")))
