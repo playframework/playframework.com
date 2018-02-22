@@ -55,22 +55,10 @@ class Application @Inject() (
     Ok(views.html.widget(news(version)))
   }
 
-  def download(platform: Option[String] = None) = Action.async { implicit request =>
-    val selectedPlatform = Platform(platform.orElse(request.headers.get("User-Agent")))
-
-    exampleProjectsService.cached() match {
-      case Some(cached) =>
-        val examples = toExamples(cached)
-        Future.successful {
-          Ok(html.download(releases, examples, selectedPlatform))
-        }
-      case None =>
-        exampleProjectsService.examples().map { live =>
-          val examples = toExamples(live)
-          Ok(html.download(releases, examples, selectedPlatform))
-        }
-    }
+  def download = Action { implicit request =>
+    Ok(html.download())
   }
+  
 
   def allreleases(platform: Option[String] = None) = Action.async { implicit request =>
     val selectedPlatform = Platform(platform.orElse(request.headers.get("User-Agent")))

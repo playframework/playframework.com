@@ -1,75 +1,42 @@
-@(releases: PlayReleases, examples: PlayExamples, platform: Platform.Platform,
-        title: String = "Try Play")(implicit requestHeader: RequestHeader)
-
-@renderRelease(linkClass: String, release: PlayRelease) = {
-@if(release.secureUrl) {
-  <td width="250">
-    <a href="@release.secureUrl.get" class="@linkClass" data-version="@{release.version}">play-@{release.version}.zip</a>
-  </td>
-  <td width="200">
-  @release.date
-  </td>
-  <td width="100">
-  @release.size.get
-  </td>
-} else {
-  <td width="250">
-    Play @release.version
-  </td>
-  <td width="200">
-  @release.date
-  </td>
-  <td width="100">
-  </td>
-}
-}
-
-@versionAtLeast(v1: String, v2: String) = @{
-  import math.Ordering.Implicits._
-  v1.split('.').toSeq >= v2.split('.').toSeq
-}
+@(title: String = "Try Play")(implicit requestHeader: RequestHeader)
 
 @main(title, "download") {
-
   <header id="top">
     <div class="wrapper">
       <h1>
-      @title
+      It's quick and easy to get started
       </h1>
     </div>
   </header>
   <section id="content">
+  <div style="margin: 10pt;">  <article>
+      <h2>What would you like to do?</h2>
+      <p>To learn about Play hands-on, try the examples as described below. When you are ready to build your own app, use a <a href="@controllers.documentation.ReverseRouter.latest(None, "NewApplication")">seed template</a> that sets up the project structure and dev environment for you. You can easily integrate Play projects into your <a href="@controllers.documentation.ReverseRouter.latest(None, "IDE")">favorite IDE</a>. </p>
 
-    <article class="starter">
-      <h2>It's quick and easy to get started!</h2>
-      <p>Lightbend Tech Hub generates a variety of <a href="https://developer.lightbend.com/start/?group=play" target="_blank">Play example projects</a>. Just unzip, build, and run the projects using <code>sbt</code> or Gradle. The build tool automatically downloads everything you need to start working with Play, including an HTTP server.</p>
-      <p>For your first experience with Play, we suggest the Starter Example for <a href="https://developer.lightbend.com/start/?group=play&project=play-java-starter-example" target="_blank">Java</a> or <a href="https://developer.lightbend.com/start/?group=play&project=play-scala-starter-example" target="_blank">Scala</a>.  The other examples available from <a href="https://developer.lightbend.com/start/?group=play" target="_blank">Tech Hub</a> showcase a particular feature or illustrate how to satisfy a common use case. When you are ready to build your own app, use a <a href="@controllers.documentation.ReverseRouter.latest(None, "NewApplication")">seed template</a> that sets up the appropriate project structure and dev environment for you. </p>
-    
-      
-      <p>Note: To develop a Play app or use one of the examples, you will need Java Java Software Developer's Kit (SE) 1.8 or higher. If you do not have the required version, you can obtain it from: <span style="font-weight: bold"><a href="https://www.oracle.com/technetwork/java/javase/downloads/index.html" target="_blank"> Java SE</a></span>.
-      
-      
+    <hr />
+
+    <h3>Downloading and building examples</h3>
+  <p>Lightbend <a href="https://developer.lightbend.com/start/?group=play" target="_blank">Tech Hub</a> offers a variety of Play examples for Java and Scala. We recommend trying the Play Starter Example first.</p> 
+  <p>The downloadable zip files include everything you need to build and run the examples, including a distribution of the Simple Build Tool <a href="https://www.scala-sbt.org/index.html" target="_blank"><code>sbt</code></a>. If you have Gradle, you can use it as a build tool instead. </p>
   
-
-  </section>
-
-  <div class="get-started" style="display: none">
-    <div class="back"></div>
-    <div class="wrapped typo">
-      <q>Your download will begin shortly...</q>
-      <h3>What's next?</h3>
-      <ul>
-        <li><a href="@controllers.documentation.ReverseRouter.latest(None, "Installing")">Installation</a></li>
-        <li class="bold"><a href="@controllers.documentation.ReverseRouter.latest(None, "NewApplication")">
-          Get started</a></li>
-        <li><a href="@routes.Application.download()">Read the complete documentation</a></li>
-        <li><a href="@routes.Application.getInvolved">Get involved</a></li>
-        <li><a href="//twitter.com/playframework">Follow us on Twitter</a></li>
-        <li><a href="//stackoverflow.com/questions/tagged/playframework">Ask questions on StackOverflow</a></li>
+  <p>After downloading and unzipping an example, follow these steps to build and run it:</p>
+  <ol>
+    <li>In a command window, navigate to the top level project directory.</li>
+    <li>Enter one of the following commands:
+      <p></p>
+      <ul><li>On OSx or Linux systems: <code>./sbt run</code> or <code>./gradle runPlayBinary</code></li>
+        <li>On Windows systems: <code>sbt run</code> or <code>gradle runPlayBinary</code></li>
       </ul>
-    </div>
-  </div>
+    <p>The build tool downloads dependencies and compiles the project.</p></li>
+      <li>After the build finishes, enter the following URL in a browser to view the app:
+        <p><code>http://localhost:9000</code></p>
+    </li>
+    
+  </ol>
+  <p>Check out the readme file in the top level project directory to learn more about the example.</p>
 
-    <!-- Downloads are targeted at this iframe -->
-  <iframe name="download-iframe" style="display: none" src="data:," />
+    </article>
+</div>
+</section>
+
 }
