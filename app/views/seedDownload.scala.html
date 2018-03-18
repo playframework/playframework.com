@@ -23,12 +23,7 @@
     Use <code>sbt run</code> and then go to <a href="http://localhost:9000">http://localhost:9000</a>
     to see the running server.
   </p>
-
-  <p>
-    Type <code>g8Scaffold form</code>
-    from sbt to create the scaffold controller, template and tests needed to process a form. You can also create your own giter8 seeds and scaffolds based off this one by forking from the <a href="https://github.com/playframework/play-java-seed.g8">https://github.com/playframework/play-java-seed.g8</a> or <a href="https://github.com/playframework/play-scala-seed.g8">https://github.com/playframework/play-scala-seed.g8</a> github projects.
-  </p>
-
+  
   @downloads.sections.headOption.toIterable.flatMap(_._2.seeds.values.flatten.filter(_.gitHubRepo.endsWith(".g8"))).map { project: ExampleProject =>
     <div class="seed-project">
       <h4>@project.displayName</h4>
