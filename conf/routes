@@ -47,6 +47,13 @@ GET         /assets/*file                                            controllers
 
 GET         /sitemap-index.xml                                       controllers.Assets.at(path="/public", file="sitemap-index.xml")
 GET         /sitemap-main.xml                                        controllers.Assets.at(path="/public", file="sitemap-main.xml")
+
+GET         /favicon.ico                                             controllers.Assets.at(path="/public", file="images/favicon.ico")
+GET         /apple-touch-icon.png                                    controllers.Assets.at(path="/public", file="images/apple-touch-icon.png")
+GET         /apple-touch-icon-precomposed.png                        controllers.Assets.at(path="/public", file="images/apple-touch-icon.png")
+GET         /apple-touch-icon-120x120.png                            controllers.Assets.at(path="/public", file="images/apple-touch-icon-120x120.png")
+GET         /apple-touch-icon-120x120-precomposed.png                controllers.Assets.at(path="/public", file="images/apple-touch-icon-120x120.png")
+
 GET         /sitemap-documentation.xml                               controllers.documentation.DocumentationController.sitemap
 GET         /robots.txt                                              controllers.Application.robots
 
