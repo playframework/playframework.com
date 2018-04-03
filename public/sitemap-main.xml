@@ -5,15 +5,17 @@
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>https://www.playframework.com/download</loc>
+        <loc>https://www.playframework.com/getting-started</loc>
         <priority>1.0</priority>
     </url>
-    <!-- Support page is currently in a "todo" state, so don't add it to the sitemap
+    <url>
+        <loc>https://www.playframework.com/releases</loc>
+        <priority>1.0</priority>
+    </url>
     <url>
         <loc>https://www.playframework.com/support</loc>
         <priority>1.0</priority>
     </url>
-    -->
     <url>
         <loc>https://www.playframework.com/code</loc>
         <priority>1.0</priority>
