@@ -64,25 +64,25 @@ class Application @Inject() (
     MovedPermanently(routes.Application.gettingStarted.path)
   }
 
-  def gettingStarted = Action { implicit request =>
-    Ok(html.gettingStarted())
-  }
+  def gettingStarted = Action.async { implicit request =>
 
-  def allreleases(platform: Option[String] = None) = Action.async { implicit request =>
-    val selectedPlatform = Platform(platform.orElse(request.headers.get("User-Agent")))
-  
     exampleProjectsService.cached() match {
       case Some(cached) =>
         val examples = toExamples(cached)
         Future.successful {
-          Ok(html.allreleases(releases, examples, selectedPlatform))
+          Ok(html.gettingStarted(examples))
         }
       case None =>
         exampleProjectsService.examples().map { live =>
           val examples = toExamples(live)
-          Ok(html.allreleases(releases, examples, selectedPlatform))
+          Ok(html.gettingStarted(examples))
         }
     }
+  }
+
+  def allreleases(platform: Option[String] = None) = Action { implicit request =>
+    val selectedPlatform = Platform(platform.orElse(request.headers.get("User-Agent")))
+    Ok(html.allreleases(releases, selectedPlatform))
   }
   
   def changelog = markdownAction("public/markdown/changelog.md", { implicit request =>
