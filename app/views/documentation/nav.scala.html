@@ -18,7 +18,7 @@
     <h3>Browse versions</h3>
     <div class="switch">
         @for(version <- Helpers.latestCurrent(context)) {
-            <a href="@controllers.documentation.ReverseRouter.switch(context.alternateLang, version.name, page)">@version.name</a>
+            <a ga-on="click" ga-event-category="Version" ga-event-action="@version.name" href="@controllers.documentation.ReverseRouter.switch(context.alternateLang, version.name, page)">@version.name</a>
         }
         <dl class="dropdown">
             <dt>▾</dt>
@@ -34,7 +34,7 @@
         <h3>Browse APIs</h3>
         <div class="switch">
         @for(api <- apis) {
-            <a href="@controllers.documentation.ReverseRouter.api(version.name, api._2)">@api._1</a>
+            <a ga-on="click" ga-event-category="API" ga-event-action="@api._1" href="@controllers.documentation.ReverseRouter.api(version.name, api._2)">@api._1</a>
         }
         </div>
     }
