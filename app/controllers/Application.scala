@@ -55,23 +55,33 @@ class Application @Inject() (
     Ok(views.html.widget(news(version)))
   }
 
-  def download(platform: Option[String] = None) = Action.async { implicit request =>
-    val selectedPlatform = Platform(platform.orElse(request.headers.get("User-Agent")))
+  // This used to be the download/getting-started page. We are keeping
+  // the URL for SEO purposes only.
+  def download = Action { implicit request =>
+    MovedPermanently(routes.Application.gettingStarted.path)
+  }
 
+  def gettingStarted = Action { implicit request =>
+    Ok(html.gettingStarted())
+  }
+
+  def allreleases(platform: Option[String] = None) = Action.async { implicit request =>
+    val selectedPlatform = Platform(platform.orElse(request.headers.get("User-Agent")))
+  
     exampleProjectsService.cached() match {
       case Some(cached) =>
         val examples = toExamples(cached)
         Future.successful {
-          Ok(html.download(releases, examples, selectedPlatform))
+          Ok(html.allreleases(releases, examples, selectedPlatform))
         }
       case None =>
         exampleProjectsService.examples().map { live =>
           val examples = toExamples(live)
-          Ok(html.download(releases, examples, selectedPlatform))
+          Ok(html.allreleases(releases, examples, selectedPlatform))
         }
     }
   }
-
+  
   def changelog = markdownAction("public/markdown/changelog.md", { implicit request =>
     views.html.changelog(_)
   })

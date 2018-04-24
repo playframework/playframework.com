@@ -125,7 +125,7 @@ $(function(){
             } else if(delta < 70){
                 els.developer.terminal.css("background-position", "-401px 0")
                 els.developer.editor.css("background-position", "-401px 0")
-                els.developer.browser.css("background-position", "0 0")
+                els.developer.browser.css("background-position", "-802px 0")
             } else {
                 els.developer.terminal.css("background-position", "-401px 0")
                 els.developer.editor.css("background-position", "-401px 0")
@@ -133,21 +133,21 @@ $(function(){
             }
 
             if (delta < 50){
-                els.developer.editor.css(vendor, "translate3d(0,"+(250-delta*4)+"px,"+(25-delta/2)+"px) rotateX(-"+(50-delta)+"deg)")
+                els.developer.editor.css(vendor, "translate3d(0,"+(250-delta*4)+"px,"+(20-delta/2)+"px)")
                 els.developer.editor.css("opacity", (delta*2)/100)
             } else {
-                els.developer.editor.css(vendor, "translate3d(0,50px,"+(25-delta/2)+"px) rotateX(0)")
+                els.developer.editor.css(vendor, "translate3d(0,50px,"+(20-delta/2)+"px) rotateX(0)")
                 els.developer.editor.css("opacity", 1)
             }
 
             if (delta < 20){
-                els.developer.browser.css(vendor, "translate3d(0,"+(300-(delta-20)*4)+"px,"+(50-delta/2)+"px) rotateX(-20deg)")
+                els.developer.browser.css(vendor, "translate3d(0,"+(300-(delta-20)*4)+"px,"+(30-delta/2)+"px)")
                 els.developer.browser.css("opacity", 0)
             } else if (delta < 70) {
-                els.developer.browser.css(vendor, "translate3d(0,"+(300-(delta-20)*4)+"px,"+(50-delta/2)+"px) rotateX(-"+(50-(delta-20))+"deg)")
+                els.developer.browser.css(vendor, "translate3d(0,"+(300-(delta-20)*4)+"px,"+(30-delta/2)+"px)")
                 els.developer.browser.css("opacity", ((delta-20)*2)/100)
             } else {
-                els.developer.browser.css(vendor, "translate3d(0,100px,"+(50-delta/2)+"px) rotateX(0)")
+                els.developer.browser.css(vendor, "translate3d(0,100px,"+(30-delta/2)+"px) rotateX(0)")
                 els.developer.browser.css("opacity", 1)
             }
         })

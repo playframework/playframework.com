@@ -28,7 +28,7 @@ Although this list cannot be exhaustive, we explicitly honor diversity in age, c
 
 We recommend you first speak with respective project leads and committers about the issue.
 
-If that doesn't work, or if you want to report issues privately, please fill out the [contact owner](https://groups.google.com/forum/#!contactowner/play-framework) form for the Play mailing list.
+If you have a concern about the conduct of other community members, we recommend you first speak with respective project leads and committers about the problem. If unsure where to ask, you can contact the team by filling out the [Lightbend contact form](https://www.lightbend.com/contact) or emailing <info@lightbend.com>.
 
 ## Thanks
 

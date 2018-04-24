@@ -1,32 +1,35 @@
 @(title: String = "Support")(implicit requestHeader : RequestHeader)
 
-@main(title, "support"){
+@main(title, "support") {
     <header id="top">
         <div class="wrapper">
-            <h1>
-                @title
-            </h1>
+            <h1>@title</h1>
         </div>
     </header>
     <section id="content">
         <article>
+            <h1>How to obtain help</h1>
+            <p>Lightbend sponsors the Play Framework open source project and encourages community contributions. Take advantage of free help from the active community and learn more about commercial support from Lightbend. Enterprises can adopt Play for mission critical systems with confidence because Lightbend stands behind it with first-class commercial support and services.</p>
+
             <section>
-                <h1>Community support</h1>
-                <p>Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
+                <h2>Community support</h2>
                 <ul>
-                    <li><a href="#">Mailing list (Google group)</a></li>
-                    <li><a href="#">Stackoverflow</a></li>
+                    <li>The Play <a href="//discuss.playframework.com">Discuss Forum</a></li>
+                    <li>The Play <a href="//gitter.im/playframework/playframework">Gitter Channel</a></li>
+                    <li>Play questions on <a href="//stackoverflow.com/questions/tagged/playframework">Stack Overflow</a></li>
                 </ul>
             </section>
             <section>
-                <h1>Professional support</h1>
-                <p>Fusce pharetra nisi ac dolor ultricies sollicitudin. Nullam leo libero, faucibus eu fermentum nec, cursus a mauris.</p>
+                <h2>Commercial support</h2>
                 <ul>
-                    <li><a href="#">Lightbend Subscription</a></li>
-                    <li><a href="#">Training</a></li>
-                    <li><a href="#">Consulting</a></li>
+                    <li><a href="//www.lightbend.com/subscription" target="_blank">Subscription</a></li>
+                    <li><a href="//www.lightbend.com/services/training" target="_blank">Training</a></li>
+                    <li><a href="//www.lightbend.com/services/consulting" target="_blank">Consulting</a></li>
                 </ul>
             </section>
         </article>
+        <aside>
+            @commonSidebar()
+        </aside>
     </section>
 }
