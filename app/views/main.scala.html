@@ -20,6 +20,15 @@
         <meta name="globalsign-domain-verification" content="wISFsU3SjLaCmI4hF3fuBebFOs4shuuBnKV7fGALYz" />
         <meta name="google-site-verification" content="9oxXjOc4jWfnf21Iep-0dc2sDawa14s-Gpwho_yb5AU" />
 
+        <!-- OneTrust Cookies Consent Notice (Staging, playframework.com, en-GB) start -->
+        <script src="https://optanon.blob.core.windows.net/consent/cf9a6823-fec0-455d-b6c6-5f386804e808-test.js" type="text/javascript" charset="UTF-8"></script>
+        <script type="text/javascript">
+            function OptanonWrapper() {
+                //one trust inserts here
+            }
+        </script>
+        <!-- OneTrust Cookies Consent Notice (Staging, playframework.com, en-GB) end -->
+
         <!--[if lt IE 9]>
         <script src="@routes.Assets.versioned("lib/html5shiv/html5shiv.js")"></script>
         <![endif]-->
@@ -167,14 +176,46 @@
                     Play Framework is released under the Apache 2 License
                 </p>
             </div>
+            <div class="lb-legal">
+                <p>
+                    &copy; Lightbend 2018 | 
+                    <a href="https://www.lightbend.com/legal/licenses" target="_blank">Licenses</a> | 
+                    <a href="https://www.lightbend.com/legal/terms" target="_blank">Terms</a> | 
+                    <a href="https://www.lightbend.com/legal/privacy" target="_blank">Privacy Policy</a> | 
+                    <a href="@routes.Application.cookie()">Cookie Listing</a> | 
+                    <a class="optanon-toggle-display">Cookie Settings</a>
+                </p>
+            </div>
+
         </footer>
 
-        <a href="http://www.reactivemanifesto.org/" id="reactive_ribbon">
-            <img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000"
-                src="//d379ifj7s9wntv.cloudfront.net/reactivemanifesto/images/ribbons/we-are-reactive-black-right.png">
-        </a>
+        <a href="http://www.reactivemanifesto.org/" id="reactive_ribbon"><img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000" src="//d379ifj7s9wntv.cloudfront.net/reactivemanifesto/images/ribbons/we-are-reactive-black-right.png"></a>
 
-        <script type="text/javascript">
+        <script type="text/plain" class="optanon-category-2">
+
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-37989507-1']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
+
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+              })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-23127719-1', 'lightbend.com', {'allowLinker': true, 'name': 'tsTracker'});
+            ga('require', 'linker');
+            ga('linker:autoLink', ['lightbend.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org','scala-ide.org']);
+            ga('tsTracker.send', 'pageview');
+        </script>
+
+
+        <script type="text/plain" class="optanon-category-3">
         (function() {
           var didInit = false;
           function initMunchkin() {
