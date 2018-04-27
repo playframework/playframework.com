@@ -27,7 +27,7 @@
                     <div class="try-option-content">
                         <ul>
                             <li><a href="@controllers.documentation.ReverseRouter.latest(None, "Introduction")">Introduction to Play</a></li>
-                            <li><a href="@controllers.documentation.ReverseRouter.latest(None, "Requirements")">Requirements to work With Play</a></li>
+                            <li><a href="@controllers.documentation.ReverseRouter.latest(None, "Requirements")">Requirements for using Play</a></li>
                             <li><a href="@controllers.documentation.ReverseRouter.latest(None, "Philosophy")">Our philosophy</a></li>
                         </ul>
                     </div>
@@ -36,7 +36,7 @@
                 <div class="try-option">
                     <h3><span>&raquo;</span> Follow the Hello World Tutorial</h3>
                     <div class="try-option-content">
-                        <p>Play requires Java SE 1.8 or higher. You can check your version with the <code>java -version</code> command or install it from <a href="//www.oracle.com/technetwork/java/javase/downloads/index.html" rel="noopener">Oracle's site</a>. See details about the <a href="@controllers.documentation.ReverseRouter.latest(None, "Requirements")">requirements to work with Play</a>.</p>
+                        <p>Play requires Java 8 or higher. You can check your version with the <code>java -version</code> command or install it from <a href="//www.oracle.com/technetwork/java/javase/downloads/index.html" rel="noopener">Oracle's site</a>. See details about <a href="@controllers.documentation.ReverseRouter.latest(None, "Requirements")">Play's system requirement</a>.</p>
                         <p>First, download the starter project:</p>
                             <table>
                             @examples.sections.map { case (version, section) =>
@@ -59,20 +59,20 @@
             <div class="try-section">
                 <h2>Already know a bit about Play?</h2>
                 <p>Check out our <a href="//developer.lightbend.com/start/?group=play">example projects for Java or Scala</a>. The downloadable zip files include everything you need, including <a href="//www.scala-sbt.org/index.html">sbt</a>, Play Framework, and an HTTP server. Examples also support <a href="//docs.gradle.org/current/userguide/play_plugin.html">Gradle</a>. You can also create a Play project from the command line using a template if you have sbt installed already.</p>
-                <p>Play requires Java SE 1.8 or higher. You can check your version with the <code>java -version</code> command or install it from <a href="//www.oracle.com/technetwork/java/javase/downloads/index.html" rel="noopener">Oracle's site</a>. See details about the <a href="@controllers.documentation.ReverseRouter.latest(None, "Requirements")">requirements to work with Play</a>.</p>
+                <p>Play requires Java 8 or higher. You can check your version with the <code>java -version</code> command or install it from <a href="//www.oracle.com/technetwork/java/javase/downloads/index.html" rel="noopener">Oracle's site</a>. See details about the <a href="@controllers.documentation.ReverseRouter.latest(None, "Requirements")">requirements to work with Play</a>.</p>
 
                 <div class="try-option">
                     <h3><span>&raquo;</span> Try a focused example</h3>
                     <div class="try-option-content">
                         <p>Follow these steps to try an example project:</p>
                         <ol>
-                            <li>Choose an example from <a href="">Lightbend's Tech Hub</a>.</li>
+                            <li>Choose an example from <a href="https://developer.lightbend.com/start/?group=play">Lightbend's Tech Hub</a>.</li>
                             <li>Click "CREATE A PROJECT FOR ME" to download the zipped project.</li>
                             <li>Unzip the project in a convenient location.</li>
                             <li>In a command window, navigate to the top level project directory.</li>
                             <li>Enter one of the following commands:
                                 <ul>
-                                    <li>On OSx or Linux systems: <code>./sbt run</code> or <code>./gradlew runPlayBinary</code></li>
+                                    <li>On macOS or Linux systems: <code>./sbt run</code> or <code>./gradlew runPlayBinary</code></li>
                                     <li>On Windows systems: <code>sbt.bat run</code> or <code>gradlew.bat runPlayBinary</code></li>
                                 </ul>
                             </li>
