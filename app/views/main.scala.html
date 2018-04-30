@@ -7,24 +7,6 @@
         <title>@title</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width,maximum-scale=1"/>
-        <script>
-            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-                    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-            ga('require', 'linker');
-            ga('require', 'maxScrollTracker');
-            ga('require', 'eventTracker');
-            ga('require', 'outboundLinkTracker');
-
-            ga('create', 'UA-37989507-1', 'auto');
-            ga('send', 'pageview');
-
-            ga('create', 'UA-23127719-1', 'lightbend.com', {'allowLinker': true, 'name': 'tsTracker'});
-            ga('linker:autoLink', ['lightbend.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org','scala-ide.org']);
-            ga('tsTracker.send', 'pageview');
-        </script>
         <script src="@routes.Assets.versioned("javascripts/autotrack.js")"></script>
         <style type="text/css">
         @@import "@routes.Assets.versioned("lib/prettify/prettify.css")";
@@ -211,24 +193,20 @@
         <a href="http://www.reactivemanifesto.org/" id="reactive_ribbon"><img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000" src="//d379ifj7s9wntv.cloudfront.net/reactivemanifesto/images/ribbons/we-are-reactive-black-right.png"></a>
 
         <script type="text/plain" class="optanon-category-2">
-
-            var _gaq = _gaq || [];
-            _gaq.push(['_setAccount', 'UA-37989507-1']);
-            _gaq.push(['_trackPageview']);
-
-            (function() {
-                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-            })();
-
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-              })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+            ga('require', 'linker');
+            ga('require', 'maxScrollTracker');
+            ga('require', 'eventTracker');
+            ga('require', 'outboundLinkTracker');
+
+            ga('create', 'UA-37989507-1', 'auto');
+            ga('send', 'pageview');
 
             ga('create', 'UA-23127719-1', 'lightbend.com', {'allowLinker': true, 'name': 'tsTracker'});
-            ga('require', 'linker');
             ga('linker:autoLink', ['lightbend.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org','scala-ide.org']);
             ga('tsTracker.send', 'pageview');
         </script>
