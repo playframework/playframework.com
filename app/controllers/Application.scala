@@ -117,6 +117,10 @@ class Application @Inject() (
     Ok(html.getInvolved())
   }
 
+    def cookie = Action { implicit request =>
+      Ok(html.cookie())
+    }
+
   def certification = Action { implicit request =>
     Ok(html.certification(Certification.form))
   }
