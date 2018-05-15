@@ -1,13 +1,13 @@
  @(title: String, scope: String = "home")(content: Html)(implicit requestHeader : RequestHeader)
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <title>@title</title>
-        <meta name="description" content="">
+        <meta name="description" content="Play Framework - The High Velocity Web Framework For Java and Scala">
         <meta name="viewport" content="width=device-width,maximum-scale=1"/>
-        <style type="text/css">
+        <style>
         @@import "@routes.Assets.versioned("lib/prettify/prettify.css")";
         </style>
         <link href="//fonts.googleapis.com/css?family=PT+Serif:700italic" rel="stylesheet" type="text/css">
@@ -74,31 +74,31 @@
             <div class="pan">
                 <q>Is that what you're looking for?</q>
                 <figure>
-                    <img src="/assets/images/logos/play_full_color.svg">
+                    <img src="@routes.Assets.versioned("images/logos/play_full_color.svg")">
                      <figcaption>
-                        <a href="/assets/images/logos/play_full_color.svg">(svg)</a>
-                        <a href="/assets/images/logos/play_full_color.png">(png)</a>
+                        <a href="@routes.Assets.versioned("images/logos/play_full_color.svg")">(svg)</a>
+                        <a href="@routes.Assets.versioned("images/logos/play_full_color.png")">(png)</a>
                      </figcaption>
                 </figure>
                 <figure>
-                    <img src="/assets/images/logos/play_icon_full_color.svg">
+                    <img src="@routes.Assets.versioned("images/logos/play_icon_full_color.svg")">
                      <figcaption>
-                        <a href="/assets/images/logos/play_icon_full_color.svg">(svg)</a>
-                        <a href="/assets/images/logos/play_icon_full_color.png">(png)</a>
+                        <a href="@routes.Assets.versioned("images/logos/play_icon_full_color.svg")">(svg)</a>
+                        <a href="@routes.Assets.versioned("images/logos/play_icon_full_color.png")">(png)</a>
                      </figcaption>
                 </figure>
                 <figure class="reverse">
-                    <img src="/assets/images/logos/play_reverse.svg">
+                    <img src="@routes.Assets.versioned("images/logos/play_reverse.svg")">
                      <figcaption>
-                        <a href="/assets/images/logos/play_reverse.svg">(svg)</a>
-                        <a href="/assets/images/logos/play_reverse.png">(png)</a>
+                        <a href="@routes.Assets.versioned("images/logos/play_reverse.svg")">(svg)</a>
+                        <a href="@routes.Assets.versioned("images/logos/play_reverse.png")">(png)</a>
                      </figcaption>
                 </figure>
                 <figure class="reverse">
-                    <img src="/assets/images/logos/play_icon_reverse.svg">
+                    <img src="@routes.Assets.versioned("images/logos/play_icon_reverse.svg")">
                      <figcaption>
-                        <a href="/assets/images/logos/play_icon_reverse.svg">(svg)</a>
-                        <a href="/assets/images/logos/play_icon_reverse.png">(png)</a>
+                        <a href="@routes.Assets.versioned("images/logos/play_icon_reverse.svg")">(svg)</a>
+                        <a href="@routes.Assets.versioned("images/logos/play_icon_reverse.png")">(png)</a>
                      </figcaption>
                 </figure>
             </div>
@@ -169,9 +169,9 @@
                 </div>
             </div>
             <div class="credits">
-                <a href="/" class="logo"><img src="/assets/images/logos/play_reverse.svg"></a>
-                <a href="//lightbend.com" class="partner"><img src="/assets/images/logos/lightbend-reverse.svg"></a>
-                <a href="http://zengularity.com" class="partner"><img src="/assets/images/logos/zengularity.png"></a>
+                <a href="/" class="logo"><img src="@routes.Assets.versioned("images/logos/play_reverse.svg")"></a>
+                <a href="//lightbend.com" class="partner"><img src="@routes.Assets.versioned("images/logos/lightbend-reverse.svg")"></a>
+                <a href="http://zengularity.com" class="partner"><img src="@routes.Assets.versioned("images/logos/zengularity.png")"></a>
                 <p>
                     Play Framework is released under the Apache 2 License
                 </p>
@@ -191,25 +191,22 @@
 
         <a href="http://www.reactivemanifesto.org/" id="reactive_ribbon"><img style="border: 0; position: fixed; right: 0; top:0; z-index: 9000" src="//d379ifj7s9wntv.cloudfront.net/reactivemanifesto/images/ribbons/we-are-reactive-black-right.png"></a>
 
+        <script type="text/plain" class="optanon-category-2" src="@routes.Assets.versioned("javascripts/autotrack.js")"></script>
         <script type="text/plain" class="optanon-category-2">
-
-            var _gaq = _gaq || [];
-            _gaq.push(['_setAccount', 'UA-37989507-1']);
-            _gaq.push(['_trackPageview']);
-
-            (function() {
-                var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-                ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-                var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-            })();
-
             (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-              })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+            ga('require', 'linker');
+            ga('require', 'maxScrollTracker');
+            ga('require', 'eventTracker');
+            ga('require', 'outboundLinkTracker');
+
+            ga('create', 'UA-37989507-1', 'auto');
+            ga('send', 'pageview');
 
             ga('create', 'UA-23127719-1', 'lightbend.com', {'allowLinker': true, 'name': 'tsTracker'});
-            ga('require', 'linker');
             ga('linker:autoLink', ['lightbend.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org','scala-ide.org']);
             ga('tsTracker.send', 'pageview');
         </script>
