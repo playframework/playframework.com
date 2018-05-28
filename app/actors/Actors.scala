@@ -16,6 +16,24 @@ class ActorsModule extends AbstractModule with AkkaGuiceSupport {
     bindActor[DocumentationActor]("documentation-actor")
     bindActorFactory[DocumentationPollingActor, DocumentationPollingActor.Factory]
     bind(classOf[DocumentationConfig]).toProvider(classOf[DocumentationConfigProvider])
+    bind(classOf[DocumentationRedirects]).toProvider(classOf[DocumentationRedirectsProvider])
+  }
+}
+
+@Singleton
+class DocumentationRedirectsProvider @Inject() (configuration: Configuration) extends Provider[DocumentationRedirects] {
+  override def get: DocumentationRedirects = {
+    configuration.getConfigList("documentation.redirects") match {
+      case Some(redirectsConfig) => DocumentationRedirects(
+        redirectsConfig.map { config =>
+          RedirectPage(
+            from = config.getString("from").getOrElse(""),
+            to = config.getString("to").getOrElse("")
+          )
+        }
+      )
+      case None => DocumentationRedirects(Seq.empty)
+    }
   }
 }
 
