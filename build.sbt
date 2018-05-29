@@ -5,7 +5,7 @@ JsEngineKeys.engineType := JsEngineKeys.EngineType.Node
 name := "playframework"
 version := "1.0-SNAPSHOT"
 
-lazy val root = (project in file(".")).enablePlugins(PlayScala)
+lazy val root = (project in file(".")).enablePlugins(PlayScala, NewRelic)
 
 libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-doc" % "1.5.0",
@@ -52,3 +52,7 @@ sourceGenerators in Compile += Def.task {
 managedSourceDirectories in Compile += crossTarget.value / "version"
 sources in (Compile, doc) := Seq.empty
 publishArtifact in (Compile, packageDoc) := false
+
+// NewRelic settings
+newrelicVersion := "4.1.0"
+newrelicAppName := "playframework.com"
