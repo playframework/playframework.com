@@ -7,7 +7,7 @@ import akka.pattern.ask
 import akka.util.Timeout
 import javax.inject.{Named, Inject, Singleton}
 import models.PlayReleases
-import models.documentation.{AlternateTranslation, TranslationContext, Version}
+import models.documentation.{ AlternateTranslation, DocumentationRedirects, TranslationContext, Version }
 import org.joda.time.format.DateTimeFormat
 import play.api.http.HttpEntity
 import play.api.i18n.{MessagesApi, Lang}
@@ -23,6 +23,7 @@ import scala.reflect.ClassTag
 @Singleton
 class DocumentationController @Inject()(
   messages: MessagesApi,
+  documentationRedirects: DocumentationRedirects,
   @Named("documentation-actor") documentationActor: ActorRef,
   releases: PlayReleases) extends Controller {
 
@@ -164,7 +165,22 @@ class DocumentationController @Inject()(
       case RenderedPage(html, sidebarHtml, breadcrumbsHtml, source, context, cacheId) =>
         val result = Ok(views.html.documentation.v2(messages, context, page, Some(html), sidebarHtml, source, breadcrumbs = breadcrumbsHtml))
         cacheable(withLangHeaders(result, page, context), cacheId)
+    } flatMap { result =>
+      if (result.header.status == NOT_FOUND) {
+        documentationRedirects.redirectFor(page) match {
+          case Some(redirect) =>
+            pageExists(version, redirect.to).map {
+              case Some(_) => Results.MovedPermanently(ReverseRouter.page(lang, v, redirect.to))
+              case None => Results.MovedPermanently(redirect.to)
+            }
+          case None =>
+            Future.successful(result)
+        }
+      } else {
+        Future.successful(result)
+      }
     }
+
     for {
       link <- linkFuture
       result <- resultFuture
