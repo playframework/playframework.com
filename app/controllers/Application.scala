@@ -1,11 +1,13 @@
 package controllers
 
-import javax.inject.{Inject, Singleton}
+import java.io.InputStream
 
+import javax.inject.{Inject, Singleton}
 import models._
 import models.certification.Certification
 import org.apache.commons.io.IOUtils
 import play.api._
+import play.api.cache.CacheApi
 import play.api.i18n.{I18nSupport, Lang, MessagesApi}
 import play.api.mvc._
 import play.twirl.api.Html
@@ -22,7 +24,8 @@ class Application @Inject() (
   val messagesApi: MessagesApi,
   certificationDao: CertificationDao,
   releases: PlayReleases,
-  exampleProjectsService: PlayExampleProjectsService
+  exampleProjectsService: PlayExampleProjectsService,
+  cacheApi: CacheApi
 )(implicit ec: ExecutionContext) extends Controller with Common with I18nSupport {
 
   private val VulnerableVersions = Set(
@@ -38,7 +41,7 @@ class Application @Inject() (
           <p>Please upgrade to a later version <a href="${routes.Application.download()}">here</a>.</p>"""
 
     } orElse {
-      if (version.forall(_ != releases.latest.version)) {
+      if (!version.contains(releases.latest.version)) {
         Some(s"""Play framework ${releases.latest.version} is out!  Check it out <a href="${routes.Application.download()}">here</a>.""")
       } else {
         None
@@ -99,14 +102,31 @@ class Application @Inject() (
   })
 
   def markdownAction(markdownFile: String, template: RequestHeader => Html => Html) = Action { implicit request =>
-    environment.resourceAsStream(markdownFile).map { is =>
-      try {
-        Ok(template(request)(Html(Markdown.toHtml(IOUtils.toString(is, "utf-8"), link => (link, link)))))
-          .withHeaders(CACHE_CONTROL -> "max-age=10000")
-      } finally {
-        is.close()
-      }
-    } getOrElse notFound
+    def readInputStream(is: InputStream): String = try {
+      IOUtils.toString(is, "utf-8")
+    } finally {
+      is.close()
+    }
+
+    def fromMarkdownToHtml(md: String): String = Markdown.toHtml(md, link => (link, link))
+
+    // Read from cache or either from an input stream.
+    val page = cacheApi.get[String](markdownFile).orElse {
+      environment
+        .resourceAsStream(markdownFile)
+        .map(readInputStream)
+        .map(fromMarkdownToHtml)
+    }
+
+    // We can cache the generated HTML like forever since
+    // the file is updated only when deploying and cache
+    // is gone when deploying.
+    page.foreach(cacheApi.set(markdownFile, _))
+
+    page match {
+      case Some(content) => Ok(template(request)(Html(content))).withHeaders(CACHE_CONTROL -> "max-age=10000")
+      case None => notFound
+    }
   }
 
   def support = Action { implicit request =>
