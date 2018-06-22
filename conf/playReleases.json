@@ -3,7 +3,12 @@
             "version": "2.6.15",
             "date": "May 27 2018"
     },
-    "development": [],
+    "development": [
+        {
+            "version": "2.7.0-M1",
+            "date": "Jun 22 2018"
+        }
+    ],
     "previous": [
         {
             "version": "2.6.15",
