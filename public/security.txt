@@ -1,0 +1,2 @@
+Contact: mailto:security@playframework.com
+Policy: https://www.playframework.com/security/vulnerability
