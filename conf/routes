@@ -56,6 +56,7 @@ GET         /apple-touch-icon.png                                    controllers
 GET         /apple-touch-icon-precomposed.png                        controllers.Assets.at(path="/public", file="images/apple-touch-icon.png")
 GET         /apple-touch-icon-120x120.png                            controllers.Assets.at(path="/public", file="images/apple-touch-icon-120x120.png")
 GET         /apple-touch-icon-120x120-precomposed.png                controllers.Assets.at(path="/public", file="images/apple-touch-icon-120x120.png")
+GET         /.well-known/security.txt                                controllers.Assets.at(path="/public", file="security.txt")
 
 GET         /sitemap-documentation.xml                               controllers.documentation.DocumentationController.sitemap
 GET         /robots.txt                                              controllers.Application.robots
