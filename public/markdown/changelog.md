@@ -1048,6 +1048,36 @@ A complete list of what was fixed for 2.2.2 can be found on [Github](https://git
 * Removed circular dependencies in dev mode ClassLoaders
 
 
+## Play 1.5.1
+
+*Released 17 july 2018*
+
+
+* [#2173](https://play.lighthouseapp.com/projects/57987/tickets/2173): Add LocalDateTime binder  
+* [#1133](https://github.com/playframework/play1/issues/1133): Allow customization of @CacheFor cache key
+* [#1186](https://github.com/playframework/play1/issues/1186): [#2138]enhance the function for the injector (Add the injectable interface)
+* [#1193](https://github.com/playframework/play1/issues/1193): Update select.tag to support "null" option of select with attribute "showEmpty: true"
+* [#1232](https://github.com/playframework/play1/issues/1232): Update HikariCP to 2.7.9
+* [#1233](https://github.com/playframework/play1/issues/1233): [#1232] feat(libs)/ update hikari CP from 2.6.3 to 2.7.9
+* [#1158](https://github.com/playframework/play1/issues/1158): [#1896] fix play daemon stacktrace on [re]start-stop
+* [#1166](https://github.com/playframework/play1/issues/1166): Allow customization of @CacheFor cache key
+* [#1192](https://github.com/playframework/play1/issues/1192): Update Configuration.java
+* [#1208](https://github.com/playframework/play1/issues/1208): [#2140] Make FunctionalTest compatible with Response.writeChunk()
+* [#1219](https://github.com/playframework/play1/issues/1219): [#2154] fix NPE on @On  annotation
+* [#2154](https://play.lighthouseapp.com/projects/57987/tickets/2154): fix NPE on @On  annotation
+* [#1220](https://github.com/playframework/play1/issues/1220): [#2154, #1219] Fixes NPE for @On annotation
+* [#1223](https://github.com/playframework/play1/issues/1223): [#1823] Fix play.exceptions.CompilationException (fix for the fix #786)
+* [#1224](https://github.com/playframework/play1/issues/1224): [#1823] Fix play.exceptions.CompilationException (fix for the fix #786)
+* [#1225](https://github.com/playframework/play1/issues/1225): PlayController implemented
+* [#1226](https://github.com/playframework/play1/issues/1226): #1237 Use secure websocket protocol for secure pages
+* [#1228](https://github.com/playframework/play1/issues/1228): Fixing spelling mistake (runing -> running)
+* [#1229](https://github.com/playframework/play1/issues/1229): 1228 fix spellling mistake
+* [#1237](https://github.com/playframework/play1/issues/1237): Do not allow mixed-content WebSockets
+* [#1910](https://play.lighthouseapp.com/projects/57987/tickets/1910): Stacktrace when running play start with existing pid but no process 
+* [#1896](https://play.lighthouseapp.com/projects/57987/tickets/1896): play daemon [re]start-stop (python traceback)
+* [#2140](https://play.lighthouseapp.com/projects/57987/tickets/2140): Chunked responses are not testable by FunctionalTest     
+* [#1244](https://github.com/playframework/play1/issues/1244): Prepare release 1.5.1
+
 ## Play 1.5.0
 
 *Released 29 September 2017*
