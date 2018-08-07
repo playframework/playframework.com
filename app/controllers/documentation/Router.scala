@@ -51,11 +51,14 @@ class Router @Inject() (
         case p"/$version<\d+\.[^/]+>/api/$path*" => docController.api(lang, version, decodePath(path))
         // The docs used to be served from this path
         case p"/api/$version/$path*" => docController.apiRedirect(lang, version, path)
+        // Play1 doc specific paths
         case p"/$version<1\.[^/]+>/$page" => docController.v1Page(lang, version, page)
         case p"/$version<1\.[^/]+>/images/$image" => docController.v1Image(lang, version, image)
         case p"/$version<1\.[^/]+>/files/$file" => docController.v1File(lang, version, file)
+        case p"/$version<1\.[^/]+>/releases/$file" => docController.v1Page(lang, version, "releases/" + file)
+        case p"/$version<1\.[^/]+>/releases/$release/$file" => docController.v1Page(lang, version, "releases/" + release + "/" + file)
         case p"/$version<1\.[^/]+>/cheatsheet/$category" => docController.v1Cheatsheet(lang, version, category)
-
+        // Other paths
         case p"/$version<\d+\.[^/]+>" => docController.home(lang, version)
         case p"/$version<\d+\.[^/]+>/" => docController.home(lang, version)
         case p"/$version<\d+\.[^/]+>/$page" => docController.page(lang, version, page)
