@@ -132,6 +132,13 @@ Adds support for sbt 1.0
 [Migration Guide](https://playframework.com/documentation/2.6.x/Migration26)
 [Full changelog](https://github.com/playframework/playframework/compare/2.5.x...2.6.0/)
 
+## Play 2.5.19 "Streamy"
+
+*Released 17 Aug 2018*
+
+[All changes](https://github.com/playframework/playframework/compare/2.5.18...2.5.19/)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/66?closed=1)
+
 ## Play 2.5.18 "Streamy"
 
 *Released 5 Oct 2017*
