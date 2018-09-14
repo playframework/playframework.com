@@ -33,7 +33,7 @@
                         <td><strong>@release.version</strong></td>
                         <td>@(new java.text.SimpleDateFormat("MMM dd yyyy").format(release.date))</td>
                         <td><a href="@routes.Modules.documentation(module.name, release.version, "home")">Documentation</a></td>
-                        <td><a href="@routes.Modules.download(module.name, release.version)">Try Play</a></td>
+                        <td><a href="@routes.Modules.download(module.name, release.version)">Download</a></td>
                     </tr>
                 }
             </tbody>

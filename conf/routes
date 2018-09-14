@@ -7,8 +7,7 @@
 GET         /                                                        controllers.Application.index()
 
 # Pages
-GET         /download                                                controllers.Application.download
-GET         /getting-started                                         controllers.Application.gettingStarted
+GET         /download                                                controllers.Application.download(platform: Option[String] ?= None)
 GET         /support                                                 controllers.Application.support
 GET         /code                                                    controllers.Code.index
 GET         /get-involved                                            controllers.Application.getInvolved
@@ -19,7 +18,6 @@ GET         /conduct                                                 controllers
 GET         /community-process                                       controllers.Application.communityProcess
 GET         /contributing                                            controllers.Application.contributing
 GET         /certification                                           controllers.Application.certification
-GET         /releases                                                controllers.Application.allreleases(platform: Option[String] ?= None)
 POST        /certification/interest                                  controllers.Application.interest
 
 GET         /outreachy                                               controllers.Outreachy.outreachy
