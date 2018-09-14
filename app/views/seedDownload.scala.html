@@ -1,0 +1,51 @@
+@(downloads: PlayExamples)
+
+<article class="starter">
+  <h2 id="seeds">Play Seed Templates</h2>
+  <h3>Experienced With Play? Use a Seed Template!</h3>
+</article>
+
+<hr />
+
+<article class="seed-projects">
+  <p>
+    If you have <a href="http://scala-sbt.org">sbt 0.13.13 or higher</a>
+    installed, you can create your own Play project using <code>sbt new</code>
+    using a minimal <a href="http://foundweekends.org/giter8">giter8</a>
+    template (roughly like a maven archetype).
+  </p>
+
+  <p>
+    This is a good choice if you already know Play and want to create a new project immediately.
+  </p>
+  
+  <p>
+    Use <code>sbt run</code> and then go to <a href="http://localhost:9000">http://localhost:9000</a>
+    to see the running server.
+  </p>
+  
+  @downloads.sections.headOption.toIterable.flatMap(_._2.seeds.values.flatten.filter(_.gitHubRepo.endsWith(".g8"))).map { project: ExampleProject =>
+    <div class="seed-project">
+      <h4>@project.displayName</h4>
+      <pre><code>sbt new @project.gitHubRepo</code></pre>
+
+      <h5>Download directly:</h5>
+      <form class="template-form" target="_blank" method="get" action="@project.downloadUrl">
+        @project.params.map { param =>
+          <label class="template-param">@param.displayName:
+            <input
+                type="@{param.`type`}"
+                name="@param.query"
+                @param.defaultValue.map { v => value="@v" }
+                @param.pattern.map {p => pattern="@p" }
+                @if(param.required) { required }
+            >
+          </label>
+        }
+        <label class="template-param">
+          <input type="submit" value="Download Project">
+        </label>
+      </form>
+    </div>
+  }
+</article>

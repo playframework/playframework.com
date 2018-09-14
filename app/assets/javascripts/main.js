@@ -130,7 +130,7 @@ $(function(){
     })
 
     // Scope on download page
-    $("body.alternatives").each(function(el){
+    $("body.download").each(function(el){
         // Show guides on download
         var download = $(".latest"),
             getStarted = $(".get-started"),
@@ -144,7 +144,7 @@ $(function(){
         });
 
         // Older releases
-        var versions = $(".alternatives .version");
+        var versions = $("#alternatives .version");
 
         versions.each(function(i, el) {
             var list = $(".release", el).slice(3).hide();

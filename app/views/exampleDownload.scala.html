@@ -1,0 +1,47 @@
+@(downloads: PlayExamples)
+
+@renderProject(project: ExampleProject) = {
+<tr>
+  <td><strong><a href="@project.downloadUrl" target="_blank">@project.displayName</a></strong></td>
+  <td><a href="@project.downloadUrl" target="_blank">Download (zip)</a></td>
+  <td><a href="@project.gitHubUrl" target="_blank">View on GitHub</a></td>
+</tr>
+}
+
+<article class="starter">
+  <h2 id="examples">Play Example Projects</h2>
+  <h3>Want to see what Play can do? Download an example project!</h3>
+</article>
+
+<article class="example-projects">
+  <p>
+    Play has many features, so rather than pack them all into one project,
+    we've organized many example projects that showcase a feature or use
+    case of Play so that you can see Play at work.
+  </p>
+
+  <p>
+    Note that these example projects are not configured for out of the box security, and are intended to showcase particular areas of Play functionality.
+  </p>
+
+  <p>
+    Download SBT and type <code>./sbt run</code> to run your project.
+  </p>
+
+  <table>
+    @downloads.sections.map { case (version, section) =>
+      <tbody>
+      <tr><th><h4>Play @version Examples</h4></th></tr>
+        <tr><th><h5>Java Projects</h5></th></tr>
+        @section.examples.getOrElse("java", Seq.empty).map { (project) =>
+          @renderProject(project)
+        }
+
+        <tr><th><h5>Scala Projects</h5></th></tr>
+        @section.examples.getOrElse("scala", Seq.empty).map { (project) =>
+          @renderProject(project)
+        }
+      </tbody>
+    }
+  </table>
+</article>
