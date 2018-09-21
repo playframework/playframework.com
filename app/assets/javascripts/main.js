@@ -1,5 +1,10 @@
 $(function(){
 
+    $(".try-option h3").on('click', function(el) {
+        var content = $(this).parent().find(".try-option-content");
+        $(content).slideToggle("fast");
+    });
+
     // Right click on the logo
     $("#logo").on("contextmenu",function(e){
         e.preventDefault()

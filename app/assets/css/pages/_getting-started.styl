@@ -1,2 +1,22 @@
 .getting-started
     @extend .content-column
+
+    .try-section
+        margin-bottom: 3em;
+        .try-option:last-child
+            border-bottom: 1px solid #dddddd;
+
+    .try-option
+        border-top: 1px solid #dddddd;
+        padding-bottom: 1em;
+
+        h3
+            cursor: pointer;
+            &:hover
+                color: #548b0c;
+
+            span
+                font-family: "Avenir", sans-serif
+
+        .try-option-content
+            display: none;

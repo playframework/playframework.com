@@ -1,4 +1,4 @@
-@(releases: PlayReleases, examples: PlayExamples, platform: Platform.Platform,
+@(releases: PlayReleases, platform: Platform.Platform,
         title: String = "Play Releases")(implicit requestHeader: RequestHeader)
 
 @renderRelease(linkClass: String, release: PlayRelease) = {
