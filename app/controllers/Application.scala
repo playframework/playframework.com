@@ -200,13 +200,13 @@ class Application @Inject() (
     }
 
     val sections = byVersion.map { case (v, p) =>
-      val StarterKeyword = "starter" // this MUST be in the project keywords for this to work
+      val TutorialKeyword = "tutorials" // this MUST be in the project keywords for this to work
       val SeedKeyword = "seed"
-      val starters = p.filter(e => e.keywords.contains(StarterKeyword) && !e.hasParams)
+      val tutorials = p.filter(e => e.keywords.contains(TutorialKeyword) && !e.hasParams)
         .groupBy(byLanguage)
         .mapValues(_.sortBy(_.displayName))
 
-      val examples = p.filter(e => !e.keywords.contains(StarterKeyword) && !e.hasParams)
+      val examples = p.filter(e => !e.keywords.contains(TutorialKeyword) && !e.hasParams)
         .groupBy(byLanguage)
         .mapValues(_.sortBy(_.displayName))
 
@@ -214,7 +214,7 @@ class Application @Inject() (
         .groupBy(byLanguage)
         .mapValues(_.sortBy(_.displayName))
 
-      v -> PlayExampleSection(starters, seeds, examples)
+      v -> PlayExampleSection(tutorials, seeds, examples)
     }
     PlayExamples(sections)
   }
@@ -222,6 +222,6 @@ class Application @Inject() (
 
 case class PlayExamples(sections: Seq[(String, PlayExampleSection)])
 
-case class PlayExampleSection(starters: Map[String, Seq[ExampleProject]],
+case class PlayExampleSection(tutorials: Map[String, Seq[ExampleProject]],
                               seeds: Map[String, Seq[ExampleProject]],
                               examples: Map[String, Seq[ExampleProject]])
