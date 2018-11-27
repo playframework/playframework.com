@@ -200,7 +200,7 @@ class Application @Inject() (
     }
 
     val sections = byVersion.map { case (v, p) =>
-      val TutorialKeyword = "tutorials" // this MUST be in the project keywords for this to work
+      val TutorialKeyword = "tutorial" // this MUST be in the project keywords for this to work
       val SeedKeyword = "seed"
       val tutorials = p.filter(e => e.keywords.contains(TutorialKeyword) && !e.hasParams)
         .groupBy(byLanguage)
