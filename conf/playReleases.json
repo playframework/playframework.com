@@ -208,6 +208,12 @@
             "date": "Mar 4 2016"
         },
         {
+            "version": "1.5.2",
+            "url": "http://downloads.typesafe.com/play/1.5.2/play-1.5.2.zip",
+            "date": "Oct 30 2018",
+            "size": "79M"
+        },
+        {
             "version": "1.5.1",
             "url": "http://downloads.typesafe.com/play/1.5.1/play-1.5.1.zip",
             "date": "Jul 17 2018",
