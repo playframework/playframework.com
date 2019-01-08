@@ -1,4 +1,4 @@
-import JsEngineKeys._
+
 
 JsEngineKeys.engineType := JsEngineKeys.EngineType.Node
 
@@ -28,10 +28,9 @@ libraryDependencies ++= Seq(
 
 scalaVersion := "2.12.8"
 
-scalacOptions in test ++= Seq(
+scalacOptions ++= Seq(
   "-feature",
-  "-deprecation",
-  "-Xfatal-warnings"
+  "-deprecation"
 )
 
 routesGenerator := InjectedRoutesGenerator
