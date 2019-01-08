@@ -2,13 +2,13 @@ package actors
 
 import java.io.File
 
-import javax.inject.{Provider, Inject, Singleton}
 import com.google.inject.AbstractModule
+import com.typesafe.config.Config
+import javax.inject.{Inject, Provider, Singleton}
 import models.documentation._
 import play.api._
 import play.api.i18n.Lang
 import play.api.libs.concurrent.AkkaGuiceSupport
-import scala.collection.JavaConverters._
 
 class ActorsModule extends AbstractModule with AkkaGuiceSupport {
   def configure() = {
@@ -20,20 +20,15 @@ class ActorsModule extends AbstractModule with AkkaGuiceSupport {
 }
 
 @Singleton
-class DocumentationRedirectsProvider @Inject() (configuration: Configuration) extends Provider[DocumentationRedirects] {
-  override def get: DocumentationRedirects = {
-    configuration.getConfigList("documentation.redirects") match {
-      case Some(redirectsConfig) => DocumentationRedirects(
-        redirectsConfig.map { config =>
-          RedirectPage(
-            from = config.getString("from").getOrElse(""),
-            to = config.getString("to").getOrElse("")
-          )
-        }
+class DocumentationRedirectsProvider @Inject()(configuration: Configuration) extends Provider[DocumentationRedirects] {
+  override def get: DocumentationRedirects = DocumentationRedirects(
+    configuration.get[Seq[Config]]("documentation.redirects").map { config =>
+      RedirectPage(
+        from = config.getString("from"),
+        to = config.getString("to")
       )
-      case None => DocumentationRedirects(Seq.empty)
     }
-  }
+  )
 }
 
 @Singleton
@@ -48,11 +43,15 @@ class DocumentationConfigProvider @Inject() (environment: Environment, configura
       path <- docsConfig.getOptional[String]("path").map(basePath)
       mainConfig <- docsConfig.getOptional[Configuration]("main")
       mainTranslation <- loadTranslationConfig(path, mainConfig)
-      translations <- docsConfig.getConfigList("translations")
+      translations <- docsConfig.getOptional[Seq[Config]]("translations")
     } yield {
       DocumentationConfig(mainTranslation,
-        translations.asScala.toList.collect(Function.unlift(loadTranslationConfig(path, _))))
+        translations.toList.collect(Function.unlift(loadTranslationConfig(path, _))))
     }
+  }
+
+  private def loadTranslationConfig(base: File, config: Config): Option[TranslationConfig] = {
+    loadTranslationConfig(base, Configuration(config))
   }
 
   private def loadTranslationConfig(base: File, config: Configuration): Option[TranslationConfig] = {

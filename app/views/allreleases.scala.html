@@ -1,5 +1,5 @@
-@(releases: PlayReleases, platform: Platform.Platform,
-        title: String = "Play Releases")(implicit requestHeader: RequestHeader)
+@import controllers.documentation.ReverseRouter
+@(releases: PlayReleases, platform: Platform.Platform, title: String = "Play Releases")(implicit requestHeader: RequestHeader, reverseRouter: ReverseRouter)
 
 @renderRelease(linkClass: String, release: PlayRelease) = {
   @if(release.secureUrl) {
@@ -67,7 +67,7 @@
             <th colspan="3">
               <h4 class="previousVersionHeading">@group._1</h4>
               @if(versionAtLeast(group._1, "1.2")) {
-                <a href="@controllers.documentation.ReverseRouter.page(None, group._1 + ".x", if(versionAtLeast(group._1, "2.0")) "Installing" else "install")" class="instructionLink"> Setup Instructions</a>
+                <a href="@reverseRouter.page(None, group._1 + ".x", if(versionAtLeast(group._1, "2.0")) "Installing" else "install")" class="instructionLink"> Setup Instructions</a>
               }
             </th>
           </tr>

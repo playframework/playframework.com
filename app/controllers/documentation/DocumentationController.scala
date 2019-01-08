@@ -167,7 +167,7 @@ class DocumentationController @Inject()(
         documentationRedirects.redirectFor(page) match {
           case Some(redirect) =>
             pageExists(version, redirect.to).map {
-              case Some(_) => Results.MovedPermanently(ReverseRouter.page(lang, v, redirect.to))
+              case Some(_) => Results.MovedPermanently(reverseRouter.page(lang, v, redirect.to))
               case None => Results.MovedPermanently(redirect.to)
             }
           case None =>

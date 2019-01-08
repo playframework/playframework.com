@@ -1,4 +1,5 @@
-@(title: String = "Cookie Listing")(implicit requestHeader : RequestHeader)
+@import controllers.documentation.ReverseRouter
+@(title: String = "Cookie Listing")(implicit requestHeader : RequestHeader, reverseRouter: ReverseRouter)
 
 @main(title, "cookieListing"){
     <header id="top">

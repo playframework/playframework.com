@@ -1,11 +1,9 @@
 package models
 
-import javax.inject.Inject
-
 import com.google.inject.{AbstractModule, Singleton}
+import javax.inject.Inject
 import play.api.Configuration
-import play.api.cache.CacheApi
-import play.api.data.validation.ValidationError
+import play.api.cache.SyncCacheApi
 import play.api.libs.json._
 import play.api.libs.ws.WSClient
 
@@ -53,7 +51,7 @@ class ExamplesModule extends AbstractModule {
 class PlayExampleProjectsService @Inject()(
   configuration: Configuration,
   ws: WSClient,
-  cache: CacheApi
+  cache: SyncCacheApi
 )(implicit ec: ExecutionContext) {
 
   val validPlayVersions: Seq[String] = configuration.get[Seq[String]]("examples.playVersions")
@@ -81,7 +79,7 @@ class PlayExampleProjectsService @Inject()(
           cache.set(cacheKey(version), playProjects, examplesCacheTtl)
         }
         playProjects
-      case JsError(errors: Seq[(JsPath, Seq[ValidationError])]) =>
+      case JsError(errors: Seq[(JsPath, Seq[JsonValidationError])]) =>
         logger.error(s"Cannot parse example projects for $version\n$errors")
         Seq.empty
     }

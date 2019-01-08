@@ -70,7 +70,7 @@ object Sitemap {
    */
   private def findPages(tv: TranslationVersion): Set[String] = {
     def findPagesInToc(toc: TocTree): Seq[String] = toc match {
-      case TocPage(page, title) => Seq(page)
+      case TocPage(page, title, _) => Seq(page)
       case Toc(name, title, nodes, _) => nodes.flatMap(node => findPagesInToc(node._2))
     }
 
