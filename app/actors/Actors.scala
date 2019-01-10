@@ -6,12 +6,13 @@ import com.google.inject.AbstractModule
 import com.typesafe.config.Config
 import javax.inject.{Inject, Provider, Singleton}
 import models.documentation._
+import org.slf4j.LoggerFactory
 import play.api._
 import play.api.i18n.Lang
 import play.api.libs.concurrent.AkkaGuiceSupport
 
 class ActorsModule extends AbstractModule with AkkaGuiceSupport {
-  def configure() = {
+  override def configure() = {
     bindActor[DocumentationActor]("documentation-actor")
     bindActorFactory[DocumentationPollingActor, DocumentationPollingActor.Factory]
     bind(classOf[DocumentationConfig]).toProvider(classOf[DocumentationConfigProvider])
@@ -33,6 +34,7 @@ class DocumentationRedirectsProvider @Inject()(configuration: Configuration) ext
 
 @Singleton
 class DocumentationConfigProvider @Inject() (environment: Environment, configuration: Configuration) extends Provider[DocumentationConfig] {
+  private val log = LoggerFactory.getLogger(classOf[DocumentationConfigProvider])
 
   lazy val get: DocumentationConfig = loadConfig.getOrElse(DocumentationConfig(
     TranslationConfig(Lang("en"), environment.rootPath, None, "origin", None, None), Nil))
@@ -86,7 +88,8 @@ class DocumentationConfigProvider @Inject() (environment: Environment, configura
     if (translationPath.exists()) {
       true
     } else {
-      Logger.warn("Not loading translation: " + name + " because its configured repo " + translationPath.getCanonicalPath + " doesn't exist")
+      val path = translationPath.getCanonicalPath
+      log.warn(s"Not loading translation: $name because its configured repo $path doesn't exist")
       false
     }
   }

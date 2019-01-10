@@ -5,7 +5,7 @@ import javax.inject.{Singleton, Inject}
 import akka.actor.ActorSystem
 import com.google.inject.name.Named
 import models.github._
-import play.api.Logger
+import org.slf4j.LoggerFactory
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.concurrent.duration._
@@ -37,7 +37,7 @@ class DefaultContributorsSummariser @Inject() (gitHub: GitHub, config: GitHubCon
   private def fetchAllContributors(repos: Seq[Repository]): Future[Seq[GitHubUser]] = {
     val contributorRepos = repos.filterNot(_.fork)
     for {
-      contributors <- Future.sequence(contributorRepos.map(gitHub.fetchRepoContributors))
+      contributors <- Future.traverse(contributorRepos)(gitHub.fetchRepoContributors)
     } yield {
 
       // All contributors and the number of contributions.
@@ -46,7 +46,7 @@ class DefaultContributorsSummariser @Inject() (gitHub: GitHub, config: GitHubCon
       val contributorContributions: Seq[(GitHubUser, Int)] = contributors
         .flatten
         .groupBy(_._1.id)
-        .map {
+        .collect {
         case ((_, contributions @ ((user, _) :: _))) =>
           user -> contributions.map(_._2).sum
       }.toSeq
@@ -86,15 +86,17 @@ class DefaultContributorsSummariser @Inject() (gitHub: GitHub, config: GitHubCon
 @Singleton
 class CachingContributorsSummariser @Inject() (actorSystem: ActorSystem,
                                                @Named("gitHubContributorsSummariser") delegate: ContributorsSummariser)(implicit ec: ExecutionContext) extends ContributorsSummariser {
+  private val log = LoggerFactory.getLogger(classOf[CachingContributorsSummariser])
+
   @volatile private var contributors: Contributors = FallbackContributors.contributors
 
   actorSystem.scheduler.schedule(0.seconds, 24.hours) {
     delegate.fetchContributors.onComplete {
-      case Failure(t) => Logger.error("Unable to load contributors from GitHub", t)
+      case Failure(t) => log.error("Unable to load contributors from GitHub", t)
       case Success(cs) =>
         if (contributors != cs) {
           val count = contributors.committers.size + contributors.playOrganisation.size + contributors.contributors.size
-          Logger.info("Loaded " + count + " contributors for GitHub")
+          log.info(s"Loaded $count contributors for GitHub")
         }
         contributors = cs
     }

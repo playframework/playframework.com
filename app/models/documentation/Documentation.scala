@@ -2,7 +2,7 @@ package models.documentation
 
 import java.util.Locale
 
-import play.api.Logger
+import org.slf4j.LoggerFactory
 import play.api.i18n.Lang
 import play.doc.PlayDoc
 import utils.{ExtendedFileRepository, PlayGitRepository}
@@ -101,6 +101,7 @@ case class Version(name: String, era: Int, major: Int, minor: Int, patch: Int, v
 }
 
 object Version {
+  private val log = LoggerFactory.getLogger(classOf[Version])
 
   def findMostRecentDevelopment(versions: Seq[Version], currentStable: Version): Seq[Version] = {
     versions.filter(!_.versionType.isStable).filter(_ > currentStable).take(2)
@@ -179,7 +180,7 @@ object Version {
       }
     } catch {
       case NonFatal(e) =>
-        Logger.warn("Error encountered while trying to parse version: " + name, e)
+        log.warn("Error encountered while trying to parse version: " + name, e)
         None
     }
   }

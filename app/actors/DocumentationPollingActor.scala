@@ -3,13 +3,12 @@ package actors
 import javax.inject.Inject
 
 import actors.DocumentationActor.{DocumentationGitRepo, DocumentationGitRepos, UpdateDocumentation}
-import akka.actor.{Actor, ActorRef}
+import akka.actor.{Actor, ActorLogging, ActorRef}
 import com.google.inject.assistedinject.Assisted
 import models.documentation._
 import org.apache.commons.io.IOUtils
 import org.eclipse.jgit.lib.ObjectId
 import org.eclipse.jgit.util.Base64
-import play.api.Logger
 import play.api.i18n.{Lang, MessagesApi}
 import play.doc.{PageIndex, PlayDoc, TranslatedPlayDocTemplates}
 import utils.{AggregateFileRepository, PlayGitRepository}
@@ -33,7 +32,9 @@ object DocumentationPollingActor {
  * documentation.
  */
 class DocumentationPollingActor @Inject() (messages: MessagesApi, @Assisted repos: DocumentationGitRepos,
-                                           @Assisted documentationActor: ActorRef) extends Actor {
+                                           @Assisted documentationActor: ActorRef) extends Actor
+    with ActorLogging
+{
 
   import DocumentationPollingActor._
   import context.dispatcher
@@ -108,7 +109,7 @@ class DocumentationPollingActor @Inject() (messages: MessagesApi, @Assisted repo
             implicit val lang = repos.default.config.lang
 
             if (old.isDefined) {
-              Logger.info(s"Updating default documentation for $version: $cacheId")
+              log.info(s"Updating default documentation for {}: {}", version, cacheId)
             }
 
             val playDoc = new PlayDoc(
