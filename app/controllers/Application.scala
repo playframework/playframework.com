@@ -36,8 +36,8 @@ class Application @Inject() (
   private def news(version: Option[String]): Seq[Html] = {
     val message = version.filter(VulnerableVersions).map { _ =>
 
-      s"""<p style="font-weight: bold; color: red;">You are using a version of Play Framework that has a
-        <a style="color: red;" href="${routes.Security.vulnerability("20130806-SessionInjection")}">known vulnerability</a>.</p>
+      s"""<p class="vulnerability-warning">You are using a version of Play Framework that has a
+        <a href="${routes.Security.vulnerability("20130806-SessionInjection")}">known vulnerability</a>.</p>
           <p>Please upgrade to a later version <a href="${routes.Application.download()}">here</a>.</p>"""
 
     } orElse {
