@@ -1,15 +1,16 @@
-@(messages: MessagesApi, context: models.documentation.TranslationContext, page: String, apis: Seq[(String, String)])
+@import controllers.documentation.ReverseRouter
+@(messages: MessagesApi, context: models.documentation.TranslationContext, page: String, apis: Seq[(String, String)])(implicit reverseRouter: ReverseRouter)
 
 @language(lang: Lang, isDefault: Boolean, version: Option[models.documentation.Version]) = {
     <a href="@version.fold(
         routes.Application.setPreferedLanguage(
           lang.language,
-          controllers.documentation.ReverseRouter.latest(Some(lang).filterNot(_ => isDefault))
+          reverseRouter.latest(Some(lang).filterNot(_ => isDefault))
         )
     )( v =>
         routes.Application.setPreferedLanguage(
           lang.language,
-          controllers.documentation.ReverseRouter.page(Some(lang).filterNot(_ => isDefault), v.name, page)
+          reverseRouter.page(Some(lang).filterNot(_ => isDefault), v.name, page)
         )
     )">@messages("lang.name")(lang)</a>
 }
@@ -18,13 +19,13 @@
     <h3>Browse versions</h3>
     <div class="switch">
         @for(version <- Helpers.latestCurrent(context)) {
-            <a ga-on="click" ga-event-category="Version" ga-event-action="@version.name" href="@controllers.documentation.ReverseRouter.switch(context.alternateLang, version.name, page)">@version.name</a>
+            <a ga-on="click" ga-event-category="Version" ga-event-action="@version.name" href="@reverseRouter.switch(context.alternateLang, version.name, page)">@version.name</a>
         }
         <dl class="dropdown">
             <dt>▾</dt>
             <dd>
             @for(v <- context.displayVersions) {
-                <a href="@controllers.documentation.ReverseRouter.switch(context.alternateLang, v.name, page)">@v.name</a>
+                <a href="@reverseRouter.switch(context.alternateLang, v.name, page)">@v.name</a>
             }
             </dd>
         </dl>
@@ -34,7 +35,7 @@
         <h3>Browse APIs</h3>
         <div class="switch">
         @for(api <- apis) {
-            <a ga-on="click" ga-event-category="API" ga-event-action="@api._1" href="@controllers.documentation.ReverseRouter.api(version.name, api._2)">@api._1</a>
+            <a ga-on="click" ga-event-category="API" ga-event-action="@api._1" href="@reverseRouter.api(version.name, api._2)">@api._1</a>
         }
         </div>
     }

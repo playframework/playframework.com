@@ -1,5 +1,5 @@
-@(examples: PlayExamples)(implicit requestHeader: RequestHeader)
-
+@import controllers.documentation.ReverseRouter
+@(examples: PlayExamples)(implicit requestHeader: RequestHeader, reverseRouter: ReverseRouter)
 
 @renderProject(project: ExampleProject) = {
     <tr>
@@ -24,9 +24,9 @@
                     <h3><span>&raquo;</span> Learn whether Play Framework is right for your project</h3>
                     <div class="try-option-content">
                         <ul>
-                            <li><a href="@controllers.documentation.ReverseRouter.latest(None, "Introduction")" target="_blank">Introduction to Play</a></li>
-                            <li><a href="@controllers.documentation.ReverseRouter.latest(None, "Philosophy")" target="_blank">Our philosophy</a></li>
-                            <li><a href="@controllers.documentation.ReverseRouter.latest(None, "Requirements")" target="_blank">Requirements for using Play</a></li>
+                            <li><a href="@reverseRouter.latest(None, "Introduction")" target="_blank">Introduction to Play</a></li>
+                            <li><a href="@reverseRouter.latest(None, "Philosophy")" target="_blank">Our philosophy</a></li>
+                            <li><a href="@reverseRouter.latest(None, "Requirements")" target="_blank">Requirements for using Play</a></li>
                         </ul>
                     </div>
                 </div>

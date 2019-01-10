@@ -2,14 +2,13 @@ package actors
 
 import java.io.File
 
-import akka.actor.{ ActorSystem, ActorRef }
-import javax.inject.{Provider, Inject, Singleton}
 import com.google.inject.AbstractModule
+import com.typesafe.config.Config
+import javax.inject.{Inject, Provider, Singleton}
 import models.documentation._
 import play.api._
-import play.api.i18n.{MessagesApi, Lang}
-import play.api.libs.concurrent.{AkkaGuiceSupport, Akka}
-import scala.collection.JavaConversions._
+import play.api.i18n.Lang
+import play.api.libs.concurrent.AkkaGuiceSupport
 
 class ActorsModule extends AbstractModule with AkkaGuiceSupport {
   def configure() = {
@@ -21,56 +20,55 @@ class ActorsModule extends AbstractModule with AkkaGuiceSupport {
 }
 
 @Singleton
-class DocumentationRedirectsProvider @Inject() (configuration: Configuration) extends Provider[DocumentationRedirects] {
-  override def get: DocumentationRedirects = {
-    configuration.getConfigList("documentation.redirects") match {
-      case Some(redirectsConfig) => DocumentationRedirects(
-        redirectsConfig.map { config =>
-          RedirectPage(
-            from = config.getString("from").getOrElse(""),
-            to = config.getString("to").getOrElse("")
-          )
-        }
+class DocumentationRedirectsProvider @Inject()(configuration: Configuration) extends Provider[DocumentationRedirects] {
+  override def get: DocumentationRedirects = DocumentationRedirects(
+    configuration.get[Seq[Config]]("documentation.redirects").map { config =>
+      RedirectPage(
+        from = config.getString("from"),
+        to = config.getString("to")
       )
-      case None => DocumentationRedirects(Seq.empty)
     }
-  }
+  )
 }
 
 @Singleton
 class DocumentationConfigProvider @Inject() (environment: Environment, configuration: Configuration) extends Provider[DocumentationConfig] {
 
-  lazy val get = loadConfig.getOrElse(DocumentationConfig(
+  lazy val get: DocumentationConfig = loadConfig.getOrElse(DocumentationConfig(
     TranslationConfig(Lang("en"), environment.rootPath, None, "origin", None, None), Nil))
 
   private def loadConfig: Option[DocumentationConfig] = {
     for {
-      docsConfig <- configuration.getConfig("documentation")
-      path <- docsConfig.getString("path").map(basePath)
-      mainConfig <- docsConfig.getConfig("main")
+      docsConfig <- configuration.getOptional[Configuration]("documentation")
+      path <- docsConfig.getOptional[String]("path").map(basePath)
+      mainConfig <- docsConfig.getOptional[Configuration]("main")
       mainTranslation <- loadTranslationConfig(path, mainConfig)
-      translations <- docsConfig.getConfigList("translations")
+      translations <- docsConfig.getOptional[Seq[Config]]("translations")
     } yield {
       DocumentationConfig(mainTranslation,
         translations.toList.collect(Function.unlift(loadTranslationConfig(path, _))))
     }
   }
 
+  private def loadTranslationConfig(base: File, config: Config): Option[TranslationConfig] = {
+    loadTranslationConfig(base, Configuration(config))
+  }
+
   private def loadTranslationConfig(base: File, config: Configuration): Option[TranslationConfig] = {
     for {
-      lang <- config.getString("lang")
-      repo <- config.getString("repo") if verifyTranslationPath(base, repo, lang)
+      lang <- config.getOptional[String]("lang")
+      repo <- config.getOptional[String]("repo") if verifyTranslationPath(base, repo, lang)
     } yield {
       TranslationConfig(
         Lang(lang),
         new File(base, repo).getCanonicalFile,
-        config.getString("path"),
-        config.getString("remote").getOrElse("origin"),
+        config.getOptional[String]("path"),
+        config.getOptional[String]("remote").getOrElse("origin"),
         for {
-          file <- config.getString("versionFile")
-          pattern <- config.getString("versionPattern")
+          file <- config.getOptional[String]("versionFile")
+          pattern <- config.getOptional[String]("versionPattern")
         } yield MasterVersion(file, pattern.r),
-        config.getString("gitHubSource")
+        config.getOptional[String]("gitHubSource")
       )
     }
   }

@@ -1,14 +1,18 @@
 package services.github
 
+import play.api.http.{DefaultFileMimeTypesProvider, FileMimeTypesConfiguration}
 import play.api.mvc.Results._
-import play.api.mvc.Action
-import play.api.test.{ WsTestClient, PlaySpecification }
+import play.api.routing.sird.{GET => Get, _}
+import play.api.test.{PlaySpecification, WsTestClient}
 import play.core.server.Server
-import play.api.routing.sird.{ GET => Get, _ }
 
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration._
+import scala.concurrent.{Await, Future}
 
 object GitHubSpec extends PlaySpecification {
+
+  implicit val fileMimeTypes = new DefaultFileMimeTypesProvider(FileMimeTypesConfiguration(Map("json" -> "application/json"))).get
 
   "The GitHub service" should {
     "allow getting an organisation" in withGitHub { gh =>
@@ -59,21 +63,24 @@ object GitHubSpec extends PlaySpecification {
     }
   }
 
-  def withGitHub[T](block: GitHub => T) = Server.withRouter() {
-    case Get(p"/orgs/${_}") => Action(Ok.sendResource("github/org.json"))
-    case Get(p"/orgs/${_}/members") => Action(Ok.sendResource("github/orgMembers.json"))
-    case Get(p"/orgs/${_}/teams") => Action(Ok.sendResource("github/teams.json"))
-    case Get(p"/orgs/${_}/repos") => Action(Ok.sendResource("github/repos.json"))
-    case Get(p"/teams/${_}/members") => Action(Ok.sendResource("github/teamMembers.json"))
-    case Get(p"/repos/${_}/${_}/contributors" | p"/repositories/${_}/contributors") => Action { req =>
-      req.getQueryString("page") match {
-        case None => Ok.sendResource("github/contributors1.json").withHeaders(
-          "Link" -> s"""</repositories/2340549/contributors?per_page=2&page=2>; rel="next""""
-        )
-        case Some("2") => Ok.sendResource("github/contributors2.json")
+  def await[T](future: Future[T]): T = Await.result(future, 10.seconds)
+
+  def withGitHub[T](block: GitHub => T): T = Server.withRouterFromComponents() { components => {
+      case Get(p"/orgs/${_}") => components.defaultActionBuilder(Ok.sendResource("github/org.json"))
+      case Get(p"/orgs/${_}/members") => components.defaultActionBuilder(Ok.sendResource("github/orgMembers.json"))
+      case Get(p"/orgs/${_}/teams") => components.defaultActionBuilder(Ok.sendResource("github/teams.json"))
+      case Get(p"/orgs/${_}/repos") => components.defaultActionBuilder(Ok.sendResource("github/repos.json"))
+      case Get(p"/teams/${_}/members") => components.defaultActionBuilder(Ok.sendResource("github/teamMembers.json"))
+      case Get(p"/repos/${_}/${_}/contributors" | p"/repositories/${_}/contributors") => components.defaultActionBuilder { req =>
+        req.getQueryString("page") match {
+          case None => Ok.sendResource("github/contributors1.json").withHeaders(
+            "Link" -> s"""</repositories/2340549/contributors?per_page=2&page=2>; rel="next""""
+          )
+          case Some(_) => Ok.sendResource("github/contributors2.json")
+        }
       }
+      case Get(p"/users/${_}") => components.defaultActionBuilder(Ok.sendResource("github/user.json"))
     }
-    case Get(p"/users/${_}") => Action(Ok.sendResource("github/user.json"))
   } { implicit port =>
     WsTestClient.withClient { ws =>
       val gitHub = new DefaultGitHub(ws, GitHubConfig("token", "", "playframework", Nil))

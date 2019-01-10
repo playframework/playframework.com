@@ -9,20 +9,31 @@ import play.api.libs.json._
 import play.api.test._
 import services.modules.{ModuleDao, ModulesLookup}
 
+import play.api.inject.bind
+
+import scala.concurrent.ExecutionContext.Implicits.global
+
 object ModulesSpec extends PlaySpecification with Mockito {
 
   val module = Module("name", "Full name", "Some Author", "authorid", "Some Description", "http://www.example.com")
-  val release = Release("version", new Date(), "match", true)
+  val release = Release("version", new Date(), "match", isDefault = true)
+
+  val moduleDao = {
+    val dao = mock[ModuleDao]
+    dao.findAll("foo") returns Seq(module)
+    dao.findEverything() returns Seq(module -> Seq(release))
+    dao
+  }
 
   def app = new GuiceApplicationBuilder()
     .configure("play.modules.evolutions.db.default.enabled" -> false)
+    .overrides(bind[ModuleDao].toInstance(moduleDao))
     .build()
 
   "The modules controller" should {
     "render an index page" in {
       "as html when the client accepts html" in new WithApplication(app) {
-        val (modules, _, dao) = createModules
-        dao.findAll("foo") returns Seq(module)
+        val (modules, _, dao) = createModules(app)
         val result = modules.index("foo")(FakeRequest().withHeaders(ACCEPT -> "text/html"))
         status(result) must_== 200
         contentType(result) must beSome("text/html")
@@ -30,7 +41,7 @@ object ModulesSpec extends PlaySpecification with Mockito {
       }
 
       "as json when the client accepts json" in new WithApplication(app) {
-        val (modules, _, dao) = createModules
+        val (modules, _, dao) = createModules(app)
         dao.findEverything() returns Seq(module -> Seq(release))
         val result = modules.index("")(FakeRequest().withHeaders(ACCEPT -> "application/json"))
         status(result) must_== 200
@@ -52,11 +63,10 @@ object ModulesSpec extends PlaySpecification with Mockito {
     }
   }
 
-  def createModules: (Modules, ModulesLookup, ModuleDao) = {
-    val lookup = mock[ModulesLookup]
-    val dao = mock[ModuleDao]
-    val modules = new Modules(lookup, dao)
+  def createModules(app: play.api.Application): (Modules, ModulesLookup, ModuleDao) = {
+    val lookup = app.injector.instanceOf[ModulesLookup]
+    val dao = app.injector.instanceOf[ModuleDao]
+    val modules = app.injector.instanceOf[Modules]
     (modules, lookup, dao)
   }
-
 }

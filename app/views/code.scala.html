@@ -1,6 +1,6 @@
 @import models.github._
-
-@(contributors: Contributors, title: String = "Code & contributors")(implicit requestHeader : RequestHeader)
+@import controllers.documentation.ReverseRouter
+@(contributors: Contributors, title: String = "Code & contributors")(implicit req: RequestHeader, reverseRouter: ReverseRouter)
 
 @avatar(url: String, size: Int) = @{
     val doubleSize = size * 2
@@ -33,7 +33,7 @@
                 <p>If you're looking for the code for the previous Play 1.x series, it's available in another repository:</p>
                 <pre><code>git clone git://github.com/playframework/play.git</code></pre>
                 <p>
-                    To contribute, check out the <a href="@routes.Application.contributing()">contributor guide</a> and learn how to <a href="@controllers.documentation.ReverseRouter.latest(None, "BuildingFromSource")">build Play from source</a>.
+                    To contribute, check out the <a href="@routes.Application.contributing()">contributor guide</a> and learn how to <a href="@reverseRouter.latest(None, "BuildingFromSource")">build Play from source</a>.
                 </p>
 
                 <h2>Licence</h2>

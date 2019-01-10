@@ -6,6 +6,8 @@ import com.google.inject.ImplementedBy
 import models.modules._
 import play.api.db.Database
 
+import scala.language.postfixOps
+
 /**
  * DAO for accessing modules
  */

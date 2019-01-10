@@ -1,11 +1,9 @@
 package models
 
-import javax.inject.Inject
-
 import com.google.inject.{AbstractModule, Singleton}
+import javax.inject.Inject
 import play.api.Configuration
-import play.api.cache.CacheApi
-import play.api.data.validation.ValidationError
+import play.api.cache.SyncCacheApi
 import play.api.libs.json._
 import play.api.libs.ws.WSClient
 
@@ -44,7 +42,7 @@ object ExampleProject {
 }
 
 class ExamplesModule extends AbstractModule {
-  override def configure() = {
+  override def configure(): Unit = {
     bind(classOf[PlayExampleProjectsService]).asEagerSingleton()
   }
 }
@@ -53,21 +51,19 @@ class ExamplesModule extends AbstractModule {
 class PlayExampleProjectsService @Inject()(
   configuration: Configuration,
   ws: WSClient,
-  cache: CacheApi
+  cache: SyncCacheApi
 )(implicit ec: ExecutionContext) {
-  import scala.collection.JavaConverters._
 
-  val validPlayVersions: Seq[String] = configuration.getStringList("examples.playVersions").get.asScala
+  val validPlayVersions: Seq[String] = configuration.get[Seq[String]]("examples.playVersions")
 
   private val logger = org.slf4j.LoggerFactory.getLogger(this.getClass)
 
-  private val examplesUrl =
-    configuration.getString("examples.apiUrl").get
+  private val examplesUrl = configuration.get[String]("examples.apiUrl")
 
   // NOTE: TTL is really just a safety measure here.
   // We should re-deploy when we make major changes to projects
   private val examplesCacheTtl =
-    configuration.getMilliseconds("examples.cache.ttl").get.milliseconds
+  configuration.getMillis("examples.cache.ttl").milliseconds
 
   private def playQueryString(version: String): Seq[(String, String)] = {
     Seq("keyword" -> "play", "keyword" -> version)
@@ -83,7 +79,7 @@ class PlayExampleProjectsService @Inject()(
           cache.set(cacheKey(version), playProjects, examplesCacheTtl)
         }
         playProjects
-      case JsError(errors: Seq[(JsPath, Seq[ValidationError])]) =>
+      case JsError(errors: Seq[(JsPath, Seq[JsonValidationError])]) =>
         logger.error(s"Cannot parse example projects for $version\n$errors")
         Seq.empty
     }
@@ -91,7 +87,7 @@ class PlayExampleProjectsService @Inject()(
 
   def examples(): Future[Seq[ExampleProject]] = {
     Future.sequence(validPlayVersions.map { version =>
-      ws.url(examplesUrl).withQueryString(playQueryString(version): _*).get()
+      ws.url(examplesUrl).withQueryStringParameters(playQueryString(version): _*).get()
         .map(response => (version, response.json))
     }).map { response =>
       response.flatMap((convertExampleProjects _).tupled)

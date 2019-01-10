@@ -1,9 +1,10 @@
 package controllers
 
 import play.api.mvc._
+import play.api.mvc.Results._
 
 trait Common {
-  self: Controller =>
-
   def notFound(implicit request: RequestHeader) = NotFound(views.html.notfound())
+
+  implicit def reverseRouter: documentation.ReverseRouter
 }

@@ -1,28 +1,20 @@
 package utils;
 
-import java.io.File;
-import java.io.FileFilter;
 import java.util.Arrays;
-import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
-
-import play.Play;
 
 public class CheatSheetHelper {
 
     public static String[] sortSheets(String[] sheetFiles) {
         // first letters of file name before "-" serves as sort index
-        Arrays.sort(sheetFiles, new Comparator<String>() {
+        Arrays.sort(sheetFiles, (f1, f2) -> {
 
-            public int compare(String f1, String f2) {
-
-                if (f1.contains("-") && f2.contains("-")) {
-                    return f1.substring(0, f1.indexOf("-"))
-                            .compareTo(f2.substring(0, f1.indexOf("-")));
-                } else {
-                    return f1.compareTo(f2);
-                }
+            if (f1.contains("-") && f2.contains("-")) {
+                return f1.substring(0, f1.indexOf("-"))
+                        .compareTo(f2.substring(0, f1.indexOf("-")));
+            } else {
+                return f1.compareTo(f2);
             }
         });
 
@@ -53,7 +45,7 @@ public class CheatSheetHelper {
 
         Arrays.sort(categories);
 
-        Map<String, String> categoriesAndTitles = new LinkedHashMap<String, String>();
+        Map<String, String> categoriesAndTitles = new LinkedHashMap<>();
 
         for (String category : categories) {
             categoriesAndTitles.put(category, getCategoryTitle(category));

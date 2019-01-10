@@ -7,8 +7,8 @@ import models._
 import models.certification.Certification
 import org.apache.commons.io.IOUtils
 import play.api._
-import play.api.cache.CacheApi
-import play.api.i18n.{I18nSupport, Lang, MessagesApi}
+import play.api.cache.SyncCacheApi
+import play.api.i18n.{I18nSupport, Lang}
 import play.api.mvc._
 import play.twirl.api.Html
 import services.certification.CertificationDao
@@ -21,12 +21,12 @@ import scala.concurrent.{ExecutionContext, Future}
 class Application @Inject() (
   environment: Environment,
   configuration: Configuration,
-  val messagesApi: MessagesApi,
   certificationDao: CertificationDao,
   releases: PlayReleases,
   exampleProjectsService: PlayExampleProjectsService,
-  cacheApi: CacheApi
-)(implicit ec: ExecutionContext) extends Controller with Common with I18nSupport {
+  components: ControllerComponents,
+  cacheApi: SyncCacheApi
+)(implicit ec: ExecutionContext, val reverseRouter: documentation.ReverseRouter) extends AbstractController(components) with Common with I18nSupport {
 
   private val VulnerableVersions = Set(
     "2.0", "2.0.1", "2.0.2", "2.0.3", "2.0.4", "2.0.5",
@@ -84,7 +84,7 @@ class Application @Inject() (
     val selectedPlatform = Platform(platform.orElse(request.headers.get("User-Agent")))
     Ok(html.allreleases(releases, selectedPlatform))
   }
-  
+
   def changelog = markdownAction("public/markdown/changelog.md", { implicit request =>
     views.html.changelog(_)
   })

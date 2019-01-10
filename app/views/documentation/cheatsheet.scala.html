@@ -1,4 +1,5 @@
-@(context: models.documentation.TranslationContext, title: String, otherCategories: Map[String,String], sheets: Seq[String])
+@import controllers.documentation.ReverseRouter
+@(context: models.documentation.TranslationContext, title: String, otherCategories: Map[String,String], sheets: Seq[String])(implicit reverseRouter: ReverseRouter)
 
 <html>
 <head>
@@ -10,7 +11,7 @@
 <div class="cs-wrapper">
 <div id="docTopbar">
 <div id="backToToc">
-    <span>Back to </span><a href="@controllers.documentation.ReverseRouter.home(context.alternateLang, context.version.fold("")(_.name))">Table of contents</a>
+    <span>Back to </span><a href="@reverseRouter.home(context.alternateLang, context.version.fold("")(_.name))">Table of contents</a>
 </div>
 <div id="searchBar">
 <span>Get help with Google:</span>
@@ -22,7 +23,7 @@
 <div class="titlebar links">
 @otherCategories.map { category =>
     @if(category._2 != title) {
-        <a href="@controllers.documentation.ReverseRouter.cheatsheet(context.alternateLang, context.version.fold("")(_.name), category._1)">@category._2</a>
+        <a href="@reverseRouter.cheatsheet(context.alternateLang, context.version.fold("")(_.name), category._1)">@category._2</a>
     } else {
         @category._2
     }

@@ -1,4 +1,5 @@
-@()(implicit req: RequestHeader)
+@import controllers.documentation.ReverseRouter
+@()(implicit req: RequestHeader, reverseRouter: ReverseRouter)
 
 @main("Certification", "certification"){
     <header id="top">

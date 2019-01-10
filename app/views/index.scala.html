@@ -1,4 +1,5 @@
-@(releases: PlayReleases, title: String = "Play Framework - Build Modern & Scalable Web Apps with Java and Scala")(implicit requestHeader : RequestHeader)
+@import controllers.documentation.ReverseRouter
+@(releases: PlayReleases, title: String = "Play Framework - Build Modern & Scalable Web Apps with Java and Scala")(implicit req: RequestHeader, reverseRouter: ReverseRouter)
 
 @main(title) {
     <header id="top">
@@ -23,9 +24,9 @@
             <div id="docs">
                 <h2>Read the Docs</h2>
 
-                <a href="@controllers.documentation.ReverseRouter.index(None)" class="button">Documentation <br> @releases.latest.version@for(name <- releases.latest.name){ "@name"}</a>
+                <a href="@reverseRouter.index(None)" class="button">Documentation <br> @releases.latest.version@for(name <- releases.latest.name){ "@name"}</a>
                 <p>
-                  or go to <a href="@controllers.documentation.ReverseRouter.latest(None, "JavaHome")">Java docs</a> or <a href="@controllers.documentation.ReverseRouter.latest(None, "ScalaHome")">Scala docs</a>
+                  or go to <a href="@reverseRouter.latest(None, "JavaHome")">Java docs</a> or <a href="@reverseRouter.latest(None, "ScalaHome")">Scala docs</a>
                 </p>
             </div>
 
@@ -235,5 +236,5 @@
             </div>
         </article>
     </section>
-<script type="text/javascript" charset="utf-8" src="@routes.Assets.versioned("javascripts/fse.js")"></script>
+    <script type="text/javascript" charset="utf-8" src="@routes.Assets.versioned("javascripts/fse.js")"></script>
 }

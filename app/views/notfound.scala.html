@@ -1,4 +1,5 @@
-@(title: String = "Play Framework - Build Modern & Scalable Web Apps with Java and Scala")(implicit requestHeader : RequestHeader)
+@import controllers.documentation.ReverseRouter
+@(title: String = "Play Framework - Build Modern & Scalable Web Apps with Java and Scala")(implicit req: RequestHeader, reverseRouter: ReverseRouter)
 
 @main(title, "notfound") {
     <header id="top">

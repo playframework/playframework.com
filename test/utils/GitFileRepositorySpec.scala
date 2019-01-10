@@ -17,10 +17,12 @@ class GitFileRepositorySpec extends Specification {
     try {
       val repodir = new File(tmpdir, "repo")
 
+      val encoding = "UTF-8"
+
       // Some files in it
-      FileUtils.write(new File(repodir, "documentation/manual/working/scalaGuide/ScalaHome.md"), "Hello!")
-      FileUtils.write(new File(repodir, "documentation/manual/working/scalaGuide/main/http/code/ScalaActions.scala"), "Action")
-      FileUtils.write(new File(repodir, "framework/build.sbt"), "Build")
+      FileUtils.write(new File(repodir, "documentation/manual/working/scalaGuide/ScalaHome.md"), "Hello!", encoding)
+      FileUtils.write(new File(repodir, "documentation/manual/working/scalaGuide/main/http/code/ScalaActions.scala"), "Action", encoding)
+      FileUtils.write(new File(repodir, "framework/build.sbt"), "Build", encoding)
 
       // Turn it into a git repo
       val repo = new InitCommand().setDirectory(repodir).call()

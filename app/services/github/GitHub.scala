@@ -57,7 +57,7 @@ case class GitHubConfig(accessToken: String, gitHubApiUrl: String, organisation:
 class DefaultGitHub @Inject() (ws: WSClient, config: GitHubConfig)(implicit ec: ExecutionContext) extends GitHub {
 
   private def authCall(url: String) = {
-    ws.url(url).withHeaders(HeaderNames.AUTHORIZATION -> ("token " + config.accessToken))
+    ws.url(url).withHttpHeaders(HeaderNames.AUTHORIZATION -> ("token " + config.accessToken))
   }
 
   private def load[T: Reads](path: String) = {
@@ -68,7 +68,7 @@ class DefaultGitHub @Inject() (ws: WSClient, config: GitHubConfig)(implicit ec: 
   }
 
   object NextLink {
-    val ParseNext = """.*<([^>]+)>;\s*rel="next".*""".r
+    val ParseNext = """.*<([^>]+)>;\s*rel="?next"?.*""".r
     def unapply(response: WSResponse): Option[String] = {
       response.header("Link").collect {
         case ParseNext(next) => next
@@ -78,8 +78,7 @@ class DefaultGitHub @Inject() (ws: WSClient, config: GitHubConfig)(implicit ec: 
 
   private def responseFailure(response: WSResponse): Exception = response.status match {
     case 403 => new RuntimeException("Request forbidden, GitHub quota rate limit is probably exceeded: " + response.body)
-    case error => new RuntimeException("Request failed with " + response.status + " " +
-      response.underlying[org.asynchttpclient.Response].getStatusText)
+    case error => new RuntimeException("Request failed with " + response.status + " " + response.statusText)
   }
 
   private def checkSuccess(response: WSResponse): WSResponse = response.status match {

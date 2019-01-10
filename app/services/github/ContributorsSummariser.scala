@@ -88,7 +88,7 @@ class CachingContributorsSummariser @Inject() (actorSystem: ActorSystem,
                                                @Named("gitHubContributorsSummariser") delegate: ContributorsSummariser)(implicit ec: ExecutionContext) extends ContributorsSummariser {
   @volatile private var contributors: Contributors = FallbackContributors.contributors
 
-  actorSystem.scheduler.schedule(0 seconds, 24 hours) {
+  actorSystem.scheduler.schedule(0.seconds, 24.hours) {
     delegate.fetchContributors.onComplete {
       case Failure(t) => Logger.error("Unable to load contributors from GitHub", t)
       case Success(cs) =>

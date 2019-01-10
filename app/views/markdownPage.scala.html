@@ -1,4 +1,5 @@
-@(title: String, markdown: Html)(implicit requestHeader : RequestHeader)
+@import controllers.documentation.ReverseRouter
+@(title: String, markdown: Html)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
 
 @main(title, "markdown"){
     <header id="top">

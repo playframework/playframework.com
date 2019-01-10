@@ -1,5 +1,6 @@
 package views.html.documentation
 
+import controllers.documentation.ReverseRouter
 import models.documentation.{Milestone, ReleaseCandidate, TranslationContext, Version}
 import play.api.i18n.{Lang, MessagesApi}
 import play.twirl.api.Html
@@ -10,8 +11,8 @@ object Helpers {
     ! context.version.equals(latestCurrent)
   }
 
-  def displayVersionMessage(page: String)(implicit messagesApi: MessagesApi, context: TranslationContext): Html = {
-    implicit val lang = context.alternateLang
+  def displayVersionMessage(page: String)(implicit messagesApi: MessagesApi, context: TranslationContext, reverseRouter: ReverseRouter): Html = {
+    implicit val lang = context.alternateLang.getOrElse(Lang.defaultLang)
     val version = context.version.get
     if (isDevelopmentVersion(version)) {
       upgrade(unstableMessage(link(version, page)), page)
@@ -34,49 +35,49 @@ object Helpers {
     }
   }
 
-  private def upgrade(originalHtml: Html, page: String)(implicit messagesApi: MessagesApi, context: TranslationContext): Html = {
+  private def upgrade(originalHtml: Html, page: String)(implicit messagesApi: MessagesApi, context: TranslationContext, reverseRouter: ReverseRouter): Html = {
     import scala.collection.immutable.Seq
     new Html(Seq(originalHtml, Html(" "), displayUpgradeMessage(page)))
   }
 
   // 2.6.0
-  private def unstableMessage(specificLink: Html)(implicit messagesApi: MessagesApi, lang: Option[Lang]) = {
+  private def unstableMessage(specificLink: Html)(implicit messagesApi: MessagesApi, lang: Lang) = {
     // documentation.unstable.message=You are viewing the documentation for the {0} development release.
     Html(messagesApi("documentation.unstable.message", specificLink.toString()))
   }
 
   // Current release 2.5.0.  (Displayed because latest is 2.5.x)
-  private def currentReleaseMessage(specificLink: Html)(implicit messagesApi: MessagesApi, lang: Option[Lang]): Html = {
+  private def currentReleaseMessage(specificLink: Html)(implicit messagesApi: MessagesApi, lang: Lang): Html = {
     // You are viewing the documentation for the {0} release.
     Html(messagesApi("documentation.current.release.message", specificLink.toString()))
   }
 
   // Used to point people to 2.5.x
-  private def currentLatestMessage(seriesLink: Html)(implicit messagesApi: MessagesApi, lang: Option[Lang]): Html = {
+  private def currentLatestMessage(seriesLink: Html)(implicit messagesApi: MessagesApi, lang: Lang): Html = {
     // The latest stable release series is {0}.
     Html(messagesApi("documentation.current.latest.message", seriesLink.toString()))
   }
 
   // 2.3.2
-  private def oldReleaseMessage(specificLink: Html, seriesLink: Html)(implicit messagesApi: MessagesApi, lang: Option[Lang]): Html  = {
+  private def oldReleaseMessage(specificLink: Html, seriesLink: Html)(implicit messagesApi: MessagesApi, lang: Lang): Html  = {
     // You are viewing the documentation for the {0} release in the {1} series of releases.
     Html(messagesApi("documentation.old.release.message", specificLink.toString(), seriesLink.toString()))
   }
 
   // 2.3.x
-  private def oldLatestMessage(seriesLink: Html)(implicit messagesApi: MessagesApi, lang: Option[Lang]): Html  = {
+  private def oldLatestMessage(seriesLink: Html)(implicit messagesApi: MessagesApi, lang: Lang): Html  = {
     // You are viewing the documentation for the {0} release series.
     Html(messagesApi("documentation.old.latest.message", seriesLink.toString()))
   }
 
-  private def link(version: Version, page: String)(implicit alternateLang: Option[Lang]): Html = {
-    val url = controllers.documentation.ReverseRouter.page(alternateLang, version.toString, page)
-    Html(s"""<a href="${url}">${version.toString}</a>""")
+  private def link(version: Version, page: String)(implicit alternateLang: Lang, reverseRouter: ReverseRouter): Html = {
+    val url = reverseRouter.page(Option(alternateLang), version.toString, page)
+    Html(s"""<a href="$url">${version.toString}</a>""")
   }
 
-  private def displayUpgradeMessage(page: String)(implicit messagesApi: MessagesApi, context: TranslationContext): Html = {
+  private def displayUpgradeMessage(page: String)(implicit messagesApi: MessagesApi, context: TranslationContext, reverseRouter: ReverseRouter): Html = {
     val version = latestCurrent.get
-    implicit val lang = context.alternateLang
+    implicit val lang = context.alternateLang.getOrElse(Lang.defaultLang)
     currentLatestMessage(link(version, page))
   }
 

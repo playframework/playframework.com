@@ -1,4 +1,4 @@
-import JsEngineKeys._
+
 
 JsEngineKeys.engineType := JsEngineKeys.EngineType.Node
 
@@ -8,24 +8,30 @@ version := "1.0-SNAPSHOT"
 lazy val root = (project in file(".")).enablePlugins(PlayScala, NewRelic)
 
 libraryDependencies ++= Seq(
-  "com.typesafe.play" %% "play-doc" % "1.5.0",
+  "com.typesafe.play" %% "play-doc" % "1.8.2",
   "org.eclipse.jgit" % "org.eclipse.jgit" % "3.0.0.201306101825-r",
-  "mysql" % "mysql-connector-java" % "5.1.18", // TODO: 5.1.34
-  "com.damnhandy" % "handy-uri-templates" % "2.0.2",
-  "org.webjars" % "jquery" % "1.8.2",
-  "org.webjars" % "html5shiv" % "3.7.2",
-  "org.webjars" % "prettify" % "4-Mar-2013",
+  "mysql" % "mysql-connector-java" % "5.1.47",
+  "com.damnhandy" % "handy-uri-templates" % "2.1.7",
+  "org.webjars" % "jquery" % "1.8.3",
+  "org.webjars" % "html5shiv" % "3.7.3",
+  "org.webjars" % "prettify" % "4-Mar-2013-1",
   "org.webjars" % "clipboard.js" % "1.5.5",
-  "com.typesafe.play" %% "anorm" % "2.4.0",
+  "org.playframework.anorm" %% "anorm" % "2.6.2",
+  guice,
   jdbc,
-  cache,
+  ehcache,
   evolutions,
   filters,
   ws,
   specs2 % "test"
 )
 
-scalaVersion := "2.11.11"
+scalaVersion := "2.12.8"
+
+scalacOptions ++= Seq(
+  "-feature",
+  "-deprecation"
+)
 
 routesGenerator := InjectedRoutesGenerator
 
@@ -54,5 +60,5 @@ sources in (Compile, doc) := Seq.empty
 publishArtifact in (Compile, packageDoc) := false
 
 // NewRelic settings
-newrelicVersion := "4.1.0"
+newrelicVersion := "4.9.0"
 newrelicAppName := "playframework.com"
