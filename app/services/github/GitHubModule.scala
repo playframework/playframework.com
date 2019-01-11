@@ -1,9 +1,11 @@
 package services.github
 
-import play.api.{Logger, Configuration, Environment}
+import org.slf4j.LoggerFactory
+import play.api.{Configuration, Environment}
 import play.api.inject.Module
 
 class GitHubModule extends Module {
+  private val log = LoggerFactory.getLogger(classOf[GitHubModule])
 
   def bindings(environment: Environment, configuration: Configuration) = {
     import scala.collection.JavaConverters._
@@ -20,7 +22,7 @@ class GitHubModule extends Module {
           bind[ContributorsSummariser].to[CachingContributorsSummariser]
         )
       case None =>
-        Logger.info("No GitHub access token yet, using fallback contributors")
+        log.info("No GitHub access token yet, using fallback contributors")
         Seq(bind[ContributorsSummariser].to[OfflineContributorsSummariser])
     }
 
