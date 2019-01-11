@@ -109,7 +109,7 @@ class DocumentationPollingActor @Inject() (messages: MessagesApi, @Assisted repo
             implicit val lang = repos.default.config.lang
 
             if (old.isDefined) {
-              log.info(s"Updating default documentation for {}: {}", version, cacheId)
+              log.info("Updating default documentation for {}: {}", version, cacheId)
             }
 
             val playDoc = new PlayDoc(
