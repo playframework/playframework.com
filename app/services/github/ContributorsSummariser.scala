@@ -96,7 +96,7 @@ class CachingContributorsSummariser @Inject() (actorSystem: ActorSystem,
       case Success(cs) =>
         if (contributors != cs) {
           val count = contributors.committers.size + contributors.playOrganisation.size + contributors.contributors.size
-          log.info(s"Loaded $count contributors for GitHub")
+          log.info("Loaded {} contributors for GitHub", count)
         }
         contributors = cs
     }
