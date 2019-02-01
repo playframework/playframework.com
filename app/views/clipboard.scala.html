@@ -1,5 +1,7 @@
+@()(implicit request: RequestHeader)
+
 <script type="text/javascript" charset="utf-8" src="@routes.Assets.versioned("lib/clipboard.js/clipboard.js")"></script>
-<script type="text/javascript">
+@views.html.helper.script('type -> "text/javascript") {
 (function(){
     var pre = document.getElementsByClassName('prettyprint');
     for (var i = 0; i < pre.length; i++) {
@@ -36,4 +38,4 @@
     });
 
 })();
-</script>
+}

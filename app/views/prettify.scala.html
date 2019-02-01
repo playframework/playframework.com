@@ -1,8 +1,9 @@
+@()(implicit request: RequestHeader)
 <script type="text/javascript" charset="utf-8" src="@routes.Assets.versioned("lib/prettify/prettify.js")"></script>
 <script type="text/javascript" charset="utf-8" src="@routes.Assets.versioned("lib/prettify/lang-scala.js")"></script>
-<script type="text/javascript">
-$(function(){
-window.prettyPrint && prettyPrint()
-});
-</script>
+@views.html.helper.script('type -> "text/javascript") {
+    $(function(){
+       window.prettyPrint && prettyPrint()
+    });
+}
 @clipboard()
