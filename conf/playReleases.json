@@ -1,14 +1,9 @@
 {
     "latest": {
-            "version": "2.6.21",
-            "date": "Jan 8 2019"
+            "version": "2.7.0",
+            "date": "Jan 30 2019"
     },
-    "development": [
-        {
-            "version": "2.7.0-RC9",
-            "date": "Jan 10 2019"
-        }
-    ],
+    "development": [],
     "previous": [
         {
             "version": "2.6.21",

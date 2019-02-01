@@ -1,3 +1,11 @@
+## Play 2.7.0
+
+*Released 30 Jan 2019*
+
+[Highlights](https://playframework.com/documentation/2.7.x/Highlights27)
+[Migration Guide](https://playframework.com/documentation/2.7.x/Migration27)
+[All changes](https://github.com/playframework/playframework/compare/2.6.0...2.7.0/)
+[Github milestone](https://github.com/playframework/playframework/milestone/56?closed=1)
 
 ## Play 2.6.21
 
