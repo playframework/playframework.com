@@ -16,10 +16,10 @@
 
         <hr class="clear"/>
 
-        <script type="text/javascript">
+        @views.html.helper.script('type -> "text/javascript") {
             // On start, check if flex mod is enabled
             if (localStorage && localStorage['flex'] == "true" ) document.body.className += " flex"
-        </script>
+        }
 
         @maybeContext.map { context =>
           @algolia(context)
