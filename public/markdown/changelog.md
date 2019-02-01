@@ -1,6 +1,6 @@
 ## Play 2.7.0
 
-*Released 30 Jan 2019*
+*Released 1 Feb 2019*
 
 [Highlights](https://playframework.com/documentation/2.7.x/Highlights27)
 [Migration Guide](https://playframework.com/documentation/2.7.x/Migration27)
