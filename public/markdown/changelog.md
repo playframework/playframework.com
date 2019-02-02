@@ -1,25 +1,25 @@
 ## Play 2.7.0
 
-*Released 30 Jan 2019*
+*Released 1 Feb 2019*
 
 [Highlights](https://playframework.com/documentation/2.7.x/Highlights27)
 [Migration Guide](https://playframework.com/documentation/2.7.x/Migration27)
 [All changes](https://github.com/playframework/playframework/compare/2.6.0...2.7.0/)
-[Github milestone](https://github.com/playframework/playframework/milestone/56?closed=1)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/56?closed=1)
 
 ## Play 2.6.21
 
 *Released 8 Jan 2019*
 
 [All changes](https://github.com/playframework/playframework/compare/2.6.20...2.6.21/)
-[Github milestone](https://github.com/playframework/playframework/milestone/79?closed=1)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/79?closed=1)
 
 ## Play 2.6.20
 
 *Released 8 Oct 2018*
 
 [All changes](https://github.com/playframework/playframework/compare/2.6.19...2.6.20/)
-[Github milestone](https://github.com/playframework/playframework/milestone/78?closed=1)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/78?closed=1)
 
 
 ## Play 2.6.19
@@ -27,77 +27,77 @@
 *Released 10 Sep 2018*
 
 [All changes](https://github.com/playframework/playframework/compare/2.6.18...2.6.19/)
-[Github milestone](https://github.com/playframework/playframework/milestone/77?closed=1)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/77?closed=1)
 
 ## Play 2.6.18
 
 *Released 20 Aug 2018*
 
 [All changes](https://github.com/playframework/playframework/compare/2.6.17...2.6.18/)
-[Github milestone](https://github.com/playframework/playframework/milestone/76?closed=1)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/76?closed=1)
 
 ## Play 2.6.17
 
 *Released 19 Jul 2018*
 
 [All changes](https://github.com/playframework/playframework/compare/2.6.16...2.6.17/)
-[Github milestone](https://github.com/playframework/playframework/milestone/75?closed=1)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/75?closed=1)
 
 ## Play 2.6.16
 
 *Released 16 Jul 2018*
 
 [All changes](https://github.com/playframework/playframework/compare/2.6.15...2.6.16/)
-[Github milestone](https://github.com/playframework/playframework/milestone/74?closed=1)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/74?closed=1)
 
 ## Play 2.6.15
 
 *Released 27 May 2018*
 
 [All changes](https://github.com/playframework/playframework/compare/2.6.14...2.6.15/)
-[Github milestone](https://github.com/playframework/playframework/milestone/73?closed=1)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/73?closed=1)
 
 ## Play 2.6.14
 
 *Released but not announced*. Play 2.6.14 was released, but we missed a few things so we released Play 2.6.15 instead.
 
 [All changes](https://github.com/playframework/playframework/compare/2.6.13...2.6.14/)
-[Github milestone](https://github.com/playframework/playframework/milestone/72?closed=1)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/72?closed=1)
 
 ## Play 2.6.13
 
 *Released 6 Apr 2018*
 
 [All changes](https://github.com/playframework/playframework/compare/2.6.12...2.6.13/)
-[Github milestone](https://github.com/playframework/playframework/milestone/71?closed=1)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/71?closed=1)
 
 ## Play 2.6.12
 
 *Released 2 Mar 2018*
 
 [All changes](https://github.com/playframework/playframework/compare/2.6.11...2.6.12/)
-[Github milestone](https://github.com/playframework/playframework/milestone/70?closed=1)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/70?closed=1)
 
 ## Play 2.6.11
 
 *Released 11 Jan 2018*
 
 [All changes](https://github.com/playframework/playframework/compare/2.6.10...2.6.11/)
-[Github milestone](https://github.com/playframework/playframework/milestone/69?closed=1)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/69?closed=1)
 
 ## Play 2.6.10
 
 *Released 21 Dec 2017*
 
 [All changes](https://github.com/playframework/playframework/compare/2.6.9...2.6.10/)
-[Github milestone](https://github.com/playframework/playframework/milestone/68?closed=1)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/68?closed=1)
 
 ## Play 2.6.9
 
 *Released 8 Dec 2017*
 
 [All changes](https://github.com/playframework/playframework/compare/2.6.7...2.6.9/)
-[Github milestone](https://github.com/playframework/playframework/milestone/65?closed=1)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/65?closed=1)
 
 ## Play 2.6.8
 
@@ -108,7 +108,7 @@
 *Released 1 Nov 2017*
 
 [All changes](https://github.com/playframework/playframework/compare/2.6.6...2.6.7/)
-[Github milestone](https://github.com/playframework/playframework/milestone/64?closed=1)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/64?closed=1)
 
 ## Play 2.6.6
 
@@ -117,14 +117,14 @@
 Adds support for sbt 1.0
 
 [All changes](https://github.com/playframework/playframework/compare/2.6.5...2.6.6/)
-[Github milestone](https://github.com/playframework/playframework/milestone/62?closed=1)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/62?closed=1)
 
 ## Play 2.6.5
 
 *Released 14 Sep 2017*
 
 [All changes](https://github.com/playframework/playframework/compare/2.6.3...2.6.5/)
-[Github milestone](https://github.com/playframework/playframework/milestone/61?closed=1)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/61?closed=1)
 
 ## Play 2.6.4
 
@@ -135,7 +135,7 @@ Adds support for sbt 1.0
 *Released 12 Aug 2017*
 
 [All changes](https://github.com/playframework/playframework/compare/2.6.2...2.6.3/)
-[Github milestone](https://github.com/playframework/playframework/milestone/59?closed=1)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/59?closed=1)
 
 ## Play 2.6.2
 
@@ -900,7 +900,7 @@ Highlights:
 * update to Scala 2.10.3
 * various bug fixes
 
-A complete list of what was fixed for 2.2.2 can be found on [Github](https://github.com/playframework/playframework/issues?milestone=11&page=1&state=closed)
+A complete list of what was fixed for 2.2.2 can be found on [GitHub](https://github.com/playframework/playframework/issues?milestone=11&page=1&state=closed)
 
 
 ## Play 2.2.1
