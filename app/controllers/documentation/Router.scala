@@ -67,6 +67,7 @@ class Router @Inject() (
         case p"/latest/$path*" => docController.latest(lang, path)
         case p"/switch/$version<1\.[^/]+>/$page" => docController.v1Switch(lang, version, page)
         case p"/switch/$version<\d+\.[^/]+>/$page" => docController.switch(lang, version, page)
+        case p"/switch/$version<\d+\.[^/]+>" => docController.switch(lang, version, "Home")
       }
     } else {
       None
