@@ -20,6 +20,36 @@ object DocumentationControllerSpec extends PlaySpecification {
       result.header.headers.contains("Link") must beTrue
     }
 
+    "when switching to another version" should {
+      "redirect to the selected version and page" in new WithApplication with Injecting {
+        val reverseRouter: ReverseRouter = inject[ReverseRouter]
+
+        val request = FakeRequest("GET", reverseRouter.switch(None, "2.7.x", "Home"))
+        val result = route(app, request).get
+
+        redirectLocation(result) must beSome(reverseRouter.page(None, "2.7.x", "Home"))
+      }
+
+      "redirect to the selected version and home when no page is selected" in new WithApplication with Injecting {
+        val reverseRouter: ReverseRouter = inject[ReverseRouter]
+
+        val request = FakeRequest("GET", reverseRouter.switch(None, "2.7.x", ""))
+        val result = route(app, request).get
+
+        redirectLocation(result) must beSome(reverseRouter.page(None, "2.7.x", "Home"))
+      }
+
+      "redirect to the selected version when not having a trailing slash" in new WithApplication with Injecting {
+        val reverseRouter: ReverseRouter = inject[ReverseRouter]
+
+        val page =  reverseRouter.switch(None, "2.7.x", "").stripSuffix("/")
+        val request = FakeRequest("GET", page)
+        val result = route(app, request).get
+
+        redirectLocation(result) must beSome(reverseRouter.page(None, "2.7.x", "Home"))
+      }
+    }
+
     "when page not found" should {
       "redirect page that was renamed" in new WithApplication with Injecting {
         val reverseRouter: ReverseRouter = inject[ReverseRouter]
