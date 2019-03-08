@@ -1,6 +1,7 @@
 package controllers
 
-import javax.inject.{ Inject, Singleton }
+import javax.inject.Inject
+import javax.inject.Singleton
 import play.api.mvc._
 import play.api.libs.json._
 import services.modules._
@@ -9,10 +10,10 @@ import models.modules._
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class Modules @Inject() (
-  modulesLookup: ModulesLookup,
-  moduleDao: ModuleDao,
-  components: ControllerComponents)(implicit ec: ExecutionContext, reverseRouter: documentation.ReverseRouter) extends AbstractController(components) {
+class Modules @Inject()(modulesLookup: ModulesLookup, moduleDao: ModuleDao, components: ControllerComponents)(
+    implicit ec: ExecutionContext,
+    reverseRouter: documentation.ReverseRouter,
+) extends AbstractController(components) {
 
   def index(keyword: String) = Action { implicit request =>
     render {
@@ -27,11 +28,10 @@ class Modules @Inject() (
   def download(name: String, version: String) = Action { implicit request =>
     modulesLookup.findModule(name, version) match {
       case Some(zip) => Ok.sendFile(zip)
-      case None => PageNotFound
+      case None      => PageNotFound
     }
   }
- 
-    
+
   def documentation(name: String, version: String, page: String) = Action { implicit request =>
     modulesLookup.loadModuleDocumentation(name, version, page) match {
       case Some(content) =>
@@ -39,23 +39,20 @@ class Modules @Inject() (
       case None => PageNotFound
     }
   }
-  
-              
 
   def show(name: String) = Action { implicit request =>
     moduleDao.findById(name) match {
       case Some((module, releases)) => Ok(views.html.modules.show(module, releases))
-      case None => PageNotFound
+      case None                     => PageNotFound
     }
   }
 
   def dependencies(name: String, version: String) = Action { implicit request =>
     modulesLookup.findDependencies(name, version) match {
       case Some(yml) => Ok(yml)
-      case None => PageNotFound
+      case None      => PageNotFound
     }
   }
 
   private def PageNotFound(implicit request: RequestHeader) = NotFound(views.html.notfound())
 }
-

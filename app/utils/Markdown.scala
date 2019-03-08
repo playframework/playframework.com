@@ -5,7 +5,7 @@ import org.pegdown.ast._
 
 object Markdown {
 
-  def toHtml(markdown: String, link: String => (String, String) = a => (a,a)): String = {
+  def toHtml(markdown: String, link: String => (String, String) = a => (a, a)): String = {
     val processor = new PegDownProcessor(Extensions.ALL)
     val links = new LinkRenderer {
       override def render(node: WikiLinkNode) = {

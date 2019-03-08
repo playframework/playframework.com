@@ -4,7 +4,9 @@ import java.io.File
 
 import com.google.inject.AbstractModule
 import com.typesafe.config.Config
-import javax.inject.{Inject, Provider, Singleton}
+import javax.inject.Inject
+import javax.inject.Provider
+import javax.inject.Singleton
 import models.documentation._
 import org.slf4j.LoggerFactory
 import play.api._
@@ -21,34 +23,39 @@ class ActorsModule extends AbstractModule with AkkaGuiceSupport {
 }
 
 @Singleton
-class DocumentationRedirectsProvider @Inject()(configuration: Configuration) extends Provider[DocumentationRedirects] {
+class DocumentationRedirectsProvider @Inject()(configuration: Configuration)
+    extends Provider[DocumentationRedirects] {
   override def get: DocumentationRedirects = DocumentationRedirects(
     configuration.get[Seq[Config]]("documentation.redirects").map { config =>
       RedirectPage(
         from = config.getString("from"),
-        to = config.getString("to")
+        to = config.getString("to"),
       )
-    }
+    },
   )
 }
 
 @Singleton
-class DocumentationConfigProvider @Inject() (environment: Environment, configuration: Configuration) extends Provider[DocumentationConfig] {
+class DocumentationConfigProvider @Inject()(environment: Environment, configuration: Configuration)
+    extends Provider[DocumentationConfig] {
   private val log = LoggerFactory.getLogger(classOf[DocumentationConfigProvider])
 
-  lazy val get: DocumentationConfig = loadConfig.getOrElse(DocumentationConfig(
-    TranslationConfig(Lang("en"), environment.rootPath, None, "origin", None, None), Nil))
+  lazy val get: DocumentationConfig = loadConfig.getOrElse(
+    DocumentationConfig(TranslationConfig(Lang("en"), environment.rootPath, None, "origin", None, None), Nil),
+  )
 
   private def loadConfig: Option[DocumentationConfig] = {
     for {
-      docsConfig <- configuration.getOptional[Configuration]("documentation")
-      path <- docsConfig.getOptional[String]("path").map(basePath)
-      mainConfig <- docsConfig.getOptional[Configuration]("main")
+      docsConfig      <- configuration.getOptional[Configuration]("documentation")
+      path            <- docsConfig.getOptional[String]("path").map(basePath)
+      mainConfig      <- docsConfig.getOptional[Configuration]("main")
       mainTranslation <- loadTranslationConfig(path, mainConfig)
-      translations <- docsConfig.getOptional[Seq[Config]]("translations")
+      translations    <- docsConfig.getOptional[Seq[Config]]("translations")
     } yield {
-      DocumentationConfig(mainTranslation,
-        translations.toList.collect(Function.unlift(loadTranslationConfig(path, _))))
+      DocumentationConfig(
+        mainTranslation,
+        translations.toList.collect(Function.unlift(loadTranslationConfig(path, _))),
+      )
     }
   }
 
@@ -67,10 +74,10 @@ class DocumentationConfigProvider @Inject() (environment: Environment, configura
         config.getOptional[String]("path"),
         config.getOptional[String]("remote").getOrElse("origin"),
         for {
-          file <- config.getOptional[String]("versionFile")
+          file    <- config.getOptional[String]("versionFile")
           pattern <- config.getOptional[String]("versionPattern")
         } yield MasterVersion(file, pattern.r),
-        config.getOptional[String]("gitHubSource")
+        config.getOptional[String]("gitHubSource"),
       )
     }
   }

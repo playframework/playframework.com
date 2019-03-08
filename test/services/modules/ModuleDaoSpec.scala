@@ -40,14 +40,15 @@ object ModuleDaoSpec extends Specification {
     }
   }
 
-  def withDao[T](block: DbModuleDao => T) = Databases.withDatabase(
-    driver = "com.mysql.jdbc.Driver",
-    url = "jdbc:mysql://localhost:3306/playunittest",
-    config = Map("user" -> "root")
-  ) { db =>
-    Evolutions.withEvolutions(db) {
-      block(new DbModuleDao(db))
+  def withDao[T](block: DbModuleDao => T) =
+    Databases.withDatabase(
+      driver = "com.mysql.jdbc.Driver",
+      url = "jdbc:mysql://localhost:3306/playunittest",
+      config = Map("user" -> "root"),
+    ) { db =>
+      Evolutions.withEvolutions(db) {
+        block(new DbModuleDao(db))
+      }
     }
-  }
 
 }

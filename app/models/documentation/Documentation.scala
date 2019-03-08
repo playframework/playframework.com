@@ -5,7 +5,8 @@ import java.util.Locale
 import org.slf4j.LoggerFactory
 import play.api.i18n.Lang
 import play.doc.PlayDoc
-import utils.{ExtendedFileRepository, PlayGitRepository}
+import utils.ExtendedFileRepository
+import utils.PlayGitRepository
 
 import scala.util.control.NonFatal
 
@@ -15,7 +16,11 @@ case class Documentation(default: Translation, defaultLang: Lang, translations: 
 
 }
 
-case class Translation(availableVersions: List[TranslationVersion], repo: PlayGitRepository, source: Option[String]) {
+case class Translation(
+    availableVersions: List[TranslationVersion],
+    repo: PlayGitRepository,
+    source: Option[String],
+) {
 
   lazy val byVersion: Map[Version, TranslationVersion] = availableVersions.map(v => v.version -> v).toMap
 
@@ -34,15 +39,18 @@ case class Translation(availableVersions: List[TranslationVersion], repo: PlayGi
    * and the most recent patch version of every past major version
    */
   private def calculateDisplayVersions(versions: List[Version]): List[Version] = {
-    versions.find(_.versionType.isStable).map { currentStable =>
-      val mostRecentDevelopment = Version.findMostRecentDevelopment(versions, currentStable)
-      val currentPatchVersions = Version.findCurrentPatchVersions(versions, currentStable)
-      val previousMostRecentVersions = Version.findPreviousMostRecentVersions(versions, currentStable)
-      // Ensure that the most recent Play 1 version, even if it's an RC, is in there
-      val mostRecent1 = versions.find(_.era == 1).toSeq
+    versions
+      .find(_.versionType.isStable)
+      .map { currentStable =>
+        val mostRecentDevelopment      = Version.findMostRecentDevelopment(versions, currentStable)
+        val currentPatchVersions       = Version.findCurrentPatchVersions(versions, currentStable)
+        val previousMostRecentVersions = Version.findPreviousMostRecentVersions(versions, currentStable)
+        // Ensure that the most recent Play 1 version, even if it's an RC, is in there
+        val mostRecent1 = versions.find(_.era == 1).toSeq
 
-      (List[Version]() ++ mostRecentDevelopment ++ currentPatchVersions ++ previousMostRecentVersions ++ mostRecent1).distinct.sorted.reverse
-    } getOrElse versions
+        (List[Version]() ++ mostRecentDevelopment ++ currentPatchVersions ++ previousMostRecentVersions ++ mostRecent1).distinct.sorted.reverse
+      }
+      .getOrElse(versions)
   }
 
   /**
@@ -54,14 +62,20 @@ case class Translation(availableVersions: List[TranslationVersion], repo: PlayGi
 
 /**
  * A version of a particular translation.
- * 
+ *
  * @param version The version
  * @param repo The file repository for the this version
  * @param playDoc The play doc instance that can render the documentation for this version
  * @param cacheId An etag value that uniquely identifies this version
  * @param symbolicName The git symbolic name
  */
-case class TranslationVersion(version: Version, repo: ExtendedFileRepository, playDoc: PlayDoc, cacheId: String, symbolicName: String)
+case class TranslationVersion(
+    version: Version,
+    repo: ExtendedFileRepository,
+    playDoc: PlayDoc,
+    cacheId: String,
+    symbolicName: String,
+)
 
 /**
  * Release types.  Primary use is to identify which versions are stable, and how to sort them.
@@ -82,12 +96,13 @@ case object Latest extends VersionType("x", 100) {
   override val isLatest = true
 }
 case class ReleaseCandidate(override val number: Int) extends VersionType("rc", 9)
-case class Milestone(override val number: Int) extends VersionType("m", 8)
+case class Milestone(override val number: Int)        extends VersionType("m", 8)
 
 /**
  * A version.  Primary use is for sorting.
  */
-case class Version(name: String, era: Int, major: Int, minor: Int, patch: Int, versionType: VersionType) extends Ordered[Version] {
+case class Version(name: String, era: Int, major: Int, minor: Int, patch: Int, versionType: VersionType)
+    extends Ordered[Version] {
   def sameMajor(that: Version) = era == that.era && major == that.major
   def earlierMajorThan(that: Version) = {
     if (era < that.era) true
@@ -95,7 +110,13 @@ case class Version(name: String, era: Int, major: Int, minor: Int, patch: Int, v
     else major < that.major
   }
   def compare(that: Version) = {
-    (era, major, minor, patch, versionType).compareTo(that.era, that.major, that.minor, that.patch, that.versionType)
+    (era, major, minor, patch, versionType).compareTo(
+      that.era,
+      that.major,
+      that.minor,
+      that.patch,
+      that.versionType,
+    )
   }
   override def toString = name
 }
@@ -120,21 +141,24 @@ object Version {
   }
 
   /**
-    * Finds the most recent stable version, and then the latest version that matches that
-    *
-    * @param displayVersions the list of display versions.
-    * @return the default version.
-    */
+   * Finds the most recent stable version, and then the latest version that matches that
+   *
+   * @param displayVersions the list of display versions.
+   * @return the default version.
+   */
   def findDefaultVersion(displayVersions: Seq[Version]): Option[Version] = {
-      displayVersions.find(_.versionType.isStable).flatMap { stable =>
+    displayVersions
+      .find(_.versionType.isStable)
+      .flatMap { stable =>
         displayVersions.find(v => v.sameMajor(stable) && (v.versionType.isLatest || v.versionType.isStable))
-      }.orElse(displayVersions.headOption)
+      }
+      .orElse(displayVersions.headOption)
   }
 
   def parse(name: String): Option[Version] = {
     try {
-      val splitted = name.split("\\.", 4)
-      val splitLast = splitted(splitted.length - 1).split("-", 2)
+      val splitted     = name.split("\\.", 4)
+      val splitLast    = splitted(splitted.length - 1).split("-", 2)
       val splittedFull = splitted.dropRight(1) ++ splitLast
 
       // Convenience some version constructor
@@ -155,14 +179,14 @@ object Version {
       // Version type extractor object
       object T {
         def unapply(s: String): Option[VersionType] = {
-          val vt = s.takeWhile(_.isLetter)
+          val vt  = s.takeWhile(_.isLetter)
           val vtn = s.dropWhile(!_.isDigit)
-          val n = if (vtn.isEmpty) 0 else vtn.toInt
+          val n   = if (vtn.isEmpty) 0 else vtn.toInt
           vt.toLowerCase(Locale.ENGLISH) match {
-            case "rc" => Some(new ReleaseCandidate(n))
-            case "m" => Some(new Milestone(n))
+            case "rc"       => Some(new ReleaseCandidate(n))
+            case "m"        => Some(new Milestone(n))
             case "snapshot" => Some(Latest)
-            case unknown => None
+            case unknown    => None
           }
         }
       }
@@ -176,7 +200,7 @@ object Version {
         case Array(I(era), I(major), I(minor), "x")             => v(era, major, minor, 9999, Latest)
         case Array(I(era), I(major), I(minor), T(vt))           => v(era, major, minor, 0, vt)
         case Array(I(era), I(major), I(minor), I(patch), T(vt)) => v(era, major, minor, patch, vt)
-        case _ => None
+        case _                                                  => None
       }
     } catch {
       case NonFatal(e) =>
@@ -184,6 +208,5 @@ object Version {
         None
     }
   }
-
 
 }

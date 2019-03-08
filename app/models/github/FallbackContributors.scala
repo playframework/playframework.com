@@ -25,7 +25,7 @@ object FallbackContributors {
       GitHubUser(id = 703748, login = "dotta", url = "https://api.github.com/users/dotta", avatar_url = "https://avatars.githubusercontent.com/u/703748?v=3", html_url = "https://github.com/dotta", name = Some("Mirco Dotta")),
       GitHubUser(id = 4576, login = "marcospereira", url = "https://api.github.com/users/marcospereira", avatar_url = "https://avatars.githubusercontent.com/u/4576?v=3", html_url = "https://github.com/marcospereira", name = Some("Marcos Silva Pereira")),
       GitHubUser(id = 71236, login = "wsargent", url = "https://api.github.com/users/wsargent", avatar_url = "https://avatars.githubusercontent.com/u/71236?v=3", html_url = "https://github.com/wsargent", name = None),
-      GitHubUser(id = 71236, login = "wsargent", url = "https://api.github.com/users/wsargent", avatar_url = "https://avatars.githubusercontent.com/u/71236?v=3", html_url = "https://github.com/wsargent", name = None)
+      GitHubUser(id = 71236, login = "wsargent", url = "https://api.github.com/users/wsargent", avatar_url = "https://avatars.githubusercontent.com/u/71236?v=3", html_url = "https://github.com/wsargent", name = None),
     ),
     playOrganisation = List(
       GitHubUser(id = 126080, login = "pk11", url = "https://api.github.com/users/pk11", avatar_url = "https://avatars.githubusercontent.com/u/126080?v=3", html_url = "https://github.com/pk11", name = None),
@@ -43,7 +43,7 @@ object FallbackContributors {
       GitHubUser(id = 159452, login = "ikeike443", url = "https://api.github.com/users/ikeike443", avatar_url = "https://avatars.githubusercontent.com/u/159452?v=3", html_url = "https://github.com/ikeike443", name = None),
       GitHubUser(id = 274947, login = "cvogt", url = "https://api.github.com/users/cvogt", avatar_url = "https://avatars.githubusercontent.com/u/274947?v=3", html_url = "https://github.com/cvogt", name = None),
       GitHubUser(id = 197573, login = "Warry", url = "https://api.github.com/users/Warry", avatar_url = "https://avatars.githubusercontent.com/u/197573?v=3", html_url = "https://github.com/Warry", name = None),
-      GitHubUser(id = 456058, login = "schaloner", url = "https://api.github.com/users/schaloner", avatar_url = "https://avatars.githubusercontent.com/u/456058?v=3", html_url = "https://github.com/schaloner", name = None)
+      GitHubUser(id = 456058, login = "schaloner", url = "https://api.github.com/users/schaloner", avatar_url = "https://avatars.githubusercontent.com/u/456058?v=3", html_url = "https://github.com/schaloner", name = None),
     ),
     contributors = List(
       GitHubUser(id = 181613, login = "jfp", url = "https://api.github.com/users/jfp", avatar_url = "https://avatars.githubusercontent.com/u/181613?v=3", html_url = "https://github.com/jfp", name = None),
@@ -617,8 +617,8 @@ object FallbackContributors {
       GitHubUser(id = 570429, login = "bjornm", url = "https://api.github.com/users/bjornm", avatar_url = "https://avatars.githubusercontent.com/u/570429?v=3", html_url = "https://github.com/bjornm", name = None),
       GitHubUser(id = 129965, login = "DanieleSalatti", url = "https://api.github.com/users/DanieleSalatti", avatar_url = "https://avatars.githubusercontent.com/u/129965?v=3", html_url = "https://github.com/DanieleSalatti", name = None),
       GitHubUser(id = 764760, login = "jparound30", url = "https://api.github.com/users/jparound30", avatar_url = "https://avatars.githubusercontent.com/u/764760?v=3", html_url = "https://github.com/jparound30", name = None),
-      GitHubUser(id = 1200471, login = "matthew-lucidchart", url = "https://api.github.com/users/matthew-lucidchart", avatar_url = "https://avatars.githubusercontent.com/u/1200471?v=3", html_url = "https://github.com/matthew-lucidchart", name = None)
-    )
+      GitHubUser(id = 1200471, login = "matthew-lucidchart", url = "https://api.github.com/users/matthew-lucidchart", avatar_url = "https://avatars.githubusercontent.com/u/1200471?v=3", html_url = "https://github.com/matthew-lucidchart", name = None),
+    ),
   )
   // format: on
 
@@ -637,18 +637,17 @@ object FallbackContributors {
     def formatUsers(users: Seq[GitHubUser]) = users.map(user => "        " + formatUser(user)).mkString(",\n")
 
     s"""
-      |    Contributors(
-      |      committers = List(
-      |${formatUsers(contributors.committers)}
-      |      ),
-      |      playOrganisation = List(
-      |${formatUsers(contributors.playOrganisation)}
-      |      ),
-      |      contributors = List(
-      |${formatUsers(contributors.contributors)}
-      |      )
-      |    )""".stripMargin
+       |    Contributors(
+       |      committers = List(
+       |${formatUsers(contributors.committers)}
+       |      ),
+       |      playOrganisation = List(
+       |${formatUsers(contributors.playOrganisation)}
+       |      ),
+       |      contributors = List(
+       |${formatUsers(contributors.contributors)}
+       |      )
+       |    )""".stripMargin
   }
-
 
 }

@@ -3,11 +3,15 @@ package actors
 import javax.inject.Inject
 
 import actors.SitemapGeneratingActor.GenerateSitemap
-import akka.actor.{ActorRef, Props, Actor}
-import akka.pattern.{ask, pipe}
+import akka.actor.ActorRef
+import akka.actor.Props
+import akka.actor.Actor
+import akka.pattern.ask
+import akka.pattern.pipe
 import akka.routing.SmallestMailboxPool
 import akka.stream.scaladsl.Source
-import akka.util.{ByteString, Timeout}
+import akka.util.ByteString
+import akka.util.Timeout
 import models.documentation._
 import play.api.i18n.Lang
 import play.api.libs.concurrent.InjectedActorSupport
@@ -66,7 +70,8 @@ object DocumentationActor {
    * @param version The version of the documentation to fetch the page for.
    * @param page The page to render.
    */
-  case class RenderPage(lang: Option[Lang], version: Version, cacheId: Option[String], page: String) extends LangRequest[RenderedPage]
+  case class RenderPage(lang: Option[Lang], version: Version, cacheId: Option[String], page: String)
+      extends LangRequest[RenderedPage]
 
   /**
    * A rendered page.
@@ -78,8 +83,14 @@ object DocumentationActor {
    * @param translationContext The translation context.
    * @param cacheId The cacheid.
    */
-  case class RenderedPage(pageHtml: String, sidebarHtml: Option[String], breadcrumbsHtml: Option[String], source: Option[String],
-                          translationContext: TranslationContext, cacheId: String) extends Found[RenderedPage]
+  case class RenderedPage(
+      pageHtml: String,
+      sidebarHtml: Option[String],
+      breadcrumbsHtml: Option[String],
+      source: Option[String],
+      translationContext: TranslationContext,
+      cacheId: String,
+  ) extends Found[RenderedPage]
 
   /**
    * Load a resource.
@@ -88,7 +99,8 @@ object DocumentationActor {
    * @param version The version of the documentation to get the resource from.
    * @param resource The resource path.
    */
-  case class LoadResource(lang: Option[Lang], version: Version, cacheId: Option[String], resource: String) extends LangRequest[Resource]
+  case class LoadResource(lang: Option[Lang], version: Version, cacheId: Option[String], resource: String)
+      extends LangRequest[Resource]
 
   /**
    * Load an API resource.
@@ -122,7 +134,7 @@ object DocumentationActor {
    * Check whether the given page exists at the given version.
    */
   case class QueryPageExists(lang: Option[Lang], version: Version, cacheId: Option[String], page: String)
-    extends LangRequest[PageExists]
+      extends LangRequest[PageExists]
 
   /**
    * The queried page exists.
@@ -136,18 +148,25 @@ object DocumentationActor {
    * @param version The version of the documentation to fetch the page for.
    * @param page The page to render.
    */
-  case class RenderV1Page(lang: Option[Lang], version: Version, cacheId: Option[String], page: String) extends LangRequest[RenderedPage]
+  case class RenderV1Page(lang: Option[Lang], version: Version, cacheId: Option[String], page: String)
+      extends LangRequest[RenderedPage]
 
-  case class RenderV1Cheatsheet(lang: Option[Lang], version: Version, cacheId: Option[String], category: String) extends LangRequest[V1Cheatsheet]
+  case class RenderV1Cheatsheet(lang: Option[Lang], version: Version, cacheId: Option[String], category: String)
+      extends LangRequest[V1Cheatsheet]
 
-  case class V1Cheatsheet(sheets: Seq[String], title: String, otherCategories: Map[String, String],
-                          context: TranslationContext, cacheId: String) extends Found[V1Cheatsheet]
+  case class V1Cheatsheet(
+      sheets: Seq[String],
+      title: String,
+      otherCategories: Map[String, String],
+      context: TranslationContext,
+      cacheId: String,
+  ) extends Found[V1Cheatsheet]
 
   /**
    * Check whether the given page exists at the given version.
    */
   case class QueryV1PageExists(lang: Option[Lang], version: Version, cacheId: Option[String], page: String)
-    extends LangRequest[PageExists]
+      extends LangRequest[PageExists]
 
   /**
    * A summary of the documentation.
@@ -158,8 +177,13 @@ object DocumentationActor {
    * @param translations All translations and their latest versions.
    * @param translationContext The translation context.
    */
-  case class DocumentationSummary(defaultLatest: Option[Version], defaultLang: Lang, allLangs: Seq[Lang],
-                                  translations: Map[Lang, Option[Version]], translationContext: TranslationContext)
+  case class DocumentationSummary(
+      defaultLatest: Option[Version],
+      defaultLang: Lang,
+      allLangs: Seq[Lang],
+      translations: Map[Lang, Option[Version]],
+      translationContext: TranslationContext,
+  )
 
   /**
    * Get a sitemap describing the documentation.
@@ -173,8 +197,7 @@ object DocumentationActor {
 
   // Not part of protocol:
 
-  case class DocumentationGitRepos(default: DocumentationGitRepo,
-                                   translations: Seq[DocumentationGitRepo])
+  case class DocumentationGitRepos(default: DocumentationGitRepo, translations: Seq[DocumentationGitRepo])
 
   case class DocumentationGitRepo(config: TranslationConfig, repo: PlayGitRepository)
 }
@@ -186,7 +209,11 @@ object DocumentationActor {
  * it merely coordinates everything.  It keeps a reference to the current documentation index.  All IO, page rendering,
  * etc is delegated to the other documentation actors.
  */
-class DocumentationActor @Inject() (config: DocumentationConfig, pollerFactory: DocumentationPollingActor.Factory) extends Actor with InjectedActorSupport {
+class DocumentationActor @Inject()(
+    config: DocumentationConfig,
+    pollerFactory: DocumentationPollingActor.Factory,
+) extends Actor
+    with InjectedActorSupport {
 
   import DocumentationActor._
   import actors.{ DocumentationLoadingActor => Loader }
@@ -200,25 +227,27 @@ class DocumentationActor @Inject() (config: DocumentationConfig, pollerFactory: 
 
   private val repos = DocumentationGitRepos(
     createRepo(config.default),
-    config.translations.map(createRepo)
+    config.translations.map(createRepo),
   )
 
   /**
    * The poller, when it starts, scans all repos and will send the documentation,
    * moving this actor into the documentation loaded state.
    */
-  private val poller = injectedChild(pollerFactory(repos, self), "documentationPoller", _.withDispatcher("polling-dispatcher"))
+  private val poller =
+    injectedChild(pollerFactory(repos, self), "documentationPoller", _.withDispatcher("polling-dispatcher"))
 
   private val loader = context.actorOf(
     Props[DocumentationLoadingActor]
       .withRouter(SmallestMailboxPool(nrOfInstances = 4))
       .withDispatcher("loader-dispatcher"),
-    "documentationLoaders")
+    "documentationLoaders",
+  )
 
   private val sitemapGenerator = context.actorOf(
     Props[SitemapGeneratingActor]
       .withDispatcher("sitemapgenerator-dispatcher"),
-    "sitemapGenerator"
+    "sitemapGenerator",
   )
 
   override def postStop() = {
@@ -253,7 +282,7 @@ class DocumentationActor @Inject() (config: DocumentationConfig, pollerFactory: 
       // Fold lang
       req.lang.fold[Option[(Lang, Translation)]](
         // No lang, use default
-        Some((documentation.defaultLang, documentation.default))
+        Some((documentation.defaultLang, documentation.default)),
       ) { lang =>
         // Lang was requested, see if we have that lang
         documentation.translations.get(lang).map { translation =>
@@ -261,12 +290,11 @@ class DocumentationActor @Inject() (config: DocumentationConfig, pollerFactory: 
         }
       } match {
         case Some((lang, translation)) =>
-
           translation.byVersion.get(req.version) match {
             case Some(tv) =>
               req.cacheId match {
                 case Some(cacheId) if cacheId == tv.cacheId => sender() ! NotModified(cacheId)
-                case _ => block(lang, translation, tv)
+                case _                                      => block(lang, translation, tv)
               }
             case _ => sender() ! NotFound(notFoundTranslationContext(lang, translation.displayVersions))
           }
@@ -285,18 +313,21 @@ class DocumentationActor @Inject() (config: DocumentationConfig, pollerFactory: 
      * @param loaderRequest A function that creates the request message from the given repository
      * @param response A function that creates the response message from the answer, to send back to the sender
      */
-    def loaderRequestOpt[T](incomingRequest: LangRequest[_])(loaderRequest: TranslationVersion => Any)
-                                (response: (Lang, Translation, TranslationVersion, T) => Response[_]) = {
+    def loaderRequestOpt[T](incomingRequest: LangRequest[_])(
+        loaderRequest: TranslationVersion => Any,
+    )(response: (Lang, Translation, TranslationVersion, T) => Response[_]) = {
       forLang(incomingRequest) { (lang, translation, tv) =>
         val askRequest = for {
           answerOpt <- (loader ? loaderRequest(tv)).mapTo[Option[T]]
         } yield {
-          answerOpt.map { answer =>
-            response(lang, translation, tv, answer)
-          } getOrElse NotFound(notFoundTranslationContext(lang, translation.displayVersions))
+          answerOpt
+            .map { answer =>
+              response(lang, translation, tv, answer)
+            }
+            .getOrElse(NotFound(notFoundTranslationContext(lang, translation.displayVersions)))
         }
 
-        askRequest pipeTo sender()
+        askRequest.pipeTo(sender())
       }
     }
 
@@ -309,15 +340,16 @@ class DocumentationActor @Inject() (config: DocumentationConfig, pollerFactory: 
      * @param loaderRequest A function that creates the request message from the given repository
      * @param response A function that creates the response message from the answer, to send back to the sender
      */
-    def loaderRequest[T: ClassTag](incomingRequest: LangRequest[_])(loaderRequest: TranslationVersion => Any)
-                           (response: (Lang, Translation, TranslationVersion, T) => Response[_]) = {
+    def loaderRequest[T: ClassTag](incomingRequest: LangRequest[_])(
+        loaderRequest: TranslationVersion => Any,
+    )(response: (Lang, Translation, TranslationVersion, T) => Response[_]) = {
       forLang(incomingRequest) { (lang, translation, tv) =>
         val askRequest = for {
           answer <- (loader ? loaderRequest(tv)).mapTo[T]
         } yield {
           response(lang, translation, tv, answer)
         }
-        askRequest pipeTo sender()
+        askRequest.pipeTo(sender())
       }
     }
 
@@ -326,13 +358,22 @@ class DocumentationActor @Inject() (config: DocumentationConfig, pollerFactory: 
      */
     def translationContext(lang: Lang, version: Version, translation: Translation): TranslationContext = {
       val isDefault = lang == documentation.defaultLang
-      val defaultAlternative = AlternateTranslation(documentation.defaultLang, true,
-        findMostSuitableMatch(version, documentation.default.availableVersions.map(_.version)))
+      val defaultAlternative = AlternateTranslation(
+        documentation.defaultLang,
+        true,
+        findMostSuitableMatch(version, documentation.default.availableVersions.map(_.version)),
+      )
       val alternatives = documentation.translations.toList.sortBy(_._1.code).map {
         case (l, t) =>
           AlternateTranslation(l, false, findMostSuitableMatch(version, t.availableVersions.map(_.version)))
       }
-      TranslationContext(lang, isDefault, Some(version), translation.displayVersions, defaultAlternative :: alternatives)
+      TranslationContext(
+        lang,
+        isDefault,
+        Some(version),
+        translation.displayVersions,
+        defaultAlternative :: alternatives,
+      )
     }
 
     /**
@@ -344,25 +385,33 @@ class DocumentationActor @Inject() (config: DocumentationConfig, pollerFactory: 
      */
     def findMostSuitableMatch(version: Version, candidates: List[Version]): Option[Version] = {
       val sameMajors = candidates.filter(_.sameMajor(version))
-      sameMajors.find(_ == version).orElse {
-        sameMajors.find(v => v.versionType.isLatest || v.versionType.isStable)
-      }.orElse(sameMajors.headOption)
+      sameMajors
+        .find(_ == version)
+        .orElse {
+          sameMajors.find(v => v.versionType.isLatest || v.versionType.isStable)
+        }
+        .orElse(sameMajors.headOption)
     }
 
     /**
      * The translation context for if a resource is not found.
      */
-    def notFoundTranslationContext(lang: Lang = documentation.defaultLang,
-                                           displayVersions: List[Version] = documentation.default.displayVersions) = {
-      TranslationContext(lang, lang == documentation.defaultLang, None, displayVersions,
+    def notFoundTranslationContext(
+        lang: Lang = documentation.defaultLang,
+        displayVersions: List[Version] = documentation.default.displayVersions,
+    ) = {
+      TranslationContext(
+        lang,
+        lang == documentation.defaultLang,
+        None,
+        displayVersions,
         AlternateTranslation(documentation.defaultLang, true, None) ::
           documentation.translations.toList.sortBy(_._1.code).map {
             case (l, translation) =>
               AlternateTranslation(l, false, None)
-          }
+          },
       )
     }
-
 
     {
 
@@ -373,7 +422,6 @@ class DocumentationActor @Inject() (config: DocumentationConfig, pollerFactory: 
         loaderRequestOpt[play.doc.RenderedPage](rp) { tv =>
           Loader.RenderPage(page, tv.playDoc)
         } { (lang, translation, tv, page) =>
-
           val source = if (version.versionType.isLatest) {
             translation.source.map { gitHubSource =>
               gitHubSource.format(tv.symbolicName, page.path)
@@ -385,8 +433,9 @@ class DocumentationActor @Inject() (config: DocumentationConfig, pollerFactory: 
             sidebarHtml = page.sidebarHtml,
             breadcrumbsHtml = page.breadcrumbsHtml,
             source = source,
-            translationContext =  translationContext(lang, version, translation),
-            cacheId = tv.cacheId)
+            translationContext = translationContext(lang, version, translation),
+            cacheId = tv.cacheId,
+          )
         }
 
       case rp @ RenderV1Page(_, version, _, page) =>
@@ -399,7 +448,8 @@ class DocumentationActor @Inject() (config: DocumentationConfig, pollerFactory: 
             breadcrumbsHtml = None,
             source = None,
             translationContext = translationContext(lang, version, translation),
-            cacheId = tv.cacheId)
+            cacheId = tv.cacheId,
+          )
         }
 
       case lr: LoadResource =>
@@ -415,21 +465,29 @@ class DocumentationActor @Inject() (config: DocumentationConfig, pollerFactory: 
             sender() ! NotModified(tr.cacheId)
           case Some(tr) =>
             val resourceRequest = for {
-              maybeResource <- (loader ? Loader.LoadResource("api/" + resource, tr.repo)).mapTo[Option[Loader.Resource]]
+              maybeResource <- (loader ? Loader.LoadResource("api/" + resource, tr.repo))
+                .mapTo[Option[Loader.Resource]]
             } yield {
-              maybeResource.map { resource =>
-                Resource(resource.content, resource.size, tr.cacheId)
-              } getOrElse NotFound(notFoundTranslationContext())
+              maybeResource
+                .map { resource =>
+                  Resource(resource.content, resource.size, tr.cacheId)
+                }
+                .getOrElse(NotFound(notFoundTranslationContext()))
             }
 
-            resourceRequest pipeTo sender()
+            resourceRequest.pipeTo(sender())
 
           case None => sender() ! NotFound(notFoundTranslationContext())
         }
 
       case GetSummary =>
-        sender() ! DocumentationSummary(documentation.default.defaultVersion, documentation.defaultLang, documentation.allLangs,
-          documentation.translations.mapValues(_.defaultVersion), notFoundTranslationContext())
+        sender() ! DocumentationSummary(
+          documentation.default.defaultVersion,
+          documentation.defaultLang,
+          documentation.allLangs,
+          documentation.translations.mapValues(_.defaultVersion),
+          notFoundTranslationContext(),
+        )
 
       case pe @ QueryPageExists(_, _, _, page) =>
         loaderRequest[Boolean](pe) { tv =>
@@ -449,7 +507,13 @@ class DocumentationActor @Inject() (config: DocumentationConfig, pollerFactory: 
         loaderRequestOpt[Loader.V1Cheatsheet](rc) { tv =>
           Loader.RenderV1Cheatsheet(category, tv.repo)
         } { (lang, translation, tv, cs) =>
-          V1Cheatsheet(cs.sheets, cs.title, cs.otherCategories, translationContext(lang, version, translation), tv.cacheId)
+          V1Cheatsheet(
+            cs.sheets,
+            cs.title,
+            cs.otherCategories,
+            translationContext(lang, version, translation),
+            tv.cacheId,
+          )
         }
 
       case GetSitemap =>
