@@ -1,6 +1,7 @@
 package services.certification
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Inject
+import javax.inject.Singleton
 
 import anorm.SqlParser._
 import anorm._
@@ -27,21 +28,18 @@ trait CertificationDao {
 }
 
 @Singleton
-class DbCertificationDao @Inject() (db: Database) extends CertificationDao {
+class DbCertificationDao @Inject()(db: Database) extends CertificationDao {
 
   import JodaParameterMetaData._
 
   private val certificationParser = {
-    get[DateTime]("Certification.registered") ~
+    (get[DateTime]("Certification.registered") ~
       get[String]("Certification.name") ~
       get[String]("Certification.email") ~
       get[Boolean]("Certification.developer") ~
       get[Boolean]("Certification.organization") ~
-      get[String]("Certification.comments") map
-      flatten map
-      (Certification.apply _).tupled
+      get[String]("Certification.comments")).map(flatten).map((Certification.apply _).tupled)
   }
-
 
   def registerInterest(certification: Certification) = {
     db.withConnection { implicit conn =>

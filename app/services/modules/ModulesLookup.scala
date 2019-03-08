@@ -32,7 +32,7 @@ trait ModulesLookup {
   def findDependencies(name: String, version: String): Option[String]
 }
 
-class FilesystemModulesLookup @Inject() (environment: Environment) extends ModulesLookup {
+class FilesystemModulesLookup @Inject()(environment: Environment) extends ModulesLookup {
 
   def findModule(name: String, version: String) =
     environment.getExistingFile("data/modules/" + name + "-" + version + ".zip")

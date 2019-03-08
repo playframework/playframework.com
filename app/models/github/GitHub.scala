@@ -2,7 +2,11 @@ package models.github
 
 import play.api.libs.json._
 
-case class Contributors(committers: Seq[GitHubUser], playOrganisation: Seq[GitHubUser], contributors: Seq[GitHubUser])
+case class Contributors(
+    committers: Seq[GitHubUser],
+    playOrganisation: Seq[GitHubUser],
+    contributors: Seq[GitHubUser],
+)
 
 case class Team(id: Long, name: String, url: String, members_url: String) {
   def membersUrl = members_url
@@ -20,9 +24,16 @@ object Team {
  *
  * The name is only available when loading the user details from the user API, hence it is an option.
  */
-case class GitHubUser(id: Long, login: String, url: String, avatar_url: String, html_url: String, name: Option[String]) {
+case class GitHubUser(
+    id: Long,
+    login: String,
+    url: String,
+    avatar_url: String,
+    html_url: String,
+    name: Option[String],
+) {
   def avatarUrl = avatar_url
-  def htmlUrl = html_url
+  def htmlUrl   = html_url
 }
 
 object GitHubUser {
@@ -30,7 +41,7 @@ object GitHubUser {
 }
 
 case class Repository(id: Long, name: String, full_name: String, fork: Boolean, contributors_url: String) {
-  def fullName = full_name
+  def fullName        = full_name
   def contributorsUrl = contributors_url
 }
 
@@ -39,7 +50,7 @@ object Repository {
 }
 
 case class Organisation(id: Long, login: String, url: String, repos_url: String, members_url: String) {
-  def reposUrl = repos_url
+  def reposUrl   = repos_url
   def membersUrl = members_url
 }
 

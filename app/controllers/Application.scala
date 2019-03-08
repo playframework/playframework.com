@@ -2,51 +2,67 @@ package controllers
 
 import java.io.InputStream
 
-import javax.inject.{Inject, Singleton}
+import javax.inject.Inject
+import javax.inject.Singleton
 import models._
 import models.certification.Certification
 import org.apache.commons.io.IOUtils
 import play.api._
 import play.api.cache.SyncCacheApi
-import play.api.i18n.{I18nSupport, Lang}
+import play.api.i18n.I18nSupport
+import play.api.i18n.Lang
 import play.api.mvc._
 import play.twirl.api.Html
 import services.certification.CertificationDao
 import utils.Markdown
 import views._
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 
 @Singleton
-class Application @Inject() (
-  environment: Environment,
-  configuration: Configuration,
-  certificationDao: CertificationDao,
-  releases: PlayReleases,
-  exampleProjectsService: PlayExampleProjectsService,
-  components: ControllerComponents,
-  cacheApi: SyncCacheApi
-)(implicit ec: ExecutionContext, val reverseRouter: documentation.ReverseRouter) extends AbstractController(components) with Common with I18nSupport {
+class Application @Inject()(
+    environment: Environment,
+    configuration: Configuration,
+    certificationDao: CertificationDao,
+    releases: PlayReleases,
+    exampleProjectsService: PlayExampleProjectsService,
+    components: ControllerComponents,
+    cacheApi: SyncCacheApi,
+)(implicit ec: ExecutionContext, val reverseRouter: documentation.ReverseRouter)
+    extends AbstractController(components)
+    with Common
+    with I18nSupport {
 
   private val VulnerableVersions = Set(
-    "2.0", "2.0.1", "2.0.2", "2.0.3", "2.0.4", "2.0.5",
-    "2.1", "2.1.1", "2.1.2"
+    "2.0",
+    "2.0.1",
+    "2.0.2",
+    "2.0.3",
+    "2.0.4",
+    "2.0.5",
+    "2.1",
+    "2.1.1",
+    "2.1.2",
   )
 
   private def news(version: Option[String]): Seq[Html] = {
-    val message = version.filter(VulnerableVersions).map { _ =>
-
-      s"""<p class="vulnerability-warning">You are using a version of Play Framework that has a
+    val message = version
+      .filter(VulnerableVersions)
+      .map { _ =>
+        s"""<p class="vulnerability-warning">You are using a version of Play Framework that has a
         <a href="${routes.Security.vulnerability("20130806-SessionInjection")}">known vulnerability</a>.</p>
           <p>Please upgrade to a later version <a href="${routes.Application.download()}">here</a>.</p>"""
 
-    } orElse {
-      if (!version.contains(releases.latest.version)) {
-        Some(s"""Play framework ${releases.latest.version} is out!  Check it out <a href="${routes.Application.download()}">here</a>.""")
-      } else {
-        None
       }
-    }
+      .orElse {
+        if (!version.contains(releases.latest.version)) {
+          Some(s"""Play framework ${releases.latest.version} is out!  Check it out <a href="${routes.Application
+            .download()}">here</a>.""")
+        } else {
+          None
+        }
+      }
     message.toSeq.map(Html.apply)
   }
 
@@ -65,7 +81,6 @@ class Application @Inject() (
   }
 
   def gettingStarted = Action.async { implicit request =>
-
     exampleProjectsService.cached() match {
       case Some(cached) =>
         val examples = toExamples(cached)
@@ -85,48 +100,54 @@ class Application @Inject() (
     Ok(html.allreleases(releases, selectedPlatform))
   }
 
-  def changelog = markdownAction("public/markdown/changelog.md", { implicit request =>
-    views.html.changelog(_)
-  })
+  def changelog =
+    markdownAction("public/markdown/changelog.md", { implicit request =>
+      views.html.changelog(_)
+    })
 
-  def conduct = markdownAction("public/markdown/code-of-conduct.md", { implicit request => markdown =>
-    views.html.markdownPage("Code of conduct", markdown)
-  })
+  def conduct =
+    markdownAction("public/markdown/code-of-conduct.md", { implicit request => markdown =>
+      views.html.markdownPage("Code of conduct", markdown)
+    })
 
-  def communityProcess = markdownAction("public/markdown/community-process.md", { implicit request => markdown =>
-    views.html.markdownPage("Community process", markdown)
-  })
+  def communityProcess =
+    markdownAction("public/markdown/community-process.md", { implicit request => markdown =>
+      views.html.markdownPage("Community process", markdown)
+    })
 
-  def contributing = markdownAction("public/markdown/contributing.md", { implicit request => markdown =>
-    views.html.markdownPage("Contributing", markdown)
-  })
+  def contributing =
+    markdownAction("public/markdown/contributing.md", { implicit request => markdown =>
+      views.html.markdownPage("Contributing", markdown)
+    })
 
-  def markdownAction(markdownFile: String, template: RequestHeader => Html => Html) = Action { implicit request =>
-    def readInputStream(is: InputStream): String = try {
-      IOUtils.toString(is, "utf-8")
-    } finally {
-      is.close()
-    }
+  def markdownAction(markdownFile: String, template: RequestHeader => Html => Html) = Action {
+    implicit request =>
+      def readInputStream(is: InputStream): String =
+        try {
+          IOUtils.toString(is, "utf-8")
+        } finally {
+          is.close()
+        }
 
-    def fromMarkdownToHtml(md: String): String = Markdown.toHtml(md, link => (link, link))
+      def fromMarkdownToHtml(md: String): String = Markdown.toHtml(md, link => (link, link))
 
-    // Read from cache or either from an input stream.
-    val page = cacheApi.get[String](markdownFile).orElse {
-      environment
-        .resourceAsStream(markdownFile)
-        .map(readInputStream)
-        .map(fromMarkdownToHtml)
-    }
+      // Read from cache or either from an input stream.
+      val page = cacheApi.get[String](markdownFile).orElse {
+        environment
+          .resourceAsStream(markdownFile)
+          .map(readInputStream)
+          .map(fromMarkdownToHtml)
+      }
 
-    // We can cache the generated HTML like forever since
-    // the file is updated only when deploying and cache
-    // is gone when deploying.
-    page.foreach(cacheApi.set(markdownFile, _))
+      // We can cache the generated HTML like forever since
+      // the file is updated only when deploying and cache
+      // is gone when deploying.
+      page.foreach(cacheApi.set(markdownFile, _))
 
-    page match {
-      case Some(content) => Ok(template(request)(Html(content))).withHeaders(CACHE_CONTROL -> "max-age=10000")
-      case None => notFound
-    }
+      page match {
+        case Some(content) => Ok(template(request)(Html(content))).withHeaders(CACHE_CONTROL -> "max-age=10000")
+        case None          => notFound
+      }
   }
 
   def support = Action { implicit request =>
@@ -137,22 +158,24 @@ class Application @Inject() (
     Ok(html.getInvolved())
   }
 
-    def cookie = Action { implicit request =>
-      Ok(html.cookie())
-    }
+  def cookie = Action { implicit request =>
+    Ok(html.cookie())
+  }
 
   def certification = Action { implicit request =>
     Ok(html.certification(Certification.form))
   }
 
   def interest = Action(parse.tolerantFormUrlEncoded) { implicit request =>
-    Certification.form.bindFromRequest().fold(
-      form => BadRequest(html.certification(form)),
-      form => {
-        certificationDao.registerInterest(form.toCertification)
-        Ok(html.interest())
-      }
-    )
+    Certification.form
+      .bindFromRequest()
+      .fold(
+        form => BadRequest(html.certification(form)),
+        form => {
+          certificationDao.registerInterest(form.toCertification)
+          Ok(html.interest())
+        },
+      )
   }
 
   // Deprecated links
@@ -199,22 +222,26 @@ class Application @Inject() (
       }
     }
 
-    val sections = byVersion.map { case (v, p) =>
-      val TutorialKeyword = "tutorial" // this MUST be in the project keywords for this to work
-      val SeedKeyword = "seed"
-      val tutorials = p.filter(e => e.keywords.contains(TutorialKeyword) && !e.hasParams)
-        .groupBy(byLanguage)
-        .mapValues(_.sortBy(_.displayName))
+    val sections = byVersion.map {
+      case (v, p) =>
+        val TutorialKeyword = "tutorial" // this MUST be in the project keywords for this to work
+        val SeedKeyword     = "seed"
+        val tutorials = p
+          .filter(e => e.keywords.contains(TutorialKeyword) && !e.hasParams)
+          .groupBy(byLanguage)
+          .mapValues(_.sortBy(_.displayName))
 
-      val examples = p.filter(e => !e.keywords.contains(TutorialKeyword) && !e.hasParams)
-        .groupBy(byLanguage)
-        .mapValues(_.sortBy(_.displayName))
+        val examples = p
+          .filter(e => !e.keywords.contains(TutorialKeyword) && !e.hasParams)
+          .groupBy(byLanguage)
+          .mapValues(_.sortBy(_.displayName))
 
-      val seeds = p.filter(e => e.hasParams && e.keywords.contains(SeedKeyword))
-        .groupBy(byLanguage)
-        .mapValues(_.sortBy(_.displayName))
+        val seeds = p
+          .filter(e => e.hasParams && e.keywords.contains(SeedKeyword))
+          .groupBy(byLanguage)
+          .mapValues(_.sortBy(_.displayName))
 
-      v -> PlayExampleSection(tutorials, seeds, examples)
+        v -> PlayExampleSection(tutorials, seeds, examples)
     }
     PlayExamples(sections)
   }
@@ -222,6 +249,8 @@ class Application @Inject() (
 
 case class PlayExamples(sections: Seq[(String, PlayExampleSection)])
 
-case class PlayExampleSection(tutorials: Map[String, Seq[ExampleProject]],
-                              seeds: Map[String, Seq[ExampleProject]],
-                              examples: Map[String, Seq[ExampleProject]])
+case class PlayExampleSection(
+    tutorials: Map[String, Seq[ExampleProject]],
+    seeds: Map[String, Seq[ExampleProject]],
+    examples: Map[String, Seq[ExampleProject]],
+)

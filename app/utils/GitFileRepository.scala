@@ -1,32 +1,38 @@
 package utils
 
 import play.doc.FileHandle
-import java.io.{InputStream, File}
+import java.io.InputStream
+import java.io.File
 import org.eclipse.jgit.api.Git
 import scala.collection.JavaConverters._
 import org.eclipse.jgit.revwalk.RevWalk
 import org.eclipse.jgit.treewalk.TreeWalk
-import org.eclipse.jgit.treewalk.filter.{PathSuffixFilter, TreeFilter, PathFilter}
-import org.eclipse.jgit.lib.{FileMode, ObjectId, RepositoryBuilder, Constants}
+import org.eclipse.jgit.treewalk.filter.PathSuffixFilter
+import org.eclipse.jgit.treewalk.filter.TreeFilter
+import org.eclipse.jgit.treewalk.filter.PathFilter
+import org.eclipse.jgit.lib.FileMode
+import org.eclipse.jgit.lib.ObjectId
+import org.eclipse.jgit.lib.RepositoryBuilder
+import org.eclipse.jgit.lib.Constants
 import org.eclipse.jgit.api.ListBranchCommand.ListMode
 import org.eclipse.jgit.transport.TagOpt
 
 class PlayGitRepository(val gitDir: File, val remote: String = "origin", basePath: Option[String] = None) {
   private val repository = new RepositoryBuilder().setGitDir(new File(gitDir, ".git")).build()
-  private val git = new Git(repository)
+  private val git        = new Git(repository)
 
   def fileRepoForHash(hash: ObjectId): ExtendedFileRepository = {
     new GitFileRepository(this, hash, basePath)
   }
 
   def close(): Unit = repository.close()
-  def allTags: Seq[(String, ObjectId)] = git.tagList().call().asScala.map(tag =>
-    tag.getName.stripPrefix("refs/tags/") -> tag.getLeaf.getObjectId
-  )
-  def allBranches: Seq[(String, ObjectId)] = git.branchList().setListMode(ListMode.REMOTE).call().asScala.collect {
-    case origin if origin.getName.startsWith("refs/remotes/" + remote + "/") =>
-      origin.getName.stripPrefix("refs/remotes/" + remote + "/") -> origin.getLeaf.getObjectId
-  }
+  def allTags: Seq[(String, ObjectId)] =
+    git.tagList().call().asScala.map(tag => tag.getName.stripPrefix("refs/tags/") -> tag.getLeaf.getObjectId)
+  def allBranches: Seq[(String, ObjectId)] =
+    git.branchList().setListMode(ListMode.REMOTE).call().asScala.collect {
+      case origin if origin.getName.startsWith("refs/remotes/" + remote + "/") =>
+        origin.getName.stripPrefix("refs/remotes/" + remote + "/") -> origin.getLeaf.getObjectId
+    }
 
   def hashForRef(ref: String): Option[ObjectId] =
     Option(repository.getRef("refs/remotes/" + remote + "/" + ref))
@@ -82,15 +88,16 @@ class PlayGitRepository(val gitDir: File, val remote: String = "origin", basePat
       // The way include works is if it's a subtree (directory), then we return true if we want to descend into it,
       // and if it's not, then we return true if the file is the one we want.
       walker.isPathPrefix(pathRaw, pathRaw.length) == 0 &&
-        (walker.isSubtree || walker.isPathSuffix(nameRaw, nameRaw.length))
+      (walker.isSubtree || walker.isPathSuffix(nameRaw, nameRaw.length))
     }
 
     override def clone(): FileWithNameFilter = this
   }
 
   def findFileWithName(hash: ObjectId, basePath: Option[String], name: String): Option[String] = {
-    scanFiles(hash,
-      basePath.map(new FileWithNameFilter(_, name)).getOrElse(PathSuffixFilter.create("#/" + name))
+    scanFiles(
+      hash,
+      basePath.map(new FileWithNameFilter(_, name)).getOrElse(PathSuffixFilter.create("#/" + name)),
     ) { treeWalk =>
       if (!treeWalk.next()) {
         None
@@ -120,7 +127,7 @@ class PlayGitRepository(val gitDir: File, val remote: String = "origin", basePat
   private def scanFiles[T](hash: ObjectId, filter: TreeFilter)(block: TreeWalk => T): T = {
     // Now find the tree for that commit id
     val revWalk = new RevWalk(repository)
-    val tree = revWalk.parseCommit(hash).getTree
+    val tree    = revWalk.parseCommit(hash).getTree
 
     // And walk it
     val treeWalk = new TreeWalk(repository)
@@ -137,15 +144,19 @@ class PlayGitRepository(val gitDir: File, val remote: String = "origin", basePat
   }
 }
 
-class GitFileRepository(playRepo: PlayGitRepository, hash: ObjectId, base: Option[String]) extends ExtendedFileRepository {
+class GitFileRepository(playRepo: PlayGitRepository, hash: ObjectId, base: Option[String])
+    extends ExtendedFileRepository {
 
   def resolve(path: String): String = {
     // Split into parts, fold it from the right back into parts, skipping any part after a .. part
-    val resolvedPath = path.split("/").foldRight((List.empty[String], 0)) {
-      case (part, (parts, toSkip)) if part == ".." => (parts, toSkip + 1)
-      case (part, (parts, toSkip)) if toSkip > 0 => (parts, toSkip - 1)
-      case (part, (parts, _)) => (part :: parts, 0)
-    }._1
+    val resolvedPath = path
+      .split("/")
+      .foldRight((List.empty[String], 0)) {
+        case (part, (parts, toSkip)) if part == ".." => (parts, toSkip + 1)
+        case (part, (parts, toSkip)) if toSkip > 0   => (parts, toSkip - 1)
+        case (part, (parts, _))                      => (part :: parts, 0)
+      }
+      ._1
     // Prepend the base if it exists, and make back into a string
     base.fold(resolvedPath)(_ :: resolvedPath).mkString("/")
   }
@@ -164,7 +175,8 @@ class GitFileRepository(playRepo: PlayGitRepository, hash: ObjectId, base: Optio
 
   def handleFile[A](path: String)(handler: (FileHandle) => A) = {
     playRepo.loadFile(hash, resolve(path)).map {
-      case (length, is) => handler(FileHandle(path.drop(path.lastIndexOf('/') + 1), length, is, () => is.close()))
+      case (length, is) =>
+        handler(FileHandle(path.drop(path.lastIndexOf('/') + 1), length, is, () => is.close()))
     }
   }
 

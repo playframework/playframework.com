@@ -1,6 +1,8 @@
 package controllers.documentation
 
-import javax.inject.{ Inject, Provider, Singleton }
+import javax.inject.Inject
+import javax.inject.Provider
+import javax.inject.Singleton
 import play.api.i18n.Lang
 import play.api.routing.sird._
 import play.utils.UriEncoding
@@ -9,8 +11,7 @@ import play.utils.UriEncoding
  * Documentation router
  */
 @Singleton
-class Router @Inject() (
-  docController: DocumentationController) extends play.api.routing.Router {
+class Router @Inject()(docController: DocumentationController) extends play.api.routing.Router {
 
   private var _prefix = "/"
 
@@ -41,33 +42,38 @@ class Router @Inject() (
       val path = rh.path.substring(prefix.length)
 
       // Extract the language and the remainder of the path (which should start with the version)
-      val (lang, versionPath) = Language.findFirstMatchIn(path).map { mtch =>
-        Some(Lang(mtch.group(1))) -> mtch.group(2)
-      } getOrElse None -> path
+      val (lang, versionPath) = Language
+        .findFirstMatchIn(path)
+        .map { mtch =>
+          Some(Lang(mtch.group(1))) -> mtch.group(2)
+        }
+        .getOrElse(None -> path)
 
       Some(versionPath).collect {
-        case p"" => docController.index(lang)
-        case p"/$version<1\.[^/]+>" => docController.v1Home(lang, version)
+        case p""                                 => docController.index(lang)
+        case p"/$version<1\.[^/]+>"              => docController.v1Home(lang, version)
         case p"/$version<\d+\.[^/]+>/api/$path*" => docController.api(lang, version, decodePath(path))
         // The docs used to be served from this path
         case p"/api/$version/$path*" => docController.apiRedirect(lang, version, path)
         // Play1 doc specific paths
-        case p"/$version<1\.[^/]+>/$page" => docController.v1Page(lang, version, page)
-        case p"/$version<1\.[^/]+>/images/$image" => docController.v1Image(lang, version, image)
-        case p"/$version<1\.[^/]+>/files/$file" => docController.v1File(lang, version, file)
+        case p"/$version<1\.[^/]+>/$page"          => docController.v1Page(lang, version, page)
+        case p"/$version<1\.[^/]+>/images/$image"  => docController.v1Image(lang, version, image)
+        case p"/$version<1\.[^/]+>/files/$file"    => docController.v1File(lang, version, file)
         case p"/$version<1\.[^/]+>/releases/$file" => docController.v1Page(lang, version, "releases/" + file)
-        case p"/$version<1\.[^/]+>/releases/$release/$file" => docController.v1Page(lang, version, "releases/" + release + "/" + file)
+        case p"/$version<1\.[^/]+>/releases/$release/$file" =>
+          docController.v1Page(lang, version, "releases/" + release + "/" + file)
         case p"/$version<1\.[^/]+>/cheatsheet/$category" => docController.v1Cheatsheet(lang, version, category)
         // Other paths
-        case p"/$version<\d+\.[^/]+>" => docController.home(lang, version)
-        case p"/$version<\d+\.[^/]+>/" => docController.home(lang, version)
+        case p"/$version<\d+\.[^/]+>"       => docController.home(lang, version)
+        case p"/$version<\d+\.[^/]+>/"      => docController.home(lang, version)
         case p"/$version<\d+\.[^/]+>/$page" => docController.page(lang, version, page)
-        case p"/$version<\d+\.[^/]+>/resources/$path*" => docController.resource(lang, version, decodePath(path))
-        case p"/latest" => docController.latest(lang, "Home")
-        case p"/latest/$path*" => docController.latest(lang, path)
-        case p"/switch/$version<1\.[^/]+>/$page" => docController.v1Switch(lang, version, page)
+        case p"/$version<\d+\.[^/]+>/resources/$path*" =>
+          docController.resource(lang, version, decodePath(path))
+        case p"/latest"                            => docController.latest(lang, "Home")
+        case p"/latest/$path*"                     => docController.latest(lang, path)
+        case p"/switch/$version<1\.[^/]+>/$page"   => docController.v1Switch(lang, version, page)
         case p"/switch/$version<\d+\.[^/]+>/$page" => docController.switch(lang, version, page)
-        case p"/switch/$version<\d+\.[^/]+>" => docController.switch(lang, version, "Home")
+        case p"/switch/$version<\d+\.[^/]+>"       => docController.switch(lang, version, "Home")
       }
     } else {
       None
@@ -76,7 +82,7 @@ class Router @Inject() (
 }
 
 @Singleton
-class ReverseRouter @Inject() (routerProvider: Provider[Router]) {
+class ReverseRouter @Inject()(routerProvider: Provider[Router]) {
   private def router: Router = routerProvider.get
   def index(lang: Option[Lang]) = {
     router.prefix + lang.fold("")(l => "/" + l.code)
