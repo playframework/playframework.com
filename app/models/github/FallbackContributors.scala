@@ -9,6 +9,7 @@ package models.github
  */
 object FallbackContributors {
 
+  // format: off
   val contributors = Contributors(
     committers = List(
       GitHubUser(id = 105833, login = "jroper", url = "https://api.github.com/users/jroper", avatar_url = "https://avatars.githubusercontent.com/u/105833?v=3", html_url = "https://github.com/jroper", name = Some("James Roper")),
@@ -23,7 +24,8 @@ object FallbackContributors {
       GitHubUser(id = 59060, login = "baloo", url = "https://api.github.com/users/baloo", avatar_url = "https://avatars.githubusercontent.com/u/59060?v=3", html_url = "https://github.com/baloo", name = Some("Arthur Gautier")),
       GitHubUser(id = 703748, login = "dotta", url = "https://api.github.com/users/dotta", avatar_url = "https://avatars.githubusercontent.com/u/703748?v=3", html_url = "https://github.com/dotta", name = Some("Mirco Dotta")),
       GitHubUser(id = 4576, login = "marcospereira", url = "https://api.github.com/users/marcospereira", avatar_url = "https://avatars.githubusercontent.com/u/4576?v=3", html_url = "https://github.com/marcospereira", name = Some("Marcos Silva Pereira")),
-      GitHubUser(id = 71236, login = "wsargent", url = "https://api.github.com/users/wsargent", avatar_url = "https://avatars.githubusercontent.com/u/71236?v=3", html_url = "https://github.com/wsargent", name = None),GitHubUser(id = 71236, login = "wsargent", url = "https://api.github.com/users/wsargent", avatar_url = "https://avatars.githubusercontent.com/u/71236?v=3", html_url = "https://github.com/wsargent", name = None)
+      GitHubUser(id = 71236, login = "wsargent", url = "https://api.github.com/users/wsargent", avatar_url = "https://avatars.githubusercontent.com/u/71236?v=3", html_url = "https://github.com/wsargent", name = None),
+      GitHubUser(id = 71236, login = "wsargent", url = "https://api.github.com/users/wsargent", avatar_url = "https://avatars.githubusercontent.com/u/71236?v=3", html_url = "https://github.com/wsargent", name = None)
     ),
     playOrganisation = List(
       GitHubUser(id = 126080, login = "pk11", url = "https://api.github.com/users/pk11", avatar_url = "https://avatars.githubusercontent.com/u/126080?v=3", html_url = "https://github.com/pk11", name = None),
@@ -618,14 +620,19 @@ object FallbackContributors {
       GitHubUser(id = 1200471, login = "matthew-lucidchart", url = "https://api.github.com/users/matthew-lucidchart", avatar_url = "https://avatars.githubusercontent.com/u/1200471?v=3", html_url = "https://github.com/matthew-lucidchart", name = None)
     )
   )
+  // format: on
 
   /**
    * Code to generate the code above from a current list of contributors
    */
   def dumpContributors(contributors: Contributors) = {
     def option(s: Option[String]) = s.fold("None")("Some(\"" + _ + "\")")
-    def formatUser(u: GitHubUser): String =
-      s"""GitHubUser(id = ${u.id}, login = "${u.login}", url = "${u.url}", avatar_url = "${u.avatar_url}", html_url = "${u.html_url}", name = ${option(u.name)})"""
+    def formatUser(u: GitHubUser): String = {
+      import u._
+      // format: off
+      s"""GitHubUser(id = $id, login = "$login", url = "$url", avatar_url = "$avatar_url", html_url = "$html_url", name = ${option(name)})"""
+      // format: on
+    }
 
     def formatUsers(users: Seq[GitHubUser]) = users.map(user => "        " + formatUser(user)).mkString(",\n")
 
