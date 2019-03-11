@@ -38,12 +38,17 @@ Requirements for minimal local installation (e.g. for previewing changes when re
 - or a local MariaDB database called "test" using Docker:
 
   ```
-  $ docker run -d --name play.com-mariadb -p 3306 -e MYSQL_DATABASE=test -e MYSQL_ALLOW_EMPTY_PASSWORD=true mariadb:10.4
+  $ docker run -d --name play.com-mariadb -p 3306:3306 -e MYSQL_DATABASE=test -e MYSQL_ALLOW_EMPTY_PASSWORD=true mariadb:10.4
   ```
 
   Test connection:
   ```
   $ docker run -it --rm --link play.com-mariadb:mysql mariadb sh -c 'exec mysql -h"$MYSQL_PORT_3306_TCP_ADDR" test'
+  ```
+
+  Stop and remove the container:
+  ```
+  $ docker stop play.com-mariadb && docker rm $_
   ```
 
 Requirements for unit tests:
