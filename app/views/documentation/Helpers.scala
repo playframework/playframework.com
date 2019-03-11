@@ -18,8 +18,9 @@ object Helpers {
   def displayVersionMessage(
       page: String,
   )(implicit messagesApi: MessagesApi, context: TranslationContext, reverseRouter: ReverseRouter): Html = {
-    implicit val lang = context.alternateLang.getOrElse(Lang.defaultLang)
-    val version       = context.version.get
+    implicit val alternateLang = context.alternateLang
+    implicit val lang          = context.alternateLang.getOrElse(Lang.defaultLang)
+    val version                = context.version.get
     if (isDevelopmentVersion(version)) {
       upgrade(unstableMessage(link(version, page)), page)
     } else {
@@ -85,16 +86,17 @@ object Helpers {
   private def link(
       version: Version,
       page: String,
-  )(implicit alternateLang: Lang, reverseRouter: ReverseRouter): Html = {
-    val url = reverseRouter.page(Option(alternateLang), version.toString, page)
+  )(implicit alternateLang: Option[Lang], reverseRouter: ReverseRouter): Html = {
+    val url = reverseRouter.page(alternateLang, version.toString, page)
     Html(s"""<a href="$url">${version.toString}</a>""")
   }
 
   private def displayUpgradeMessage(
       page: String,
   )(implicit messagesApi: MessagesApi, context: TranslationContext, reverseRouter: ReverseRouter): Html = {
-    val version       = latestCurrent.get
-    implicit val lang = context.alternateLang.getOrElse(Lang.defaultLang)
+    val version                = latestCurrent.get
+    implicit val alternateLang = context.alternateLang
+    implicit val lang          = context.alternateLang.getOrElse(Lang.defaultLang)
     currentLatestMessage(link(version, page))
   }
 
