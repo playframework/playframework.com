@@ -238,15 +238,15 @@ class DocumentationController @Inject()(
         // requested the default lang
         case Some(l) if l == summary.defaultLang => None -> summary.defaultLatest
         // requested a specific translation
-        case Some(l) if summary.translations.contains(l) => lang -> summary.translations(l)
+        case Some(l) if hasLatestDocumentation(summary, l) => lang -> summary.translations(l)
         // requested an unknown translation
         case Some(missing) => None -> None
         case None          =>
           // This is the only place where we do accept header based language detection, on the documentation home page
           val autoLang = preferredLang(summary.allLangs)
           autoLang match {
-            case Some(l) if summary.translations.contains(l) => autoLang -> summary.translations(l)
-            case _                                           => None     -> summary.defaultLatest
+            case Some(l) if hasLatestDocumentation(summary, l) => autoLang -> summary.translations(l)
+            case _                                             => None     -> summary.defaultLatest
           }
       }
       version
@@ -257,6 +257,9 @@ class DocumentationController @Inject()(
         .getOrElse(pageNotFound(summary.translationContext, path, Nil))
     }
   }
+
+  private def hasLatestDocumentation(summary: DocumentationSummary, lang: Lang): Boolean =
+    summary.translations.contains(lang) && summary.translations(lang) == summary.defaultLatest
 
   def sitemap = DocsAction { actor => implicit req =>
     (actor ? GetSitemap).mapTo[DocumentationSitemap].map { docSitemap =>
