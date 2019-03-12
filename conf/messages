@@ -11,7 +11,8 @@ documentation.old.release.message=You are viewing the documentation for the {0} 
 documentation.old.latest.message=You are viewing the documentation for the {0} release series.
 
 documentation.contribute.message=Found an error in this documentation? The source code for this page can be found \
-  {0}here{1}.  After reading the {2}documentation guidelines{3}, please feel free to contribute a pull request.
+  {0}here{1}.  After reading the {2}documentation guidelines{3}, please feel free to contribute a pull request. You can \
+  also ask questions about it in {4}our community forums{5}
 
 documentation.next=Next
 documentation.home=Home

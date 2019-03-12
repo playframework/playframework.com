@@ -43,7 +43,8 @@
               <p>
                   @Html(messages("documentation.contribute.message",
                       s"""<a href="$source">""", "</a>",
-                      s"""<a href="${reverseRouter.latest(context.alternateLang, "Documentation")}">""", "</a>"
+                      s"""<a href="${reverseRouter.latest(context.alternateLang, "Documentation")}">""", "</a>",
+                      s"""<a href="https://discuss.playframework.com/">""", "</a>"
                   )(context.lang))
               </p>
             }
