@@ -7,6 +7,7 @@ tmp
 .history
 dist
 /.idea
+/.ensime
 /*.iml
 /out
 /.idea_modules
