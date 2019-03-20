@@ -1,7 +1,7 @@
 package controllers.documentation
 
 import actors.DocumentationActor
-import actors.DocumentationActor.{ NotFound => DocsNotFound, NotModified => DocsNotModified, _ }
+import actors.DocumentationActor.{NotFound => DocsNotFound, NotModified => DocsNotModified, _}
 import akka.actor.ActorRef
 import akka.pattern.ask
 import akka.util.Timeout
@@ -18,10 +18,11 @@ import play.api.http.HttpEntity
 import play.api.i18n.MessagesApi
 import play.api.i18n.Lang
 import play.api.mvc._
+import utils.HtmlHelpers
+
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.duration._
-
 import scala.reflect.ClassTag
 
 @Singleton
@@ -181,9 +182,10 @@ class DocumentationController @Inject()(
     val linkFuture = canonicalLinkHeader(page)
     val resultFuture = actorRequest(actor, page, RenderPage(lang, version, etag(req), page)) {
       case RenderedPage(html, sidebarHtml, breadcrumbsHtml, source, context, cacheId) =>
+        val pageTitle = HtmlHelpers.friendlyTitle(page)
         val result = Ok(
           views.html.documentation
-            .v2(messages, context, page, Some(html), sidebarHtml, source, breadcrumbs = breadcrumbsHtml),
+            .v2(messages, context, pageTitle, Some(html), sidebarHtml, source, breadcrumbs = breadcrumbsHtml),
         )
         cacheable(withLangHeaders(result, page, context), cacheId)
     }.flatMap { result =>
