@@ -10,7 +10,7 @@ libraryDependencies ++= Seq(
   "org.eclipse.jgit"        % "org.eclipse.jgit"     % "3.0.0.201306101825-r",
   "mysql"                   % "mysql-connector-java" % "8.0.15",
   "com.damnhandy"           % "handy-uri-templates"  % "2.1.7",
-  "org.webjars"             % "jquery"               % "1.8.3",
+  "org.webjars"             % "jquery"               % "1.12.4",
   "org.webjars"             % "html5shiv"            % "3.7.3",
   "org.webjars"             % "prettify"             % "4-Mar-2013-1",
   "org.webjars"             % "clipboard.js"         % "1.7.1",
