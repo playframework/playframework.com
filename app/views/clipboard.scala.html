@@ -11,8 +11,8 @@
         pre[i].appendChild(button);
     }
 
-    // Run Clipboard
-    var copyCode = new Clipboard('.copy-button', {
+    // Run Clipboard asdf
+    var copyCode = new ClipboardJS('.copy-button', {
         target: function(trigger) {
             return trigger.previousElementSibling;
         }
