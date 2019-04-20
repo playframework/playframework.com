@@ -1,10 +1,12 @@
 package actors
 
 import akka.actor.Actor
-import akka.stream.scaladsl.{StreamConverters, Source}
+import akka.stream.scaladsl.StreamConverters
+import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import org.apache.commons.io.IOUtils
-import play.doc.{PlayDoc, FileRepository}
+import play.doc.PlayDoc
+import play.doc.FileRepository
 import utils._
 
 object DocumentationLoadingActor {
@@ -44,21 +46,29 @@ class DocumentationLoadingActor extends Actor {
 
     case RenderV1Page(page, repo) =>
       val content = repo.loadFile(s"manual/$page.textile")(IOUtils.toString(_, "utf-8"))
-      val html = content.map(Textile.toHTML)
+      val html    = content.map(Textile.toHTML)
       sender() ! html
 
     case RenderV1Cheatsheet(category, repo) =>
       import scala.collection.JavaConverters._
 
-      val sheetFiles = repo.listAllFilesInPath(s"cheatsheets/$category")
+      val sheetFiles   = repo.listAllFilesInPath(s"cheatsheets/$category")
       val sortedSheets = CheatSheetHelper.sortSheets(sheetFiles.filter(_.endsWith(".textile")).toArray)
       if (sortedSheets.nonEmpty) {
         val sheets = sortedSheets.flatMap { file =>
           repo.loadFile(s"cheatsheets/$category/$file")(is => Textile.toHTML(IOUtils.toString(is, "utf-8")))
         }
         val title = CheatSheetHelper.getCategoryTitle(category)
-        val otherCategories = CheatSheetHelper.listCategoriesAndTitles(repo.listAllFilesInPath("cheatsheets")
-          .map(_.takeWhile(_ != '/')).toSet.toArray).asScala.toMap
+        val otherCategories = CheatSheetHelper
+          .listCategoriesAndTitles(
+            repo
+              .listAllFilesInPath("cheatsheets")
+              .map(_.takeWhile(_ != '/'))
+              .toSet
+              .toArray,
+          )
+          .asScala
+          .toMap
 
         sender() ! Some(V1Cheatsheet(sheets, title, otherCategories))
       } else {

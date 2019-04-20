@@ -2,7 +2,13 @@ package models
 
 import play.api.libs.json.Json
 
-case class PlayRelease(version: String, private val url: Option[String], date: Option[String], size: Option[String], name: Option[String]) {
+case class PlayRelease(
+    version: String,
+    private val url: Option[String],
+    date: Option[String],
+    size: Option[String],
+    name: Option[String],
+) {
   lazy val secureUrl: Option[String] = url.map(SecurifyUrl.securify)
 }
 

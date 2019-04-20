@@ -3,7 +3,9 @@ package models.documentation
 import java.nio.file.Paths
 
 import play.api.i18n.Lang
-import play.doc.{TocTree, Toc, TocPage}
+import play.doc.TocTree
+import play.doc.Toc
+import play.doc.TocPage
 
 import scala.xml.Node
 
@@ -34,18 +36,23 @@ case class Sitemap(urls: Seq[SitemapUrl]) {
   def toXml: Node = {
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
             xmlns:xhtml="http://www.w3.org/1999/xhtml">
-    { urls map { url =>
-      <url>
+    {
+      urls.map { url =>
+        <url>
         <loc>{url.loc}</loc>
         <priority>{url.priority.value.formatted("%.2f")}</priority>
-        {url.alternates map { case (lang, href) =>
-          <xhtml:link
+        {
+          url.alternates.map {
+            case (lang, href) =>
+              <xhtml:link
           rel="alternate"
           hreflang={lang.code}
           href={href}/>
-        }}
+          }
+        }
       </url>
-    }}
+      }
+    }
     </urlset>
   }
 
@@ -57,9 +64,9 @@ object Sitemap {
   private object Play2DocPage {
     def unapply(path: String): Option[String] = {
       Paths.get(path).getFileName.toString match {
-        case sidebar if sidebar.startsWith("_") => None
+        case sidebar if sidebar.startsWith("_")   => None
         case markdown if markdown.endsWith(".md") => Some(markdown.dropRight(3))
-        case other => None
+        case other                                => None
       }
     }
   }
@@ -70,7 +77,7 @@ object Sitemap {
    */
   private def findPages(tv: TranslationVersion): Set[String] = {
     def findPagesInToc(toc: TocTree): Seq[String] = toc match {
-      case TocPage(page, title, _) => Seq(page)
+      case TocPage(page, title, _)    => Seq(page)
       case Toc(name, title, nodes, _) => nodes.flatMap(node => findPagesInToc(node._2))
     }
 
@@ -79,26 +86,33 @@ object Sitemap {
       for (pageIndex <- tv.playDoc.pageIndex) yield findPagesInToc(pageIndex.toc)
 
     // If for some reason we don't have a PageIndex, we need to find the pages the hard way
-    (foundInToC getOrElse {
+    foundInToC.getOrElse {
       tv.repo.listAllFilesInPath("manual").collect {
         case Play2DocPage(page) => page
       }
-    }).toSet
+    }.toSet
   }
 
   /**
    * Find the pages that have been translated into each language for a given version
    * @return (language -> pages)
    */
-  private def findPageTranslations(translations: Map[Lang, Translation], version: Version): Map[Lang, Set[String]] = {
+  private def findPageTranslations(
+      translations: Map[Lang, Translation],
+      version: Version,
+  ): Map[Lang, Set[String]] = {
     translations.mapValues { trans =>
       (for {
         tv <- trans.byVersion.get(version)
-      } yield findPages(tv)) getOrElse Set.empty[String]
+      } yield findPages(tv)).getOrElse(Set.empty[String])
     }
   }
 
-  private case class VersionedPageList(version: Version, pages: Set[String], translatedPages: Map[Lang, Set[String]])
+  private case class VersionedPageList(
+      version: Version,
+      pages: Set[String],
+      translatedPages: Map[Lang, Set[String]],
+  )
 
   /**
    * Generate a sitemap for the given documentation.
@@ -112,8 +126,8 @@ object Sitemap {
 
     val versionedPageLists: Seq[VersionedPageList] = for {
       version <- defaultVersion
-      tv <- documentation.default.byVersion.get(version)
-      pages = findPages(tv)
+      tv      <- documentation.default.byVersion.get(version)
+      pages           = findPages(tv)
       translatedPages = findPageTranslations(documentation.translations, version)
     } yield {
       VersionedPageList(version, pages, translatedPages)
@@ -121,12 +135,13 @@ object Sitemap {
 
     val sitemapUrls = for {
       VersionedPageList(version, pages, pageTranslations) <- versionedPageLists
-      page <- pages
+      page                                                <- pages
     } yield {
       val loc = s"https://www.playframework.com/documentation/$version/$page"
       // for all langs that have the page translated for this version, add an alternate URL to the sitemap
-      val alternates = pageTranslations.collect { case (lang, ps) if ps.contains(page) =>
-        lang -> s"https://www.playframework.com/documentation/${lang.code}/$version/$page"
+      val alternates = pageTranslations.collect {
+        case (lang, ps) if ps.contains(page) =>
+          lang -> s"https://www.playframework.com/documentation/${lang.code}/$version/$page"
       }
       SitemapUrl(loc, Priority.LatestDocumentation, alternates)
     }

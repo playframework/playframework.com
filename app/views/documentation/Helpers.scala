@@ -1,19 +1,26 @@
 package views.html.documentation
 
 import controllers.documentation.ReverseRouter
-import models.documentation.{Milestone, ReleaseCandidate, TranslationContext, Version}
-import play.api.i18n.{Lang, MessagesApi}
+import models.documentation.Milestone
+import models.documentation.ReleaseCandidate
+import models.documentation.TranslationContext
+import models.documentation.Version
+import play.api.i18n.Lang
+import play.api.i18n.MessagesApi
 import play.twirl.api.Html
 
 object Helpers {
 
   def isNotMostRecentVersion(implicit context: TranslationContext): Boolean = {
-    ! context.version.equals(latestCurrent)
+    !context.version.equals(latestCurrent)
   }
 
-  def displayVersionMessage(page: String)(implicit messagesApi: MessagesApi, context: TranslationContext, reverseRouter: ReverseRouter): Html = {
-    implicit val lang = context.alternateLang.getOrElse(Lang.defaultLang)
-    val version = context.version.get
+  def displayVersionMessage(
+      page: String,
+  )(implicit messagesApi: MessagesApi, context: TranslationContext, reverseRouter: ReverseRouter): Html = {
+    implicit val alternateLang = context.alternateLang
+    implicit val lang          = context.alternateLang.getOrElse(Lang.defaultLang)
+    val version                = context.version.get
     if (isDevelopmentVersion(version)) {
       upgrade(unstableMessage(link(version, page)), page)
     } else {
@@ -35,7 +42,10 @@ object Helpers {
     }
   }
 
-  private def upgrade(originalHtml: Html, page: String)(implicit messagesApi: MessagesApi, context: TranslationContext, reverseRouter: ReverseRouter): Html = {
+  private def upgrade(
+      originalHtml: Html,
+      page: String,
+  )(implicit messagesApi: MessagesApi, context: TranslationContext, reverseRouter: ReverseRouter): Html = {
     import scala.collection.immutable.Seq
     new Html(Seq(originalHtml, Html(" "), displayUpgradeMessage(page)))
   }
@@ -59,25 +69,34 @@ object Helpers {
   }
 
   // 2.3.2
-  private def oldReleaseMessage(specificLink: Html, seriesLink: Html)(implicit messagesApi: MessagesApi, lang: Lang): Html  = {
+  private def oldReleaseMessage(
+      specificLink: Html,
+      seriesLink: Html,
+  )(implicit messagesApi: MessagesApi, lang: Lang): Html = {
     // You are viewing the documentation for the {0} release in the {1} series of releases.
     Html(messagesApi("documentation.old.release.message", specificLink.toString(), seriesLink.toString()))
   }
 
   // 2.3.x
-  private def oldLatestMessage(seriesLink: Html)(implicit messagesApi: MessagesApi, lang: Lang): Html  = {
+  private def oldLatestMessage(seriesLink: Html)(implicit messagesApi: MessagesApi, lang: Lang): Html = {
     // You are viewing the documentation for the {0} release series.
     Html(messagesApi("documentation.old.latest.message", seriesLink.toString()))
   }
 
-  private def link(version: Version, page: String)(implicit alternateLang: Lang, reverseRouter: ReverseRouter): Html = {
-    val url = reverseRouter.page(Option(alternateLang), version.toString, page)
+  private def link(
+      version: Version,
+      page: String,
+  )(implicit alternateLang: Option[Lang], reverseRouter: ReverseRouter): Html = {
+    val url = reverseRouter.page(alternateLang, version.toString, page)
     Html(s"""<a href="$url">${version.toString}</a>""")
   }
 
-  private def displayUpgradeMessage(page: String)(implicit messagesApi: MessagesApi, context: TranslationContext, reverseRouter: ReverseRouter): Html = {
-    val version = latestCurrent.get
-    implicit val lang = context.alternateLang.getOrElse(Lang.defaultLang)
+  private def displayUpgradeMessage(
+      page: String,
+  )(implicit messagesApi: MessagesApi, context: TranslationContext, reverseRouter: ReverseRouter): Html = {
+    val version                = latestCurrent.get
+    implicit val alternateLang = context.alternateLang
+    implicit val lang          = context.alternateLang.getOrElse(Lang.defaultLang)
     currentLatestMessage(link(version, page))
   }
 
@@ -93,10 +112,10 @@ object Helpers {
 
   private def isDevelopmentVersion(version: Version)(implicit context: TranslationContext): Boolean = {
     version.versionType match {
-      case rc: ReleaseCandidate => true
-      case m: Milestone => true
+      case rc: ReleaseCandidate                                  => true
+      case m: Milestone                                          => true
       case series if latestCurrent.get.earlierMajorThan(version) => true // hack
-      case other => false
+      case other                                                 => false
     }
   }
 

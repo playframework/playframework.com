@@ -1,7 +1,8 @@
 package services.github
 
 import org.slf4j.LoggerFactory
-import play.api.{Configuration, Environment}
+import play.api.Configuration
+import play.api.Environment
 import play.api.inject.Module
 
 class GitHubModule extends Module {
@@ -10,16 +11,18 @@ class GitHubModule extends Module {
   def bindings(environment: Environment, configuration: Configuration) = {
     import scala.collection.JavaConverters._
     val committerTeams = configuration.underlying.getStringList("github.committerTeams").asScala
-    val organisation = configuration.underlying.getString("github.organisation")
-    val gitHubApiUrl = configuration.underlying.getString("github.apiUrl")
+    val organisation   = configuration.underlying.getString("github.organisation")
+    val gitHubApiUrl   = configuration.underlying.getString("github.apiUrl")
 
     configuration.getOptional[String]("github.access.token") match {
       case Some(accessToken) =>
         Seq(
           bind[GitHubConfig].to(GitHubConfig(accessToken, gitHubApiUrl, organisation, committerTeams)),
           bind[GitHub].to[DefaultGitHub],
-          bind[ContributorsSummariser].qualifiedWith("gitHubContributorsSummariser").to[DefaultContributorsSummariser],
-          bind[ContributorsSummariser].to[CachingContributorsSummariser]
+          bind[ContributorsSummariser]
+            .qualifiedWith("gitHubContributorsSummariser")
+            .to[DefaultContributorsSummariser],
+          bind[ContributorsSummariser].to[CachingContributorsSummariser],
         )
       case None =>
         log.info("No GitHub access token yet, using fallback contributors")

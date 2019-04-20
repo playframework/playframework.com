@@ -8,7 +8,8 @@ import play.api.libs.json._
 import play.api.libs.functional.syntax._
 import play.api.libs.ws._
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 import models.github._
 
 /**
@@ -52,9 +53,15 @@ trait GitHub {
   def fetchRepoContributors(repo: Repository): Future[Seq[(GitHubUser, Int)]]
 }
 
-case class GitHubConfig(accessToken: String, gitHubApiUrl: String, organisation: String, committerTeams: Seq[String])
+case class GitHubConfig(
+    accessToken: String,
+    gitHubApiUrl: String,
+    organisation: String,
+    committerTeams: Seq[String],
+)
 
-class DefaultGitHub @Inject() (ws: WSClient, config: GitHubConfig)(implicit ec: ExecutionContext) extends GitHub {
+class DefaultGitHub @Inject()(ws: WSClient, config: GitHubConfig)(implicit ec: ExecutionContext)
+    extends GitHub {
 
   private def authCall(url: String) = {
     ws.url(url).withHttpHeaders(HeaderNames.AUTHORIZATION -> ("token " + config.accessToken))
@@ -62,7 +69,7 @@ class DefaultGitHub @Inject() (ws: WSClient, config: GitHubConfig)(implicit ec: 
 
   private def load[T: Reads](path: String) = {
     val url = if (path.matches("https?://.*")) path else config.gitHubApiUrl + path
-    authCall(url).get().map { response => 
+    authCall(url).get().map { response =>
       checkSuccess(response).json.as[T]
     }
   }
@@ -77,13 +84,14 @@ class DefaultGitHub @Inject() (ws: WSClient, config: GitHubConfig)(implicit ec: 
   }
 
   private def responseFailure(response: WSResponse): Exception = response.status match {
-    case 403 => new RuntimeException("Request forbidden, GitHub quota rate limit is probably exceeded: " + response.body)
+    case 403 =>
+      new RuntimeException("Request forbidden, GitHub quota rate limit is probably exceeded: " + response.body)
     case error => new RuntimeException("Request failed with " + response.status + " " + response.statusText)
   }
 
   private def checkSuccess(response: WSResponse): WSResponse = response.status match {
     case ok if ok < 300 => response
-    case error => throw responseFailure(response)
+    case error          => throw responseFailure(response)
   }
 
   /**
@@ -96,11 +104,12 @@ class DefaultGitHub @Inject() (ws: WSClient, config: GitHubConfig)(implicit ec: 
     def loadNext(url: String): Future[Seq[T]] = {
       authCall(url).get().flatMap {
         case notOk if notOk.status >= 300 => throw responseFailure(notOk)
-        case response @ NextLink(next) => for {
-          nextResults <- loadNext(next)
-        } yield {
-          response.json.as[Seq[T]] ++ nextResults
-        }
+        case response @ NextLink(next) =>
+          for {
+            nextResults <- loadNext(next)
+          } yield {
+            response.json.as[Seq[T]] ++ nextResults
+          }
         case lastResponse => Future.successful(lastResponse.json.as[Seq[T]])
       }
     }
@@ -112,24 +121,24 @@ class DefaultGitHub @Inject() (ws: WSClient, config: GitHubConfig)(implicit ec: 
 
   def fetchOrganisation(organisation: String) =
     load[Organisation]("/orgs/" + organisation)
-  
+
   def fetchOrganisationTeams(organisation: Organisation) =
     loadWithPaging[Team]("/orgs/" + organisation.login + "/teams")
 
-  def fetchTeamMembers(team: Team) = 
+  def fetchTeamMembers(team: Team) =
     loadWithPaging[GitHubUser](expand(team.membersUrl))
 
-  def fetchOrganisationMembers(organisation: Organisation) = 
+  def fetchOrganisationMembers(organisation: Organisation) =
     loadWithPaging[GitHubUser](expand(organisation.membersUrl))
 
-  def fetchUserDetails(user: GitHubUser) = 
+  def fetchUserDetails(user: GitHubUser) =
     load[GitHubUser](expand(user.url))
 
   def fetchRepoContributors(repo: Repository) =
     loadWithPaging[(GitHubUser, Int)](expand(repo.contributorsUrl))(
-      (implicitly[Reads[GitHubUser]] and (__ \ "contributions").read[Int]).tupled
+      implicitly[Reads[GitHubUser]].and((__ \ "contributions").read[Int]).tupled,
     )
 
-  def fetchOrganisationRepos(organisation: Organisation) = 
+  def fetchOrganisationRepos(organisation: Organisation) =
     loadWithPaging[Repository](expand(organisation.reposUrl))
 }

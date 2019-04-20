@@ -17,8 +17,14 @@ import play.api.i18n.Lang
  * @param version The version of this context (if there is one)
  * @param alternatives Alternative translations of this documentation
  */
-case class TranslationContext(lang: Lang, isDefault: Boolean, version: Option[Version], displayVersions: List[Version],
-                              alternatives: List[AlternateTranslation]) {
+case class TranslationContext(
+    lang: Lang,
+    isDefault: Boolean,
+    version: Option[Version],
+    displayVersions: List[Version],
+    alternatives: List[AlternateTranslation],
+) {
+
   /**
    * The language as an alternative language, returning none if it's the default language.
    */

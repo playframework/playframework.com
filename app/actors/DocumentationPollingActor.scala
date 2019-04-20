@@ -2,16 +2,24 @@ package actors
 
 import javax.inject.Inject
 
-import actors.DocumentationActor.{DocumentationGitRepo, DocumentationGitRepos, UpdateDocumentation}
-import akka.actor.{Actor, ActorLogging, ActorRef}
+import actors.DocumentationActor.DocumentationGitRepo
+import actors.DocumentationActor.DocumentationGitRepos
+import actors.DocumentationActor.UpdateDocumentation
+import akka.actor.Actor
+import akka.actor.ActorLogging
+import akka.actor.ActorRef
 import com.google.inject.assistedinject.Assisted
 import models.documentation._
 import org.apache.commons.io.IOUtils
 import org.eclipse.jgit.lib.ObjectId
 import org.eclipse.jgit.util.Base64
-import play.api.i18n.{Lang, MessagesApi}
-import play.doc.{PageIndex, PlayDoc, TranslatedPlayDocTemplates}
-import utils.{AggregateFileRepository, PlayGitRepository}
+import play.api.i18n.Lang
+import play.api.i18n.MessagesApi
+import play.doc.PageIndex
+import play.doc.PlayDoc
+import play.doc.TranslatedPlayDocTemplates
+import utils.AggregateFileRepository
+import utils.PlayGitRepository
 
 import scala.concurrent.duration._
 
@@ -31,10 +39,12 @@ object DocumentationPollingActor {
  * expensive task of scanning/indexing the repo to extract all the available versions and table of contents for the
  * documentation.
  */
-class DocumentationPollingActor @Inject() (messages: MessagesApi, @Assisted repos: DocumentationGitRepos,
-                                           @Assisted documentationActor: ActorRef) extends Actor
-    with ActorLogging
-{
+class DocumentationPollingActor @Inject()(
+    messages: MessagesApi,
+    @Assisted repos: DocumentationGitRepos,
+    @Assisted documentationActor: ActorRef,
+) extends Actor
+    with ActorLogging {
 
   import DocumentationPollingActor._
   import context.dispatcher
@@ -63,20 +73,21 @@ class DocumentationPollingActor @Inject() (messages: MessagesApi, @Assisted repo
   private def determineMasterVersion(repo: DocumentationGitRepo): Option[(Version, ObjectId)] = {
     def fileContents(hash: ObjectId, file: String): Option[String] = {
       repo.repo.loadFile(hash, file).map {
-        case (size, is) => try {
-          IOUtils.toString(is, "utf-8")
-        } finally {
-          is.close()
-        }
+        case (size, is) =>
+          try {
+            IOUtils.toString(is, "utf-8")
+          } finally {
+            is.close()
+          }
       }
     }
 
     for {
       masterVersion <- repo.config.masterVersion
-      masterHash <- repo.repo.hashForRef("master")
-      contents <- fileContents(masterHash, masterVersion.file)
-      matched <- masterVersion.pattern.findFirstMatchIn(contents)
-      version <- Version.parse(matched.group(1).replace("-SNAPSHOT", ".x"))
+      masterHash    <- repo.repo.hashForRef("master")
+      contents      <- fileContents(masterHash, masterVersion.file)
+      matched       <- masterVersion.pattern.findFirstMatchIn(contents)
+      version       <- Version.parse(matched.group(1).replace("-SNAPSHOT", ".x"))
     } yield version -> masterHash
   }
 
@@ -86,7 +97,7 @@ class DocumentationPollingActor @Inject() (messages: MessagesApi, @Assisted repo
     // Find all the versions in the repo. The versions are all tags, and all branches that look like a version number.
     val defaultVersions = (parseVersionsFromRefs(repos.default.repo.allTags) ++ parseVersionsFromRefs(
       repos.default.repo.allBranches
-        .filter(_._1.matches("""\d+\.\d+\.x"""))
+        .filter(_._1.matches("""\d+\.\d+\.x""")),
     )).map(v => (v._1, v._2.name, repos.default.repo.fileRepoForHash(v._2), v._1.name))
 
     // Find the master version
@@ -99,7 +110,6 @@ class DocumentationPollingActor @Inject() (messages: MessagesApi, @Assisted repo
 
     val allVersions = (defaultVersions ++ defaultMasterVersion).toList.sortBy(_._1).reverse.map {
       case (version, cacheId, repo, symName) =>
-
         val newCacheId = xorHashes(cacheId, utils.SiteVersion.hash)
 
         old.flatMap(_.default.byVersion.get(version)) match {
@@ -119,7 +129,7 @@ class DocumentationPollingActor @Inject() (messages: MessagesApi, @Assisted repo
               playVersion = version.name,
               pageIndex = PageIndex.parseFrom(repo, messages("documentation.home"), Some("manual")),
               templates = new TranslatedPlayDocTemplates(messages("documentation.next")),
-              pageExtension = None
+              pageExtension = None,
             )
             TranslationVersion(version, repo, playDoc, newCacheId, symName)
         }
@@ -129,18 +139,21 @@ class DocumentationPollingActor @Inject() (messages: MessagesApi, @Assisted repo
 
     // Now for each translation
     val translations = repos.translations.map { t =>
-
       // Parse all the versions from tags, branches and the master version
       val gitTags = parseVersionsFromRefs(t.repo.allTags).map(v => (v._1, v._2, v._1.name))
       val gitBranches = parseVersionsFromRefs(
         t.repo.allBranches
-          .filter(_._1.matches("""\d+\.\d+\.x"""))
+          .filter(_._1.matches("""\d+\.\d+\.x""")),
       ).map(v => (v._1, v._2, v._1.name))
       val masterVersion = determineMasterVersion(t).map(v => (v._1, v._2, "master"))
 
       implicit val lang = t.config.lang
-      val versions = versionsToTranslations(t.repo, gitTags ++ gitBranches ++ masterVersion, defaultTranslation,
-        old.flatMap(_.translations.get(lang)))
+      val versions = versionsToTranslations(
+        t.repo,
+        gitTags ++ gitBranches ++ masterVersion,
+        defaultTranslation,
+        old.flatMap(_.translations.get(lang)),
+      )
 
       t.config.lang -> Translation(versions, t.repo, t.config.gitHubSource)
     }.toMap
@@ -157,41 +170,47 @@ class DocumentationPollingActor @Inject() (messages: MessagesApi, @Assisted repo
     }
   }
 
-  private def versionsToTranslations(repo: PlayGitRepository, versions: Seq[(Version, ObjectId, String)],
-                                     aggregate: Translation, old: Option[Translation])(implicit lang: Lang): List[TranslationVersion] = {
-    versions.sortBy(_._1).reverse.map { version =>
-      val baseRepo = repo.fileRepoForHash(version._2)
-      val aggregateVersion = aggregate.byVersion.get(version._1)
-      val (fileRepo, cacheId) = aggregateVersion.fold(baseRepo -> xorHashes(version._2.name, utils.SiteVersion.hash)) { default =>
+  private def versionsToTranslations(
+      repo: PlayGitRepository,
+      versions: Seq[(Version, ObjectId, String)],
+      aggregate: Translation,
+      old: Option[Translation],
+  )(implicit lang: Lang): List[TranslationVersion] = {
+    versions
+      .sortBy(_._1)
+      .reverse
+      .map { version =>
+        val baseRepo         = repo.fileRepoForHash(version._2)
+        val aggregateVersion = aggregate.byVersion.get(version._1)
+        val (fileRepo, cacheId) =
+          aggregateVersion.fold(baseRepo -> xorHashes(version._2.name, utils.SiteVersion.hash)) { default =>
+            new AggregateFileRepository(Seq(baseRepo, default.repo)) ->
+              xorHashes(version._2.name, default.cacheId)
+          }
 
-        new AggregateFileRepository(Seq(baseRepo, default.repo)) ->
-          xorHashes(version._2.name, default.cacheId)
+        old.flatMap(_.byVersion.get(version._1)) match {
+          // The version hasn't changed, don't rescan
+          case Some(same: TranslationVersion) if same.cacheId == cacheId => same
+          case _ =>
+            val playDoc = new PlayDoc(
+              markdownRepository = fileRepo,
+              codeRepository = fileRepo,
+              resources = "resources",
+              playVersion = version._1.name,
+              pageIndex = PageIndex.parseFrom(fileRepo, messages("documentation.home"), Some("manual")),
+              templates = new TranslatedPlayDocTemplates(messages("documentation.next")),
+              pageExtension = None,
+            )
+            TranslationVersion(version._1, fileRepo, playDoc, cacheId, version._3)
+        }
+
       }
-
-      old.flatMap(_.byVersion.get(version._1)) match {
-        // The version hasn't changed, don't rescan
-        case Some(same: TranslationVersion) if same.cacheId == cacheId => same
-        case _ =>
-
-
-          val playDoc = new PlayDoc(
-            markdownRepository = fileRepo,
-            codeRepository = fileRepo,
-            resources = "resources",
-            playVersion = version._1.name,
-            pageIndex = PageIndex.parseFrom(fileRepo, messages("documentation.home"), Some("manual")),
-            templates = new TranslatedPlayDocTemplates(messages("documentation.next")),
-            pageExtension = None
-          )
-          TranslationVersion(version._1, fileRepo, playDoc, cacheId, version._3)
-      }
-
-    }.toList
+      .toList
   }
 
   private def xorHashes(hash1: String, hash2: String): String = {
-    val ba1 = Base64.decode(hash1)
-    val ba2 = Base64.decode(hash2)
+    val ba1    = Base64.decode(hash1)
+    val ba2    = Base64.decode(hash2)
     val result = new Array[Byte](20)
     for (i <- 0 until 20) {
       result(i) = (ba1(i) ^ ba2(i)).asInstanceOf[Byte]

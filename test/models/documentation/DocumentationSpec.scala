@@ -6,22 +6,22 @@ class DocumentationSpec extends Specification {
 
   "Version.parse" should {
     "parse a major version" in {
-      Version.parse("1.2") must be some Version("1.2", 1, 2, 0, 0, Release)
+      (Version.parse("1.2") must be).some(Version("1.2", 1, 2, 0, 0, Release))
     }
     "parse a major minor version" in {
-      Version.parse("1.2.3") must be some Version("1.2.3", 1, 2, 3, 0, Release)
+      (Version.parse("1.2.3") must be).some(Version("1.2.3", 1, 2, 3, 0, Release))
     }
     "parse a release candidate version" in {
-      Version.parse("1.2-RC2") must be some Version("1.2-RC2", 1, 2, 0, 0, ReleaseCandidate(2))
+      (Version.parse("1.2-RC2") must be).some(Version("1.2-RC2", 1, 2, 0, 0, ReleaseCandidate(2)))
     }
     "parse a milestone version" in {
-      Version.parse("1.2-M4") must be some Version("1.2-M4", 1, 2, 0, 0, Milestone(4))
+      (Version.parse("1.2-M4") must be).some(Version("1.2-M4", 1, 2, 0, 0, Milestone(4)))
     }
     "parse a snapshot version" in {
-      Version.parse("1.2.3-SNAPSHOT") must be some Version("1.2.3-SNAPSHOT", 1, 2, 3, 0, Latest)
+      (Version.parse("1.2.3-SNAPSHOT") must be).some(Version("1.2.3-SNAPSHOT", 1, 2, 3, 0, Latest))
     }
     "parse a wildcard version" in {
-      Version.parse("1.2.x") must be some Version("1.2.x", 1, 2, 9999, 0, Latest)
+      (Version.parse("1.2.x") must be).some(Version("1.2.x", 1, 2, 9999, 0, Latest))
     }
     "ignore versions that aren't numbers" in {
       Version.parse("blah") must beNone
@@ -30,7 +30,7 @@ class DocumentationSpec extends Specification {
       Version.parse("1.2-BLAH1") must beNone
     }
     "parse a patch version" in {
-      Version.parse("1.2.3.4") must be some Version("1.2.3.4", 1, 2, 3, 4, Release)
+      (Version.parse("1.2.3.4") must be).some(Version("1.2.3.4", 1, 2, 3, 4, Release))
     }
   }
 
@@ -69,7 +69,8 @@ class DocumentationSpec extends Specification {
       versions.toList.collect(Function.unlift(Version.parse)).sorted.reverse.map { version =>
         TranslationVersion(version, null, null, "", "")
       },
-      null, None
+      null,
+      None,
     )
   }
 
@@ -91,17 +92,19 @@ class DocumentationSpec extends Specification {
         "2.1",
         "2.1.1",
         "2.1.2",
-        "2.1.3-RC1"
-      ).displayVersions must containAllOf(Seq[Version](
-        "2.2-SNAPSHOT",
-        "2.1.3-RC2",
-        "2.1.2",
-        "2.1.1",
-        "2.1",
-        "2.0.4",
-        "1.3.x",
-        "1.2.4.1"
-      )).inOrder
+        "2.1.3-RC1",
+      ).displayVersions must containAllOf(
+        Seq[Version](
+          "2.2-SNAPSHOT",
+          "2.1.3-RC2",
+          "2.1.2",
+          "2.1.1",
+          "2.1",
+          "2.0.4",
+          "1.3.x",
+          "1.2.4.1",
+        ),
+      ).inOrder
     }
     "should only show most recent snapshot and development version" in {
       mockTranslation(
@@ -109,12 +112,14 @@ class DocumentationSpec extends Specification {
         "2.2.0-RC1",
         "2.2.0-M2",
         "2.1.4-RC1",
-        "2.1.3"
-      ).displayVersions must containAllOf(Seq[Version](
-        "2.2-SNAPSHOT",
-        "2.2.0-RC1",
-        "2.1.3"
-      )).inOrder
+        "2.1.3",
+      ).displayVersions must containAllOf(
+        Seq[Version](
+          "2.2-SNAPSHOT",
+          "2.2.0-RC1",
+          "2.1.3",
+        ),
+      ).inOrder
     }
   }
 }

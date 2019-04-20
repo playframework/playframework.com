@@ -12,7 +12,7 @@
     }
 
     // Run Clipboard
-    var copyCode = new Clipboard('.copy-button', {
+    var copyCode = new ClipboardJS('.copy-button', {
         target: function(trigger) {
             return trigger.previousElementSibling;
         }

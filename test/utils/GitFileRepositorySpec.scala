@@ -1,10 +1,12 @@
 package utils
 
-import org.eclipse.jgit.api.{CloneCommand, InitCommand}
+import org.eclipse.jgit.api.CloneCommand
+import org.eclipse.jgit.api.InitCommand
 import org.eclipse.jgit.lib.PersonIdent
 import org.specs2.mutable.Specification
 import java.io.File
-import org.apache.commons.io.{FileUtils, IOUtils}
+import org.apache.commons.io.FileUtils
+import org.apache.commons.io.IOUtils
 
 class GitFileRepositorySpec extends Specification {
 
@@ -20,8 +22,16 @@ class GitFileRepositorySpec extends Specification {
       val encoding = "UTF-8"
 
       // Some files in it
-      FileUtils.write(new File(repodir, "documentation/manual/working/scalaGuide/ScalaHome.md"), "Hello!", encoding)
-      FileUtils.write(new File(repodir, "documentation/manual/working/scalaGuide/main/http/code/ScalaActions.scala"), "Action", encoding)
+      FileUtils.write(
+        new File(repodir, "documentation/manual/working/scalaGuide/ScalaHome.md"),
+        "Hello!",
+        encoding,
+      )
+      FileUtils.write(
+        new File(repodir, "documentation/manual/working/scalaGuide/main/http/code/ScalaActions.scala"),
+        "Action",
+        encoding,
+      )
       FileUtils.write(new File(repodir, "framework/build.sbt"), "Build", encoding)
 
       // Turn it into a git repo
@@ -42,7 +52,7 @@ class GitFileRepositorySpec extends Specification {
 
       // Now create another git repo, and set this one to be a remote, since Play only works with remote refs
       val clonedir = new File(tmpdir, "clone")
-      val clone = new CloneCommand().setDirectory(clonedir).setURI(repodir.toURI.toString).call()
+      val clone    = new CloneCommand().setDirectory(clonedir).setURI(repodir.toURI.toString).call()
 
       val playRepo = new PlayGitRepository(clonedir)
 
@@ -53,7 +63,8 @@ class GitFileRepositorySpec extends Specification {
   }
 
   def withGitRepo[T](block: GitFileRepository => T): T = withPlayRepo { playRepo =>
-    val gitRepo = new GitFileRepository(playRepo, playRepo.hashForRef("master").orNull, Some("documentation/manual"))
+    val gitRepo =
+      new GitFileRepository(playRepo, playRepo.hashForRef("master").orNull, Some("documentation/manual"))
     block(gitRepo)
   }
 
@@ -76,11 +87,15 @@ class GitFileRepositorySpec extends Specification {
     }
 
     "work with relative paths" in withGitRepo { gitRepo =>
-      gitRepo.loadFile("working/scalaGuide/main/async/../http/code/ScalaActions.scala")(IOUtils.toString(_, "utf-8")) must beSome("Action")
+      gitRepo.loadFile("working/scalaGuide/main/async/../http/code/ScalaActions.scala")(
+        IOUtils.toString(_, "utf-8"),
+      ) must beSome("Action")
     }
 
     "work with doubly relative paths" in withGitRepo { gitRepo =>
-      gitRepo.loadFile("working/scalaGuide/main/async/code/../../http/code/ScalaActions.scala")(IOUtils.toString(_, "utf-8")) must beSome("Action")
+      gitRepo.loadFile("working/scalaGuide/main/async/code/../../http/code/ScalaActions.scala")(
+        IOUtils.toString(_, "utf-8"),
+      ) must beSome("Action")
     }
 
     "not escape outside the base path" in withGitRepo { gitRepo =>

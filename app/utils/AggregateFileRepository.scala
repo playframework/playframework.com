@@ -2,7 +2,8 @@ package utils
 
 import java.io.InputStream
 
-import play.doc.{ FileHandle, FileRepository }
+import play.doc.FileHandle
+import play.doc.FileRepository
 
 trait ExtendedFileRepository extends FileRepository {
   def listAllFilesInPath(path: String): Seq[String]
@@ -17,7 +18,8 @@ class AggregateFileRepository(repos: Seq[ExtendedFileRepository]) extends Extend
 
   def this(repos: Array[ExtendedFileRepository]) = this(repos.toSeq)
 
-  private def fromFirstRepo[A](load: ExtendedFileRepository => Option[A]) = repos.collectFirst(Function.unlift(load))
+  private def fromFirstRepo[A](load: ExtendedFileRepository => Option[A]) =
+    repos.collectFirst(Function.unlift(load))
 
   def loadFile[A](path: String)(loader: (InputStream) => A) = fromFirstRepo(_.loadFile(path)(loader))
 
