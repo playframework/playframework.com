@@ -1,3 +1,10 @@
+## Play 2.7.1
+
+*Released 18 Apr 2019*
+
+[All changes](https://github.com/playframework/playframework/compare/2.7.0...2.7.1/)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/83?closed=1)
+
 ## Play 2.7.0
 
 *Released 1 Feb 2019*
