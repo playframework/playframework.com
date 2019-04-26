@@ -17,7 +17,7 @@ object DocumentationControllerSpec extends PlaySpecification {
       val reverseRouter: ReverseRouter = inject[ReverseRouter]
       val request                      = FakeRequest("GET", reverseRouter.page(None, "2.5.x", "Home"))
       val result                       = await(route(app, request).get)
-      result.header.headers.contains("Link") must beTrue
+      result.header.headers.contains("link") must beTrue
     }
 
     "when switching to another version" should {
