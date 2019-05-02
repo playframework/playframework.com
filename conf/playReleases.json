@@ -6,6 +6,10 @@
     "development": [],
     "previous": [
         {
+            "version": "2.6.22",
+            "date": "May 2 2019"
+        },
+        {
             "version": "2.7.0",
             "date": "Feb 1 2019"
         },
