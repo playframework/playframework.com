@@ -90,8 +90,8 @@ class ReverseRouter @Inject()(routerProvider: Provider[Router]) {
   def home(lang: Option[Lang], version: String) = {
     s"${index(lang)}/$version"
   }
-  def page(lang: Option[Lang], version: String, page: String = "Home") = {
-    s"${index(lang)}/$version/$page"
+  def page(lang: Option[Lang], version: String, pageFileName: String = "Home") = {
+    s"${index(lang)}/$version/$pageFileName"
   }
   def api(version: String, path: String) = {
     s"${router.prefix}/$version/api/$path"
@@ -102,7 +102,7 @@ class ReverseRouter @Inject()(routerProvider: Provider[Router]) {
   def cheatsheet(lang: Option[Lang], version: String, category: String) = {
     s"${index(lang)}/$version/cheatsheet/$category"
   }
-  def switch(lang: Option[Lang], version: String, page: String) = {
-    s"${index(lang)}/switch/$version/$page"
+  def switch(lang: Option[Lang], version: String, pageFileName: String) = {
+    s"${index(lang)}/switch/$version/$pageFileName"
   }
 }
