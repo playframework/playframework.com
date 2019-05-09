@@ -40,15 +40,18 @@ class DbModuleDao @Inject() extends ModuleDao {
     moduleReleases.groupBy(_._1).mapValues(_.map(_._2))
   // left join. Some modules may not have a release.
   private val everything: Seq[(Module, Seq[Release])] = modules.map {
-    case (id, mod) => mod -> releasesByModuleId.getOrElse(id, Seq.empty[Release])
+    case (id, mod) => mod -> releasesByModuleId.getOrElse(id, Seq.empty[Release]).sortBy(_.date)
   }.toSeq
 
   def findEverything(): Seq[(Module, Seq[Release])] = everything
 
   // find all module whose name contains `keyword`
   def findAll(keyword: String = ""): Seq[Module] =
-    modules.values.filter(_.name.toLowerCase.contains(keyword.toLowerCase())).toSeq
+    modules.values.filter(_.fullname.toLowerCase.contains(keyword.toLowerCase())).toSeq
 
-  def findById(name: String): Option[(Module, Seq[Release])] = everything.find(_._1.name == name)
+  def findById(name: String): Option[(Module, Seq[Release])] =
+    everything.find(_._1.name == name).map {
+      case (mod, releases) => (mod, releases.sortBy(_.date).reverse)
+    }
 
 }

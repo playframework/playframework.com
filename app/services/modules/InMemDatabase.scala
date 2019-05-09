@@ -16,15 +16,11 @@ object InMemDatabase {
       version: String,
       moduleId: Long,
   ): (ModuleId, Release) = {
-    val isd = isDefault match {
-      case "\0" => false
-      case ""   => true
-    }
     val release = Release(
       version,
       f.parse(date),
       frameworkMatch,
-      isd,
+      isDefault != "0",
     )
     (ModuleId(moduleId), release)
   }
