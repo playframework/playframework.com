@@ -40,12 +40,6 @@
         <loc>https://www.playframework.com/contributing</loc>
         <priority>1.0</priority>
     </url>
-    <!-- Don't think we need an old April Fool page to be indexed with high priority!
-    <url>
-        <loc>https://www.playframework.com/certification</loc>
-        <priority>1.0</priority>
-    </url>
-    -->
     <url>
         <loc>https://www.playframework.com/outreachy</loc>
         <priority>1.0</priority>
