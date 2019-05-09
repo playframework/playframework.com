@@ -38,3 +38,5 @@ object Module {
  * A release of a module
  */
 case class Release(version: String, date: java.util.Date, frameworkMatch: String, isDefault: Boolean)
+
+case class ModuleId(id: Long) extends AnyVal
