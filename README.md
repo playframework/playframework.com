@@ -10,6 +10,3 @@ Requirements for full installation:
 Git should ignore the symlinked repos but you may need to tell your IDE to exclude them.
 
 You may see exceptions in the logs about failing to authenticate, ignore them, they are just the periodic git fetch failing because the Play app doesn't have your GitHub credentials.
-
-Requirements for minimal local installation (e.g. for previewing changes when releasing a new version of Play):
-
