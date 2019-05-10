@@ -3,7 +3,6 @@ scala: 2.12.8
 jdk: oraclejdk8
 
 before_script:
-  - mysql -uroot -e 'create database playunittest; create database test;'
   # Clone generated docs so that we can run some integration tests
   - git clone https://github.com/playframework/play-generated-docs.git $PWD/data/generated
 

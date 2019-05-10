@@ -5,7 +5,6 @@ import javax.inject.Singleton
 
 import com.google.inject.ImplementedBy
 import models.modules._
-import play.api.db.Database
 
 import scala.language.postfixOps
 
@@ -32,49 +31,27 @@ trait ModuleDao {
 }
 
 @Singleton
-class DbModuleDao @Inject()(db: Database) extends ModuleDao {
+class DbModuleDao @Inject() extends ModuleDao {
 
-  import anorm._
-  import anorm.SqlParser._
+  private val modules: Map[ModuleId, Module] = InMemDatabase.rawModules.toMap
+  // not a Map because ModuleId can be duplicate in this Seq
+  private val moduleReleases: Seq[(ModuleId, Release)] = InMemDatabase.rawReleases
+  private val releasesByModuleId: Map[ModuleId, Seq[Release]] =
+    moduleReleases.groupBy(_._1).mapValues(_.map(_._2))
+  // left join. Some modules may not have a release.
+  private val everything: Seq[(Module, Seq[Release])] = modules.map {
+    case (id, mod) => mod -> releasesByModuleId.getOrElse(id, Seq.empty[Release]).sortBy(_.date)
+  }.toSeq
 
-  private val moduleParser = {
-    (get[String]("Module.name") ~
-      get[String]("Module.fullname") ~
-      get[String]("Module.author") ~
-      get[String]("Module.authorId") ~
-      get[String]("Module.description") ~
-      get[String]("Module.homepage")).map(flatten).map((Module.apply _).tupled)
-  }
+  def findEverything(): Seq[(Module, Seq[Release])] = everything
 
-  private val releaseParser = {
-    (get[String]("ModuleRelease.version") ~
-      get[java.util.Date]("ModuleRelease.publishedDate") ~
-      get[String]("ModuleRelease.frameworkMatch") ~
-      get[Boolean]("ModuleRelease.isDefault")).map(flatten).map((Release.apply _).tupled)
-  }
+  // find all module whose name contains `keyword`
+  def findAll(keyword: String = ""): Seq[Module] =
+    modules.values.filter(_.fullname.toLowerCase.contains(keyword.toLowerCase())).toSeq
 
-  def findEverything() = db.withConnection { implicit c =>
-    SQL("""
-        select * from Module
-        join ModuleRelease on Module.id = ModuleRelease.module_id
-        """).as(moduleParser ~ releaseParser *).groupBy(_._1).mapValues(_.map(_._2)).toSeq
-  }
-
-  def findAll(keyword: String = "") = db.withConnection { implicit c =>
-    SQL("select * from Module where fullname like {keyword} order by name")
-      .on('keyword -> ("%" + keyword + "%"))
-      .as(moduleParser *)
-  }
-
-  def findById(name: String) = db.withConnection { implicit c =>
-    val result = SQL("""
-      select * from Module
-      left join ModuleRelease on Module.id = ModuleRelease.module_id
-      where name = {name}
-                     """).on('name -> name).as(moduleParser ~ (releaseParser ?) *)
-
-    result.headOption.map {
-      case module ~ _ => (module, result.flatMap(_._2).sortBy(_.date).reverse)
+  def findById(name: String): Option[(Module, Seq[Release])] =
+    everything.find(_._1.name == name).map {
+      case (mod, releases) => (mod, releases.sortBy(_.date).reverse)
     }
-  }
+
 }

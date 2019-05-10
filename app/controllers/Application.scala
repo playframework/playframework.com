@@ -5,7 +5,6 @@ import java.io.InputStream
 import javax.inject.Inject
 import javax.inject.Singleton
 import models._
-import models.certification.Certification
 import org.apache.commons.io.IOUtils
 import play.api._
 import play.api.cache.SyncCacheApi
@@ -13,7 +12,6 @@ import play.api.i18n.I18nSupport
 import play.api.i18n.Lang
 import play.api.mvc._
 import play.twirl.api.Html
-import services.certification.CertificationDao
 import utils.Markdown
 import views._
 
@@ -24,7 +22,6 @@ import scala.concurrent.Future
 class Application @Inject()(
     environment: Environment,
     configuration: Configuration,
-    certificationDao: CertificationDao,
     releases: PlayReleases,
     exampleProjectsService: PlayExampleProjectsService,
     components: ControllerComponents,
@@ -160,22 +157,6 @@ class Application @Inject()(
 
   def cookie = Action { implicit request =>
     Ok(html.cookie())
-  }
-
-  def certification = Action { implicit request =>
-    Ok(html.certification(Certification.form))
-  }
-
-  def interest = Action(parse.tolerantFormUrlEncoded) { implicit request =>
-    Certification.form
-      .bindFromRequest()
-      .fold(
-        form => BadRequest(html.certification(form)),
-        form => {
-          certificationDao.registerInterest(form.toCertification)
-          Ok(html.interest())
-        },
-      )
   }
 
   // Deprecated links

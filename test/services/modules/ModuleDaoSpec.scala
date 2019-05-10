@@ -1,8 +1,6 @@
 package services.modules
 
 import org.specs2.mutable.Specification
-import play.api.db.evolutions.Evolutions
-import play.api.db.Databases
 
 object ModuleDaoSpec extends Specification {
 
@@ -23,7 +21,7 @@ object ModuleDaoSpec extends Specification {
 
     "find all modules and revisions" in withDao { dao =>
       val modules = dao.findEverything()
-      modules must haveSize(124)
+      modules must haveSize(135)
       modules.find(_._1.name == "deadbolt") must beSome.which { moduleVersions =>
         val (module, versions) = moduleVersions
         module.author must_== "Steve Chaloner"
@@ -41,14 +39,6 @@ object ModuleDaoSpec extends Specification {
   }
 
   def withDao[T](block: DbModuleDao => T) =
-    Databases.withDatabase(
-      driver = "com.mysql.jdbc.Driver",
-      url = "jdbc:mysql://localhost:3306/playunittest",
-      config = Map("user" -> "root"),
-    ) { db =>
-      Evolutions.withEvolutions(db) {
-        block(new DbModuleDao(db))
-      }
-    }
+    block(new DbModuleDao())
 
 }

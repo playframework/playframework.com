@@ -11,7 +11,7 @@ import utils.Textile
 import scala.io.Source
 
 /**
- * Provides utilities for looking up modules for download and interogation
+ * Provides utilities for looking up modules for download and interrogation
  */
 @ImplementedBy(classOf[FilesystemModulesLookup])
 trait ModulesLookup {
