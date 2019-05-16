@@ -1121,6 +1121,30 @@ A complete list of what was fixed for 2.2.2 can be found on [GitHub](https://git
 * Stopped plugins in reverse order to started
 * Removed circular dependencies in dev mode ClassLoaders
 
+## Play 1.5.3
+
+*Released 8 April 2019*
+
+
+* [#1279](https://github.com/playframework/play1/issues/1279): [#1262] Allow to override default fast tags with empty namespace
+* [#1290](https://github.com/playframework/play1/issues/1290): hibernate 5.4 update
+* [#1292](https://github.com/playframework/play1/issues/1292): Java 11 (JDT update)
+* [#1293](https://github.com/playframework/play1/issues/1293): HikariCP: config property for init connection sql added
+* [#1156](https://github.com/playframework/play1/issues/1156): [#2128] feature: help for module commands
+* [#1221](https://github.com/playframework/play1/issues/1221): [#2155] Silent or suppressed errors in unittest PluginCollectionTest#skipsDuplicatePlugins
+* [#1222](https://github.com/playframework/play1/issues/1222): [#2155] Silent or suppressed errors in unittest PluginCollectionTest#skipsDuplicatePlugins
+* [#1262](https://github.com/playframework/play1/issues/1262): Play1.4.3 and newer not allow to override default FastTag.class (empty namespace) using @FastTags.Namespace("")
+* [#1281](https://github.com/playframework/play1/issues/1281): Lighthouse#2273: Stop Fixtures attempting to set static (Map) fields
+* [#1287](https://github.com/playframework/play1/issues/1287): Fix JPA version to match what Hibernate 5.3+ supports.
+* [#1294](https://github.com/playframework/play1/issues/1294): Does not make sense to default MySQL character set and collation properties on connection URL
+* [#1295](https://github.com/playframework/play1/issues/1295): Remove MySQL connection charset property defaults
+* [#1298](https://github.com/playframework/play1/issues/1298): SslHttpServerContextFactory does not support private key only PEM content
+* [#1299](https://github.com/playframework/play1/issues/1299): #1298: Handle only private key info from PEM
+* [#1300](https://github.com/playframework/play1/issues/1300): Define allowed methods used in 'X-HTTP-Method-Override'
+* [#1301](https://github.com/playframework/play1/issues/1301): [#1300] feat: Define allowed methods used in 'X-HTTP-Method-Override'
+* [#2128](https://play.lighthouseapp.com/projects/57987/tickets/2128) : help for module commands like for core commands no tags
+* [#2155](https://play.lighthouseapp.com/projects/57987/tickets/2155) : Silent or suppressed errors in unittest PluginCollectionTest#skipsDuplicatePlugins unittes
+
 
 ## Play 1.5.2
 
@@ -1227,6 +1251,15 @@ A complete list of what was fixed for 2.2.2 can be found on [GitHub](https://git
 * [#2121](https://play.lighthouseapp.com/projects/57987/tickets/2121) : JPABase.equals() invokes _key() before checking null/ref equality
 * [#2120](https://play.lighthouseapp.com/projects/57987/tickets/2120) : Add support for (special) hibernate properties through application
 * [#1138](https://github.com/playframework/play1/pull/1138) : Make it possible to load plugins from single `play.plugins` file
+
+
+## Play 1.4.6
+
+*Released 8 April 2019*
+
+
+* [#1301](https://github.com/playframework/play1/issues/1301): [#1300] feat: Define allowed methods used in 'X-HTTP-Method-Override'
+
 
 ## Play 1.4.5
 
