@@ -219,6 +219,12 @@
             "date": "Mar 4 2016"
         },
         {
+            "version": "1.5.3",
+            "url": "http://downloads.typesafe.com/play/1.5.3/play-1.5.3.zip",
+            "date": "Apr 8 2019",
+            "size": "79M"
+        },
+        {
             "version": "1.5.2",
             "url": "http://downloads.typesafe.com/play/1.5.2/play-1.5.2.zip",
             "date": "Oct 30 2018",
@@ -230,13 +236,19 @@
             "date": "Jul 17 2018",
             "size": "79M"
         },
-		{
+        {
             "version": "1.5.0",
             "url": "http://downloads.typesafe.com/play/1.5.0/play-1.5.0.zip",
             "date": "Sep 29 2017",
             "size": "79M"
         },
-		 {
+        {
+            "version": "1.4.6",
+            "url": "http://downloads.typesafe.com/play/1.4.6/play-1.4.6.zip",
+            "date": "Apr 8 2019",
+            "size": "74.6M"
+        },
+        {
             "version": "1.4.5",
             "url": "http://downloads.typesafe.com/play/1.4.5/play-1.4.5.zip",
             "date": "Sep 29 2017",
