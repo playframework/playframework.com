@@ -1,17 +1,17 @@
 @import controllers.documentation.ReverseRouter
-@(messages: MessagesApi, context: models.documentation.TranslationContext, page: String = "Documentation", content: Option[String] = None, sidebar: Option[String] = None, source: Option[String] = None, alternateVersions: Seq[models.documentation.Version] = Nil, breadcrumbs: Option[String] = None)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
+@(messages: MessagesApi, context: models.documentation.TranslationContext, pageFileName:String, pageTitle: String = "Documentation", content: Option[String] = None, sidebar: Option[String] = None, source: Option[String] = None, alternateVersions: Seq[models.documentation.Version] = Nil, breadcrumbs: Option[String] = None)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
 
 @import Helpers._
 
 @title = {
-  @page @context.version.map(" - " + _).getOrElse("")
+  @pageTitle @context.version.map(" - " + _).getOrElse("")
 }
 
 @header(title.toString, Some(context)) {
 
     <aside>
 
-        @nav(messages, context, page, Seq("Scala" -> "scala/index.html", "Java" -> "java/index.html"))
+        @nav(messages, context, pageFileName, Seq("Scala" -> "scala/index.html", "Java" -> "java/index.html"))
 
         @sidebar.map(Html.apply)
 
@@ -25,7 +25,7 @@
 
     <article>
         @content.map { html =>
-            @versionInfo(page)(messages, context, reverseRouter)
+            @versionInfo(pageFileName)(messages, context, reverseRouter)
 
             @for(version <- context.version) {
                 <form id="search">
@@ -54,7 +54,7 @@
                 <button type="submit">Search</button>
             </form>
 
-            <h1>Page not found [ @page ]</h1>
+            <h1>Page not found [ @pageFileName ]</h1>
 
             <p>
               This page does not exist in that version of the documentation.  You can still use the <strong>search box above</strong> to look for for that particular word or phrase.
@@ -98,7 +98,7 @@
                 <ul>
                 @for(version <- alternateVersions) {
                     <li>
-                        <a href="@reverseRouter.page(context.alternateLang, version.name, page)">Found page @page in version @{version.name}</a>.
+                        <a href="@reverseRouter.page(context.alternateLang, version.name, pageFileName)">Found page @pageFileName in version @{version.name}</a>.
                     </li>
                 }
                 </ul>

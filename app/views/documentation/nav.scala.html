@@ -1,5 +1,5 @@
 @import controllers.documentation.ReverseRouter
-@(messages: MessagesApi, context: models.documentation.TranslationContext, page: String, apis: Seq[(String, String)])(implicit reverseRouter: ReverseRouter)
+@(messages: MessagesApi, context: models.documentation.TranslationContext, pageFileName: String, apis: Seq[(String, String)])(implicit reverseRouter: ReverseRouter)
 
 @language(lang: Lang, isDefault: Boolean, version: Option[models.documentation.Version]) = {
     <a href="@version.fold(
@@ -10,7 +10,7 @@
     )( v =>
         routes.Application.setPreferedLanguage(
           lang.language,
-          reverseRouter.page(Some(lang).filterNot(_ => isDefault), v.name, page)
+          reverseRouter.page(Some(lang).filterNot(_ => isDefault), v.name, pageFileName)
         )
     )">@messages("lang.name")(lang)</a>
 }
@@ -19,13 +19,13 @@
     <h3>Browse versions</h3>
     <div class="switch">
         @for(version <- Helpers.latestCurrent(context)) {
-            <a ga-on="click" ga-event-category="Version" ga-event-action="@version.name" href="@reverseRouter.switch(context.alternateLang, version.name, page)">@version.name</a>
+            <a ga-on="click" ga-event-category="Version" ga-event-action="@version.name" href="@reverseRouter.switch(context.alternateLang, version.name, pageFileName)">@version.name</a>
         }
         <dl class="dropdown">
             <dt>▾</dt>
             <dd>
             @for(v <- context.displayVersions) {
-                <a href="@reverseRouter.switch(context.alternateLang, v.name, page)">@v.name</a>
+                <a href="@reverseRouter.switch(context.alternateLang, v.name, pageFileName)">@v.name</a>
             }
             </dd>
         </dl>

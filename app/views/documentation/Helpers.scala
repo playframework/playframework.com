@@ -16,27 +16,27 @@ object Helpers {
   }
 
   def displayVersionMessage(
-      page: String,
+      pageFileName: String,
   )(implicit messagesApi: MessagesApi, context: TranslationContext, reverseRouter: ReverseRouter): Html = {
     implicit val alternateLang = context.alternateLang
     implicit val lang          = context.alternateLang.getOrElse(Lang.defaultLang)
     val version                = context.version.get
     if (isDevelopmentVersion(version)) {
-      upgrade(unstableMessage(link(version, page)), page)
+      upgrade(unstableMessage(link(version, pageFileName)), pageFileName)
     } else {
       val versionType = version.versionType
       if (versionType.isLatest) {
         // If it's the latest, then we've got 2.3.x or 2.4.x, a series release.
         // If it's 2.5.x, we never get here in the first place.
-        upgrade(oldLatestMessage(link(version, page)), page)
+        upgrade(oldLatestMessage(link(version, pageFileName)), pageFileName)
       } else {
         val mostCurrentVersion = latestCurrent.get
         if (version.sameMajor(mostCurrentVersion)) {
-          upgrade(currentReleaseMessage(link(version, page)), page)
+          upgrade(currentReleaseMessage(link(version, pageFileName)), pageFileName)
         } else {
           // We have a specific release -- 2.3.4 or 2.4.2, a specific release in the series.
           val sameMajor = latestCompatible.get
-          upgrade(oldReleaseMessage(link(version, page), link(sameMajor, page)), page)
+          upgrade(oldReleaseMessage(link(version, pageFileName), link(sameMajor, pageFileName)), pageFileName)
         }
       }
     }
@@ -44,10 +44,10 @@ object Helpers {
 
   private def upgrade(
       originalHtml: Html,
-      page: String,
+      pageFileName: String,
   )(implicit messagesApi: MessagesApi, context: TranslationContext, reverseRouter: ReverseRouter): Html = {
     import scala.collection.immutable.Seq
-    new Html(Seq(originalHtml, Html(" "), displayUpgradeMessage(page)))
+    new Html(Seq(originalHtml, Html(" "), displayUpgradeMessage(pageFileName)))
   }
 
   // 2.6.0
@@ -85,19 +85,19 @@ object Helpers {
 
   private def link(
       version: Version,
-      page: String,
+      pageFileName: String,
   )(implicit alternateLang: Option[Lang], reverseRouter: ReverseRouter): Html = {
-    val url = reverseRouter.page(alternateLang, version.toString, page)
+    val url = reverseRouter.page(alternateLang, version.toString, pageFileName)
     Html(s"""<a href="$url">${version.toString}</a>""")
   }
 
   private def displayUpgradeMessage(
-      page: String,
+      pageFileName: String,
   )(implicit messagesApi: MessagesApi, context: TranslationContext, reverseRouter: ReverseRouter): Html = {
     val version                = latestCurrent.get
     implicit val alternateLang = context.alternateLang
     implicit val lang          = context.alternateLang.getOrElse(Lang.defaultLang)
-    currentLatestMessage(link(version, page))
+    currentLatestMessage(link(version, pageFileName))
   }
 
   /** Returns the most current version, i.e. 2.6.x. */

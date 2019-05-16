@@ -18,9 +18,7 @@ GET         /changelog                                               controllers
 GET         /conduct                                                 controllers.Application.conduct
 GET         /community-process                                       controllers.Application.communityProcess
 GET         /contributing                                            controllers.Application.contributing
-GET         /certification                                           controllers.Application.certification
 GET         /releases                                                controllers.Application.allreleases(platform: Option[String] ?= None)
-POST        /certification/interest                                  controllers.Application.interest
 
 GET         /outreachy                                               controllers.Outreachy.outreachy
 GET         /outreachy/round10                                       controllers.Outreachy.round10

@@ -1,7 +1,7 @@
 package controllers.documentation
 
 import actors.DocumentationActor
-import actors.DocumentationActor.{NotFound => DocsNotFound, NotModified => DocsNotModified, _}
+import actors.DocumentationActor.{ NotFound => DocsNotFound, NotModified => DocsNotModified, _ }
 import akka.actor.ActorRef
 import akka.pattern.ask
 import akka.util.Timeout
@@ -185,7 +185,16 @@ class DocumentationController @Inject()(
         val pageTitle = HtmlHelpers.friendlyTitle(page)
         val result = Ok(
           views.html.documentation
-            .v2(messages, context, pageTitle, Some(html), sidebarHtml, source, breadcrumbs = breadcrumbsHtml),
+            .v2(
+              messages,
+              context,
+              page,
+              pageTitle,
+              Some(html),
+              sidebarHtml,
+              source,
+              breadcrumbs = breadcrumbsHtml,
+            ),
         )
         cacheable(withLangHeaders(result, page, context), cacheId)
     }.flatMap { result =>
