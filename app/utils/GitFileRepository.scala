@@ -76,11 +76,7 @@ class PlayGitRepository(val gitDir: File, val remote: String = "origin", basePat
   // A tree filter that finds files with the given name under the given base path
   private class FileWithNameFilter(basePath: String, name: String) extends TreeFilter {
     private val pathRaw = Constants.encode(basePath)
-
-    // Due to this bug: https://bugs.eclipse.org/bugs/show_bug.cgi?id=411999
-    // we have to supply a byte array that has one dummy byte at the front of it.
-    // As soon as that bug is fixed, this code will break, just remove the #.
-    private val nameRaw = Constants.encode("#/" + name)
+    private val nameRaw = Constants.encode("/" + name)
 
     def shouldBeRecursive() = false
 
@@ -97,7 +93,7 @@ class PlayGitRepository(val gitDir: File, val remote: String = "origin", basePat
   def findFileWithName(hash: ObjectId, basePath: Option[String], name: String): Option[String] = {
     scanFiles(
       hash,
-      basePath.map(new FileWithNameFilter(_, name)).getOrElse(PathSuffixFilter.create("#/" + name)),
+      basePath.map(new FileWithNameFilter(_, name)).getOrElse(PathSuffixFilter.create("/" + name)),
     ) { treeWalk =>
       if (!treeWalk.next()) {
         None
