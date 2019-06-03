@@ -35,7 +35,7 @@ class PlayGitRepository(val gitDir: File, val remote: String = "origin", basePat
     }
 
   def hashForRef(ref: String): Option[ObjectId] =
-    Option(repository.getRef("refs/remotes/" + remote + "/" + ref))
+    Option(repository.exactRef("refs/remotes/" + remote + "/" + ref))
       .map(_.getLeaf.getObjectId)
 
   def fetch(): Unit = {
@@ -134,7 +134,7 @@ class PlayGitRepository(val gitDir: File, val remote: String = "origin", basePat
       block(treeWalk)
     } finally {
       // Clean up
-      treeWalk.release()
+      treeWalk.close()
       revWalk.dispose()
     }
   }
