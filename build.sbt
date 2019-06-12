@@ -6,7 +6,7 @@ enablePlugins(PlayScala, NewRelic)
 scalacOptions ++= List("-encoding", "utf8", "-deprecation", "-feature", "-unchecked")
 
 libraryDependencies ++= Seq(
-  "com.typesafe.play" %% "play-doc"           % "2.0.0",
+  "com.typesafe.play" %% "play-doc"           % "2.0.1",
   "org.eclipse.jgit"  % "org.eclipse.jgit"    % "5.3.2.201906051522-r",
   "com.damnhandy"     % "handy-uri-templates" % "2.1.8",
   "org.webjars"       % "jquery"              % "3.4.1",
