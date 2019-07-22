@@ -19,8 +19,11 @@ body
         -webkit-text-size-adjust:none
 
 // The ribbon obscures the navigation when there is no rightnav
-@media only screen and (max-width: 960px)
+@media only screen and (max-width: 1220px)
     #reactive_ribbon
+        display: none
+@media only screen and (max-width: 1820px)
+    .flex #reactive_ribbon
         display: none
 
 a

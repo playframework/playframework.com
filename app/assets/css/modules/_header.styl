@@ -1,12 +1,8 @@
 #navigation
-    // scoped vars
-    border-top-width=5px
-
     position: relative
     z-index: 1
     background: white
     height: header-height
-    border-top: border-top-width solid green
     box-shadow: 0 0 5px rgba(#000, .2)
     .wrapper
         position: relative
@@ -14,7 +10,7 @@
     #logo
         box: 150px, 65px
         float: left
-        margin: 5px 0
+        margin: 15px 0
         background: image("logos/play_full_color.svg") no-repeat
         hide-text()
 
@@ -25,7 +21,7 @@
         a
             display: block
             float: left
-            height: (header-height - border-top-width)
+            height: header-height
             line-height: header-height
             padding: 0 30px
             color: grey-dark
@@ -82,10 +78,12 @@
             &:hover span
                 display: block
 
-@media only screen and (max-width: 700px)
+@media only screen and (max-width: 870px)
     #navigation
         height: auto
         clear: after
+        border: none
+        box-shadow: none
         #logo
             float: none
             margin: 20px auto
