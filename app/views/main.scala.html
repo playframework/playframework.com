@@ -11,6 +11,7 @@
         <link rel="stylesheet" href="@routes.Assets.versioned("lib/prettify/prettify.css")">
         <link href="//fonts.googleapis.com/css?family=PT+Serif:700italic" rel="stylesheet" type="text/css">
         <link href="//fonts.googleapis.com/css?family=Open+Sans+Condensed:700,300" rel="stylesheet" type="text/css">
+        <link href='//fonts.googleapis.com/css?family=Source+Sans+Pro:400' rel='stylesheet' type='text/css'>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.css">
         <link rel="stylesheet" href="@routes.Assets.versioned("css/main.min.css")">
         <link rel="shortcut icon" href="/favicon.ico"/>
@@ -48,6 +49,8 @@
         <!--[if lt IE 7]>
             <p class="outdated">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="//www.google.com/chrome/browser/">install Google Chrome Frame</a> to better experience this site.</p>
         <![endif]-->
+
+        @lightbendBanner()
 
         <header id="navigation">
             <div class="wrapper">
@@ -203,9 +206,11 @@
             ga('create', 'UA-37989507-1', 'auto');
             ga('send', 'pageview');
 
-            ga('create', 'UA-23127719-1', 'lightbend.com', {'allowLinker': true, 'name': 'tsTracker'});
-            ga('linker:autoLink', ['lightbend.com','playframework.com','scala-lang.org','scaladays.org','spray.io','akka.io','scala-sbt.org','scala-ide.org']);
-            ga('tsTracker.send', 'pageview');
+            (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+            new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+            j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+            'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+            })(window,document,'script','dataLayer','GTM-W9TKHC7');
         </script>
 
         <script src="@routes.Assets.versioned("javascripts/munchkin.js")"></script>
