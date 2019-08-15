@@ -18,14 +18,6 @@ body
     body
         -webkit-text-size-adjust:none
 
-// The ribbon obscures the navigation when there is no rightnav
-@media only screen and (max-width: 1220px)
-    #reactive_ribbon
-        display: none
-@media only screen and (max-width: 1820px)
-    .flex #reactive_ribbon
-        display: none
-
 a
     text-decoration: none
 
@@ -48,13 +40,6 @@ a[href="#"], a[href="#todo"], [todo]
             padding: 0 3px 0 0
             font-size: 13px
             margin: 0
-
-.reactive-ribbon
-    border: 0
-    position: fixed
-    right: 0
-    top: 0
-    z-index: 9000
 
 .vulnerability-warning
     font-weight: bold
