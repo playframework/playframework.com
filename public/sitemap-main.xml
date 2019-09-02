@@ -29,10 +29,6 @@
         <priority>1.0</priority>
     </url>
     <url>
-        <loc>https://www.playframework.com/conduct</loc>
-        <priority>1.0</priority>
-    </url>
-    <url>
         <loc>https://www.playframework.com/community-process</loc>
         <priority>1.0</priority>
     </url>

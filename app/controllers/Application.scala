@@ -102,10 +102,9 @@ class Application @Inject()(
       views.html.changelog(_)
     })
 
-  def conduct =
-    markdownAction("public/markdown/code-of-conduct.md", { implicit request => markdown =>
-      views.html.markdownPage("Code of conduct", markdown)
-    })
+  def conduct = Action {
+    Redirect("https://www.lightbend.com/conduct")
+  }
 
   def communityProcess =
     markdownAction("public/markdown/community-process.md", { implicit request => markdown =>

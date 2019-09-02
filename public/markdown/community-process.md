@@ -74,7 +74,7 @@ While Lightbend ultimately has the last word on all decisions here, as much as p
 Integrator selection is made by Lightbend.  Lightbend will offer contributors integrator status based on the following criteria:
 
 * The contributor has made substantial contributions to Play.  What makes a substantial contribution is subjective, but for example, recent new integrators have been reviewing 3 or more pull requests per week, making one or more pull request per week, and triaging 3 or more issues a week.
-* The contributor is an exemplar of both Play's [code of conduct](/conduct) and [contributor guidelines](/contributing).
+* The contributor is an exemplar of both Play's [code of conduct](https://www.lightbend.com/conduct) and [contributor guidelines](/contributing).
 * The contributor is well respected by other members of the Play community.
 * The contributor agrees to the rules set out by Lightbend below for integrators.
 
@@ -84,7 +84,7 @@ If an integrator stops contributing regularly to Play, their write access may be
 
 ## Rules for integrators
 
-All integrators should follow the processes outlined on this page, and should be an example to follow with regards to Play's [code of conduct](/conduct) and [contributor guidelines](/contributing).  There are also a few specific rules, outlined below:
+All integrators should follow the processes outlined on this page, and should be an example to follow with regards to Play's [code of conduct](https://www.lightbend.com/conduct) and [contributor guidelines](/contributing).  There are also a few specific rules, outlined below:
 
 * An integrator must never push directly to a repository in the GitHub organisation.  All contributions, no matter how small, must be made through pull requests.  The only exceptions to this are when backporting changes, and changes that arise from cutting a release.
 * Generally, pull requests should be made from integrators' personal forks, not from branches push to repositories in the playframework GitHub organisation.
