@@ -11,6 +11,10 @@
     ],
     "previous": [
         {
+            "version": "2.6.24",
+            "date": "Oct 16 2019"
+        },
+        {
             "version": "2.6.23",
             "date": "May 14 2019"
         },

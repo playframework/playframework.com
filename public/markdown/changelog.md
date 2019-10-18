@@ -5,6 +5,12 @@
 [All changes](https://github.com/playframework/playframework/compare/2.7.2...2.7.3/)
 [GitHub milestone](https://github.com/playframework/playframework/milestone/86?closed=1)
 
+## Play 2.6.24
+
+*Released 16 Oct 2019*
+
+[All changes](https://github.com/playframework/playframework/compare/2.6.23...2.6.24/)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/91?closed=1)
 
 ## Play 2.6.23
 
