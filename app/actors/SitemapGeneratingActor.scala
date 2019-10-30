@@ -1,22 +1,18 @@
 package actors
 
-import akka.actor.Actor
+import akka.actor.typed.{ ActorRef, Behavior }
+import akka.actor.typed.scaladsl.Behaviors
 import models.documentation.Sitemap
 import models.documentation.Documentation
 
 object SitemapGeneratingActor {
+  final case class GenerateSitemap(documentation: Documentation, replyTo: ActorRef[Sitemap])
 
-  case class GenerateSitemap(documentation: Documentation)
-
-}
-
-class SitemapGeneratingActor extends Actor {
-  import SitemapGeneratingActor._
-
-  def receive = {
-    case GenerateSitemap(documentation) =>
+  def apply(): Behavior[GenerateSitemap] = Behaviors.receiveMessage {
+    case GenerateSitemap(documentation, replyTo) =>
       // this will perform IO as it has to look stuff up in git repos
       val sitemap = Sitemap(documentation)
-      sender ! sitemap
+      replyTo ! sitemap
+      Behaviors.same
   }
 }

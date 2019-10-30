@@ -6,7 +6,9 @@ import actors.SitemapGeneratingActor.GenerateSitemap
 import akka.actor.ActorRef
 import akka.actor.Props
 import akka.actor.Actor
-import akka.pattern.ask
+import akka.actor.typed.DispatcherSelector
+import akka.actor.typed.Scheduler
+import akka.actor.typed.scaladsl.adapter._
 import akka.pattern.pipe
 import akka.routing.SmallestMailboxPool
 import akka.stream.scaladsl.Source
@@ -220,6 +222,7 @@ class DocumentationActor @Inject()(
   import context.dispatcher
 
   implicit val timeout = Timeout(5.seconds)
+  implicit val scheduler: Scheduler = context.system.toTyped.scheduler
 
   private def createRepo(config: TranslationConfig) = {
     new DocumentationGitRepo(config, new PlayGitRepository(config.repo, config.remote, config.basePath))
@@ -244,10 +247,10 @@ class DocumentationActor @Inject()(
     "documentationLoaders",
   )
 
-  private val sitemapGenerator = context.actorOf(
-    Props[SitemapGeneratingActor]
-      .withDispatcher("sitemapgenerator-dispatcher"),
+  private val sitemapGenerator = context.spawn(
+    SitemapGeneratingActor(),
     "sitemapGenerator",
+    DispatcherSelector.fromConfig("sitemapgenerator-dispatcher"),
   )
 
   override def postStop() = {
@@ -316,6 +319,7 @@ class DocumentationActor @Inject()(
     def loaderRequestOpt[T](incomingRequest: LangRequest[_])(
         loaderRequest: TranslationVersion => Any,
     )(response: (Lang, Translation, TranslationVersion, T) => Response[_]) = {
+      import akka.pattern.ask
       forLang(incomingRequest) { (lang, translation, tv) =>
         val askRequest = for {
           answerOpt <- (loader ? loaderRequest(tv)).mapTo[Option[T]]
@@ -343,6 +347,7 @@ class DocumentationActor @Inject()(
     def loaderRequest[T: ClassTag](incomingRequest: LangRequest[_])(
         loaderRequest: TranslationVersion => Any,
     )(response: (Lang, Translation, TranslationVersion, T) => Response[_]) = {
+      import akka.pattern.ask
       forLang(incomingRequest) { (lang, translation, tv) =>
         val askRequest = for {
           answer <- (loader ? loaderRequest(tv)).mapTo[T]
@@ -464,6 +469,7 @@ class DocumentationActor @Inject()(
           case Some(tr) if cacheId.exists(_ == tr.cacheId) =>
             sender() ! NotModified(tr.cacheId)
           case Some(tr) =>
+            import akka.pattern.ask
             val resourceRequest = for {
               maybeResource <- (loader ? Loader.LoadResource("api/" + resource, tr.repo))
                 .mapTo[Option[Loader.Resource]]
@@ -517,8 +523,8 @@ class DocumentationActor @Inject()(
         }
 
       case GetSitemap =>
-        (sitemapGenerator ? GenerateSitemap(documentation))
-          .mapTo[Sitemap]
+        import akka.actor.typed.scaladsl.AskPattern._
+        sitemapGenerator.ask[Sitemap](replyTo => GenerateSitemap(documentation, replyTo))
           .map(DocumentationSitemap)
           .pipeTo(sender())
     }
