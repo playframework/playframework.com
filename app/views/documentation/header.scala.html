@@ -16,7 +16,7 @@
 
         <hr class="clear"/>
 
-        @views.html.helper.script('type -> "text/javascript") {
+        @views.html.helper.script(Symbol("type") -> "text/javascript") {
             // On start, check if flex mod is enabled
             if (localStorage && localStorage['flex'] == "true" ) document.body.className += " flex"
         }

@@ -26,7 +26,7 @@ class Application @Inject()(
     exampleProjectsService: PlayExampleProjectsService,
     components: ControllerComponents,
     cacheApi: SyncCacheApi,
-)(implicit ec: ExecutionContext, val reverseRouter: documentation.ReverseRouter)
+)(implicit ec: ExecutionContext, val reverseRouter: _root_.controllers.documentation.ReverseRouter)
     extends AbstractController(components)
     with Common
     with I18nSupport {
@@ -209,17 +209,23 @@ class Application @Inject()(
         val tutorials = p
           .filter(e => e.keywords.contains(TutorialKeyword) && !e.hasParams)
           .groupBy(byLanguage)
+          .view
           .mapValues(_.sortBy(_.displayName))
+          .toMap
 
         val examples = p
           .filter(e => !e.keywords.contains(TutorialKeyword) && !e.hasParams)
           .groupBy(byLanguage)
+          .view
           .mapValues(_.sortBy(_.displayName))
+          .toMap
 
         val seeds = p
           .filter(e => e.hasParams && e.keywords.contains(SeedKeyword))
           .groupBy(byLanguage)
+          .view
           .mapValues(_.sortBy(_.displayName))
+          .toMap
 
         v -> PlayExampleSection(tutorials, seeds, examples)
     }

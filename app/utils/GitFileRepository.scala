@@ -4,7 +4,7 @@ import play.doc.FileHandle
 import java.io.InputStream
 import java.io.File
 import org.eclipse.jgit.api.Git
-import scala.collection.JavaConverters._
+import scala.jdk.CollectionConverters._
 import org.eclipse.jgit.revwalk.RevWalk
 import org.eclipse.jgit.treewalk.TreeWalk
 import org.eclipse.jgit.treewalk.filter.PathSuffixFilter
@@ -27,12 +27,12 @@ class PlayGitRepository(val gitDir: File, val remote: String = "origin", basePat
 
   def close(): Unit = repository.close()
   def allTags: Seq[(String, ObjectId)] =
-    git.tagList().call().asScala.map(tag => tag.getName.stripPrefix("refs/tags/") -> tag.getLeaf.getObjectId)
+    git.tagList().call().asScala.map(tag => tag.getName.stripPrefix("refs/tags/") -> tag.getLeaf.getObjectId).toSeq
   def allBranches: Seq[(String, ObjectId)] =
     git.branchList().setListMode(ListMode.REMOTE).call().asScala.collect {
       case origin if origin.getName.startsWith("refs/remotes/" + remote + "/") =>
         origin.getName.stripPrefix("refs/remotes/" + remote + "/") -> origin.getLeaf.getObjectId
-    }
+    }.toSeq
 
   def hashForRef(ref: String): Option[ObjectId] =
     Option(repository.exactRef("refs/remotes/" + remote + "/" + ref))

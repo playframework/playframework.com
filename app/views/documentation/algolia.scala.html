@@ -1,7 +1,7 @@
 @(context: models.documentation.TranslationContext)(implicit request: RequestHeader)
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script>
-@views.html.helper.script('type -> "text/javascript") {
+@views.html.helper.script(Symbol("type") -> "text/javascript") {
 docsearch({
     apiKey: 'a0b34e68c804cf96e76adcb02d47159b',
     indexName: 'playframework',

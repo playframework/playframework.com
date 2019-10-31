@@ -9,8 +9,8 @@ class GitHubModule extends Module {
   private val log = LoggerFactory.getLogger(classOf[GitHubModule])
 
   def bindings(environment: Environment, configuration: Configuration) = {
-    import scala.collection.JavaConverters._
-    val committerTeams = configuration.underlying.getStringList("github.committerTeams").asScala
+    import scala.jdk.CollectionConverters._
+    val committerTeams = configuration.underlying.getStringList("github.committerTeams").asScala.toSeq
     val organisation   = configuration.underlying.getString("github.organisation")
     val gitHubApiUrl   = configuration.underlying.getString("github.apiUrl")
 

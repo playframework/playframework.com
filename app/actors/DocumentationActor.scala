@@ -473,7 +473,7 @@ class DocumentationActor(
           documentation.default.defaultVersion,
           documentation.defaultLang,
           documentation.allLangs,
-          documentation.translations.mapValues(_.defaultVersion),
+          documentation.translations.view.mapValues(_.defaultVersion).toMap,
           notFoundTranslationContext(),
         )
         Behaviors.same

@@ -53,10 +53,10 @@ object DocumentationLoadingActor {
       Behaviors.same
 
     case RenderV1Cheatsheet(category, repo, replyTo) =>
-      import scala.collection.JavaConverters._
+      import scala.jdk.CollectionConverters._
 
       val sheetFiles   = repo.listAllFilesInPath(s"cheatsheets/$category")
-      val sortedSheets = CheatSheetHelper.sortSheets(sheetFiles.filter(_.endsWith(".textile")).toArray)
+      val sortedSheets = CheatSheetHelper.sortSheets(sheetFiles.filter(_.endsWith(".textile")).toArray).toSeq
       if (sortedSheets.nonEmpty) {
         val sheets = sortedSheets.flatMap { file =>
           repo.loadFile(s"cheatsheets/$category/$file")(is => Textile.toHTML(IOUtils.toString(is, "utf-8")))

@@ -68,8 +68,8 @@ object GitFileRepositoryPerformanceTest extends App {
 
     println("Loaded " + loaded + " files in " + seconds + " seconds")
     println("That's " + (loaded / seconds) + " files a second")
-    println("Total time spent finding markdown files: " + (findFileWithNameTiming.get() / 1000000 + "ms"))
-    println("Total time spent loading markdown files: " + (loadFileTiming.get() / 1000000 + "ms"))
+    println(s"Total time spent finding markdown files: ${(findFileWithNameTiming.get() / 1000000)}ms")
+    println(s"Total time spent loading markdown files: ${(loadFileTiming.get() / 1000000)}ms")
   }
 
   println

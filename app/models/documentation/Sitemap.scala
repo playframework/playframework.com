@@ -101,11 +101,11 @@ object Sitemap {
       translations: Map[Lang, Translation],
       version: Version,
   ): Map[Lang, Set[String]] = {
-    translations.mapValues { trans =>
+    translations.view.mapValues { trans =>
       (for {
         tv <- trans.byVersion.get(version)
       } yield findPages(tv)).getOrElse(Set.empty[String])
-    }
+    }.toMap
   }
 
   private case class VersionedPageList(
