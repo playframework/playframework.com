@@ -1,14 +1,11 @@
 package actors
 
-import javax.inject.Inject
-
 import actors.DocumentationActor.DocumentationGitRepo
 import actors.DocumentationActor.DocumentationGitRepos
 import actors.DocumentationActor.UpdateDocumentation
-import akka.actor.Actor
-import akka.actor.ActorLogging
 import akka.actor.ActorRef
-import com.google.inject.assistedinject.Assisted
+import akka.actor.typed.Behavior
+import akka.actor.typed.scaladsl.{ ActorContext, Behaviors, LoggerOps }
 import models.documentation._
 import org.apache.commons.io.IOUtils
 import org.eclipse.jgit.lib.ObjectId
@@ -30,7 +27,18 @@ object DocumentationPollingActor {
    * Factory for creating the documentation polling actor
    */
   trait Factory {
-    def apply(repos: DocumentationGitRepos, documentationActor: ActorRef): Actor
+    def apply(repos: DocumentationGitRepos, documentationActor: ActorRef): Behavior[Tick.type]
+  }
+
+  def apply(
+      messages: MessagesApi,
+      repos: DocumentationGitRepos,
+      documentationActor: ActorRef,
+  ): Behavior[Tick.type] = Behaviors.setup { context =>
+    Behaviors.withTimers { timers =>
+      timers.startTimerWithFixedDelay(Tick, Tick, 10.minutes) // no 1.minute initial delay
+      new DocumentationPollingActor(messages, repos, documentationActor, context).initialBehavior
+    }
   }
 }
 
@@ -39,30 +47,23 @@ object DocumentationPollingActor {
  * expensive task of scanning/indexing the repo to extract all the available versions and table of contents for the
  * documentation.
  */
-class DocumentationPollingActor @Inject()(
+class DocumentationPollingActor(
     messages: MessagesApi,
-    @Assisted repos: DocumentationGitRepos,
-    @Assisted documentationActor: ActorRef,
-) extends Actor
-    with ActorLogging {
-
-  import DocumentationPollingActor._
-  import context.dispatcher
-
-  val schedule = context.system.scheduler.schedule(1.minute, 10.minutes, self, Tick)
-
-  override def postStop() = {
-    schedule.cancel()
-  }
+    repos: DocumentationGitRepos,
+    documentationActor: ActorRef,
+    context: ActorContext[DocumentationPollingActor.Tick.type],
+) {
+  import DocumentationPollingActor.Tick
+  import context.log
 
   // Initial scan of documentation
-  val receive = update(scanAndSendDocumentation(None))
+  val initialBehavior = update(scanAndSendDocumentation(None))
 
-  def update(old: Documentation): Receive = {
+  def update(old: Documentation): Behavior[Tick.type] = Behaviors.receiveMessage {
     case Tick =>
       repos.default.repo.fetch()
       repos.translations.foreach(_.repo.fetch())
-      context.become(update(scanAndSendDocumentation(Some(old))))
+      update(scanAndSendDocumentation(Some(old)))
   }
 
   /**
@@ -119,7 +120,7 @@ class DocumentationPollingActor @Inject()(
             implicit val lang = repos.default.config.lang
 
             if (old.isDefined) {
-              log.info("Updating default documentation for {}: {}", version, cacheId)
+              log.info2("Updating default documentation for {}: {}", version, cacheId)
             }
 
             val playDoc = new PlayDoc(

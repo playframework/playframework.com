@@ -16,7 +16,6 @@ import akka.util.ByteString
 import akka.util.Timeout
 import models.documentation._
 import play.api.i18n.Lang
-import play.api.libs.concurrent.InjectedActorSupport
 import utils.PlayGitRepository
 import scala.concurrent.duration._
 import scala.reflect.ClassTag
@@ -214,8 +213,7 @@ object DocumentationActor {
 class DocumentationActor @Inject()(
     config: DocumentationConfig,
     pollerFactory: DocumentationPollingActor.Factory,
-) extends Actor
-    with InjectedActorSupport {
+) extends Actor {
 
   import DocumentationActor._
   import actors.{ DocumentationLoadingActor => Loader }
@@ -237,8 +235,11 @@ class DocumentationActor @Inject()(
    * The poller, when it starts, scans all repos and will send the documentation,
    * moving this actor into the documentation loaded state.
    */
-  private val poller =
-    injectedChild(pollerFactory(repos, self), "documentationPoller", _.withDispatcher("polling-dispatcher"))
+  private val poller = context.spawn(
+    pollerFactory(repos, self),
+    "documentationPoller",
+    DispatcherSelector.fromConfig("polling-dispatcher"),
+  )
 
   private val loader = context.actorOf(
     Props[DocumentationLoadingActor]
