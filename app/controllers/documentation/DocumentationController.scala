@@ -15,6 +15,7 @@ import models.documentation.TranslationContext
 import models.documentation.Version
 import org.joda.time.format.DateTimeFormat
 import play.api.http.HttpEntity
+import play.api.i18n.DefaultLangs
 import play.api.i18n.MessagesApi
 import play.api.i18n.Lang
 import play.api.mvc._
@@ -83,19 +84,8 @@ class DocumentationController @Inject()(
       case Some(cookieLang) => cookieLang +: request.acceptLanguages
       case None             => request.acceptLanguages
     }
-    candidateLangs
-      .collectFirst(Function.unlift { lang =>
-        langs.find(_.satisfies(lang))
-      })
-      .orElse {
-        candidateLangs
-          .collect {
-            case lang: Lang if lang.country.nonEmpty => Lang(lang.language)
-          }
-          .collectFirst(Function.unlift { lang =>
-            langs.find(_.satisfies(lang))
-          })
-      }
+    val candidates = candidateLangs ++ candidateLangs.collect { case l if l.country.nonEmpty => Lang(l.language) }
+    new DefaultLangs(langs).preferred(candidates)
   }
 
   private def actorRequest[T <: Response[T]: ClassTag](
@@ -254,10 +244,10 @@ class DocumentationController @Inject()(
         case None          =>
           // This is the only place where we do accept header based language detection, on the documentation home page
           val autoLang = preferredLang(summary.allLangs)
-          autoLang match {
-            case Some(l) if hasLatestDocumentation(summary, l) => autoLang -> summary.translations(l)
-            case _                                             => None     -> summary.defaultLatest
-          }
+          if (hasLatestDocumentation(summary, autoLang))
+            Some(autoLang) -> summary.translations(autoLang)
+          else
+            None -> summary.defaultLatest
       }
       version
         .map { v =>
