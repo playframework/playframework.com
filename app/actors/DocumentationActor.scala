@@ -3,14 +3,16 @@ package actors
 import javax.inject.Inject
 
 import actors.SitemapGeneratingActor.GenerateSitemap
-import akka.actor.ActorRef
-import akka.actor.Props
 import akka.actor.Actor
+import akka.actor.typed.ActorRef
 import akka.actor.typed.DispatcherSelector
 import akka.actor.typed.Scheduler
+import akka.actor.typed.SupervisorStrategy
+import akka.actor.typed.scaladsl.AskPattern._
+import akka.actor.typed.scaladsl.Behaviors
+import akka.actor.typed.scaladsl.Routers
 import akka.actor.typed.scaladsl.adapter._
 import akka.pattern.pipe
-import akka.routing.SmallestMailboxPool
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import akka.util.Timeout
@@ -241,11 +243,12 @@ class DocumentationActor @Inject()(
     DispatcherSelector.fromConfig("polling-dispatcher"),
   )
 
-  private val loader = context.actorOf(
-    Props[DocumentationLoadingActor]
-      .withRouter(SmallestMailboxPool(nrOfInstances = 4))
-      .withDispatcher("loader-dispatcher"),
+  private val loader = context.spawn(
+    Routers.pool(poolSize = 4)( // no SmallestMailboxPool
+      Behaviors.supervise(Loader()).onFailure[Exception](SupervisorStrategy.restart)
+    ),
     "documentationLoaders",
+    DispatcherSelector.fromConfig("loader-dispatcher"),
   )
 
   private val sitemapGenerator = context.spawn(
@@ -266,7 +269,7 @@ class DocumentationActor @Inject()(
   /**
    * Initial state, documentation not loaded, all messages buffered.
    */
-  def noDocumentation(pendingRequests: List[(Any, ActorRef)]): Receive = {
+  def noDocumentation(pendingRequests: List[(Any, akka.actor.ActorRef)]): Receive = {
     case UpdateDocumentation(docs) =>
       context.become(documentationLoaded(docs))
       pendingRequests.reverse.foreach(m => self.tell(m._1, m._2))
@@ -318,12 +321,11 @@ class DocumentationActor @Inject()(
      * @param response A function that creates the response message from the answer, to send back to the sender
      */
     def loaderRequestOpt[T](incomingRequest: LangRequest[_])(
-        loaderRequest: TranslationVersion => Any,
+        loaderRequest: (TranslationVersion, ActorRef[Option[T]]) => DocumentationLoadingActor.Command,
     )(response: (Lang, Translation, TranslationVersion, T) => Response[_]) = {
-      import akka.pattern.ask
       forLang(incomingRequest) { (lang, translation, tv) =>
         val askRequest = for {
-          answerOpt <- (loader ? loaderRequest(tv)).mapTo[Option[T]]
+          answerOpt <- loader.ask[Option[T]](replyTo => loaderRequest(tv, replyTo))
         } yield {
           answerOpt
             .map { answer =>
@@ -346,12 +348,11 @@ class DocumentationActor @Inject()(
      * @param response A function that creates the response message from the answer, to send back to the sender
      */
     def loaderRequest[T: ClassTag](incomingRequest: LangRequest[_])(
-        loaderRequest: TranslationVersion => Any,
+        loaderRequest: (TranslationVersion, ActorRef[T]) => DocumentationLoadingActor.Command,
     )(response: (Lang, Translation, TranslationVersion, T) => Response[_]) = {
-      import akka.pattern.ask
       forLang(incomingRequest) { (lang, translation, tv) =>
         val askRequest = for {
-          answer <- (loader ? loaderRequest(tv)).mapTo[T]
+          answer <- loader.ask[T](replyTo => loaderRequest(tv, replyTo))
         } yield {
           response(lang, translation, tv, answer)
         }
@@ -425,8 +426,8 @@ class DocumentationActor @Inject()(
         context.become(documentationLoaded(docs))
 
       case rp @ RenderPage(_, version, _, page) =>
-        loaderRequestOpt[play.doc.RenderedPage](rp) { tv =>
-          Loader.RenderPage(page, tv.playDoc)
+        loaderRequestOpt[play.doc.RenderedPage](rp) { (tv, replyTo) =>
+          Loader.RenderPage(page, tv.playDoc, replyTo)
         } { (lang, translation, tv, page) =>
           val source = if (version.versionType.isLatest) {
             translation.source.map { gitHubSource =>
@@ -445,8 +446,8 @@ class DocumentationActor @Inject()(
         }
 
       case rp @ RenderV1Page(_, version, _, page) =>
-        loaderRequestOpt[String](rp) { tv =>
-          Loader.RenderV1Page(page, tv.repo)
+        loaderRequestOpt[String](rp) { (tv, replyTo) =>
+          Loader.RenderV1Page(page, tv.repo, replyTo)
         } { (lang, translation, tv, content) =>
           RenderedPage(
             pageHtml = content,
@@ -459,8 +460,8 @@ class DocumentationActor @Inject()(
         }
 
       case lr: LoadResource =>
-        loaderRequestOpt[Loader.Resource](lr) { tv =>
-          Loader.LoadResource(lr.resource, tv.repo)
+        loaderRequestOpt[Loader.Resource](lr) { (tv, replyTo) =>
+          Loader.LoadResource(lr.resource, tv.repo, replyTo)
         } { (_, _, tv, resource) =>
           Resource(resource.content, resource.size, tv.cacheId)
         }
@@ -470,9 +471,8 @@ class DocumentationActor @Inject()(
           case Some(tr) if cacheId.exists(_ == tr.cacheId) =>
             sender() ! NotModified(tr.cacheId)
           case Some(tr) =>
-            import akka.pattern.ask
             val resourceRequest = for {
-              maybeResource <- (loader ? Loader.LoadResource("api/" + resource, tr.repo))
+              maybeResource <- loader.ask[Option[DocumentationLoadingActor.Resource]](replyTo => Loader.LoadResource("api/" + resource, tr.repo, replyTo))
                 .mapTo[Option[Loader.Resource]]
             } yield {
               maybeResource
@@ -497,22 +497,22 @@ class DocumentationActor @Inject()(
         )
 
       case pe @ QueryPageExists(_, _, _, page) =>
-        loaderRequest[Boolean](pe) { tv =>
-          Loader.PageExists(page, tv.playDoc, tv.repo)
+        loaderRequest[Boolean](pe) { (tv, replyTo) =>
+          Loader.PageExists(page, tv.playDoc, tv.repo, replyTo)
         } { (_, _, tv, exists) =>
           PageExists(exists, tv.cacheId)
         }
 
       case pe @ QueryV1PageExists(_, _, _, page) =>
-        loaderRequest[Boolean](pe) { tv =>
-          Loader.V1PageExists(page, tv.repo)
+        loaderRequest[Boolean](pe) { (tv, replyTo) =>
+          Loader.V1PageExists(page, tv.repo, replyTo)
         } { (_, _, tv, exists) =>
           PageExists(exists, tv.cacheId)
         }
 
       case rc @ RenderV1Cheatsheet(_, version, _, category) =>
-        loaderRequestOpt[Loader.V1Cheatsheet](rc) { tv =>
-          Loader.RenderV1Cheatsheet(category, tv.repo)
+        loaderRequestOpt[Loader.V1Cheatsheet](rc) { (tv, replyTo) =>
+          Loader.RenderV1Cheatsheet(category, tv.repo, replyTo)
         } { (lang, translation, tv, cs) =>
           V1Cheatsheet(
             cs.sheets,
@@ -524,7 +524,6 @@ class DocumentationActor @Inject()(
         }
 
       case GetSitemap =>
-        import akka.actor.typed.scaladsl.AskPattern._
         sitemapGenerator.ask[Sitemap](replyTo => GenerateSitemap(documentation, replyTo))
           .map(DocumentationSitemap)
           .pipeTo(sender())
