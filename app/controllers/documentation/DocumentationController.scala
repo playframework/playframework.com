@@ -2,10 +2,10 @@ package controllers.documentation
 
 import actors.DocumentationActor
 import actors.DocumentationActor.{ NotFound => DocsNotFound, NotModified => DocsNotModified, _ }
-import akka.actor.ActorRef
-import akka.pattern.ask
+import akka.actor.typed.{ ActorRef, ActorSystem }
+import akka.actor.typed.scaladsl.AskPattern._
+import akka.actor.typed.scaladsl.adapter._
 import akka.util.Timeout
-import javax.inject.Named
 import javax.inject.Inject
 import javax.inject.Singleton
 import models.PlayReleases
@@ -20,7 +20,6 @@ import play.api.i18n.Lang
 import play.api.mvc._
 import utils.HtmlHelpers
 
-import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 import scala.concurrent.duration._
 import scala.reflect.ClassTag
@@ -29,13 +28,15 @@ import scala.reflect.ClassTag
 class DocumentationController @Inject()(
     messages: MessagesApi,
     documentationRedirects: DocumentationRedirects,
-    @Named("documentation-actor") documentationActor: ActorRef,
+    documentationActor: ActorRef[Command],
     releases: PlayReleases,
     components: ControllerComponents,
-)(implicit executionContext: ExecutionContext, reverseRouter: ReverseRouter)
+)(implicit actorSystem: akka.actor.ActorSystem, reverseRouter: ReverseRouter)
     extends AbstractController(components) {
 
   private implicit val timeout = Timeout(5.seconds)
+  private implicit val typedSystem: ActorSystem[Nothing] = actorSystem.toTyped
+  import typedSystem.executionContext
 
   private val Rfc1123DateTimeFormat = DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT'").withZoneUTC()
 
@@ -56,12 +57,12 @@ class DocumentationController @Inject()(
 
   private def notModified(cacheId: String) = cacheable(NotModified, cacheId)
 
-  private def DocsAction(action: ActorRef => RequestHeader => Future[Result]) = Action.async(parse.empty) {
+  private def DocsAction(action: ActorRef[Command] => RequestHeader => Future[Result]) = Action.async(parse.empty) {
     implicit req =>
       action(documentationActor)(req)
   }
 
-  private def VersionAction(version: String)(action: (ActorRef, Version) => RequestHeader => Future[Result]) =
+  private def VersionAction(version: String)(action: (ActorRef[Command], Version) => RequestHeader => Future[Result]) =
     DocsAction { actor => implicit req =>
       Version.parse(version).fold(Future.successful(pageNotFound(EmptyContext, "", Nil))) { v =>
         action(actor, v)(req)
@@ -97,12 +98,12 @@ class DocumentationController @Inject()(
       }
   }
 
-  private def actorRequest[T <: DocumentationActor.Response[T]: ClassTag](
-      actor: ActorRef,
+  private def actorRequest[T <: Response[T]: ClassTag](
+      actor: ActorRef[Command],
       page: String,
-      msg: DocumentationActor.Request[T],
+      msg: ActorRef[Response[T]] => DocumentationActor.Request[T],
   )(block: T => Result)(implicit req: RequestHeader): Future[Result] = {
-    (actor ? msg).mapTo[Response[T]].flatMap {
+    actor.ask[Response[T]](replyTo => msg(replyTo)).flatMap {
       case DocsNotFound(context) =>
         val future = Future.sequence(context.displayVersions.map(pageExists(_, page)))
         future.map(l => pageNotFound(context, page, l.flatten))
@@ -114,9 +115,7 @@ class DocumentationController @Inject()(
   }
 
   def pageExists(version: Version, page: String): Future[Option[Version]] = {
-    import akka.pattern.ask
-    val queryPageExists = QueryPageExists(None, version, None, page)
-    (documentationActor ? queryPageExists).map {
+    documentationActor.ask[Response[PageExists]](replyTo => QueryPageExists(None, version, None, page, replyTo)).map {
       case PageExists(true, _) =>
         Some(version)
       case other =>
@@ -136,7 +135,7 @@ class DocumentationController @Inject()(
 
   def v1Page(lang: Option[Lang], v: String, page: String) = VersionAction(v) {
     (actor, version) => implicit req =>
-      actorRequest(actor, page, RenderV1Page(lang, version, etag(req), page)) {
+      actorRequest(actor, page, replyTo => RenderV1Page(lang, version, etag(req), page, replyTo)) {
         case RenderedPage(html, _, _, _, context, cacheId) =>
           val result = Ok(views.html.documentation.v1(messages, context, page, html))
           cacheable(withLangHeaders(result, page, context), cacheId)
@@ -145,17 +144,17 @@ class DocumentationController @Inject()(
 
   def v1Image(lang: Option[Lang], v: String, image: String) = {
     val resource = "images/" + image + ".png"
-    ResourceAction(v, resource, (version, etag) => LoadResource(lang, version, etag, resource))
+    ResourceAction(v, resource, (version, etag, replyTo) => LoadResource(lang, version, etag, resource, replyTo))
   }
 
   def v1File(lang: Option[Lang], v: String, file: String) = {
     val resource = "files/" + file
-    ResourceAction(v, resource, (version, etag) => LoadResource(lang, version, etag, resource), inline = false)
+    ResourceAction(v, resource, (version, etag, replyTo) => LoadResource(lang, version, etag, resource, replyTo), inline = false)
   }
 
   def v1Cheatsheet(lang: Option[Lang], v: String, category: String) = VersionAction(v) {
     (actor, version) => implicit req =>
-      actorRequest(actor, category, RenderV1Cheatsheet(lang, version, etag(req), category)) {
+      actorRequest(actor, category, replyTo => RenderV1Cheatsheet(lang, version, etag(req), category, replyTo)) {
         case V1Cheatsheet(sheets, title, otherCategories, context, cacheId) =>
           cacheable(
             Ok(views.html.documentation.cheatsheet(context, title, otherCategories, sheets)),
@@ -180,7 +179,7 @@ class DocumentationController @Inject()(
 
   def page(lang: Option[Lang], v: String, page: String) = VersionAction(v) { (actor, version) => implicit req =>
     val linkFuture = canonicalLinkHeader(page)
-    val resultFuture = actorRequest(actor, page, RenderPage(lang, version, etag(req), page)) {
+    val resultFuture = actorRequest(actor, page, replyTo => RenderPage(lang, version, etag(req), page, replyTo)) {
       case RenderedPage(html, sidebarHtml, breadcrumbsHtml, source, context, cacheId) =>
         val pageTitle = HtmlHelpers.friendlyTitle(page)
         val result = Ok(
@@ -220,7 +219,7 @@ class DocumentationController @Inject()(
   }
 
   def resource(lang: Option[Lang], v: String, resource: String) =
-    ResourceAction(v, resource, (version, etag) => LoadResource(lang, version, etag, resource))
+    ResourceAction(v, resource, (version, etag, replyTo) => LoadResource(lang, version, etag, resource, replyTo))
 
   // -- API
   def v1Api(lang: Option[Lang], version: String) = Action {
@@ -228,7 +227,7 @@ class DocumentationController @Inject()(
   }
 
   def api(lang: Option[Lang], v: String, path: String) =
-    ResourceAction(v, path, (version, etag) => LoadApi(version, etag, path))
+    ResourceAction(v, path, (version, etag, replyTo) => LoadApi(version, etag, path, replyTo))
 
   def apiRedirect(lang: Option[Lang], version: String, path: String) =
     Action(MovedPermanently(reverseRouter.api(version, path)))
@@ -287,11 +286,11 @@ class DocumentationController @Inject()(
   private def ResourceAction(
       version: String,
       resource: String,
-      message: (Version, Option[String]) => Any,
+      message: (Version, Option[String], ActorRef[Response[Resource]]) => Command,
       inline: Boolean = true,
   ) = {
     VersionAction(version) { (actor, version) => implicit req =>
-      (actor ? message(version, etag(req))).mapTo[Response[Resource]].map {
+      actor.ask[Response[Resource]](replyTo => message(version, etag(req), replyTo)).map {
         case DocsNotFound(context)    => pageNotFound(context, resource, Nil)
         case DocsNotModified(cacheId) => notModified(cacheId)
         case Resource(source, size, cacheId) =>
@@ -311,8 +310,7 @@ class DocumentationController @Inject()(
   private def canonicalLinkHeader(page: String) = {
     val Array(epoch, major, minor) = releases.latest.version.split("\\.", 4)
     val latestVersion              = Version.parse(s"$epoch.$major.x").get
-    val queryPageExists            = QueryPageExists(None, latestVersion, None, page)
-    (documentationActor ? queryPageExists).map {
+    documentationActor.ask[Response[PageExists]](replyTo => QueryPageExists(None, latestVersion, None, page, replyTo)).map {
       case PageExists(true, _) =>
         val canonicalUrl = s"https://www.playframework.com/documentation/$latestVersion/$page"
         val link         = s"""<$canonicalUrl>; rel="canonical""""
@@ -323,11 +321,11 @@ class DocumentationController @Inject()(
   }
 
   private def switchAction(
-      msg: (Option[Lang], Version, Option[String], String) => LangRequest[PageExists],
+      msg: (Option[Lang], Version, Option[String], String, ActorRef[Response[PageExists]]) => LangRequest[PageExists],
       home: String,
   ) = { (lang: Option[Lang], v: String, page: String) =>
     VersionAction(v) { (actor, version) => implicit req =>
-      actorRequest(actor, page, msg(lang, version, etag(req), page)) {
+      actorRequest(actor, page, replyTo => msg(lang, version, etag(req), page, replyTo)) {
         case PageExists(true, cacheId) =>
           cacheable(TemporaryRedirect(reverseRouter.page(lang, version.name, page)), cacheId)
         case PageExists(false, cacheId) =>

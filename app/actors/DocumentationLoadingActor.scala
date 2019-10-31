@@ -9,7 +9,6 @@ import akka.util.ByteString
 import org.apache.commons.io.IOUtils
 import play.doc.PlayDoc
 import play.doc.FileRepository
-import play.doc.RenderedPage
 import utils._
 
 /**
@@ -25,7 +24,7 @@ import utils._
  */
 object DocumentationLoadingActor {
   sealed trait Command
-  case class RenderPage(page: String, repo: PlayDoc, replyTo: ActorRef[Option[RenderedPage]]) extends Command
+  case class RenderPage(page: String, repo: PlayDoc, replyTo: ActorRef[Option[play.doc.RenderedPage]]) extends Command
   case class RenderV1Page(page: String, repo: ExtendedFileRepository, replyTo: ActorRef[Option[String]]) extends Command
   case class RenderV1Cheatsheet(category: String, repo: ExtendedFileRepository, replyTo: ActorRef[Option[V1Cheatsheet]]) extends Command
   case class LoadResource(file: String, repo: FileRepository, replyTo: ActorRef[Option[Resource]]) extends Command

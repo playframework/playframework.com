@@ -3,8 +3,7 @@ package actors
 import actors.DocumentationActor.DocumentationGitRepo
 import actors.DocumentationActor.DocumentationGitRepos
 import actors.DocumentationActor.UpdateDocumentation
-import akka.actor.ActorRef
-import akka.actor.typed.Behavior
+import akka.actor.typed.{ ActorRef, Behavior }
 import akka.actor.typed.scaladsl.{ ActorContext, Behaviors, LoggerOps }
 import models.documentation._
 import org.apache.commons.io.IOUtils
@@ -27,13 +26,16 @@ object DocumentationPollingActor {
    * Factory for creating the documentation polling actor
    */
   trait Factory {
-    def apply(repos: DocumentationGitRepos, documentationActor: ActorRef): Behavior[Tick.type]
+    def apply(
+        repos: DocumentationGitRepos,
+        documentationActor: ActorRef[DocumentationActor.Command],
+    ): Behavior[Tick.type]
   }
 
   def apply(
       messages: MessagesApi,
       repos: DocumentationGitRepos,
-      documentationActor: ActorRef,
+      documentationActor: ActorRef[DocumentationActor.Command],
   ): Behavior[Tick.type] = Behaviors.setup { context =>
     Behaviors.withTimers { timers =>
       timers.startTimerWithFixedDelay(Tick, Tick, 10.minutes) // no 1.minute initial delay
@@ -50,7 +52,7 @@ object DocumentationPollingActor {
 class DocumentationPollingActor(
     messages: MessagesApi,
     repos: DocumentationGitRepos,
-    documentationActor: ActorRef,
+    documentationActor: ActorRef[DocumentationActor.Command],
     context: ActorContext[DocumentationPollingActor.Tick.type],
 ) {
   import DocumentationPollingActor.Tick

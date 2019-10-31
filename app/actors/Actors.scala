@@ -16,7 +16,7 @@ import play.api.libs.concurrent.AkkaGuiceSupport
 
 class ActorsModule extends AbstractModule with AkkaGuiceSupport {
   override def configure() = {
-    bindActor[DocumentationActor]("documentation-actor")
+    bindTypedActor(DocumentationActor, "documentation-actor")
     bind(classOf[DocumentationPollingActor.Factory])
       .toProvider(classOf[DocumentationPollingActorFactoryProvider])
     bind(classOf[DocumentationConfig]).toProvider(classOf[DocumentationConfigProvider])
