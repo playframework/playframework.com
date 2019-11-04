@@ -1,28 +1,31 @@
 package actors
 
-import javax.inject.Inject
-
 import actors.SitemapGeneratingActor.GenerateSitemap
-import akka.actor.ActorRef
-import akka.actor.Props
-import akka.actor.Actor
-import akka.pattern.ask
+import akka.actor.typed.{ ActorRef, ActorSystem, Behavior, DispatcherSelector, PostStop, PreRestart, Signal, SupervisorStrategy }
+import akka.actor.typed.scaladsl.AskPattern._
+import akka.actor.typed.scaladsl.ActorContext
+import akka.actor.typed.scaladsl.Behaviors
+import akka.actor.typed.scaladsl.Routers
+import akka.actor.typed.scaladsl.adapter._
 import akka.pattern.pipe
-import akka.routing.SmallestMailboxPool
 import akka.stream.scaladsl.Source
 import akka.util.ByteString
 import akka.util.Timeout
+import com.google.inject.Provides
 import models.documentation._
 import play.api.i18n.Lang
-import play.api.libs.concurrent.InjectedActorSupport
+import play.api.libs.concurrent.ActorModule
 import utils.PlayGitRepository
+import scala.concurrent.Future
 import scala.concurrent.duration._
-import scala.reflect.ClassTag
 
 /**
  * Protocol for the documentation actor.
  */
-object DocumentationActor {
+object DocumentationActor extends ActorModule {
+  type Message = Command
+
+  sealed trait Command
 
   /**
    * A response
@@ -32,9 +35,10 @@ object DocumentationActor {
   /**
    * A request
    */
-  sealed trait Request[R <: Response[R]] {
+  sealed trait Request[R <: Response[R]] extends Command {
     def version: Version
     def cacheId: Option[String]
+    def replyTo: ActorRef[Response[R]]
   }
 
   /**
@@ -70,7 +74,7 @@ object DocumentationActor {
    * @param version The version of the documentation to fetch the page for.
    * @param page The page to render.
    */
-  case class RenderPage(lang: Option[Lang], version: Version, cacheId: Option[String], page: String)
+  case class RenderPage(lang: Option[Lang], version: Version, cacheId: Option[String], page: String, replyTo: ActorRef[Response[RenderedPage]])
       extends LangRequest[RenderedPage]
 
   /**
@@ -99,7 +103,7 @@ object DocumentationActor {
    * @param version The version of the documentation to get the resource from.
    * @param resource The resource path.
    */
-  case class LoadResource(lang: Option[Lang], version: Version, cacheId: Option[String], resource: String)
+  case class LoadResource(lang: Option[Lang], version: Version, cacheId: Option[String], resource: String, replyTo: ActorRef[Response[Resource]])
       extends LangRequest[Resource]
 
   /**
@@ -108,7 +112,7 @@ object DocumentationActor {
    * @param version The version of the documentation to load the resource for.
    * @param resource The resource path.
    */
-  case class LoadApi(version: Version, cacheId: Option[String], resource: String) extends Request[Resource]
+  case class LoadApi(version: Version, cacheId: Option[String], resource: String, replyTo: ActorRef[Response[Resource]]) extends Request[Resource]
 
   /**
    * A resource.
@@ -123,17 +127,17 @@ object DocumentationActor {
    *
    * @param documentation The documnetation to update.
    */
-  case class UpdateDocumentation(documentation: Documentation)
+  case class UpdateDocumentation(documentation: Documentation) extends Command
 
   /**
    * Get a summary of the documentation.
    */
-  case object GetSummary
+  case class GetSummary(replyTo: ActorRef[DocumentationSummary]) extends Command
 
   /**
    * Check whether the given page exists at the given version.
    */
-  case class QueryPageExists(lang: Option[Lang], version: Version, cacheId: Option[String], page: String)
+  case class QueryPageExists(lang: Option[Lang], version: Version, cacheId: Option[String], page: String, replyTo: ActorRef[Response[PageExists]])
       extends LangRequest[PageExists]
 
   /**
@@ -148,10 +152,10 @@ object DocumentationActor {
    * @param version The version of the documentation to fetch the page for.
    * @param page The page to render.
    */
-  case class RenderV1Page(lang: Option[Lang], version: Version, cacheId: Option[String], page: String)
+  case class RenderV1Page(lang: Option[Lang], version: Version, cacheId: Option[String], page: String, replyTo: ActorRef[Response[RenderedPage]])
       extends LangRequest[RenderedPage]
 
-  case class RenderV1Cheatsheet(lang: Option[Lang], version: Version, cacheId: Option[String], category: String)
+  case class RenderV1Cheatsheet(lang: Option[Lang], version: Version, cacheId: Option[String], category: String, replyTo: ActorRef[Response[V1Cheatsheet]])
       extends LangRequest[V1Cheatsheet]
 
   case class V1Cheatsheet(
@@ -165,7 +169,7 @@ object DocumentationActor {
   /**
    * Check whether the given page exists at the given version.
    */
-  case class QueryV1PageExists(lang: Option[Lang], version: Version, cacheId: Option[String], page: String)
+  case class QueryV1PageExists(lang: Option[Lang], version: Version, cacheId: Option[String], page: String, replyTo: ActorRef[Response[PageExists]])
       extends LangRequest[PageExists]
 
   /**
@@ -188,7 +192,7 @@ object DocumentationActor {
   /**
    * Get a sitemap describing the documentation.
    */
-  case object GetSitemap
+  case class GetSitemap(replyTo: ActorRef[DocumentationSitemap]) extends Command
 
   /**
    * A sitemap describing all the pages in the documentation.
@@ -200,6 +204,14 @@ object DocumentationActor {
   case class DocumentationGitRepos(default: DocumentationGitRepo, translations: Seq[DocumentationGitRepo])
 
   case class DocumentationGitRepo(config: TranslationConfig, repo: PlayGitRepository)
+
+  @Provides
+  def apply(
+      config: DocumentationConfig,
+      pollerFactory: DocumentationPollingActor.Factory,
+  ): Behavior[Command] = Behaviors.setup(context =>
+    new DocumentationActor(config, pollerFactory, context).noDocumentation
+  )
 }
 
 /**
@@ -209,17 +221,18 @@ object DocumentationActor {
  * it merely coordinates everything.  It keeps a reference to the current documentation index.  All IO, page rendering,
  * etc is delegated to the other documentation actors.
  */
-class DocumentationActor @Inject()(
+class DocumentationActor(
     config: DocumentationConfig,
     pollerFactory: DocumentationPollingActor.Factory,
-) extends Actor
-    with InjectedActorSupport {
+    context: ActorContext[DocumentationActor.Command],
+) {
 
   import DocumentationActor._
   import actors.{ DocumentationLoadingActor => Loader }
-  import context.dispatcher
 
   implicit val timeout = Timeout(5.seconds)
+  implicit val system: ActorSystem[Nothing] = context.system
+  import system.executionContext
 
   private def createRepo(config: TranslationConfig) = {
     new DocumentationGitRepo(config, new PlayGitRepository(config.repo, config.remote, config.basePath))
@@ -234,100 +247,79 @@ class DocumentationActor @Inject()(
    * The poller, when it starts, scans all repos and will send the documentation,
    * moving this actor into the documentation loaded state.
    */
-  private val poller =
-    injectedChild(pollerFactory(repos, self), "documentationPoller", _.withDispatcher("polling-dispatcher"))
+  private val poller = context.spawn(
+    pollerFactory(repos, context.self), "documentationPoller", DispatcherSelector.fromConfig("polling-dispatcher"))
 
-  private val loader = context.actorOf(
-    Props[DocumentationLoadingActor]
-      .withRouter(SmallestMailboxPool(nrOfInstances = 4))
-      .withDispatcher("loader-dispatcher"),
+  private val loader = context.spawn(
+    Routers.pool(4)(Behaviors.supervise(Loader()).onFailure[Exception](SupervisorStrategy.restart)),
     "documentationLoaders",
+    DispatcherSelector.fromConfig("loader-dispatcher"),
   )
 
-  private val sitemapGenerator = context.actorOf(
-    Props[SitemapGeneratingActor]
-      .withDispatcher("sitemapgenerator-dispatcher"),
+  private val sitemapGenerator = context.spawn(
+    SitemapGeneratingActor(),
     "sitemapGenerator",
+    DispatcherSelector.fromConfig("sitemapgenerator-dispatcher"),
   )
 
-  override def postStop() = {
-    repos.default.repo.close()
-    repos.translations.foreach(_.repo.close())
+  private def postStop: PartialFunction[(ActorContext[Command], Signal), Behavior[Command]] = {
+    case (_, signal) if signal == PreRestart || signal == PostStop =>
+      repos.default.repo.close()
+      repos.translations.foreach(_.repo.close())
+      Behaviors.same
   }
 
   val version21 = Version("2.1", 2, 1, 0, 0, Release)
 
-  def receive = noDocumentation(Nil)
-
   /**
    * Initial state, documentation not loaded, all messages buffered.
    */
-  def noDocumentation(pendingRequests: List[(Any, ActorRef)]): Receive = {
-    case UpdateDocumentation(docs) =>
-      context.become(documentationLoaded(docs))
-      pendingRequests.reverse.foreach(m => self.tell(m._1, m._2))
-    case other =>
-      context.become(noDocumentation((other, sender()) :: pendingRequests))
-  }
+  def noDocumentation: Behavior[Command] =
+    Behaviors.withStash(Int.MaxValue) { buffer =>
+      Behaviors.receiveMessage[Command] {
+        case UpdateDocumentation(docs) =>
+          buffer.unstashAll(documentationLoaded(docs))
+        case other =>
+          buffer.stash(other)
+          Behaviors.same
+      }.receiveSignal(postStop)
+    }
 
   /**
    * Final state, documentation loaded
    */
-  def documentationLoaded(documentation: Documentation): Actor.Receive = {
+  def documentationLoaded(documentation: Documentation): Behavior[Command] = {
 
-    /**
-     * Do the given block for the given lang
-     */
-    def forLang[T](req: LangRequest[_])(block: (Lang, Translation, TranslationVersion) => Unit) = {
-      // Fold lang
-      req.lang.fold[Option[(Lang, Translation)]](
-        // No lang, use default
-        Some((documentation.defaultLang, documentation.default)),
-      ) { lang =>
-        // Lang was requested, see if we have that lang
-        documentation.translations.get(lang).map { translation =>
-          (lang, translation)
+    /** Do the given block for the given lang */
+    def forLang[R <: Response[R]](req: LangRequest[R], replyTo: ActorRef[Response[Nothing]])(
+        block: (Lang, Translation, TranslationVersion) => Future[Response[R]],
+    ) = {
+      val (lang, maybeTranslation) = req.lang match {
+        case Some(lang) => (lang, documentation.translations.get(lang))
+        case None       => (documentation.defaultLang, Some(documentation.default))
+      }
+      maybeTranslation match {
+        case Some(translation) => translation.byVersion.get(req.version) match {
+          case Some(tv) =>
+            if (req.cacheId.exists(_ == tv.cacheId)) {
+              replyTo ! NotModified(tv.cacheId)
+            } else {
+              block(lang, translation, tv).pipeTo(replyTo.toClassic)
+            }
+          case None => replyTo ! NotFound(notFoundTranslationContext(lang, translation.displayVersions))
         }
-      } match {
-        case Some((lang, translation)) =>
-          translation.byVersion.get(req.version) match {
-            case Some(tv) =>
-              req.cacheId match {
-                case Some(cacheId) if cacheId == tv.cacheId => sender() ! NotModified(cacheId)
-                case _                                      => block(lang, translation, tv)
-              }
-            case _ => sender() ! NotFound(notFoundTranslationContext(lang, translation.displayVersions))
-          }
-
-        // No lang was found
-        case _ => sender() ! NotFound(notFoundTranslationContext())
+        case None => replyTo ! NotFound(notFoundTranslationContext())
       }
     }
 
-    /**
-     * Make a loader request for the given language and version.
-     *
-     * The generated message, when asked from the loader, is expected to return an option of the given return type.
-     *
-     * @param incomingRequest The request message
-     * @param loaderRequest A function that creates the request message from the given repository
-     * @param response A function that creates the response message from the answer, to send back to the sender
-     */
-    def loaderRequestOpt[T](incomingRequest: LangRequest[_])(
-        loaderRequest: TranslationVersion => Any,
-    )(response: (Lang, Translation, TranslationVersion, T) => Response[_]) = {
-      forLang(incomingRequest) { (lang, translation, tv) =>
-        val askRequest = for {
-          answerOpt <- (loader ? loaderRequest(tv)).mapTo[Option[T]]
-        } yield {
-          answerOpt
-            .map { answer =>
-              response(lang, translation, tv, answer)
-            }
-            .getOrElse(NotFound(notFoundTranslationContext(lang, translation.displayVersions)))
+    def loaderRequestOpt[LR, R <: Response[R]](incomingRequest: LangRequest[R], replyTo: ActorRef[Response[R]])(
+        loaderRequest: (TranslationVersion, ActorRef[Option[LR]]) => Loader.Command,
+    )(response: (Lang, Translation, TranslationVersion, LR) => Response[R]) = {
+      forLang(incomingRequest, replyTo) { (lang, translation, tv) =>
+        loader.ask[Option[LR]](replyTo => loaderRequest(tv, replyTo)).map {
+          case Some(answer) => response(lang, translation, tv, answer)
+          case None         => NotFound(notFoundTranslationContext(lang, translation.displayVersions))
         }
-
-        askRequest.pipeTo(sender())
       }
     }
 
@@ -339,17 +331,16 @@ class DocumentationActor @Inject()(
      * @param incomingRequest The request message
      * @param loaderRequest A function that creates the request message from the given repository
      * @param response A function that creates the response message from the answer, to send back to the sender
+     * @tparam LR the type of the response message from the loader
+     * @tparam R the type of the response message from this actor
      */
-    def loaderRequest[T: ClassTag](incomingRequest: LangRequest[_])(
-        loaderRequest: TranslationVersion => Any,
-    )(response: (Lang, Translation, TranslationVersion, T) => Response[_]) = {
-      forLang(incomingRequest) { (lang, translation, tv) =>
-        val askRequest = for {
-          answer <- (loader ? loaderRequest(tv)).mapTo[T]
-        } yield {
+    def loaderRequest[LR, R <: Response[R]](incomingRequest: LangRequest[R], replyTo: ActorRef[Response[R]])(
+        loaderRequest: (TranslationVersion, ActorRef[LR]) => Loader.Command,
+    )(response: (Lang, Translation, TranslationVersion, LR) => Response[R]) = {
+      forLang(incomingRequest, replyTo) { (lang, translation, tv) =>
+        loader.ask[LR](replyTo => loaderRequest(tv, replyTo)).map { answer =>
           response(lang, translation, tv, answer)
         }
-        askRequest.pipeTo(sender())
       }
     }
 
@@ -413,14 +404,13 @@ class DocumentationActor @Inject()(
       )
     }
 
-    {
-
+    Behaviors.receiveMessage[Command] {
       case UpdateDocumentation(docs) =>
-        context.become(documentationLoaded(docs))
+        documentationLoaded(docs)
 
-      case rp @ RenderPage(_, version, _, page) =>
-        loaderRequestOpt[play.doc.RenderedPage](rp) { tv =>
-          Loader.RenderPage(page, tv.playDoc)
+      case rp @ RenderPage(_, version, _, page, replyTo) =>
+        loaderRequestOpt[play.doc.RenderedPage, RenderedPage](rp, replyTo) { (tv, replyTo) =>
+          Loader.RenderPage(page, tv.playDoc, replyTo)
         } { (lang, translation, tv, page) =>
           val source = if (version.versionType.isLatest) {
             translation.source.map { gitHubSource =>
@@ -437,10 +427,11 @@ class DocumentationActor @Inject()(
             cacheId = tv.cacheId,
           )
         }
+        Behaviors.same
 
-      case rp @ RenderV1Page(_, version, _, page) =>
-        loaderRequestOpt[String](rp) { tv =>
-          Loader.RenderV1Page(page, tv.repo)
+      case rp @ RenderV1Page(_, version, _, page, replyTo) =>
+        loaderRequestOpt[String, RenderedPage](rp, replyTo) { (tv, replyTo) =>
+          Loader.RenderV1Page(page, tv.repo, replyTo)
         } { (lang, translation, tv, content) =>
           RenderedPage(
             pageHtml = content,
@@ -451,61 +442,61 @@ class DocumentationActor @Inject()(
             cacheId = tv.cacheId,
           )
         }
+        Behaviors.same
 
       case lr: LoadResource =>
-        loaderRequestOpt[Loader.Resource](lr) { tv =>
-          Loader.LoadResource(lr.resource, tv.repo)
+        loaderRequestOpt[Loader.Resource, Resource](lr, lr.replyTo) { (tv, replyTo) =>
+          Loader.LoadResource(lr.resource, tv.repo, replyTo)
         } { (_, _, tv, resource) =>
           Resource(resource.content, resource.size, tv.cacheId)
         }
+        Behaviors.same
 
-      case LoadApi(version, cacheId, resource) =>
+      case LoadApi(version, cacheId, resource, replyTo) =>
         documentation.default.byVersion.get(version) match {
-          case Some(tr) if cacheId.exists(_ == tr.cacheId) =>
-            sender() ! NotModified(tr.cacheId)
           case Some(tr) =>
-            val resourceRequest = for {
-              maybeResource <- (loader ? Loader.LoadResource("api/" + resource, tr.repo))
-                .mapTo[Option[Loader.Resource]]
-            } yield {
-              maybeResource
-                .map { resource =>
-                  Resource(resource.content, resource.size, tr.cacheId)
-                }
-                .getOrElse(NotFound(notFoundTranslationContext()))
-            }
-
-            resourceRequest.pipeTo(sender())
-
-          case None => sender() ! NotFound(notFoundTranslationContext())
+            if (cacheId.exists(_ == tr.cacheId)) {
+              replyTo ! NotModified(tr.cacheId)
+            } else {
+              loader.ask[Option[Loader.Resource]](replyTo => Loader.LoadResource(s"api/$resource", tr.repo, replyTo))
+                  .map {
+                    case Some(resource) => Resource(resource.content, resource.size, tr.cacheId)
+                    case None           => NotFound(notFoundTranslationContext())
+                  }.pipeTo(replyTo.toClassic)
+          }
+          case None => replyTo ! NotFound(notFoundTranslationContext())
         }
+        Behaviors.same
 
-      case GetSummary =>
-        sender() ! DocumentationSummary(
+      case GetSummary(replyTo) =>
+        replyTo ! DocumentationSummary(
           documentation.default.defaultVersion,
           documentation.defaultLang,
           documentation.allLangs,
-          documentation.translations.mapValues(_.defaultVersion),
+          documentation.translations.view.mapValues(_.defaultVersion).toMap,
           notFoundTranslationContext(),
         )
+        Behaviors.same
 
-      case pe @ QueryPageExists(_, _, _, page) =>
-        loaderRequest[Boolean](pe) { tv =>
-          Loader.PageExists(page, tv.playDoc, tv.repo)
+      case pe @ QueryPageExists(_, _, _, page, replyTo) =>
+        loaderRequest[Boolean, PageExists](pe, replyTo) { (tv, replyTo) =>
+          Loader.PageExists(page, tv.playDoc, tv.repo, replyTo)
         } { (_, _, tv, exists) =>
           PageExists(exists, tv.cacheId)
         }
+        Behaviors.same
 
-      case pe @ QueryV1PageExists(_, _, _, page) =>
-        loaderRequest[Boolean](pe) { tv =>
-          Loader.V1PageExists(page, tv.repo)
+      case pe @ QueryV1PageExists(_, _, _, page, replyTo) =>
+        loaderRequest[Boolean, PageExists](pe, replyTo) { (tv, replyTo) =>
+          Loader.V1PageExists(page, tv.repo, replyTo)
         } { (_, _, tv, exists) =>
           PageExists(exists, tv.cacheId)
         }
+        Behaviors.same
 
-      case rc @ RenderV1Cheatsheet(_, version, _, category) =>
-        loaderRequestOpt[Loader.V1Cheatsheet](rc) { tv =>
-          Loader.RenderV1Cheatsheet(category, tv.repo)
+      case rc @ RenderV1Cheatsheet(_, version, _, category, replyTo) =>
+        loaderRequestOpt[Loader.V1Cheatsheet, V1Cheatsheet](rc, replyTo) { (tv, replyTo) =>
+          Loader.RenderV1Cheatsheet(category, tv.repo, replyTo)
         } { (lang, translation, tv, cs) =>
           V1Cheatsheet(
             cs.sheets,
@@ -515,13 +506,14 @@ class DocumentationActor @Inject()(
             tv.cacheId,
           )
         }
+        Behaviors.same
 
-      case GetSitemap =>
-        (sitemapGenerator ? GenerateSitemap(documentation))
-          .mapTo[Sitemap]
+      case GetSitemap(replyTo) =>
+        sitemapGenerator.ask[Sitemap](replyTo => GenerateSitemap(documentation, replyTo))
           .map(DocumentationSitemap)
-          .pipeTo(sender())
-    }
+          .pipeTo(replyTo.toClassic)
+        Behaviors.same
+    }.receiveSignal(postStop)
   }
 
 }

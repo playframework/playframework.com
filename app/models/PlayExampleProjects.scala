@@ -81,7 +81,7 @@ class PlayExampleProjectsService @Inject()(
           cache.set(cacheKey(version), playProjects, examplesCacheTtl)
         }
         playProjects
-      case JsError(errors: Seq[(JsPath, Seq[JsonValidationError])]) =>
+      case JsError(errors) =>
         logger.error(s"Cannot parse example projects for $version\n$errors")
         Seq.empty
     }

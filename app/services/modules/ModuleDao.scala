@@ -37,7 +37,7 @@ class DbModuleDao @Inject() extends ModuleDao {
   // not a Map because ModuleId can be duplicate in this Seq
   private val moduleReleases: Seq[(ModuleId, Release)] = InMemDatabase.rawReleases
   private val releasesByModuleId: Map[ModuleId, Seq[Release]] =
-    moduleReleases.groupBy(_._1).mapValues(_.map(_._2))
+    moduleReleases.groupBy(_._1).view.mapValues(_.map(_._2)).toMap
   // left join. Some modules may not have a release.
   private val everything: Seq[(Module, Seq[Release])] = modules.map {
     case (id, mod) => mod -> releasesByModuleId.getOrElse(id, Seq.empty[Release]).sortBy(_.date)

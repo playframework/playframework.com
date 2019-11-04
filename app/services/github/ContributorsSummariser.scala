@@ -100,9 +100,9 @@ class CachingContributorsSummariser @Inject()(
 
   @volatile private var contributors: Contributors = FallbackContributors.contributors
 
-  actorSystem.scheduler.schedule(0.seconds, 24.hours) {
+  actorSystem.scheduler.scheduleWithFixedDelay(0.seconds, 24.hours)(() => {
     delegate.fetchContributors.onComplete {
-      case Failure(t) => log.error("Unable to load contributors from GitHub", t)
+      case Failure(t)  => log.error("Unable to load contributors from GitHub", t)
       case Success(cs) =>
         if (contributors != cs) {
           val count = contributors.committers.size + contributors.playOrganisation.size + contributors.contributors.size
@@ -110,7 +110,7 @@ class CachingContributorsSummariser @Inject()(
         }
         contributors = cs
     }
-  }
+  })
 
   /**
    * Fetch and summarise the contributors from GitHub.

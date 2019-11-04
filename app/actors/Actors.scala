@@ -11,15 +11,23 @@ import models.documentation._
 import org.slf4j.LoggerFactory
 import play.api._
 import play.api.i18n.Lang
+import play.api.i18n.MessagesApi
 import play.api.libs.concurrent.AkkaGuiceSupport
 
 class ActorsModule extends AbstractModule with AkkaGuiceSupport {
   override def configure() = {
-    bindActor[DocumentationActor]("documentation-actor")
-    bindActorFactory[DocumentationPollingActor, DocumentationPollingActor.Factory]
+    bindTypedActor(DocumentationActor, "documentation-actor")
+    bind(classOf[DocumentationPollingActor.Factory])
+      .toProvider(classOf[DocumentationPollingActorFactoryProvider])
     bind(classOf[DocumentationConfig]).toProvider(classOf[DocumentationConfigProvider])
     bind(classOf[DocumentationRedirects]).toProvider(classOf[DocumentationRedirectsProvider])
   }
+}
+
+@Singleton
+class DocumentationPollingActorFactoryProvider @Inject()(messages: MessagesApi)
+    extends Provider[DocumentationPollingActor.Factory] {
+  def get() = DocumentationPollingActor(messages, _, _)
 }
 
 @Singleton
