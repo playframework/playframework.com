@@ -1,3 +1,10 @@
+## Play 2.7.4
+
+*Released 4 December 2019*
+
+[All changes](https://github.com/playframework/playframework/compare/2.7.3...2.7.4/)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/92?closed=1)
+
 ## Play 2.7.3
 
 *Released 19 June 2019*
@@ -1539,4 +1546,3 @@ arguments
 **Vulnerabilities fixed**
 
 * [20151230-SessionHijack](/security/vulnerability/20151230-SessionHijack) Session hijack
-
