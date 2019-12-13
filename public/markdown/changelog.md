@@ -1,3 +1,11 @@
+## Play 2.8.0
+
+*Released 12 Dec 2019*
+
+[Highlights](https://playframework.com/documentation/2.8.x/Highlights28)
+[Migration Guide](https://playframework.com/documentation/2.8.x/Migration28)
+[All changes](https://github.com/playframework/playframework/compare/2.7.0...2.8.0/)
+
 ## Play 2.6.25
 
 *Released 6 Dec 2019*
