@@ -1,11 +1,15 @@
 {
     "latest": {
-        "version": "2.8.0",
-        "date": "Dec 12 2019"
+        "version": "2.8.1",
+        "date": "Jan 31 2020"
     },
     "development": [
     ],
     "previous": [
+        {
+            "version": "2.8.0",
+            "date": "Dec 12 2019"
+        },
         {
             "version": "2.7.4",
             "date": "Dec 4 2019"
