@@ -8,7 +8,7 @@ scalacOptions ++= List("-encoding", "utf8", "-deprecation", "-feature", "-unchec
 
 libraryDependencies ++= Seq(
   "com.typesafe.play" %% "play-doc"           % "2.1.0",
-  "org.eclipse.jgit"  % "org.eclipse.jgit"    % "5.7.0.202003110725-r",
+  "org.eclipse.jgit"  % "org.eclipse.jgit"    % "5.8.0.202006091008-r",
   "com.damnhandy"     % "handy-uri-templates" % "2.1.8",
   "org.webjars"       % "jquery"              % "3.5.1",
   "org.webjars"       % "html5shiv"           % "3.7.3",
