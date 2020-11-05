@@ -1,15 +1,23 @@
 {
     "latest": {
-        "version": "2.8.3",
-            "date": "Oct 26 2020"
+        "version": "2.8.4",
+            "date": "Nov 5 2020"
     },
     "development": [
     ],
     "previous": [
         {
+            "version": "2.7.7",
+            "date": "Nov 5 2020"
+        },   
+        {
+            "version": "2.8.3",
+            "date": "Oct 26 2020"
+        },
+        {
             "version": "2.7.6",
             "date": "Oct 26 2020"
-        },   
+        },
         {
             "version": "2.8.2",
             "date": "May 21 2020"
