@@ -1,3 +1,16 @@
+## Play 2.8.6
+
+*Released 10 December 2020
+
+[All changes](https://github.com/playframework/playframework/compare/2.8.5...2.8.6/)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/110?closed=1)
+
+## Play 2.7.7
+
+*Released 10 December 2020
+
+[All changes](https://github.com/playframework/playframework/compare/2.7.7...2.7.8/)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/109?closed=1)
 
 ## Play 2.8.5
 
