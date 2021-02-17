@@ -1,0 +1,116 @@
+@import controllers.documentation.ReverseRouter
+    @(title: String)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
+@main(title, "blog"){
+    <header id="top">
+        <div class="wrapper">
+            <h1>
+                @title
+            </h1>
+        </div>
+    </header>
+    <section id="content">
+        <article>
+            <section>
+                <h1></h1>
+
+                <p>On the 17th of April, Oracle Labs presented the community the first release cadence for their new universal virtual machine called <a href="https://www.graalvm.org/">GraalVM</a>. Graal is a Polyglot VM that can run multiple languages and can interop between them without any overhead. In this blog post I will go into details what this means for Scala and especially for Play Framework and what runtime characteristics the new VM has, when running Play on top of it.</p>
+                <p>Graal currently comes in <a href="https://www.graalvm.org/downloads/">two flavors</a>, one is the Community Edition which is open source and comes with the same license as a regular OpenJDK VM. Sadly at the moment the Community Edition is only available for Linux, which is good for production but mostly not enough for everyday development if you are not running Linux on your development machine.</p>
+                <p>There is also another edition called the Enterprise Edition which is not open source and you need to acquire a license to use it in production, but according to the docs it’s safe to use for development and evaluation. The Enterprise Edition is currently available for macOS and Linux, it has further benefits (comes with a smaller footprint and has more sandbox capabilities).</p>
+                <p>In the future the Graal team will probably present us with more options regarding the operating system. For our blog post we stick to the Community Edition on Linux.</p>
+                <h3 id="play-production-mode">Play Production Mode</h3>
+                <p>Running Play or any Scala application on Graal is probably as easy as just switching to another Java VM. We will build the <a href="https://example.lightbend.com/v1/download/play-scala-starter-example">Play example project</a>, via <a href="https://www.playframework.com/documentation/2.6.x/Deploying#Using-the-SBT-assembly-plugin">sbt-assembly</a> and copy the production JAR to a regular server.</p>
+                <p>After downloading Graal and unpacking it, one can just run the application via <code>$GRAAL_HOME/bin/java -Xms3G -Xmx3G -XX:+UseG1GC -jar play-scala-starter-example-assembly-1.0-SNAPSHOT.jar</code>. Keep in mind for a production run, one would use a service manager or run the application inside an orchestration system like Kubernetes.</p>
+                <p>The Play application started without any problem and one could use <code>curl</code> to ensure it is running via <code>curl http://graalserver:9000/</code> and it will print the Play “hello world page”.</p>
+                <h2 id="-performance-of-graal">“Performance” of Graal</h2>
+                <p>After having the application running we can check how many requests/s it can serve via Graal, so we start up <code>wrk</code> with the following params: <code>wrk -c100 -d1m -t2 http://graalserver:9000</code> and get an output like that (after a few runs):</p>
+                <pre><code>Running <span class="hljs-number">1</span>m test @@ <span class="hljs-keyword">http</span>://<span class="hljs-number">195.201</span><span class="hljs-number">.117</span><span class="hljs-number">.210</span>:<span class="hljs-number">9000</span>
+  <span class="hljs-number">2</span> threads <span class="hljs-keyword">and</span> <span class="hljs-number">100</span> connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    <span class="hljs-number">33.83</span>ms   <span class="hljs-number">62.66</span>ms   <span class="hljs-number">1.56</span>s    <span class="hljs-number">94.36</span>%
+    Req/Sec     <span class="hljs-number">2.15</span>k   <span class="hljs-number">314.10</span>     <span class="hljs-number">3.17</span>k    <span class="hljs-number">68.92</span>%
+  <span class="hljs-number">255800</span> requests <span class="hljs-keyword">in</span> <span class="hljs-number">1.00</span>m, <span class="hljs-number">1.76</span>GB <span class="hljs-built_in">read</span>
+Requests/<span class="hljs-built_in">sec</span>:   <span class="hljs-number">4260.50</span>
+Transfer/<span class="hljs-built_in">sec</span>:     <span class="hljs-number">30.07</span>MB
+</code></pre><p>We can also compare that with a regular JVM which will output the following (after a few runs):</p>
+                <pre><code>Running <span class="hljs-number">1</span>m test @@ <span class="hljs-keyword">http</span>://<span class="hljs-number">195.201</span><span class="hljs-number">.117</span><span class="hljs-number">.210</span>:<span class="hljs-number">9000</span>
+  <span class="hljs-number">2</span> threads <span class="hljs-keyword">and</span> <span class="hljs-number">100</span> connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    <span class="hljs-number">38.41</span>ms   <span class="hljs-number">70.39</span>ms   <span class="hljs-number">1.79</span>s    <span class="hljs-number">97.70</span>%
+    Req/Sec     <span class="hljs-number">1.62</span>k   <span class="hljs-number">219.60</span>     <span class="hljs-number">3.10</span>k    <span class="hljs-number">74.37</span>%
+  <span class="hljs-number">193123</span> requests <span class="hljs-keyword">in</span> <span class="hljs-number">1.00</span>m, <span class="hljs-number">1.33</span>GB <span class="hljs-built_in">read</span>
+Requests/<span class="hljs-built_in">sec</span>:   <span class="hljs-number">3216.56</span>
+Transfer/<span class="hljs-built_in">sec</span>:     <span class="hljs-number">22.70</span>MB
+</code></pre><p>As we can see Graal will be way faster compared to a regular JVM. The performance boost probably comes from better <a href="https://en.wikipedia.org/wiki/Escape_analysis"><em>escape analysis</em></a>. Keep in mind that the performance will be less on your own tests since you probably won’t run “hello world” on your systems.</p>
+                <h2 id="aot-compilation">AoT compilation</h2>
+                <p>Currently Graal also has a way to compile a Java application to a single binary via <code>native-image</code>. However on Scala 2.12 <code>native-image</code> won’t work since Scala 2.12 relies on the <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/vm/multiple-language-support.html#invokedynamic"><em>invokedynamic</em></a> bytecode instruction which as of now is <a href="https://github.com/oracle/graal/blob/master/substratevm/LIMITATIONS.md">not supported</a> in <a href="https://github.com/oracle/graal/tree/master/substratevm">SubstrateVM</a>. But for reference I tried to use native-image on Scala 2.11.</p>
+                <p>To make that work I used <a href="https://www.playframework.com/documentation/2.6.x/Deploying#Using-the-dist-task">sbt-assembly</a> to create a standalone JAR that I can use as a reference to my <code>native-image</code>.</p>
+                <p>Sadly that also won’t work and will fail with the following error:</p>
+                <pre><code>native-image --no-server -jar target/scala<span class="hljs-string">-2</span>.11/play-scala-seed-assembly<span class="hljs-string">-1</span>.0-SNAPSHOT.jar
+   classlist:  10,847.38 ms
+       (cap):   4,676.51 ms
+       setup:   5,769.91 ms
+warning: unknown locality of class Lplay/api/ApplicationLoader$JavaApplicationLoaderAdapter$1;, assuming class is not local. To remove the warning report an issue to the library or language author. The issue is caused by Lplay/api/ApplicationLoader$JavaApplicationLoaderAdapter$1; which is not following the naming convention.
+    analysis:   8,730.53 ms
+<span class="hljs-keyword">error: </span>unsupported features in 3 methods
+Detailed message:
+<span class="hljs-keyword">Error: </span>Must not have a FileDescriptor in the image heap.
+Trace:  object java.io.FileOutputStream
+        object java.io.BufferedOutputStream
+</code></pre><h2 id="polyglot">Polyglot</h2>
+                <p>One feature I was excited the most was support for Polyglot, which means that you can run other languages on top of the GraalVM. This is useful for interop with “native” languages or even JavaScript.</p>
+                <p>Sadly in the current form JavaScript can’t run NodeJS code from a Java Context which means that if I start my program with <code>java my.package.Main</code> and try to call into JavaScript that it can’t run Node. See: <a href="https://github.com/graalvm/graaljs/issues/2">https://github.com/graalvm/graaljs/issues/2</a> for more details on the problem.</p>
+                <p>But what worked perfectly fine, was calling into native code.  In the following example I just try to make a request to example.com via libcurl and print the response code inside my play controller.</p>
+                <p>For that to work we first need to create a C file:</p>
+                <pre><code><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;curl/curl.h&gt;</span></span>
+
+<span class="hljs-function"><span class="hljs-keyword">long</span> <span class="hljs-title">request</span><span class="hljs-params">()</span> </span>{
+    CURL *curl = curl_easy_init();
+    <span class="hljs-keyword">long</span> response_code = <span class="hljs-number">-1</span>;
+
+    <span class="hljs-keyword">if</span>(curl) {
+      CURLcode res;
+      curl_easy_setopt(curl, CURLOPT_URL, <span class="hljs-string">"http://example.com"</span>);
+      res = curl_easy_perform(curl);
+      <span class="hljs-keyword">if</span>(res == CURLE_OK) {
+        curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &amp;response_code);
+      }
+      curl_easy_cleanup(curl);
+    }
+
+
+    <span class="hljs-keyword">return</span> response_code;
+}
+</code></pre><p>and turn it into bitcode via: <code>clang -c -O1 -emit-llvm graal.c</code> .</p>
+                <p>Than we need to add <code>graal-sdk</code> to our <code>build.sbt</code> via:</p>
+                <pre><code><span class="hljs-attribute">libraryDependencies</span> += <span class="hljs-string">"org.graalvm"</span> % <span class="hljs-string">"graal-sdk"</span> % <span class="hljs-string">"1.0.0-rc1"</span>
+</code></pre><p>After that we can change one of our Play controllers to invoke it:</p>
+                <pre><code>private <span class="hljs-meta">val</span> cpart = {
+  <span class="hljs-meta">val</span> polyglot = <span class="hljs-type">Context</span>
+      .newBuilder()
+      .allowAllAccess(<span class="hljs-literal">true</span>)
+      .option(<span class="hljs-string">"llvm.libraries"</span>, <span class="hljs-string">"/usr/lib/libcurl.dylib"</span>)
+      .build()
+  <span class="hljs-meta">val</span> source = <span class="hljs-type">Source</span>
+      .newBuilder(<span class="hljs-string">"llvm"</span>, <span class="hljs-function"><span class="hljs-keyword">new</span> <span class="hljs-title">File</span>("/<span class="hljs-type">Users</span>/play/projects/scala/play-scala-seed/graal.bc"))
+      .<span class="hljs-title">build</span>()
+  <span class="hljs-title">polyglot</span>.<span class="hljs-title">eval</span>(source)
+}
+
+<span class="hljs-title">def</span> <span class="hljs-title">index</span>() = <span class="hljs-title">Action</span> { <span class="hljs-title">implicit</span> <span class="hljs-title">request</span>: <span class="hljs-type">Request</span>[<span class="hljs-type">AnyContent</span>] =&gt;</span>
+  <span class="hljs-meta">val</span> responseValue = cpart.getMember(<span class="hljs-string">"request"</span>).execute()
+  <span class="hljs-meta">val</span> responseCode = responseValue.asLong()
+
+  <span class="hljs-type">Ok</span>(s”$responseCode”)
+}
+</code></pre><p>Creating a polyglot <code>Context</code> from Java and calling into another language currently works for the following languages (some which might be more experimental than others): JavaScript, all languages which can be turned into bitcode (C, C++, Rust, etc…), Python 3, R and Ruby.</p>
+                <h2 id="conclusion">Conclusion</h2>
+                <p>In most cases Graal will actually run your Play application way faster than a regular JVM. Graal is especially good in running Scala code, since it has a way better <a href="https://en.wikipedia.org/wiki/Escape_analysis"><em>escape analysis</em></a>. However it can depend on your workload and what you do, so it’s probably a good idea to take a look at Graal by yourself.</p>
+                <p>If you are trying to interop with other languages Graal might also be a really good fit, since most languages can just be executed/run from a simple “Context” and Graal will also try his best to make the code as performant as possible.</p>
+
+
+            </section>
+        </article>
+    </section>
+}
+

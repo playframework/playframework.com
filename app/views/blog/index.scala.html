@@ -1,0 +1,20 @@
+@import controllers.documentation.ReverseRouter
+    @(title: String)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
+@main(title, "blog"){
+    <header id="top">
+        <div class="wrapper">
+            <h1>
+                @title
+            </h1>
+        </div>
+    </header>
+    <section id="content">
+        <article>
+            <ol>
+                <li><a href="@routes.Blog.graal()">Running Play on GraalVM</a></li>
+                <li><a href="@routes.Blog.socketio()">Play socket.io support</a></li>
+            </ol>
+        </article>
+    </section>
+}
+
