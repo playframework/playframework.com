@@ -60,4 +60,8 @@ GET         /.well-known/security.txt                                controllers
 GET         /sitemap-documentation.xml                               controllers.documentation.DocumentationController.sitemap
 GET         /robots.txt                                              controllers.Application.robots
 
+GET         /blog                                                    controllers.Blog.index
+GET         /play-on-graal/                                          controllers.Blog.graal
+GET         /play-socket-io/                                         controllers.Blog.socketio
+
 GET         /*route                                                  controllers.Application.onHandlerNotFound(route)
