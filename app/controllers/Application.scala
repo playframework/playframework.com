@@ -165,11 +165,6 @@ class Application @Inject()(
 
   def onHandlerNotFound(route: String) = Action { implicit request =>
 
-    println("******")
-    println(route)
-    println(route.startsWith("play-"))
-    println(route.endsWith("-released"))
-    println("******")
     if (route.startsWith("play-") && route.endsWith("-released") && !route.contains("-rc") && !route.contains("-m")) {
       val version = route
         .replace("play-", "")
