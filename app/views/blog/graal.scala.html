@@ -13,7 +13,12 @@
             <br/>
                 <h1>@title</h1>
 
-                <p>On the 17th of April, Oracle Labs presented the community the first release cadence for their new universal virtual machine called <a href="https://www.graalvm.org/">GraalVM</a>. Graal is a Polyglot VM that can run multiple languages and can interop between them without any overhead. In this blog post I will go into details what this means for Scala and especially for Play Framework and what runtime characteristics the new VM has, when running Play on top of it.</p>
+            <p>
+                Christian Schmitt, 10 MAY 2018
+            </p>
+
+
+            <p>On the 17th of April, Oracle Labs presented the community the first release cadence for their new universal virtual machine called <a href="https://www.graalvm.org/">GraalVM</a>. Graal is a Polyglot VM that can run multiple languages and can interop between them without any overhead. In this blog post I will go into details what this means for Scala and especially for Play Framework and what runtime characteristics the new VM has, when running Play on top of it.</p>
                 <p>Graal currently comes in <a href="https://www.graalvm.org/downloads/">two flavors</a>, one is the Community Edition which is open source and comes with the same license as a regular OpenJDK VM. Sadly at the moment the Community Edition is only available for Linux, which is good for production but mostly not enough for everyday development if you are not running Linux on your development machine.</p>
                 <p>There is also another edition called the Enterprise Edition which is not open source and you need to acquire a license to use it in production, but according to the docs it’s safe to use for development and evaluation. The Enterprise Edition is currently available for macOS and Linux, it has further benefits (comes with a smaller footprint and has more sandbox capabilities).</p>
                 <p>In the future the Graal team will probably present us with more options regarding the operating system. For our blog post we stick to the Community Edition on Linux.</p>
