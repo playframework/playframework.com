@@ -1,17 +1,17 @@
 @import controllers.documentation.ReverseRouter
-    @(title: String)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
-@main(title, "blog"){
+    @(blogName:String, title: String)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
+@main(title, blogName){
     <header id="top">
         <div class="wrapper">
             <h1>
-                @title
+                @blogName
             </h1>
         </div>
     </header>
     <section id="content">
         <article>
-            <section>
-                <h1></h1>
+            <br/>
+                <h1>@title</h1>
 
                 <p>On the 17th of April, Oracle Labs presented the community the first release cadence for their new universal virtual machine called <a href="https://www.graalvm.org/">GraalVM</a>. Graal is a Polyglot VM that can run multiple languages and can interop between them without any overhead. In this blog post I will go into details what this means for Scala and especially for Play Framework and what runtime characteristics the new VM has, when running Play on top of it.</p>
                 <p>Graal currently comes in <a href="https://www.graalvm.org/downloads/">two flavors</a>, one is the Community Edition which is open source and comes with the same license as a regular OpenJDK VM. Sadly at the moment the Community Edition is only available for Linux, which is good for production but mostly not enough for everyday development if you are not running Linux on your development machine.</p>
@@ -109,7 +109,6 @@ Trace:  object java.io.FileOutputStream
                 <p>If you are trying to interop with other languages Graal might also be a really good fit, since most languages can just be executed/run from a simple “Context” and Graal will also try his best to make the code as performant as possible.</p>
 
 
-            </section>
         </article>
     </section>
 }

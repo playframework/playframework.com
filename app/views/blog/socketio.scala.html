@@ -1,17 +1,17 @@
 @import controllers.documentation.ReverseRouter
-@(title: String)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
-@main(title, "blog"){
+@(blogName:String,title: String)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
+@main( title, blogName){
     <header id="top">
         <div class="wrapper">
             <h1>
-                @title
+                @blogName
             </h1>
         </div>
     </header>
     <section id="content">
         <article>
-            <section>
-                <h1></h1>
+            <br/>
+                <h1>@title</h1>
 
                 <p>The Play team are proud to announce official support for <a href="https://socket.io/">socket.io</a>. We have created a library called <a href="https://github.com/playframework/play-socket.io">play-socket.io</a> which provides a complete engine.io and socket.io implementation, tested against the socket.io reference implementation client (that is, the official <a href="https://github.com/socketio/socket.io-client">JavaScript socket.io client</a>), and including a number of useful features such as backpressure and cluster support that the JavaScript implementations do not have.</p>
                 <p>Play has already proved itself to be apt at scaling to hundreds of thousands of connections per node, for example as <a href="https://engineering.linkedin.com/blog/2016/10/instant-messaging-at-linkedin--scaling-to-hundreds-of-thousands-">demonstrated by LinkedIn</a>, so having the straight forward multiplexing and event based API offered by the socket.io JavaScript client in combination with Play&#39;s powerful backend makes for a compelling technology stack for reactive applications.</p>
@@ -59,7 +59,6 @@ POST    /socket.io/         play<span class="hljs-selector-class">.engineio</spa
                 <p>For installation instructions, comprehensive documentation and links to sample apps, see the documentation for <a href="https://github.com/playframework/play-socket.io/blob/master/docs/ScalaSocketIO.md">Scala</a> and <a href="https://github.com/playframework/play-socket.io/blob/master/docs/JavaSocketIO.md">Java</a>. To contribute, visit the projects <a href="https://github.com/playframework/play-socket.io">GitHub page</a>.</p>
 
 
-            </section>
         </article>
     </section>
 }

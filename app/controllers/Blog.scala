@@ -26,16 +26,17 @@ class Blog @Inject()(
     with Common
     with I18nSupport {
 
+    val blogName = "Play Framework Blog"
   def index() = Action { implicit request =>
-    Ok(html.blog.index("Play Framework Blog"))
+    Ok(html.blog.index(blogName))
   }
 
   def graal() = Action { implicit request =>
-    Ok(html.blog.graal("Running Play on GraalVM"))
+    Ok(html.blog.graal(blogName, "Running Play on GraalVM"))
   }
 
   def socketio() = Action { implicit request =>
-    Ok(html.blog.socketio("Play socket.io support"))
+    Ok(html.blog.socketio(blogName, "Play socket.io support"))
   }
 
 }
