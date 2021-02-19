@@ -60,10 +60,10 @@ GET         /.well-known/security.txt                                controllers
 GET         /sitemap-documentation.xml                               controllers.documentation.DocumentationController.sitemap
 GET         /robots.txt                                              controllers.Application.robots
 
-GET         /blog                                                    controllers.Blog.index
+GET         /blog                                                    controllers.Blog.index()
 GET         /play-on-graal                                           controllers.Application.movedTo(url="/blog/play-on-graal", originalPath="foo")
 GET         /play-socket-io                                          controllers.Application.movedTo(url="/blog/play-socket-io", originalPath="foo")
-GET         /blog/play-on-graal                                      controllers.Blog.graal
-GET         /blog/play-socket-io                                     controllers.Blog.socketio
+GET         /blog/play-on-graal                                      controllers.Blog.graal()
+GET         /blog/play-socket-io                                     controllers.Blog.socketio()
 
 GET         /*route                                                  controllers.Application.onHandlerNotFound(route)

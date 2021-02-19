@@ -21,12 +21,13 @@ import scala.concurrent.Future
 @Singleton
 class Blog @Inject()(
     components: ControllerComponents,
-                    )(implicit ec: ExecutionContext, val reverseRouter: _root_.controllers.documentation.ReverseRouter)
+)(implicit ec: ExecutionContext, val reverseRouter: _root_.controllers.documentation.ReverseRouter)
     extends AbstractController(components)
     with Common
     with I18nSupport {
 
-    val blogName = "Play Framework Blog"
+  val blogName = "Play Framework Blog"
+
   def index() = Action { implicit request =>
     Ok(html.blog.index(blogName))
   }
