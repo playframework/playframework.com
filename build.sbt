@@ -3,7 +3,7 @@ version := "1.0-SNAPSHOT"
 
 enablePlugins(PlayScala, NewRelic)
 
-scalaVersion := "2.13.1"
+scalaVersion := "2.13.4"
 scalacOptions ++= List("-encoding", "utf8", "-deprecation", "-feature", "-unchecked")
 
 libraryDependencies ++= Seq(
