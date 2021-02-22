@@ -164,7 +164,14 @@ class Application @Inject()(
   }
 
   def onHandlerNotFound(route: String) = Action { implicit request =>
-    if (route.endsWith("/")) {
+
+    if (route.startsWith("play-") && route.endsWith("-released") && !route.contains("-rc") && !route.contains("-m")) {
+      val version = route
+        .replace("play-", "")
+        .replace("-released", "")
+        .replace("-", ".")
+      MovedPermanently(s"https://github.com/playframework/playframework/releases/tag/$version")
+    } else if (route.endsWith("/")) {
       MovedPermanently("/" + request.path.take(request.path.length - 1).dropWhile(_ == '/'))
     } else {
       notFound
