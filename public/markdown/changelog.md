@@ -1248,6 +1248,35 @@ A complete list of what was fixed for 2.2.2 can be found on [GitHub](https://git
 * Stopped plugins in reverse order to started
 * Removed circular dependencies in dev mode ClassLoaders
 
+
+## Play 1.6.0
+
+*Released 15 March 2021*
+
+
+* [#1308](https://github.com/playframework/play1/issues/1308): Adds exit codes to play deps command
+* [#1313](https://github.com/playframework/play1/issues/1313): #1313 upgrade deprecated MySQL driver
+* [#1314](https://github.com/playframework/play1/issues/1314): #1313 upgrade deprecated MySQL driver
+* [#1320](https://github.com/playframework/play1/issues/1320): * Java8 Date/Time Binder Support
+* [#1181](https://github.com/playframework/play1/issues/1181): Avoid restoring of flash and session multiple times per request
+* [#1297](https://github.com/playframework/play1/issues/1297): Custom SessionStore throws ClassNotFoundException
+* [#1306](https://github.com/playframework/play1/issues/1306): update document url
+* [#1309](https://github.com/playframework/play1/issues/1309): Upgrade java mail and commons email
+* [#1310](https://github.com/playframework/play1/issues/1310): #1309: Upgrade java mail and commons email
+* [#1311](https://github.com/playframework/play1/issues/1311): #1297 load session store using Play.classloader
+* [#1312](https://github.com/playframework/play1/issues/1312): [#1312] stylesheet.tag missing trailing slash in documentation
+* [#1317](https://github.com/playframework/play1/issues/1317): [#1316] Replace coma with comma
+* [#1322](https://github.com/playframework/play1/issues/1322): [#4098] Make "play javadoc" fail if javadoc fails
+* [#1324](https://github.com/playframework/play1/issues/1324): JDK 13/14 support
+* [#1325](https://github.com/playframework/play1/issues/1325): JDK 13 support
+* [#1327](https://github.com/playframework/play1/issues/1327): [#1935] Don't create CPU*2 "New I/O worker" threads for unused ports
+* [#1332](https://github.com/playframework/play1/issues/1332): Compatibility with JDK 13 and 14
+* [#1338](https://github.com/playframework/play1/issues/1338): Update to latest Eclipse JDT Core v3.23 to enable JDK 14 source
+* [#1339](https://github.com/playframework/play1/issues/1339): Bump junit from 4.11 to 4.13.1 in /samples-and-tests/customJars/example
+* [#1340](https://github.com/playframework/play1/issues/1340): Update junit dependencies
+* [#1341](https://github.com/playframework/play1/issues/1341): [31340] update jnit form 4.11 to 4.13.1
+
+
 ## Play 1.5.3
 
 *Released 8 April 2019*
