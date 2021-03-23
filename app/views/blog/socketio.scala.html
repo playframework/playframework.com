@@ -1,0 +1,69 @@
+@import controllers.documentation.ReverseRouter
+@(blogName:String,title: String)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
+@main( title, blogName){
+    <header id="top">
+        <div class="wrapper">
+            <h1>
+                @blogName
+            </h1>
+        </div>
+    </header>
+    <section id="content">
+        <article>
+            <br/>
+                <h1>@title</h1>
+
+                <p>
+                    James Roper, 01 AUGUST 2017
+                </p>
+
+                <p>The Play team are proud to announce official support for <a href="https://socket.io/">socket.io</a>. We have created a library called <a href="https://github.com/playframework/play-socket.io">play-socket.io</a> which provides a complete engine.io and socket.io implementation, tested against the socket.io reference implementation client (that is, the official <a href="https://github.com/socketio/socket.io-client">JavaScript socket.io client</a>), and including a number of useful features such as backpressure and cluster support that the JavaScript implementations do not have.</p>
+                <p>Play has already proved itself to be apt at scaling to hundreds of thousands of connections per node, for example as <a href="https://engineering.linkedin.com/blog/2016/10/instant-messaging-at-linkedin--scaling-to-hundreds-of-thousands-">demonstrated by LinkedIn</a>, so having the straight forward multiplexing and event based API offered by the socket.io JavaScript client in combination with Play&#39;s powerful backend makes for a compelling technology stack for reactive applications.</p>
+                <h2 id="akka-streams-based">Akka streams based</h2>
+                <p>play-socket.io is built on <a href="http://doc.akka.io/docs/akka/snapshot/scala/stream/index.html">Akka streams</a>. Each socket.io namespace is handled by an Akka streams <code>Flow</code>, which takes at its inlet the stream of messages for that namespace coming from the client, and emits messages to go to the client.</p>
+                <p>One advantage of using Akka streams is that backpressure comes for free. This is an important feature for protecting servers from being overwhelmed with events. Without backpressure, there&#39;s no way for the server to tell the client to stop sending messages, so the server has to either process them, exhausting itself of CPU and other resources, or buffer them, and risk running out of memory. However play-socket.io will push back on the TCP connection when it can&#39;t keep up with rate of messages being sent from the client, preventing the client from sending any further messages. Likewise, backpressure from slow consuming clients gets pushed back to the source of Akka streams flows, ensuring a server will slow down its emission of messages and won&#39;t run out of memory buffering the messages that are yet to be consumed by the client.</p>
+                <h2 id="built-in-clustering">Built-in clustering</h2>
+                <p>Being built on Akka, play-socket.io does not need a sticky load balancer or any intelligent routing to serve socket.io endpoints. In most other socket.io implementations, if you have a socket.io endpoint served by a cluster of servers, you need to ensure that requests for the same engine.io session always get routed to the same node. With play-socket.io, requests can be handled by any node, and Akka clustering is used to ensure that they get routed to the right node. This allows the use of dumb, stateless load balancers, simplifying your deployment. The clustered chat example app in <a href="https://github.com/playframework/play-socket.io/tree/master/samples/scala/clustered-chat">Scala</a> and <a href="https://github.com/playframework/play-socket.io/tree/master/samples/java/clustered-chat">Java</a> shows how to configure play-socket.io to work in a multi node environment, and even comes with a handy script to start 3 nodes behind an nginx load balancer to demonstrate the multi node setup at work.</p>
+                <p>Detailed documentation on using play-socket.io in a clustered setup can be found in the <a href="https://github.com/playframework/play-socket.io/blob/master/docs/ScalaSocketIO.md#multi-node-setup">Scala</a> and <a href="https://github.com/playframework/play-socket.io/blob/master/docs/JavaSocketIO.md#multi-node-setup">Java</a> documentation.</p>
+                <h2 id="example-code">Example code</h2>
+                <p>Here&#39;s a minimal chat engine (similar to the <a href="https://socket.io/get-started/chat/">official socket.io chat example</a>) written in Play Scala:</p>
+                <pre><code class="lang-scala">import akka<span class="hljs-selector-class">.stream</span><span class="hljs-selector-class">.Materializer</span>
+import akka<span class="hljs-selector-class">.stream</span><span class="hljs-selector-class">.scaladsl</span>._
+import play<span class="hljs-selector-class">.engineio</span><span class="hljs-selector-class">.EngineIOController</span>
+import play<span class="hljs-selector-class">.socketio</span><span class="hljs-selector-class">.scaladsl</span><span class="hljs-selector-class">.SocketIO</span>
+
+class ChatEngine(socketIO: SocketIO)(implicit mat: Materializer) {
+  import play<span class="hljs-selector-class">.socketio</span><span class="hljs-selector-class">.scaladsl</span><span class="hljs-selector-class">.SocketIOEventCodec</span>._
+
+  <span class="hljs-comment">// codec to encode/codec chat message events to/from strings</span>
+  val decoder = decodeByName {
+    case <span class="hljs-string">"chat message"</span> =&gt; decodeJson[String]
+  }
+  val encoder = encodeByType[String] {
+    case _: String =&gt; <span class="hljs-string">"chat message"</span> -&gt; encodeJson[String]
+  }
+
+  <span class="hljs-comment">// Merge/broadcast hub that each client will connect to</span>
+  private val chatFlow = {
+    val (sink, source) = MergeHub<span class="hljs-selector-class">.source</span>[String]
+      .toMat(BroadcastHub.sink)(Keep.both)<span class="hljs-selector-class">.run</span>
+    Flow.fromSinkAndSourceCoupled(sink, source)
+  }
+
+  val controller: EngineIOController = socketIO<span class="hljs-selector-class">.builder</span>
+    .addNamespace(<span class="hljs-string">"/chat"</span>, decoder, encoder, chatFlow)
+    .createController()
+}
+</code></pre>
+                <p>And then to ensure Play routes requests to the <code>EngineIOController</code>, add the following to your <code>routes</code> file:</p>
+                <pre><code>GET     /socket.io/         play<span class="hljs-selector-class">.engineio</span><span class="hljs-selector-class">.EngineIOController</span><span class="hljs-selector-class">.endpoint</span>(transport)
+POST    /socket.io/         play<span class="hljs-selector-class">.engineio</span><span class="hljs-selector-class">.EngineIOController</span><span class="hljs-selector-class">.endpoint</span>(transport)
+</code></pre><p>And that&#39;s all!</p>
+                <h2 id="documentation-and-samples">Documentation and samples</h2>
+                <p>For installation instructions, comprehensive documentation and links to sample apps, see the documentation for <a href="https://github.com/playframework/play-socket.io/blob/master/docs/ScalaSocketIO.md">Scala</a> and <a href="https://github.com/playframework/play-socket.io/blob/master/docs/JavaSocketIO.md">Java</a>. To contribute, visit the projects <a href="https://github.com/playframework/play-socket.io">GitHub page</a>.</p>
+
+
+        </article>
+    </section>
+}
+

@@ -1,3 +1,66 @@
+## Play 2.8.7
+
+*Released 14 December 2020
+
+[All changes](https://github.com/playframework/playframework/compare/2.8.6...2.8.7/)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/111?closed=1)
+
+## Play 2.7.9
+
+*Released 14 December 2020
+
+[All changes](https://github.com/playframework/playframework/compare/2.7.8...2.7.9/)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/114?closed=1)
+
+## Play 2.8.6
+
+*Released 10 December 2020
+
+[All changes](https://github.com/playframework/playframework/compare/2.8.5...2.8.6/)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/110?closed=1)
+
+## Play 2.7.8
+
+*Released 10 December 2020
+
+[All changes](https://github.com/playframework/playframework/compare/2.7.7...2.7.8/)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/109?closed=1)
+
+## Play 2.8.5
+
+*Released 9 November 2020
+
+[All changes](https://github.com/playframework/playframework/compare/2.8.4...2.8.5/)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/108?closed=1)
+
+## Play 2.8.4
+
+*Released 5 November 2020
+
+[All changes](https://github.com/playframework/playframework/compare/2.8.3...2.8.4/)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/106?closed=1)
+
+## Play 2.7.7
+
+*Released 5 November 2020
+
+[All changes](https://github.com/playframework/playframework/compare/2.7.6...2.7.7/)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/107?closed=1)
+
+## Play 2.8.3
+
+*Released 26 October 2020
+
+[All changes](https://github.com/playframework/playframework/compare/2.8.2...2.8.3/)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/103?closed=1)
+
+## Play 2.7.6
+
+*Released 26 October 2020
+
+[All changes](https://github.com/playframework/playframework/compare/2.7.5...2.7.6/)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/104?closed=1)
+
 ## Play 2.8.2
 
 *Released 21 May 2020

@@ -61,3 +61,47 @@ body .optanon-alert-box-wrapper .optanon-alert-box-bottom-padding
                 &:hover
                     background: green-dark
                     color: white
+
+//ontrust ccpa upgrades
+body
+    #onetrust-pc-sdk .ot-switch
+        width: 45px !important
+        padding: 0 !important
+    #onetrust-pc-sdk .ot-switch-nob:before 
+        transform: translateX(2px) 
+    .onetrust-pc-dark-filter
+        background: rgba(0,0,0,.75)
+    #onetrust-button-group
+        display: flex !important
+        flex-direction: row-reverse !important
+        justify-content: flex-end !important
+        text-align: left !important
+    #onetrust-accept-btn-handler
+        opacity: 1 !important
+        transition: anime
+        outline: none !important
+        &:hover
+            background-color: green !important
+            border-color: green !important
+            transition: anime
+    #onetrust-pc-sdk #close-pc-btn-handler.ot-close-icon
+        outline: none !important
+    .ot-pc-footer-logo
+        display: none
+    #ot-sdk-cookie-policy,
+    #cookie-policy-description,
+    .ot-sdk-cookie-policy-group-desc
+        font-size: 1rem !important
+        line-height: 1.5 !important
+        margin-bottom: 1.0625rem !important
+        & p
+            font-size: 1rem !important
+            line-height: 1.5 !important
+            margin-bottom: 1.0625rem !important
+    #onetrust-pc-sdk .ot-cat-grp .ot-always-active
+        color: #6cc04a
+    #onetrust-pc-sdk .ot-tgl input:checked+.ot-switch .ot-switch-nob
+        border-color: #6cc04a
+        background-color: #d4e8cb
+        &:before
+            background-color: #6cc04a
