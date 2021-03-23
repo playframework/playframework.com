@@ -1,6 +1,6 @@
 dist: trusty
 language: scala
-scala: 2.12.8
+scala: 2.12.13
 jdk: oraclejdk8
 
 before_script:
