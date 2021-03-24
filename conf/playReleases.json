@@ -288,6 +288,12 @@
             "date": "Mar 4 2016"
         },
         {
+            "version": "1.6.0",
+            "url": "https://github.com/playframework/play1/releases/download/1.6.0/play-1.6.0.zip",
+            "date": "Mar 15 2021",
+            "size": "101M"
+        },
+        {
             "version": "1.5.3",
             "url": "http://downloads.typesafe.com/play/1.5.3/play-1.5.3.zip",
             "date": "Apr 8 2019",
