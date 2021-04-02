@@ -14,7 +14,7 @@
         @for(version <- context.version) {
             <form id="search" method="get" action="//www.google.com/search">
                 <input type="search" name="q" placeholder="Search @version docs" results="10">
-                <input type="hidden" name="sitesearch" value="site:playframework.com@reverseRouter.home(context.alternateLang, version.name)">
+                <input type="hidden" name="sitesearch" value="playframework.com@reverseRouter.home(context.alternateLang, version.name)">
                 <button type="submit">Search</button>
             </form>
         }
