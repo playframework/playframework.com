@@ -1,6 +1,7 @@
 package services.github
 
 import play.api.http.DefaultFileMimeTypesProvider
+import play.api.http.DefaultFileMimeTypes
 import play.api.http.FileMimeTypesConfiguration
 import play.api.mvc.Results._
 import play.api.routing.sird.{ GET => Get, _ }
@@ -15,7 +16,7 @@ import scala.concurrent.Future
 
 object GitHubSpec extends PlaySpecification {
 
-  implicit val fileMimeTypes = new DefaultFileMimeTypesProvider(
+  implicit val fileMimeTypes: DefaultFileMimeTypes = new DefaultFileMimeTypesProvider(
     FileMimeTypesConfiguration(Map("json" -> "application/json")),
   ).get
 
