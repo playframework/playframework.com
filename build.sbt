@@ -25,12 +25,12 @@ routesGenerator := InjectedRoutesGenerator
 
 JsEngineKeys.engineType := JsEngineKeys.EngineType.Node
 
-StylusKeys.useNib in Assets := true
-StylusKeys.compress in Assets := true
+Assets / StylusKeys.useNib := true
+Assets / StylusKeys.compress := true
 
 pipelineStages := Seq(digest, gzip)
 
-sourceGenerators in Compile += Def.task {
+Compile / sourceGenerators += Def.task {
   import scala.sys.process._
   val siteVersionFile = crossTarget.value / "version" / "SiteVersion.scala"
   val gitHash         = "git rev-parse HEAD".!!.trim
@@ -48,9 +48,9 @@ sourceGenerators in Compile += Def.task {
   Seq(siteVersionFile)
 }.taskValue
 
-managedSourceDirectories in Compile += crossTarget.value / "version"
-sources in (Compile, doc) := Seq.empty
-publishArtifact in (Compile, packageDoc) := false
+Compile / managedSourceDirectories += crossTarget.value / "version"
+Compile / doc / sources := Seq.empty
+Compile / packageDoc / publishArtifact := false
 
 newrelicVersion := "4.9.0"
 newrelicAppName := "playframework.com"
