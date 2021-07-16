@@ -4,7 +4,6 @@
 @renderProject(project: ExampleProject) = {
     <tr>
         <td><a href="@project.downloadUrl" target="_blank">@project.displayName</a></td>
-        <td><a href="@project.downloadUrl" target="_blank">Download (zip)</a></td>
         <td><a href="@project.gitHubUrl" target="_blank">View on GitHub</a></td>
     </tr>
 }
@@ -63,31 +62,8 @@
 
             <div class="try-section">
                 <h2>Already know a bit about Play?</h2>
-                <p>Lightbend Tech Hub offers a variety of Play example projects for Java and Scala that are focused on a particular use case. The downloadable zip files include everything you need, including <a href="//www.scala-sbt.org/index.html">sbt</a>, Play Framework, and an HTTP server. The examples also support <a href="//docs.gradle.org/current/userguide/play_plugin.html">Gradle</a>.</p>
+                <p>Lightbend offers a variety of <a href="https://www.lightbend.com/akka-platform/developers#example-projects">Play example projects for Java and Scala</a> that are focused on a particular use case. These include everything you need, including <a href="//www.scala-sbt.org/index.html">sbt</a>, Play Framework, and an HTTP server. The examples also support <a href="//docs.gradle.org/current/userguide/play_plugin.html">Gradle</a>.</p>
                 <p>If you are ready to start your own project and have sbt installed, you can create a Play project from the command line.</p>
-                <div class="try-option">
-                    <h3><span>&raquo;</span> Try a focused example</h3>
-                    <div class="try-option-content">
-                        <p>Follow these steps to try an example project:</p>
-                        <ol>
-                            <li>Check that your Java version is 8 or higher with the <code>java -version</code> command and if needed, install it from <a href="//www.oracle.com/technetwork/java/javase/downloads/index.html" rel="noopener">Oracle's site</a>.
-                            <li>Choose an example from <a href="https://developer.lightbend.com/start/?group=play">Lightbend's Tech Hub</a>.</li>
-                            <li>Click "CREATE A PROJECT FOR ME" to download the zipped project.</li>
-                            <li>Unzip the project in a convenient location.</li>
-                            <li>In a command window, navigate to the top level project directory.</li>
-                            <li>Enter one of the following commands:
-                                <ul>
-                                    <li>On macOS or Linux systems: <code>./sbt run</code> or <code>./gradlew runPlayBinary</code></li>
-                                    <li>On Windows systems: <code>sbt.bat run</code> or <code>gradlew.bat runPlayBinary</code></li>
-                                </ul>
-                            </li>
-                            <li>The build tool downloads dependencies and compiles the project.</li>
-                            <li>After the build finishes, enter the following URL in a browser to view the app: <a href="http://localhost:9000/">http://localhost:9000/</a></li>
-
-                        </ol>
-                        <p>Check out the <code>README.md</code> file in the top level project directory to learn more about the example.</p>
-                    </div>
-                </div>
 
                 <div class="try-option">
                     <h3><span>&raquo;</span> Create a Play Java or Scala project using <code>sbt new</code></h3>
