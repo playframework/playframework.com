@@ -200,7 +200,7 @@
         background: image("home/mac.png") 0 0
         retina("home/mac.png", 332px 310px)
 
-#references, #sponsors
+#references, #sponsors-backers
     text-align: center
     img
         margin: 0 .75rem
@@ -211,7 +211,6 @@
     a
         position: relative
         text-decoration: none
-        color: white
         transition: color 300ms ease-in
         span
             display: block
@@ -224,9 +223,14 @@
             color: #50b4a2
             transition: color 200ms ease-out
 
-#sponsors
-    h2
+#sponsors-backers
+    h2, h3
         margin: 10px 10px 40px 10px
+        padding-top: 20px
+        clear: both
+
+#backers
+    people-faces(32px, 32px)
 
 @media only screen and (max-width: 960px)
     .home

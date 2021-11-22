@@ -12,6 +12,7 @@ import play.api.i18n.I18nSupport
 import play.api.i18n.Lang
 import play.api.mvc._
 import play.twirl.api.Html
+import services.opencollective.MembersSummariser
 import utils.Markdown
 import views._
 
@@ -22,6 +23,7 @@ import scala.concurrent.Future
 class Application @Inject()(
     environment: Environment,
     configuration: Configuration,
+    membersSummariser: MembersSummariser,
     releases: PlayReleases,
     exampleProjectsService: PlayExampleProjectsService,
     components: ControllerComponents,
@@ -63,8 +65,10 @@ class Application @Inject()(
     message.toSeq.map(Html.apply)
   }
 
-  def index = Action { implicit request =>
-    Ok(html.index(releases))
+  def index = Action.async { implicit request =>
+    membersSummariser.fetchMembers.map { members =>
+      Ok(html.index(members, releases))
+    }
   }
 
   def widget(version: Option[String]) = Action { request =>
@@ -152,6 +156,10 @@ class Application @Inject()(
 
   def getInvolved = Action { implicit request =>
     Ok(html.getInvolved())
+  }
+
+  def sponsors = Action { implicit request =>
+    Ok(html.sponsors())
   }
 
   def cookie = Action { implicit request =>
