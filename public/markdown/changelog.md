@@ -1,16 +1,10 @@
-## Play 2.8.10
 
-*Released 30 November 2021
+## Play 2.8.11
 
-[All changes](https://github.com/playframework/playframework/compare/2.8.9...2.8.10/)
+*Released 1 December 2021
+
+[All changes](https://github.com/playframework/playframework/compare/2.8.8...2.8.11/)
 [GitHub milestone](https://github.com/playframework/playframework/milestone/116?closed=1)
-
-## Play 2.8.9
-
-*Released 25 November 2021
-
-[All changes](https://github.com/playframework/playframework/compare/2.8.8...2.8.9/)
-[GitHub milestone](https://github.com/playframework/playframework/milestone/115?closed=1)
 
 ## Play 2.8.8
 
