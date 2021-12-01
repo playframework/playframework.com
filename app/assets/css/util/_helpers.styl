@@ -46,3 +46,18 @@ overflow(arg)
 hide-text()
     overflow: hidden
     text-indent: -99em
+
+people-faces(height=0, width=0)
+    a
+        &:after
+            content: none
+            display: none
+        img
+            display: block
+            float: left
+            margin: 0
+            if height != 0
+                height: height
+            if width != 0
+                width: width
+

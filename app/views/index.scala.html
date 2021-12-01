@@ -1,5 +1,14 @@
 @import controllers.documentation.ReverseRouter
-@(releases: PlayReleases, title: String = "Play Framework - Build Modern & Scalable Web Apps with Java and Scala")(implicit req: RequestHeader, reverseRouter: ReverseRouter)
+@import models.opencollective.OpenCollectiveMember
+@(backers: Seq[OpenCollectiveMember], releases: PlayReleases, title: String = "Play Framework - Build Modern & Scalable Web Apps with Java and Scala")(implicit req: RequestHeader, reverseRouter: ReverseRouter)
+
+@renderBackers(backers: Seq[OpenCollectiveMember]) = {
+    @for(backer <- backers) {
+        <a href="@backer.link">
+            <img src="@backer.imageUrl" alt="@backer.name" title="@backer.name" />
+        </a>
+    }
+}
 
 @main(title) {
     <header id="top">
@@ -34,7 +43,7 @@
                 <h2>Get Involved</h2>
                 <a href='//discuss.playframework.com' class="button">Join the Discuss<br/>Play Forum</a>
                 <p>
-                  Join <a href="//gitter.im/playframework/playframework">Gitter's Play channel</a> and <a href="https://stackoverflow.com/questions/tagged/playframework">Stack Overflow</a>
+                  Join <a href="//gitter.im/playframework/playframework">Gitter's Play channel</a> and <a href="//stackoverflow.com/questions/tagged/playframework">Stack Overflow</a>
                 </p>
             </div>
         </div>
@@ -235,27 +244,27 @@
                 <div class="box-gap"></div>
             </div>
         </article>
-        <article id="sponsors">
-            <h2>Generous Sponsors</h2>
+        <article id="sponsors-backers">
+            <h2>Sponsors & Backers</h2>
+            <p>
+                If you find Play useful for work, please consider asking your company to support this Open Source project by <a href="@routes.Application.sponsors()">becoming a sponsor</a>.
+                    You can also individually sponsor the project by <a href="@routes.Application.sponsors()">becoming a backer</a>.
+            </p>
+            <div class="donate-button">
+                <a href="//opencollective.com/playframework">Donate to our Collective</a>
+            </div>
+            <h3>Thank you to our premium sponsors!</h3>
             <div class="flex-grid two-up three-up-medium four-up-large">
                 <div class="box">
-                    <a href="//www.lightbend.com/" target="_blank" rel="noopener noreferrer">
-                        <img src="@routes.Assets.versioned("images/home/sponsors/lightbend-full-color.png")">
+                    <a href="//informaticon.com/" target="_blank" rel="noopener noreferrer">
+                        <img src="@routes.Assets.versioned("images/home/sponsors/informaticon-logo-full-color.png")">
                         <span></span>
                     </a>
                 </div>
-                <div class="box">
-                    <a href="//www.triplequote.com/" target="_blank" rel="noopener noreferrer">
-                        <img src="@routes.Assets.versioned("images/home/sponsors/triplequote-logo-250.png")">
-                        <span></span>
-                    </a>
-                </div>
-                <div class="box">
-                    <a href="//travis-ci.com/" target="_blank" rel="noopener noreferrer">
-                        <img src="@routes.Assets.versioned("images/home/sponsors/TravisCI-Full-Color.png")">
-                        <span></span>
-                    </a>
-                </div>
+            </div>
+            <div id="backers">
+                <h3>Thank you to all our backers!</h3>
+                @renderBackers(backers)
             </div>
         </article>
     </section>
