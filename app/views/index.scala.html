@@ -24,7 +24,7 @@
         <div id="actions">
             <div id="start">
                 <h2>Get Started</h2>
-                    <a href="@routes.Application.download()" class="button">Try Play <br> @releases.latest.version@for(name <- releases.latest.name){ "@name"}</a>
+                    <a href="@routes.Application.download" class="button">Try Play <br> @releases.latest.version@for(name <- releases.latest.name){ "@name"}</a>
                 <p>
                     or <a href="@routes.Application.allreleases()">browse all versions</a>
                 </p>
@@ -247,8 +247,8 @@
         <article id="sponsors-backers">
             <h2>Sponsors & Backers</h2>
             <p>
-                If you find Play useful for work, please consider asking your company to support this Open Source project by <a href="@routes.Application.sponsors()">becoming a sponsor</a>.
-                    You can also individually sponsor the project by <a href="@routes.Application.sponsors()">becoming a backer</a>.
+                If you find Play useful for work, please consider asking your company to support this Open Source project by <a href="@routes.Application.sponsors">becoming a sponsor</a>.
+                    You can also individually sponsor the project by <a href="@routes.Application.sponsors">becoming a backer</a>.
             </p>
             <div class="donate-button">
                 <a href="//opencollective.com/playframework">Donate to our Collective</a>
