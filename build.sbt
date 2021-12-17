@@ -7,13 +7,13 @@ scalaVersion := "2.13.5"
 scalacOptions ++= List("-encoding", "utf8", "-deprecation", "-feature", "-unchecked")
 
 libraryDependencies ++= Seq(
-  "com.typesafe.play" %% "play-doc"            % "2.1.0",
-  "org.eclipse.jgit"   % "org.eclipse.jgit"    % "6.0.0.202111291000-r",
-  "com.damnhandy"      % "handy-uri-templates" % "2.1.8",
-  "org.webjars"        % "jquery"              % "3.6.0",
-  "org.webjars"        % "html5shiv"           % "3.7.3",
-  "org.webjars"        % "prettify"            % "4-Mar-2013-1",
-  "org.webjars"        % "clipboard.js"        % "2.0.6",
+  "com.typesafe.play" %% "play-doc"           % "2.1.0",
+  "org.eclipse.jgit"  % "org.eclipse.jgit"    % "5.13.0.202109080827-r",
+  "com.damnhandy"     % "handy-uri-templates" % "2.1.8",
+  "org.webjars"       % "jquery"              % "3.6.0",
+  "org.webjars"       % "html5shiv"           % "3.7.3-1",
+  "org.webjars"       % "prettify"            % "4-Mar-2013-1",
+  "org.webjars"       % "clipboard.js"        % "2.0.6",
   guice,
   ehcache,
   filters,
@@ -52,5 +52,5 @@ Compile / managedSourceDirectories += crossTarget.value / "version"
 Compile / doc / sources := Seq.empty
 Compile / packageDoc / publishArtifact := false
 
-newrelicVersion := "4.9.0"
+newrelicVersion := "4.12.1"
 newrelicAppName := "playframework.com"
