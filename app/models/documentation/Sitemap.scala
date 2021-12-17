@@ -40,7 +40,7 @@ case class Sitemap(urls: Seq[SitemapUrl]) {
       urls.map { url =>
         <url>
         <loc>{url.loc}</loc>
-        <priority>{url.priority.value.formatted("%.2f")}</priority>
+        <priority>{"%.2f".format(url.priority.value)}</priority>
         {
           url.alternates.map {
             case (lang, href) =>
