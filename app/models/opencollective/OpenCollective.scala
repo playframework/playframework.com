@@ -13,7 +13,7 @@ case class OpenCollectiveMember(
   `type`: String, // USER or ORGANIZATION,
   role: String, // BACKER, ADMIN or HOST,
   isActive: Boolean, // true or false
-  totalAmountDonated: Long // amount in cent (USD 100.00 = 10000)
+  totalAmountDonated: Double // amount in cent (USD 100.00 = 10000)
   // createdAt: 2021-11-08 14:41,
   // lastTransactionAt: 2021-11-19 09:16,
   // lastTransactionAmount: 0,
