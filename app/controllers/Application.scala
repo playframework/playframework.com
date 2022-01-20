@@ -150,10 +150,6 @@ class Application @Inject()(
       }
   }
 
-  def support = Action { implicit request =>
-    Ok(html.support())
-  }
-
   def getInvolved = Action { implicit request =>
     Ok(html.getInvolved())
   }
