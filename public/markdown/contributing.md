@@ -57,6 +57,6 @@ Generally, all bug fixes, improvements and new features will go to the master br
 * The change only affects the documentation
 * The change fixes a regression that was introduced in a previous stable release from that branch
 * The change fixes a bug that impacts significant number of members of the open source community with no simple work arounds available
-* Any other reason that Lightbend deems appropriate
+* Any other reason that Play steering committee deems appropriate
 
 All backports and other commits to stable branches, in addition to satisfying the regular contributor guidelines, must also be binary and source compatible with previous releases on that branch.  The only exception to this is if a serious bug is impossible to fix without breaking the API, for example, a particular feature is not possible to use due to flaws in the API.
