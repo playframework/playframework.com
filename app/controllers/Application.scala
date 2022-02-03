@@ -82,7 +82,7 @@ class Application @Inject()(
   }
 
   def gettingStarted = markdownAction("public/markdown/getting-started.md", { implicit request => markdown =>
-      views.html.markdownPage("Community process", markdown)
+      views.html.markdownPage("Getting started", markdown)
   })
 
   def allreleases(platform: Option[String] = None) = Action { implicit request =>
