@@ -84,7 +84,7 @@
         "forks": 2025,
         "open_issues": 248,
         "watchers": 5554,
-        "default_branch": "master",
+        "default_branch": "main",
         "permissions": {
             "admin": true,
             "push": true,
@@ -176,7 +176,7 @@
         "forks": 10,
         "open_issues": 4,
         "watchers": 7,
-        "default_branch": "master",
+        "default_branch": "main",
         "permissions": {
             "admin": true,
             "push": true,

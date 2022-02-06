@@ -35,7 +35,7 @@ class GitFileRepositorySpec extends Specification {
       FileUtils.write(new File(repodir, "framework/build.sbt"), "Build", encoding)
 
       // Turn it into a git repo
-      val repo = new InitCommand().setDirectory(repodir).call()
+      val repo = new InitCommand().setInitialBranch("main").setDirectory(repodir).call()
 
       val author = new PersonIdent("Unit Test", "unit.test@example.org")
 
@@ -64,7 +64,7 @@ class GitFileRepositorySpec extends Specification {
 
   def withGitRepo[T](block: GitFileRepository => T): T = withPlayRepo { playRepo =>
     val gitRepo =
-      new GitFileRepository(playRepo, playRepo.hashForRef("master").orNull, Some("documentation/manual"))
+      new GitFileRepository(playRepo, playRepo.hashForRef("main").orNull, Some("documentation/manual"))
     block(gitRepo)
   }
 
