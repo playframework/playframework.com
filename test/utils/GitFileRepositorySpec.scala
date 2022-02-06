@@ -35,7 +35,7 @@ class GitFileRepositorySpec extends Specification {
       FileUtils.write(new File(repodir, "framework/build.sbt"), "Build", encoding)
 
       // Turn it into a git repo
-      val repo = new InitCommand().setDirectory(repodir).call()
+      val repo = new InitCommand().setInitialBranch("main").setDirectory(repodir).call()
 
       val author = new PersonIdent("Unit Test", "unit.test@example.org")
 
