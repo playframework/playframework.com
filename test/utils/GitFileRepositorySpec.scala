@@ -64,7 +64,7 @@ class GitFileRepositorySpec extends Specification {
 
   def withGitRepo[T](block: GitFileRepository => T): T = withPlayRepo { playRepo =>
     val gitRepo =
-      new GitFileRepository(playRepo, playRepo.hashForRef("master").orNull, Some("documentation/manual"))
+      new GitFileRepository(playRepo, playRepo.hashForRef("main").orNull, Some("documentation/manual"))
     block(gitRepo)
   }
 

@@ -84,7 +84,7 @@ class DocumentationConfigProvider @Inject()(environment: Environment, configurat
         for {
           file    <- config.getOptional[String]("versionFile")
           pattern <- config.getOptional[String]("versionPattern")
-        } yield MasterVersion(file, pattern.r),
+        } yield MainVersion(file, pattern.r),
         config.getOptional[String]("gitHubSource"),
       )
     }
