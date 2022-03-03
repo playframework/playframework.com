@@ -48,24 +48,18 @@
 
     </head>
     <body class="@scope">
-        <!--[if lt IE 7]>
-            <p class="outdated">You are using an outdated browser. <a href="http://browsehappy.com/">Upgrade your browser today</a> or <a href="//www.google.com/chrome/browser/">install Google Chrome Frame</a> to better experience this site.</p>
-        <![endif]-->
-
-        @lightbendBanner()
-
         <header id="navigation">
             <div class="wrapper">
-                <a href="/" id="logo">Lightbend</a>
+                <a href="/" id="logo">Play Framework</a>
                 <nav id="sections">
-                    <a href="@routes.Application.gettingStarted()">Try Play</a>
+                    <a href="@routes.Application.gettingStarted">Try Play</a>
                     <a href="@reverseRouter.index(None)">Documentation</a>
-                    <a href="@routes.Application.support()">Support</a>
-                    <a href="@routes.Application.getInvolved()">Get Involved</a>
+                    <a href="@routes.Application.getInvolved">Get Involved</a>
                 </nav>
                 <nav id="social">
                     <a href="//opencollective.com/playframework"><span>Open Collective</span></a>
                     <a href="//discuss.playframework.com"><span>Discuss Play Forum</span></a>
+                    <a href="//discord.gg/g5s2vtZ4Fa"><span>Play Discord Server</span></a>
                     <a href="//twitter.com/playframework"><span>Twitter</span></a>
                     <a href="//github.com/playframework/playframework"><span>GitHub</span></a>
                     <a href="//stackoverflow.com/questions/tagged/playframework"><span>Stackoverflow</span></a>
@@ -124,14 +118,15 @@
                 <article class="community">
                     <h3>Community support</h3>
                     <ul>
-                        <li><a href="//discuss.playframework.com">Discuss Play Forum</a></li>
+                        <li><a href="//discuss.playframework.com">Discuss Forum</a></li>
+                        <li><a href="//discord.gg/g5s2vtZ4Fa">Discord</a></li>
                         <li><a href="//stackoverflow.com/questions/tagged/playframework">Stackoverflow</a></li>
                     </ul>
                 </article>
                 <article class="professional">
                     <h3>Donate to our Collective</h3>
                     <ul>
-                        <li><a href="@routes.Application.sponsors()">If you like Play consider becoming a sponsor</a></li>
+                        <li><a href="@routes.Application.sponsors">If you like Play consider becoming a sponsor</a></li>
                     </ul>
                 </article>
             </div>
@@ -139,7 +134,7 @@
                 <div>
                     <h3>Play Framework</h3>
                     <ul>
-                        <li><a href="@routes.Application.download()">Try Play</a></li>
+                        <li><a href="@routes.Application.download">Try Play</a></li>
                         <li><a href="@reverseRouter.latest(None, "Tutorials")">Tutorials</a></li>
                         <li><a href="@reverseRouter.index(None)">Documentation</a></li>
                     </ul>
@@ -153,9 +148,9 @@
                 <div>
                     <h3>Code &amp; contribution</h3>
                     <ul>
-                        <li><a href="@routes.Code.index()">Code &amp; contributors</a></li>
+                        <li><a href="@routes.Code.index">Code &amp; contributors</a></li>
                         <li><a href="//github.com/playframework/playframework/issues">Bug tracker <em>GitHub</em></a></li>
-                        <li><a href="@routes.Application.getInvolved()">Get involved</a></li>
+                        <li><a href="@routes.Application.getInvolved">Get involved</a></li>
                     </ul>
                 </div>
                 <div>
@@ -180,7 +175,7 @@
                     <a href="https://www.lightbend.com/legal/licenses" target="_blank">Licenses</a> |
                     <a href="https://www.lightbend.com/legal/terms" target="_blank">Terms</a> |
                     <a href="https://www.lightbend.com/legal/privacy" target="_blank">Privacy Policy</a> |
-                    <a href="@routes.Application.cookie()">Cookie Listing</a> |
+                    <a href="@routes.Application.cookie">Cookie Listing</a> |
                     <a class="optanon-toggle-display">Cookie Settings</a>
                 </p>
             </div>

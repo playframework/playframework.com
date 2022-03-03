@@ -46,17 +46,17 @@ Before making a contribution, it is important to make sure that the change you w
 3. Ensure that your commits are squashed.  See [working with git](/documentation/latest/WorkingWithGit) for more information.
 4. Submit a pull request.
 
-If the pull request does not meet the above requirements then the code should **not** be merged into master, or even reviewed - regardless of how good or important it is. No exceptions.
+If the pull request does not meet the above requirements then the code should **not** be merged into main, or even reviewed - regardless of how good or important it is. No exceptions.
 
 The pull request will be reviewed according to the [implementation decision process](community-process#Implementation-decisions).
 
 ## Backporting policy
 
-Generally, all bug fixes, improvements and new features will go to the master branch.  Backports and other commits to stable branches will only be accepted if they meet the following conditions:
+Generally, all bug fixes, improvements and new features will go to the main branch.  Backports and other commits to stable branches will only be accepted if they meet the following conditions:
 
 * The change only affects the documentation
 * The change fixes a regression that was introduced in a previous stable release from that branch
 * The change fixes a bug that impacts significant number of members of the open source community with no simple work arounds available
-* Any other reason that Lightbend deems appropriate
+* Any other reason that Play steering committee deems appropriate
 
 All backports and other commits to stable branches, in addition to satisfying the regular contributor guidelines, must also be binary and source compatible with previous releases on that branch.  The only exception to this is if a serious bug is impossible to fix without breaking the API, for example, a particular feature is not possible to use due to flaws in the API.

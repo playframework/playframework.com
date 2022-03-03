@@ -51,13 +51,13 @@ class Application @Inject()(
       .map { _ =>
         s"""<p class="vulnerability-warning">You are using a version of Play Framework that has a
         <a href="${routes.Security.vulnerability("20130806-SessionInjection")}">known vulnerability</a>.</p>
-          <p>Please upgrade to a later version <a href="${routes.Application.download()}">here</a>.</p>"""
+          <p>Please upgrade to a later version <a href="${routes.Application.download}">here</a>.</p>"""
 
       }
       .orElse {
         if (!version.contains(releases.latest.version)) {
           Some(s"""Play framework ${releases.latest.version} is out!  Check it out <a href="${routes.Application
-            .download()}">here</a>.""")
+            .download}">here</a>.""")
         } else {
           None
         }
@@ -148,10 +148,6 @@ class Application @Inject()(
         case Some(content) => Ok(template(request)(Html(content))).withHeaders(CACHE_CONTROL -> "max-age=10000")
         case None          => notFound
       }
-  }
-
-  def support = Action { implicit request =>
-    Ok(html.support())
   }
 
   def getInvolved = Action { implicit request =>

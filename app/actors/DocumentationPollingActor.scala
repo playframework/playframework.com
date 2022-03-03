@@ -69,11 +69,11 @@ class DocumentationPollingActor(
   }
 
   /**
-   * Determining the master version of the repo means looking up the master branch, if found, loading a configured
-   * master version file out of it, running a configured regular expression against that file to extract the version,
+   * Determining the main version of the repo means looking up the main branch, if found, loading a configured
+   * main version file out of it, running a configured regular expression against that file to extract the version,
    * and if found, returning that version and the hash of the repo it comes from.
    */
-  private def determineMasterVersion(repo: DocumentationGitRepo): Option[(Version, ObjectId)] = {
+  private def determineMainVersion(repo: DocumentationGitRepo): Option[(Version, ObjectId)] = {
     def fileContents(hash: ObjectId, file: String): Option[String] = {
       repo.repo.loadFile(hash, file).map {
         case (size, is) =>
@@ -86,12 +86,12 @@ class DocumentationPollingActor(
     }
 
     for {
-      masterVersion <- repo.config.masterVersion
-      masterHash    <- repo.repo.hashForRef("master")
-      contents      <- fileContents(masterHash, masterVersion.file)
-      matched       <- masterVersion.pattern.findFirstMatchIn(contents)
+      mainVersion <- repo.config.mainVersion
+      mainHash    <- repo.repo.hashForRef("main")
+      contents      <- fileContents(mainHash, mainVersion.file)
+      matched       <- mainVersion.pattern.findFirstMatchIn(contents)
       version       <- Version.parse(matched.group(1).replace("-SNAPSHOT", ".x"))
-    } yield version -> masterHash
+    } yield version -> mainHash
   }
 
   private def scanAndSendDocumentation(old: Option[Documentation]): Documentation = {
@@ -103,15 +103,15 @@ class DocumentationPollingActor(
         .filter(_._1.matches("""\d+\.\d+\.x""")),
     )).map(v => (v._1, v._2.name, repos.default.repo.fileRepoForHash(v._2), v._1.name))
 
-    // Find the master version
-    val defaultMasterVersion = determineMasterVersion(repos.default).flatMap {
+    // Find the main version
+    val defaultMainVersion = determineMainVersion(repos.default).flatMap {
       case (version, hash) if defaultVersions.forall(_._1 != version) =>
         val repo = repos.default.repo.fileRepoForHash(hash)
-        Some((version, hash.name, repo, "master"))
+        Some((version, hash.name, repo, "main"))
       case _ => None
     }
 
-    val allVersions = (defaultVersions ++ defaultMasterVersion).toList.sortBy(_._1).reverse.map {
+    val allVersions = (defaultVersions ++ defaultMainVersion).toList.sortBy(_._1).reverse.map {
       case (version, cacheId, repo, symName) =>
         val newCacheId = xorHashes(cacheId, utils.SiteVersion.hash)
 
@@ -142,18 +142,18 @@ class DocumentationPollingActor(
 
     // Now for each translation
     val translations = repos.translations.map { t =>
-      // Parse all the versions from tags, branches and the master version
+      // Parse all the versions from tags, branches and the main version
       val gitTags = parseVersionsFromRefs(t.repo.allTags).map(v => (v._1, v._2, v._1.name))
       val gitBranches = parseVersionsFromRefs(
         t.repo.allBranches
           .filter(_._1.matches("""\d+\.\d+\.x""")),
       ).map(v => (v._1, v._2, v._1.name))
-      val masterVersion = determineMasterVersion(t).map(v => (v._1, v._2, "master"))
+      val mainVersion = determineMainVersion(t).map(v => (v._1, v._2, "main"))
 
       implicit val lang = t.config.lang
       val versions = versionsToTranslations(
         t.repo,
-        gitTags ++ gitBranches ++ masterVersion,
+        gitTags ++ gitBranches ++ mainVersion,
         defaultTranslation,
         old.flatMap(_.translations.get(lang)),
       )

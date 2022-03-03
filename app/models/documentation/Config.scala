@@ -19,8 +19,8 @@ case class TranslationConfig(
     repo: File,
     basePath: Option[String],
     remote: String,
-    masterVersion: Option[MasterVersion],
+    mainVersion: Option[MainVersion],
     gitHubSource: Option[String],
 )
 
-case class MasterVersion(file: String, pattern: Regex)
+case class MainVersion(file: String, pattern: Regex)
