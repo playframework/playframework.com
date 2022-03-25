@@ -38,6 +38,7 @@ For more information on setting up the seed project, [Check out the documentatio
 
 ## Contribute
 
-Play is a community run project, and we are always happy to have people contribute Play is hosted on 
-[Github](https://github.com/playframework). If you have found an issue with Play or a problem with the documentation 
-please report that [on the github issue tracker](https://github.com/playframework/playframework/issues).   
+Play is a community run project, and we are always happy to have people contribute to the project! Play is hosted on 
+[Github](https://github.com/playframework), so, issues with Play or a problems with the documentation 
+can be reported [on the github issue tracker](https://github.com/playframework/playframework/issues).
+
