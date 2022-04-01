@@ -29,8 +29,8 @@ A contributor is anyone that makes a contribution to Play.  This does not necess
 * Writing or maintaining plugins, modules or libraries for Play
 * Code reviews in GitHub
 * Raising, triaging and adding additional information to help resolve issues
-* Taking part in design and feature discussions on mailing lists
-* Answering questions on mailing lists and in stack overflow
+* Taking part in design and feature discussions in the Discuss forum
+* Answering questions in the Discuss forum and in stack overflow
 * Running, speaking at or contributing to user groups focussed on Play Framework
 * Speaking at conferences, blogging about or otherwise promoting Play Framework
 
@@ -65,7 +65,7 @@ Whether a pull request is merged or not depends on many factors, including:
 
 ### Design and house keeping decisions
 
-The primary place for discussion about the design of Play and how the Play project is run is the [play-framework-dev](https://groups.google.com/forum/#!forum/play-framework-dev) mailing list.  All major new features, refactorings or changes to the project should first be discussed in this forum.  The aim of the discussions is to reach an understanding on whether the task will be done, and how it will be done.  When a new topic is posted, interested parties are encouraged to comment with their affirmation or concerns.
+The primary place for discussion about the design of Play and how the Play project is run is the [Play Framework Forum](https://github.com/playframework/playframework/discussions).  All major new features, refactorings or changes to the project should first be discussed in this forum.  The aim of the discussions is to reach an understanding on whether the task will be done, and how it will be done.  When a new topic is posted, interested parties are encouraged to comment with their affirmation or concerns.
 
 While Lightbend ultimately has the last word on all decisions here, as much as possible we will endeavor to reach a consensus in the majority of the community.
 
@@ -91,5 +91,5 @@ All integrators should follow the processes outlined on this page, and should be
 * An integrator must never merge their own pull requests.  All pull requests must be reviewed and merged by another integrator.
 * Documentation changes may be backported between releases as desired, however all other changes must by approved by Lightbend.
 * Integrators must enforce Lightbend's CLA requirements when merging pull requests.
-* When closing issues or pull requests, remember that we are dealing with people.  Be kind and helpful, pointing people in the right direction.  For example, if someone raises an issue that is really a question, when closing the issue, direct them to the mailing list, providing a link to the mailing list, and if possible, a brief answer to the question.
+* When closing issues or pull requests, remember that we are dealing with people.  Be kind and helpful, pointing people in the right direction.  For example, if someone raises an issue that is really a question, when closing the issue, direct them to the [Play Framework Forum](https://github.com/playframework/playframework/discussions) and if possible, a brief answer to the question.
 
