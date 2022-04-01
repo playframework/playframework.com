@@ -5,8 +5,8 @@
 If you wish to report an issue for Play Framework, please ensure you have done the following things:
 
 * If it is a documentation issue with a simple fix, don't raise an issue, just edit the documentation yourself directly in GitHub and submit a pull request.  This will be quicker for you and everybody.
-* If you are not 100% sure that it is a bug, then ask about it on the [Play Framework Forum](https://discuss.playframework.com) first.  You will get a lot more help a lot quicker on the mailing list if you raise it there.  The issue tracker is for verified bugs, not for questions.
-* If you have a feature request, please raise it on the [developer mailing list](https://groups.google.com/forum/#!forum/play-framework-dev) first.  The mailing list is the best forum to discuss new features, and it may be that Play already provides something to achieve what you want to achieve and you didn't realise.
+* If you are not 100% sure that it is a bug, then ask about it in the [Play Framework Forum](https://github.com/playframework/playframework/discussions) first.  You will get a lot more help a lot quicker in the forum if you raise it there.  The issue tracker is for verified bugs, not for questions.
+* If you have a feature request, please also raise it in the [GitHub Discussion forum](https://github.com/playframework/playframework/discussions) first.  The forum is the best place to discuss new features, and it may be that Play already provides something to achieve what you want to achieve and you didn't realise.
 * If you are sure you have found a bug, then raise an issue.  Please be as specific as possible, including sample code that reproduces the problem, stack traces if there are any exceptions thrown, and versions of Play, OS, Java, etc.
 
 When the above guidelines are not followed, a Play integrator may close the issue, directing you to the appropriate forum for further discussion.
@@ -15,7 +15,7 @@ When the above guidelines are not followed, a Play integrator may close the issu
 
 ### Prerequisites
 
-Before making a contribution, it is important to make sure that the change you wish to make and the approach you wish to take will likely be accepted, otherwise you may end up doing a lot of work for nothing.  If the change is only small, for example, if it's a documentation change or a simple bugfix, then it's likely to be accepted with no prior discussion.  However, new features, or bigger refactorings should first be discussed on the [developer mailing list](https://groups.google.com/forum/#!forum/play-framework-dev).  Additionally, any issues with the [community label](https://github.com/playframework/playframework/issues?q=is%3Aopen+is%3Aissue+label%3Acommunity) have been agreed to be a change that will likely be accepted.
+Before making a contribution, it is important to make sure that the change you wish to make and the approach you wish to take will likely be accepted, otherwise you may end up doing a lot of work for nothing.  If the change is only small, for example, if it's a documentation change or a simple bugfix, then it's likely to be accepted with no prior discussion.  However, new features, or bigger refactorings should first be discussed in the [Play Framework Forum](https://github.com/playframework/playframework/discussions).  Additionally, any issues with the [community label](https://github.com/playframework/playframework/issues?q=is%3Aopen+is%3Aissue+label%3Acommunity) have been agreed to be a change that will likely be accepted.
 
 ### Procedure
 
