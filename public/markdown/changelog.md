@@ -1277,6 +1277,41 @@ A complete list of what was fixed for 2.2.2 can be found on [GitHub](https://git
 * Stopped plugins in reverse order to started
 * Removed circular dependencies in dev mode ClassLoaders
 
+## Play 1.7.0
+
+*Released 03 April 2022*
+
+
+* [#1355](https://github.com/playframework/play1/issues/1355): Play scripts upgrade to Python 3
+* [#1372](https://github.com/playframework/play1/issues/1372): Updated dependencies and allow support for JDK 17 source
+* [#1377](https://github.com/playframework/play1/issues/1377): [#1371] run on push envent
+* [#1383](https://github.com/playframework/play1/issues/1383): Ability to disable database evolutions on a datasource basis
+* [#1384](https://github.com/playframework/play1/issues/1384): [#1383] 🆕 Ability to disable database evolutions on a datasource basis
+* [#1385](https://github.com/playframework/play1/issues/1385): [#1331] 🆕 Add new parameter jpda.address support
+* [#1387](https://github.com/playframework/play1/issues/1387): make default jdk 11
+* [#1391](https://github.com/playframework/play1/issues/1391): update hibernate up to 5.6.5
+* [#1393](https://github.com/playframework/play1/issues/1393): [#1383] ♻ Support disabled evolutions for command line operations
+* [#1394](https://github.com/playframework/play1/issues/1394): [#1353, #1355] update python 3
+* [#1353](https://github.com/playframework/play1/issues/1353): python3 support or workaround
+* [#1371](https://github.com/playframework/play1/issues/1371): Switch to GitHub Actions, Travis will be removed
+* [#1376](https://github.com/playframework/play1/issues/1376): #1371 add github-actions.yml
+* [#1378](https://github.com/playframework/play1/issues/1378): #1371 remove travis badge
+* [#1343](https://github.com/playframework/play1/issues/1343): GitHub issue #1278: OrderBy support in simplified JPA queries for 1.5.x
+* [#1344](https://github.com/playframework/play1/issues/1344): MultiDb: Additional documentation
+* [#1352](https://github.com/playframework/play1/issues/1352): update hibernate up to 5.4.30.Final and its dependencies
+* [#1354](https://github.com/playframework/play1/issues/1354): The temporary class of the template is output directly under the application dir.
+* [#1357](https://github.com/playframework/play1/issues/1357): Cleanup code
+* [#1370](https://github.com/playframework/play1/issues/1370): #1367 change log4j-1.2.17 to log4j-2.17.1
+* [#1373](https://github.com/playframework/play1/issues/1373): Updated dependencies
+* [#1374](https://github.com/playframework/play1/issues/1374): Fix travis build
+* [#1375](https://github.com/playframework/play1/issues/1375): #1374 travis fix
+* [#1379](https://github.com/playframework/play1/issues/1379): Fix pull request Pr/1238
+* [#1380](https://github.com/playframework/play1/issues/1380): #1367 change log4j-1.2.17 to log4j-2.17.1
+* [#1382](https://github.com/playframework/play1/issues/1382): fixed 'play idea' now is correctly for WSL Run GitHub Action on win and fixed test for Windows 
+* [#1386](https://github.com/playframework/play1/issues/1386): delete unused dependency
+* [#1389](https://github.com/playframework/play1/issues/1389): Cleanup code
+* [#1395](https://github.com/playframework/play1/issues/1395): [#1278, #1343]  OrderBy support in simplified JPA queries for 1.5.x
+* [#1396](https://github.com/playframework/play1/issues/1396): [1.7.0] add releasenotes-1.7.0.textile
 
 ## Play 1.6.0
 
