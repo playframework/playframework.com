@@ -40,7 +40,7 @@ jobs:
       java: 11, 8
       scala: 2.13.8
       cmd: |
-         # Clone generated docs so that we can run some integration tests
+        # Clone generated docs so that we can run some integration tests
         git clone https://github.com/playframework/play-generated-docs.git $PWD/data/generated
         sbt ++$MATRIX_SCALA test
 
