@@ -1,4 +1,11 @@
 
+## Play 2.8.16
+
+*Released 2 June 2022
+
+[All changes](https://github.com/playframework/playframework/compare/2.8.15...2.8.16/)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/121?closed=1)
+
 ## Play 2.8.15
 
 *Released 31 March 2022
