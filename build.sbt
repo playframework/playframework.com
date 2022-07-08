@@ -52,5 +52,5 @@ Compile / managedSourceDirectories += crossTarget.value / "version"
 Compile / doc / sources := Seq.empty
 Compile / packageDoc / publishArtifact := false
 
-newrelicVersion := "7.6.0"
+newrelicVersion := "7.8.0"
 newrelicAppName := "playframework.com"
