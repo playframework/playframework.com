@@ -41,7 +41,7 @@ jobs:
       scala: 2.13.x
       cmd: |
         # Clone generated docs so that we can run some integration tests
-        git clone https://github.com/playframework/play-generated-docs.git $PWD/data/generated
+        git clone -o origin https://github.com/playframework/play-generated-docs.git $PWD/data/generated
         sbt ++$MATRIX_SCALA test
 
   finish:
