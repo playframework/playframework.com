@@ -1,7 +1,7 @@
 name := "playframework"
 version := "1.0-SNAPSHOT"
 
-enablePlugins(PlayScala, NewRelic)
+enablePlugins(PlayScala)
 
 scalaVersion := "2.13.8"
 scalacOptions ++= List("-encoding", "utf8", "-deprecation", "-feature", "-unchecked")
@@ -51,6 +51,3 @@ Compile / sourceGenerators += Def.task {
 Compile / managedSourceDirectories += crossTarget.value / "version"
 Compile / doc / sources := Seq.empty
 Compile / packageDoc / publishArtifact := false
-
-newrelicVersion := "7.8.0"
-newrelicAppName := "playframework.com"
