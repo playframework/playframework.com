@@ -35,7 +35,7 @@ class DocumentationController @Inject()(
 )(implicit actorSystem: akka.actor.ActorSystem, reverseRouter: ReverseRouter)
     extends AbstractController(components) {
 
-  private implicit val timeout: Timeout = Timeout(5.seconds)
+  private implicit val timeout: Timeout = Timeout(10.seconds)
   private implicit val typedSystem: ActorSystem[Nothing] = actorSystem.toTyped
   import typedSystem.executionContext
 
