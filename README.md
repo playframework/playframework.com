@@ -18,8 +18,9 @@
 Requirements for full installation:
 - local clone of playframework, with remote called origin, symlinked from data/main.
 - local clone of play-generated-docs, with remote called origin, symlinked from data/generated.
-  - `git clone https://github.com/playframework/play-generated-docs.git $PWD/data/generated`
+  - `git clone -o origin https://github.com/playframework/play-generated-docs.git $PWD/data/generated`
 - local clone of each doc translation in data/translationname, e.g. data/ja, data/tr, data/fr, data/bg. See application.conf for list of translation repos.
+- If you run tests locally, you might want to temporary move your $HOME/.gitconfig file to have a "clean" environment, like `mv .gitconfig .gitconfig.bak`. That's because JGit is used and by default reads that user config file. This can cause problems when running tests, e.g. when you have signing activated in your ~/.gitconfig file. Unfortunatly there is no config nor env-varible to disable reading that config file, see https://bugs.eclipse.org/bugs/show_bug.cgi?id=488777
 
 Git should ignore the symlinked repos but you may need to tell your IDE to exclude them.
 
