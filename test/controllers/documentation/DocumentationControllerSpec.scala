@@ -78,7 +78,7 @@ object DocumentationControllerSpec extends PlaySpecification {
         val request                      = FakeRequest("GET", reverseRouter.page(None, "2.5.x", "PullRequests"))
         val result                       = route(app, request).get
 
-        redirectLocation(result) must beSome("https://www.playframework.com/contributing")
+        redirectLocation(result) must beSome("https://github.com/playframework/.github/blob/main/CONTRIBUTING.md")
       }
 
       "not redirect when there is no new page" in new WithApplication with Injecting {

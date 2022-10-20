@@ -115,10 +115,9 @@ class Application @Inject()(
       views.html.markdownPage("Community process", markdown)
     })
 
-  def contributing =
-    markdownAction("public/markdown/contributing.md", { implicit request => markdown =>
-      views.html.markdownPage("Contributing", markdown)
-    })
+  def contributing = Action {
+    Redirect("https://github.com/playframework/.github/blob/main/CONTRIBUTING.md")
+  }
 
   def markdownAction(markdownFile: String, template: RequestHeader => Html => Html) = Action {
     implicit request =>
