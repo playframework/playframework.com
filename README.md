@@ -29,3 +29,7 @@ You may see exceptions in the logs about failing to authenticate, ignore them, t
 ## Rebuilding the AWS Instance
 
 If it is necessary to rebuild the instance, check this document: <https://github.com/playframework/play-meta/blob/main/playframework.com-machine-setup.md>.
+
+## Deployment
+
+The deployment process is described as part of a Play Framwork release. See https://github.com/playframework/.github/blob/main/RELEASING.md
