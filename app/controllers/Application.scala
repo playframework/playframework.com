@@ -81,20 +81,9 @@ class Application @Inject()(
     MovedPermanently(routes.Application.gettingStarted.path)
   }
 
-  def gettingStarted = Action.async { implicit request =>
-    exampleProjectsService.cached() match {
-      case Some(cached) =>
-        val examples = toExamples(cached)
-        Future.successful {
-          Ok(html.gettingStarted(examples))
-        }
-      case None =>
-        exampleProjectsService.examples().map { live =>
-          val examples = toExamples(live)
-          Ok(html.gettingStarted(examples))
-        }
-    }
-  }
+  def gettingStarted = markdownAction("public/markdown/getting-started.md", { implicit request => markdown =>
+      views.html.markdownPage("Getting started", markdown)
+  })
 
   def allreleases(platform: Option[String] = None) = Action { implicit request =>
     val selectedPlatform = Platform(platform.orElse(request.headers.get("User-Agent")))
