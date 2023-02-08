@@ -13,7 +13,7 @@ libraryDependencies ++= Seq(
   "org.webjars"        % "jquery"              % "3.6.3",
   "org.webjars"        % "html5shiv"           % "3.7.3-1",
   "org.webjars"        % "prettify"            % "4-Mar-2013-1",
-  "org.webjars"        % "clipboard.js"        % "2.0.6",
+  "org.webjars"        % "clipboard.js"        % "2.0.11",
   guice,
   ehcache,
   filters,
