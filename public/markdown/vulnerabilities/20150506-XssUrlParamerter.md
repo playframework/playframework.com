@@ -19,7 +19,7 @@ Any application that uses Play's URL rendering.
 
 ### Workarounds
 
-Encode parameter before using it, 
+Encode parameter before using it,
 
 ```java
 @{Controller.action(parameterWithInjection?.urlEncode())}
