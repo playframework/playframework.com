@@ -1,4 +1,4 @@
-lang.name=българин
+lang.name=български
 
 documentation.contribute.message=Found an error in this documentation? The source code for this page can be found \
   {0}here{1}.  After reading the {2}documentation guidelines{3}, please feel free to contribute a pull request.
