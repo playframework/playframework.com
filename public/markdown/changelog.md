@@ -962,7 +962,7 @@ Adds support for sbt 1.0
 
 *Released 1 September 2014*
 
-* [3298](https://github.com/playframework/playframework/issues/3298) Upgrade to [Netty 3.9.3](http://netty.io/news/2014/08/06/3-9-3-Final.html).
+* [3298](https://github.com/playframework/playframework/issues/3298) Upgrade to [Netty 3.9.3](https://netty.io/news/2014/08/06/3-9-3-Final.html).
 * [3349](https://github.com/playframework/playframework/issues/3349) Use URI instead of URL to parse Java WS URLs.
 
 [Full changelog](https://github.com/playframework/playframework/issues?q=milestone%3A2.3.4)
@@ -1027,7 +1027,7 @@ Adds support for sbt 1.0
 * [3050](https://github.com/playframework/playframework/issues/3050) Fixed reverse routing routes priority
 * [3057](https://github.com/playframework/playframework/issues/3057) Fixed excessive reloading
 * [3064](https://github.com/playframework/playframework/issues/3064) Fixed HEAD support in CSRF filter
-* [3066](https://github.com/playframework/playframework/issues/3066) Upgraded to Netty 3.9.2 to fix a [security vulnerability](http://netty.io/news/2014/06/11/3.html) in the SSL support
+* [3066](https://github.com/playframework/playframework/issues/3066) Upgraded to Netty 3.9.2 to fix a [security vulnerability](https://netty.io/news/2014/06/11/3.html) in the SSL support
 
 **Upgrade notes**
 
@@ -1054,8 +1054,8 @@ Adds support for sbt 1.0
 * One Result to rule them all: all the result types which were deprecated in 2.2 are now gone and only Result remains.
 * Lots of bug fixes.
 
-[Highlights](http://playframework.com/documentation/2.3.x/Highlights23)
-[Migration Guide](http://playframework.com/documentation/2.3.x/Migration23)
+[Highlights](https://playframework.com/documentation/2.3.x/Highlights23)
+[Migration Guide](https://playframework.com/documentation/2.3.x/Migration23)
 [Full changelog](https://github.com/playframework/playframework/issues?milestone=3&state=closed)
 
 ## Play 2.2.5
@@ -1080,7 +1080,7 @@ Adds support for sbt 1.0
 
 **Vulnerabilities fixed**
 
-* [WebSockets](http://netty.io/news/2014/04/30/release-day.html) Netty WebSocket denial of service vulnerability
+* [WebSockets](https://netty.io/news/2014/04/30/release-day.html) Netty WebSocket denial of service vulnerability
 
 **Other changes**
 
@@ -1147,7 +1147,7 @@ A complete list of what was fixed for 2.2.2 can be found on [GitHub](https://git
 * New stage and dist tasks
 * Built in gzip support
 
-[Highlights](http://playframework.com/documentation/2.2.0/Highlights22)
+[Highlights](https://playframework.com/documentation/2.2.0/Highlights22)
 [Full changelog](https://github.com/playframework/playframework/issues?milestone=2&state=closed)
 
 ## Play 2.1.5
@@ -1258,7 +1258,7 @@ A complete list of what was fixed for 2.2.2 can be found on [GitHub](https://git
 * Improved Iteratee API
 * 182 resolved bugs and improvements in our issue tracker:
 
-[Highlights](http://playframework.com/documentation/2.1.0/Highlights)
+[Highlights](https://playframework.com/documentation/2.1.0/Highlights)
 [Full changelog](https://play.lighthouseapp.com/projects/82401-play-20/milestones/137248-21)
 
 ## Play 2.0.8
@@ -1761,7 +1761,7 @@ arguments
 **Migration notes**
 
 * Java 1.5 is no longer supported
-* Modules dependencies resolution change from http://www.playframework.org to https://www.playframework.com
+* Modules dependencies resolution change from https://www.playframework.org to https://www.playframework.com
 * Run ‘play deps’ to make sure your dependencies are up-to-date
 
 **Known issues**

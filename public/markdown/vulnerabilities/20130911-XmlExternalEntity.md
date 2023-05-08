@@ -61,10 +61,10 @@ And then when starting the application in production mode, add the following sys
 
 Upgrade to the appropriate version below:
 
-* [Play 2.1.4](http://downloads.typesafe.com/play/2.1.4/play-2.1.4.zip)
-* [Play 2.0.7](http://downloads.typesafe.com/play/2.0.7/play-2.0.7.zip)
+* [Play 2.1.4](https://downloads.typesafe.com/play/2.1.4/play-2.1.4.zip)
+* [Play 2.0.7](https://downloads.typesafe.com/play/2.0.7/play-2.0.7.zip)
 
-### CVSS metrics (<a href="http://www.first.org/cvss/cvss-guide">more info</a>)
+### CVSS metrics (<a href="https://www.first.org/cvss/user-guide">more info</a>)
 
 * **Base: 6.4**
  AV:N/AC:L/Au:N/C:P/I:N/A:P
