@@ -15,7 +15,7 @@ Though Lightbend wholly owns the Play project and has the final say in any decis
 
 For this reason, Lightbend's relationship to the Play project is best described as a stewardship, Lightbend manages the Play project, but is held accountable by the Play community.
 
-For a statement of how Lightbend views open source, see the [Lightbend Open Source Position Statement](http://lightbend.com/open-source-position-statement).
+For a statement of how Lightbend views open source, see the [Lightbend Open Source Position Statement](https://lightbend.com/open-source-position-statement).
 
 ## Definitions
 

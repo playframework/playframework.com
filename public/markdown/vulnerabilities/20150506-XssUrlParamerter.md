@@ -29,12 +29,12 @@ Encode parameter before using it,
 
 Upgrade to the appropriate version below:
 
-* [Play 1.2.5.5](http://downloads.typesafe.com/play/1.2.5.5/play-1.2.5.5.zip)
-* [Play 1.2.6.1](http://downloads.typesafe.com/play/1.2.6.1/play-1.2.6.1.zip)
-* [Play 1.2.7.2](http://downloads.typesafe.com/play/1.2.7.2/play-1.2.7.2.zip)
-* [Play 1.3.1](http://downloads.typesafe.com/play/1.3.1/play-1.3.1.zip)
+* [Play 1.2.5.5](https://downloads.typesafe.com/play/1.2.5.5/play-1.2.5.5.zip)
+* [Play 1.2.6.1](https://downloads.typesafe.com/play/1.2.6.1/play-1.2.6.1.zip)
+* [Play 1.2.7.2](https://downloads.typesafe.com/play/1.2.7.2/play-1.2.7.2.zip)
+* [Play 1.3.1](https://downloads.typesafe.com/play/1.3.1/play-1.3.1.zip)
 
-### CVSS metrics (<a href="http://www.first.org/cvss/cvss-guide">more info</a>)
+### CVSS metrics (<a href="https://www.first.org/cvss/user-guide">more info</a>)
 
 * **Base: 5.8**
  AV:N/AC:M/Au:N/C:P/I:P/A:N

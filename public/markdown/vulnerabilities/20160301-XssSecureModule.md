@@ -41,8 +41,8 @@ ${messages.get(flash.success)}
 
 Upgrade to the appropriate version below:
 
-* [Play 1.3.4](http://downloads.typesafe.com/play/1.3.1/play-1.3.4.zip)
-* [Play 1.4.2](http://downloads.typesafe.com/play/1.4.2/play-1.4.2.zip)
+* [Play 1.3.4](https://downloads.typesafe.com/play/1.3.1/play-1.3.4.zip)
+* [Play 1.4.2](https://downloads.typesafe.com/play/1.4.2/play-1.4.2.zip)
 
 
 ### Acknowledgements

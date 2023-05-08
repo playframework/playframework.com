@@ -32,13 +32,13 @@ Validate that no values being placed into a session contain null bytes.
 
 Upgrade to the appropriate version below:
 
-* [Play 2.1.3](http://downloads.typesafe.com/play/2.1.3/play-2.1.3.zip)
-* [Play 2.0.6](http://downloads.typesafe.com/play/2.0.6/play-2.0.6.zip)
-* [Play 1.2.6](http://downloads.typesafe.com/play/1.2.6/play-1.2.6.zip)
-* [Play 1.1.3](http://downloads.typesafe.com/play/1.1.3/play-1.1.3.zip)
-* [Play 1.0.3.4](http://downloads.typesafe.com/play/1.0.3.4/play-1.0.3.4.zip)
+* [Play 2.1.3](https://downloads.typesafe.com/play/2.1.3/play-2.1.3.zip)
+* [Play 2.0.6](https://downloads.typesafe.com/play/2.0.6/play-2.0.6.zip)
+* [Play 1.2.6](https://downloads.typesafe.com/play/1.2.6/play-1.2.6.zip)
+* [Play 1.1.3](https://downloads.typesafe.com/play/1.1.3/play-1.1.3.zip)
+* [Play 1.0.3.4](https://downloads.typesafe.com/play/1.0.3.4/play-1.0.3.4.zip)
 
-### CVSS metrics (<a href="http://www.first.org/cvss/cvss-guide">more info</a>)
+### CVSS metrics (<a href="https://www.first.org/cvss/user-guide">more info</a>)
 
 * **Base: 6.4**
  AV:N/AC:L/Au:N/C:P/I:P/A:N
