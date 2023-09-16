@@ -37,7 +37,7 @@ object DocumentationControllerSpec extends PlaySpecification {
       }
 
       "redirect to the selected version and home when no page is selected" in new WithApplication
-      with Injecting {
+        with Injecting {
         inject[Router] // makes sure router.Routes class get initialized, which injects controllers.documentation.Router and calls its withPrefix(...)
         val reverseRouter: ReverseRouter = inject[ReverseRouter]
 
@@ -48,7 +48,7 @@ object DocumentationControllerSpec extends PlaySpecification {
       }
 
       "redirect to the selected version when not having a trailing slash" in new WithApplication
-      with Injecting {
+        with Injecting {
         inject[Router] // makes sure router.Routes class get initialized, which injects controllers.documentation.Router and calls its withPrefix(...)
         val reverseRouter: ReverseRouter = inject[ReverseRouter]
 
@@ -78,7 +78,9 @@ object DocumentationControllerSpec extends PlaySpecification {
         val request                      = FakeRequest("GET", reverseRouter.page(None, "2.5.x", "PullRequests"))
         val result                       = route(app, request).get
 
-        redirectLocation(result) must beSome("https://github.com/playframework/.github/blob/main/CONTRIBUTING.md")
+        redirectLocation(result) must beSome(
+          "https://github.com/playframework/.github/blob/main/CONTRIBUTING.md",
+        )
       }
 
       "not redirect when there is no new page" in new WithApplication with Injecting {

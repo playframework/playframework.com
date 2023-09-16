@@ -2,7 +2,8 @@ package controllers.documentation
 
 import actors.DocumentationActor
 import actors.DocumentationActor.{ NotFound => DocsNotFound, NotModified => DocsNotModified, _ }
-import akka.actor.typed.{ ActorRef, ActorSystem }
+import akka.actor.typed.ActorRef
+import akka.actor.typed.ActorSystem
 import akka.actor.typed.scaladsl.AskPattern._
 import akka.actor.typed.scaladsl.adapter._
 import akka.util.Timeout
@@ -26,7 +27,7 @@ import scala.concurrent.duration._
 import scala.reflect.ClassTag
 
 @Singleton
-class DocumentationController @Inject()(
+class DocumentationController @Inject() (
     messages: MessagesApi,
     documentationRedirects: DocumentationRedirects,
     documentationActor: ActorRef[Command],
@@ -35,7 +36,7 @@ class DocumentationController @Inject()(
 )(implicit actorSystem: akka.actor.ActorSystem, reverseRouter: ReverseRouter)
     extends AbstractController(components) {
 
-  private implicit val timeout: Timeout = Timeout(10.seconds)
+  private implicit val timeout: Timeout                  = Timeout(10.seconds)
   private implicit val typedSystem: ActorSystem[Nothing] = actorSystem.toTyped
   import typedSystem.executionContext
 
@@ -43,8 +44,8 @@ class DocumentationController @Inject()(
 
   private val EmptyContext = TranslationContext(Lang("en"), true, None, Nil, Nil)
 
-  private def pageNotFound(context: TranslationContext, title: String, alternateVersions: Seq[Version])(
-      implicit req: RequestHeader,
+  private def pageNotFound(context: TranslationContext, title: String, alternateVersions: Seq[Version])(implicit
+      req: RequestHeader,
   ) =
     NotFound(views.html.documentation.v2(messages, context, title, alternateVersions = alternateVersions))
 
@@ -58,12 +59,14 @@ class DocumentationController @Inject()(
 
   private def notModified(cacheId: String) = cacheable(NotModified, cacheId)
 
-  private def DocsAction(action: ActorRef[Command] => RequestHeader => Future[Result]) = Action.async(parse.empty) {
-    implicit req =>
+  private def DocsAction(action: ActorRef[Command] => RequestHeader => Future[Result]) =
+    Action.async(parse.empty) { implicit req =>
       action(documentationActor)(req)
-  }
+    }
 
-  private def VersionAction(version: String)(action: (ActorRef[Command], Version) => RequestHeader => Future[Result]) =
+  private def VersionAction(
+      version: String,
+  )(action: (ActorRef[Command], Version) => RequestHeader => Future[Result]) =
     DocsAction { actor => implicit req =>
       Version.parse(version).fold(Future.successful(pageNotFound(EmptyContext, "", Nil))) { v =>
         action(actor, v)(req)
@@ -84,7 +87,9 @@ class DocumentationController @Inject()(
       case Some(cookieLang) => cookieLang +: request.acceptLanguages
       case None             => request.acceptLanguages
     }
-    val candidates = candidateLangs ++ candidateLangs.collect { case l if l.country.nonEmpty => Lang(l.language) }
+    val candidates = candidateLangs ++ candidateLangs.collect {
+      case l if l.country.nonEmpty => Lang(l.language)
+    }
     new DefaultLangs(langs).preferred(candidates)
   }
 
@@ -105,12 +110,14 @@ class DocumentationController @Inject()(
   }
 
   def pageExists(version: Version, page: String): Future[Option[Version]] = {
-    documentationActor.ask[Response[PageExists]](replyTo => QueryPageExists(None, version, None, page, replyTo)).map {
-      case PageExists(true, _) =>
-        Some(version)
-      case other =>
-        None
-    }
+    documentationActor
+      .ask[Response[PageExists]](replyTo => QueryPageExists(None, version, None, page, replyTo))
+      .map {
+        case PageExists(true, _) =>
+          Some(version)
+        case other =>
+          None
+      }
   }
 
   def index(lang: Option[Lang]) = latest(lang, "Home")
@@ -134,22 +141,34 @@ class DocumentationController @Inject()(
 
   def v1Image(lang: Option[Lang], v: String, image: String) = {
     val resource = "images/" + image + ".png"
-    ResourceAction(v, resource, (version, etag, replyTo) => LoadResource(lang, version, etag, resource, replyTo))
+    ResourceAction(
+      v,
+      resource,
+      (version, etag, replyTo) => LoadResource(lang, version, etag, resource, replyTo),
+    )
   }
 
   def v1File(lang: Option[Lang], v: String, file: String) = {
     val resource = "files/" + file
-    ResourceAction(v, resource, (version, etag, replyTo) => LoadResource(lang, version, etag, resource, replyTo), inline = false)
+    ResourceAction(
+      v,
+      resource,
+      (version, etag, replyTo) => LoadResource(lang, version, etag, resource, replyTo),
+      inline = false,
+    )
   }
 
   def v1Cheatsheet(lang: Option[Lang], v: String, category: String) = VersionAction(v) {
     (actor, version) => implicit req =>
-      actorRequest(actor, category, replyTo => RenderV1Cheatsheet(lang, version, etag(req), category, replyTo)) {
-        case V1Cheatsheet(sheets, title, otherCategories, context, cacheId) =>
-          cacheable(
-            Ok(views.html.documentation.cheatsheet(context, title, otherCategories, sheets)),
-            cacheId,
-          )
+      actorRequest(
+        actor,
+        category,
+        replyTo => RenderV1Cheatsheet(lang, version, etag(req), category, replyTo),
+      ) { case V1Cheatsheet(sheets, title, otherCategories, context, cacheId) =>
+        cacheable(
+          Ok(views.html.documentation.cheatsheet(context, title, otherCategories, sheets)),
+          cacheId,
+        )
       }
   }
 
@@ -169,38 +188,39 @@ class DocumentationController @Inject()(
 
   def page(lang: Option[Lang], v: String, page: String) = VersionAction(v) { (actor, version) => implicit req =>
     val linkFuture = canonicalLinkHeader(page)
-    val resultFuture = actorRequest(actor, page, replyTo => RenderPage(lang, version, etag(req), page, replyTo)) {
-      case RenderedPage(html, sidebarHtml, breadcrumbsHtml, source, context, cacheId) =>
-        val pageTitle = HtmlHelpers.friendlyTitle(page)
-        val result = Ok(
-          views.html.documentation
-            .v2(
-              messages,
-              context,
-              page,
-              pageTitle,
-              Some(html),
-              sidebarHtml,
-              source,
-              breadcrumbs = breadcrumbsHtml,
-            ),
-        )
-        cacheable(withLangHeaders(result, page, context), cacheId)
-    }.flatMap { result =>
-      if (result.header.status == NOT_FOUND) {
-        documentationRedirects.redirectFor(page) match {
-          case Some(redirect) =>
-            pageExists(version, redirect.to).map {
-              case Some(_) => Results.MovedPermanently(reverseRouter.page(lang, v, redirect.to))
-              case None    => Results.MovedPermanently(redirect.to)
-            }
-          case None =>
-            Future.successful(result)
+    val resultFuture =
+      actorRequest(actor, page, replyTo => RenderPage(lang, version, etag(req), page, replyTo)) {
+        case RenderedPage(html, sidebarHtml, breadcrumbsHtml, source, context, cacheId) =>
+          val pageTitle = HtmlHelpers.friendlyTitle(page)
+          val result = Ok(
+            views.html.documentation
+              .v2(
+                messages,
+                context,
+                page,
+                pageTitle,
+                Some(html),
+                sidebarHtml,
+                source,
+                breadcrumbs = breadcrumbsHtml,
+              ),
+          )
+          cacheable(withLangHeaders(result, page, context), cacheId)
+      }.flatMap { result =>
+        if (result.header.status == NOT_FOUND) {
+          documentationRedirects.redirectFor(page) match {
+            case Some(redirect) =>
+              pageExists(version, redirect.to).map {
+                case Some(_) => Results.MovedPermanently(reverseRouter.page(lang, v, redirect.to))
+                case None    => Results.MovedPermanently(redirect.to)
+              }
+            case None =>
+              Future.successful(result)
+          }
+        } else {
+          Future.successful(result)
         }
-      } else {
-        Future.successful(result)
       }
-    }
 
     for {
       link   <- linkFuture
@@ -209,7 +229,11 @@ class DocumentationController @Inject()(
   }
 
   def resource(lang: Option[Lang], v: String, resource: String) =
-    ResourceAction(v, resource, (version, etag, replyTo) => LoadResource(lang, version, etag, resource, replyTo))
+    ResourceAction(
+      v,
+      resource,
+      (version, etag, replyTo) => LoadResource(lang, version, etag, resource, replyTo),
+    )
 
   // -- API
   def v1Api(lang: Option[Lang], version: String) = Action {
@@ -300,18 +324,26 @@ class DocumentationController @Inject()(
   private def canonicalLinkHeader(page: String) = {
     val Array(epoch, major, minor) = releases.latest.version.split("\\.", 4)
     val latestVersion              = Version.parse(s"$epoch.$major.x").get
-    documentationActor.ask[Response[PageExists]](replyTo => QueryPageExists(None, latestVersion, None, page, replyTo)).map {
-      case PageExists(true, _) =>
-        val canonicalUrl = s"https://www.playframework.com/documentation/$latestVersion/$page"
-        val link         = s"""<$canonicalUrl>; rel="canonical""""
-        Seq(LINK -> link)
-      case other =>
-        Seq.empty
-    }
+    documentationActor
+      .ask[Response[PageExists]](replyTo => QueryPageExists(None, latestVersion, None, page, replyTo))
+      .map {
+        case PageExists(true, _) =>
+          val canonicalUrl = s"https://www.playframework.com/documentation/$latestVersion/$page"
+          val link         = s"""<$canonicalUrl>; rel="canonical""""
+          Seq(LINK -> link)
+        case other =>
+          Seq.empty
+      }
   }
 
   private def switchAction(
-      msg: (Option[Lang], Version, Option[String], String, ActorRef[Response[PageExists]]) => LangRequest[PageExists],
+      msg: (
+          Option[Lang],
+          Version,
+          Option[String],
+          String,
+          ActorRef[Response[PageExists]],
+      ) => LangRequest[PageExists],
       home: String,
   ) = { (lang: Option[Lang], v: String, page: String) =>
     VersionAction(v) { (actor, version) => implicit req =>
@@ -324,16 +356,15 @@ class DocumentationController @Inject()(
     }
   }
 
-  def withLangHeaders(result: Result, page: String, context: TranslationContext)(
-      implicit req: RequestHeader,
+  def withLangHeaders(result: Result, page: String, context: TranslationContext)(implicit
+      req: RequestHeader,
   ) = {
     val linkHeader = context.alternatives
       .filterNot(_.lang == context.lang)
-      .collect {
-        case AlternateTranslation(l, isDefault, Some(v)) =>
-          val url =
-            Call("GET", reverseRouter.page(Some(l).filterNot(_ => isDefault), v.name, page)).absoluteURL()
-          s"""<$url>; rel="alternate"; hreflang="${l.code}""""
+      .collect { case AlternateTranslation(l, isDefault, Some(v)) =>
+        val url =
+          Call("GET", reverseRouter.page(Some(l).filterNot(_ => isDefault), v.name, page)).absoluteURL()
+        s"""<$url>; rel="alternate"; hreflang="${l.code}""""
       }
       .mkString(", ")
     if (linkHeader.nonEmpty) {

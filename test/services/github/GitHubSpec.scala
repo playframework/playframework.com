@@ -74,14 +74,14 @@ object GitHubSpec extends PlaySpecification {
   def withGitHub[T](block: GitHub => T): T =
     Server.withRouterFromComponents() { components =>
       {
-        case Get(p"/orgs/${_ }") => components.defaultActionBuilder(Ok.sendResource("github/org.json"))
-        case Get(p"/orgs/${_ }/members") =>
+        case Get(p"/orgs/${_}") => components.defaultActionBuilder(Ok.sendResource("github/org.json"))
+        case Get(p"/orgs/${_}/members") =>
           components.defaultActionBuilder(Ok.sendResource("github/orgMembers.json"))
-        case Get(p"/orgs/${_ }/teams") => components.defaultActionBuilder(Ok.sendResource("github/teams.json"))
-        case Get(p"/orgs/${_ }/repos") => components.defaultActionBuilder(Ok.sendResource("github/repos.json"))
-        case Get(p"/teams/${_ }/members") =>
+        case Get(p"/orgs/${_}/teams") => components.defaultActionBuilder(Ok.sendResource("github/teams.json"))
+        case Get(p"/orgs/${_}/repos") => components.defaultActionBuilder(Ok.sendResource("github/repos.json"))
+        case Get(p"/teams/${_}/members") =>
           components.defaultActionBuilder(Ok.sendResource("github/teamMembers.json"))
-        case Get(p"/repos/${_ }/${_ }/contributors" | p"/repositories/${_ }/contributors") =>
+        case Get(p"/repos/${_}/${_}/contributors" | p"/repositories/${_}/contributors") =>
           components.defaultActionBuilder { req =>
             req.getQueryString("page") match {
               case None =>
@@ -92,7 +92,7 @@ object GitHubSpec extends PlaySpecification {
               case Some(_) => Ok.sendResource("github/contributors2.json")
             }
           }
-        case Get(p"/users/${_ }") => components.defaultActionBuilder(Ok.sendResource("github/user.json"))
+        case Get(p"/users/${_}") => components.defaultActionBuilder(Ok.sendResource("github/user.json"))
       }
     } { implicit port =>
       WsTestClient.withClient { ws =>

@@ -56,7 +56,8 @@ object FallbackMembers {
       // format: on
     }
 
-    def formatMembers(members: Seq[OpenCollectiveMember]) = members.map(member => "        " + formatMember(member)).mkString(",\n")
+    def formatMembers(members: Seq[OpenCollectiveMember]) =
+      members.map(member => "        " + formatMember(member)).mkString(",\n")
 
     s"""Seq(
        |  ${formatMembers(members)}

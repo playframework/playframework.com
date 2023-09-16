@@ -60,7 +60,7 @@ case class GitHubConfig(
     committerTeams: Seq[String],
 )
 
-class DefaultGitHub @Inject()(ws: WSClient, config: GitHubConfig)(implicit ec: ExecutionContext)
+class DefaultGitHub @Inject() (ws: WSClient, config: GitHubConfig)(implicit ec: ExecutionContext)
     extends GitHub {
 
   private def authCall(url: String) = {
@@ -77,8 +77,8 @@ class DefaultGitHub @Inject()(ws: WSClient, config: GitHubConfig)(implicit ec: E
   object NextLink {
     val ParseNext = """.*<([^>]+)>;\s*rel="?next"?.*""".r
     def unapply(response: WSResponse): Option[String] = {
-      response.header("Link").collect {
-        case ParseNext(next) => next
+      response.header("Link").collect { case ParseNext(next) =>
+        next
       }
     }
   }

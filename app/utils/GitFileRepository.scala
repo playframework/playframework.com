@@ -27,12 +27,23 @@ class PlayGitRepository(val gitDir: File, val remote: String = "origin", basePat
 
   def close(): Unit = repository.close()
   def allTags: Seq[(String, ObjectId)] =
-    git.tagList().call().asScala.map(tag => tag.getName.stripPrefix("refs/tags/") -> tag.getLeaf.getObjectId).toSeq
+    git
+      .tagList()
+      .call()
+      .asScala
+      .map(tag => tag.getName.stripPrefix("refs/tags/") -> tag.getLeaf.getObjectId)
+      .toSeq
   def allBranches: Seq[(String, ObjectId)] =
-    git.branchList().setListMode(ListMode.REMOTE).call().asScala.collect {
-      case origin if origin.getName.startsWith("refs/remotes/" + remote + "/") =>
-        origin.getName.stripPrefix("refs/remotes/" + remote + "/") -> origin.getLeaf.getObjectId
-    }.toSeq
+    git
+      .branchList()
+      .setListMode(ListMode.REMOTE)
+      .call()
+      .asScala
+      .collect {
+        case origin if origin.getName.startsWith("refs/remotes/" + remote + "/") =>
+          origin.getName.stripPrefix("refs/remotes/" + remote + "/") -> origin.getLeaf.getObjectId
+      }
+      .toSeq
 
   def hashForRef(ref: String): Option[ObjectId] =
     Option(repository.exactRef("refs/remotes/" + remote + "/" + ref))
@@ -170,9 +181,8 @@ class GitFileRepository(playRepo: PlayGitRepository, hash: ObjectId, base: Optio
   def findFileWithName(name: String) = playRepo.findFileWithName(hash, base, name)
 
   def handleFile[A](path: String)(handler: (FileHandle) => A) = {
-    playRepo.loadFile(hash, resolve(path)).map {
-      case (length, is) =>
-        handler(FileHandle(path.drop(path.lastIndexOf('/') + 1), length, is, () => is.close()))
+    playRepo.loadFile(hash, resolve(path)).map { case (length, is) =>
+      handler(FileHandle(path.drop(path.lastIndexOf('/') + 1), length, is, () => is.close()))
     }
   }
 

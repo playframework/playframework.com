@@ -18,8 +18,8 @@ object GitFileRepositoryPerformanceTest extends App {
 
   // First, find all the files that we might want to look up
   val tags = repo.allTags
-  val allFiles = tags.flatMap {
-    case (_, ref) => repo.listAllFilesInPath(ref, basePath).map((ref, _))
+  val allFiles = tags.flatMap { case (_, ref) =>
+    repo.listAllFilesInPath(ref, basePath).map((ref, _))
   }
   // Filter markdown files
   val allMarkdown = allFiles.filter(_._2.endsWith(".md")).toIndexedSeq

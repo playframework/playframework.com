@@ -22,8 +22,8 @@ trait ContributorsSummariser {
   def fetchContributors: Future[Contributors]
 }
 
-class DefaultContributorsSummariser @Inject()(gitHub: GitHub, config: GitHubConfig)(
-    implicit ec: ExecutionContext,
+class DefaultContributorsSummariser @Inject() (gitHub: GitHub, config: GitHubConfig)(implicit
+    ec: ExecutionContext,
 ) extends ContributorsSummariser {
 
   /**
@@ -51,9 +51,8 @@ class DefaultContributorsSummariser @Inject()(gitHub: GitHub, config: GitHubConf
       // and sum their contributions.
       val contributorContributions: Seq[(GitHubUser, Int)] = contributors.flatten
         .groupBy(_._1.id)
-        .collect {
-          case ((_, contributions @ ((user, _) :: _))) =>
-            user -> contributions.map(_._2).sum
+        .collect { case (_, contributions @ ((user, _) :: _)) =>
+          user -> contributions.map(_._2).sum
         }
         .toSeq
 
@@ -91,7 +90,7 @@ class DefaultContributorsSummariser @Inject()(gitHub: GitHub, config: GitHubConf
 }
 
 @Singleton
-class CachingContributorsSummariser @Inject()(
+class CachingContributorsSummariser @Inject() (
     actorSystem: ActorSystem,
     @Named("gitHubContributorsSummariser") delegate: ContributorsSummariser,
 )(implicit ec: ExecutionContext)
@@ -102,10 +101,11 @@ class CachingContributorsSummariser @Inject()(
 
   actorSystem.scheduler.scheduleWithFixedDelay(0.seconds, 24.hours)(() => {
     delegate.fetchContributors.onComplete {
-      case Failure(t)  => log.error("Unable to load contributors from GitHub", t)
+      case Failure(t) => log.error("Unable to load contributors from GitHub", t)
       case Success(cs) =>
         if (contributors != cs) {
-          val count = contributors.committers.size + contributors.playOrganisation.size + contributors.contributors.size
+          val count =
+            contributors.committers.size + contributors.playOrganisation.size + contributors.contributors.size
           log.info("Loaded {} contributors for GitHub", count)
         }
         contributors = cs
