@@ -20,7 +20,7 @@ import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 
 @Singleton
-class Application @Inject()(
+class Application @Inject() (
     environment: Environment,
     configuration: Configuration,
     membersSummariser: MembersSummariser,
@@ -56,8 +56,9 @@ class Application @Inject()(
       }
       .orElse {
         if (!version.contains(releases.latest.version)) {
-          Some(s"""Play framework ${releases.latest.version} is out!  Check it out <a href="${routes.Application
-            .download}">here</a>.""")
+          Some(
+            s"""Play framework ${releases.latest.version} is out!  Check it out <a href="${routes.Application.download}">here</a>.""",
+          )
         } else {
           None
         }
@@ -102,18 +103,24 @@ class Application @Inject()(
   }
 
   def changelog =
-    markdownAction("public/markdown/changelog.md", { implicit request =>
-      views.html.changelog(_)
-    })
+    markdownAction(
+      "public/markdown/changelog.md",
+      { implicit request =>
+        views.html.changelog(_)
+      },
+    )
 
   def conduct = Action {
     Redirect("https://www.lightbend.com/conduct")
   }
 
   def communityProcess =
-    markdownAction("public/markdown/community-process.md", { implicit request => markdown =>
-      views.html.markdownPage("Community process", markdown)
-    })
+    markdownAction(
+      "public/markdown/community-process.md",
+      { implicit request => markdown =>
+        views.html.markdownPage("Community process", markdown)
+      },
+    )
 
   def contributing = Action {
     Redirect("https://github.com/playframework/.github/blob/main/CONTRIBUTING.md")
@@ -167,8 +174,10 @@ class Application @Inject()(
   }
 
   def onHandlerNotFound(route: String) = Action { implicit request =>
-
-    if (route.startsWith("play-") && route.endsWith("-released") && !route.contains("-rc") && !route.contains("-m")) {
+    if (
+      route.startsWith("play-") && route.endsWith("-released") && !route
+        .contains("-rc") && !route.contains("-m")
+    ) {
       val version = route
         .replace("play-", "")
         .replace("-released", "")
@@ -212,32 +221,31 @@ class Application @Inject()(
       }
     }
 
-    val sections = byVersion.map {
-      case (v, p) =>
-        val TutorialKeyword = "tutorial" // this MUST be in the project keywords for this to work
-        val SeedKeyword     = "seed"
-        val tutorials = p
-          .filter(e => e.keywords.contains(TutorialKeyword) && !e.hasParams)
-          .groupBy(byLanguage)
-          .view
-          .mapValues(_.sortBy(_.displayName))
-          .toMap
+    val sections = byVersion.map { case (v, p) =>
+      val TutorialKeyword = "tutorial" // this MUST be in the project keywords for this to work
+      val SeedKeyword     = "seed"
+      val tutorials = p
+        .filter(e => e.keywords.contains(TutorialKeyword) && !e.hasParams)
+        .groupBy(byLanguage)
+        .view
+        .mapValues(_.sortBy(_.displayName))
+        .toMap
 
-        val examples = p
-          .filter(e => !e.keywords.contains(TutorialKeyword) && !e.hasParams)
-          .groupBy(byLanguage)
-          .view
-          .mapValues(_.sortBy(_.displayName))
-          .toMap
+      val examples = p
+        .filter(e => !e.keywords.contains(TutorialKeyword) && !e.hasParams)
+        .groupBy(byLanguage)
+        .view
+        .mapValues(_.sortBy(_.displayName))
+        .toMap
 
-        val seeds = p
-          .filter(e => e.hasParams && e.keywords.contains(SeedKeyword))
-          .groupBy(byLanguage)
-          .view
-          .mapValues(_.sortBy(_.displayName))
-          .toMap
+      val seeds = p
+        .filter(e => e.hasParams && e.keywords.contains(SeedKeyword))
+        .groupBy(byLanguage)
+        .view
+        .mapValues(_.sortBy(_.displayName))
+        .toMap
 
-        v -> PlayExampleSection(tutorials, seeds, examples)
+      v -> PlayExampleSection(tutorials, seeds, examples)
     }
     PlayExamples(sections)
   }

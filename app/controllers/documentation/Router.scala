@@ -11,13 +11,13 @@ import play.utils.UriEncoding
  * Documentation router
  */
 @Singleton
-class Router @Inject()(docController: DocumentationController) extends play.api.routing.Router {
+class Router @Inject() (docController: DocumentationController) extends play.api.routing.Router {
 
   private var _prefix = "/"
 
   def withPrefix(prefix: String): Router = { _prefix = prefix; this }
-  def prefix: String                     = _prefix
-  def documentation                      = Nil
+  def prefix: String = _prefix
+  def documentation  = Nil
 
   private val Language = "^/([A-Za-z]{2}(?:_[A-Za-z]{2})?)((?:/.*)?)$".r
 
@@ -41,31 +41,33 @@ class Router @Inject()(docController: DocumentationController) extends play.api.
         .getOrElse(None -> path)
 
       Some(versionPath).collect {
-        case p""                                            => docController.index(lang)
-        case p"/$version<1\.[^/]+>"                         => docController.v1Home(lang, version)
-        case p"/$version<\d+\.[^/]+>/api/$path*"            => docController.api(lang, version, decodePath(path))
+        case p""                                 => docController.index(lang)
+        case p"/$version<1\.[^/]+>"              => docController.v1Home(lang, version)
+        case p"/$version<\d+\.[^/]+>/api/$path*" => docController.api(lang, version, decodePath(path))
 
         // The docs used to be served from this path
-        case p"/api/$version/$path*"                        => docController.apiRedirect(lang, version, path)
+        case p"/api/$version/$path*" => docController.apiRedirect(lang, version, path)
 
         // Play1 doc specific paths
-        case p"/$version<1\.[^/]+>/$page"                   => docController.v1Page(lang, version, page)
-        case p"/$version<1\.[^/]+>/images/$image"           => docController.v1Image(lang, version, image)
-        case p"/$version<1\.[^/]+>/files/$file"             => docController.v1File(lang, version, file)
-        case p"/$version<1\.[^/]+>/releases/$file"          => docController.v1Page(lang, version, s"releases/$file")
-        case p"/$version<1\.[^/]+>/releases/$release/$file" => docController.v1Page(lang, version, s"releases/$release/$file")
-        case p"/$version<1\.[^/]+>/cheatsheet/$category"    => docController.v1Cheatsheet(lang, version, category)
+        case p"/$version<1\.[^/]+>/$page"          => docController.v1Page(lang, version, page)
+        case p"/$version<1\.[^/]+>/images/$image"  => docController.v1Image(lang, version, image)
+        case p"/$version<1\.[^/]+>/files/$file"    => docController.v1File(lang, version, file)
+        case p"/$version<1\.[^/]+>/releases/$file" => docController.v1Page(lang, version, s"releases/$file")
+        case p"/$version<1\.[^/]+>/releases/$release/$file" =>
+          docController.v1Page(lang, version, s"releases/$release/$file")
+        case p"/$version<1\.[^/]+>/cheatsheet/$category" => docController.v1Cheatsheet(lang, version, category)
 
         // Other paths
-        case p"/$version<\d+\.[^/]+>"                       => docController.home(lang, version)
-        case p"/$version<\d+\.[^/]+>/"                      => docController.home(lang, version)
-        case p"/$version<\d+\.[^/]+>/$page"                 => docController.page(lang, version, page)
-        case p"/$version<\d+\.[^/]+>/resources/$path*"      => docController.resource(lang, version, decodePath(path))
-        case p"/latest"                                     => docController.latest(lang, "Home")
-        case p"/latest/$path*"                              => docController.latest(lang, path)
-        case p"/switch/$version<1\.[^/]+>/$page"            => docController.v1Switch(lang, version, page)
-        case p"/switch/$version<\d+\.[^/]+>/$page"          => docController.switch(lang, version, page)
-        case p"/switch/$version<\d+\.[^/]+>"                => docController.switch(lang, version, "Home")
+        case p"/$version<\d+\.[^/]+>"       => docController.home(lang, version)
+        case p"/$version<\d+\.[^/]+>/"      => docController.home(lang, version)
+        case p"/$version<\d+\.[^/]+>/$page" => docController.page(lang, version, page)
+        case p"/$version<\d+\.[^/]+>/resources/$path*" =>
+          docController.resource(lang, version, decodePath(path))
+        case p"/latest"                            => docController.latest(lang, "Home")
+        case p"/latest/$path*"                     => docController.latest(lang, path)
+        case p"/switch/$version<1\.[^/]+>/$page"   => docController.v1Switch(lang, version, page)
+        case p"/switch/$version<\d+\.[^/]+>/$page" => docController.switch(lang, version, page)
+        case p"/switch/$version<\d+\.[^/]+>"       => docController.switch(lang, version, "Home")
       }
     } else {
       None
@@ -75,14 +77,17 @@ class Router @Inject()(docController: DocumentationController) extends play.api.
 }
 
 @Singleton
-class ReverseRouter @Inject()(routerProvider: Provider[Router]) {
+class ReverseRouter @Inject() (routerProvider: Provider[Router]) {
   private def router: Router = routerProvider.get
 
-  def index(lang: Option[Lang])                                                = router.prefix + lang.fold("")(l => "/" + l.code)
-  def home(lang: Option[Lang], version: String)                                = s"${index(lang)}/$version"
-  def page(lang: Option[Lang], version: String, pageFileName: String = "Home") = s"${index(lang)}/$version/$pageFileName"
-  def api(version: String, path: String)                                       = s"${router.prefix}/$version/api/$path"
-  def latest(lang: Option[Lang], page: String = "Home")                        = this.page(lang, "latest", page)
-  def cheatsheet(lang: Option[Lang], version: String, category: String)        = s"${index(lang)}/$version/cheatsheet/$category"
-  def switch(lang: Option[Lang], version: String, pageFileName: String)        = s"${index(lang)}/switch/$version/$pageFileName"
+  def index(lang: Option[Lang])                 = router.prefix + lang.fold("")(l => "/" + l.code)
+  def home(lang: Option[Lang], version: String) = s"${index(lang)}/$version"
+  def page(lang: Option[Lang], version: String, pageFileName: String = "Home") =
+    s"${index(lang)}/$version/$pageFileName"
+  def api(version: String, path: String)                = s"${router.prefix}/$version/api/$path"
+  def latest(lang: Option[Lang], page: String = "Home") = this.page(lang, "latest", page)
+  def cheatsheet(lang: Option[Lang], version: String, category: String) =
+    s"${index(lang)}/$version/cheatsheet/$category"
+  def switch(lang: Option[Lang], version: String, pageFileName: String) =
+    s"${index(lang)}/switch/$version/$pageFileName"
 }

@@ -1,6 +1,7 @@
 package actors
 
-import akka.actor.typed.{ ActorRef, Behavior }
+import akka.actor.typed.ActorRef
+import akka.actor.typed.Behavior
 import akka.actor.typed.scaladsl.Behaviors
 import models.documentation.Sitemap
 import models.documentation.Documentation

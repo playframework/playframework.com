@@ -1,6 +1,7 @@
 package models
 
-import play.api.libs.json.{Json, Reads}
+import play.api.libs.json.Json
+import play.api.libs.json.Reads
 
 case class PlayRelease(
     version: String,

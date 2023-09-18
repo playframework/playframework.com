@@ -3,8 +3,11 @@ package actors
 import actors.DocumentationActor.DocumentationGitRepo
 import actors.DocumentationActor.DocumentationGitRepos
 import actors.DocumentationActor.UpdateDocumentation
-import akka.actor.typed.{ ActorRef, Behavior }
-import akka.actor.typed.scaladsl.{ ActorContext, Behaviors, LoggerOps }
+import akka.actor.typed.ActorRef
+import akka.actor.typed.Behavior
+import akka.actor.typed.scaladsl.ActorContext
+import akka.actor.typed.scaladsl.Behaviors
+import akka.actor.typed.scaladsl.LoggerOps
 import models.documentation._
 import org.apache.commons.io.IOUtils
 import org.eclipse.jgit.lib.ObjectId
@@ -61,11 +64,10 @@ class DocumentationPollingActor(
   // Initial scan of documentation
   val initialBehavior = update(scanAndSendDocumentation(None))
 
-  def update(old: Documentation): Behavior[Tick.type] = Behaviors.receiveMessage {
-    case Tick =>
-      repos.default.repo.fetch()
-      repos.translations.foreach(_.repo.fetch())
-      update(scanAndSendDocumentation(Some(old)))
+  def update(old: Documentation): Behavior[Tick.type] = Behaviors.receiveMessage { case Tick =>
+    repos.default.repo.fetch()
+    repos.translations.foreach(_.repo.fetch())
+    update(scanAndSendDocumentation(Some(old)))
   }
 
   /**
@@ -75,22 +77,21 @@ class DocumentationPollingActor(
    */
   private def determineMainVersion(repo: DocumentationGitRepo): Option[(Version, ObjectId)] = {
     def fileContents(hash: ObjectId, file: String): Option[String] = {
-      repo.repo.loadFile(hash, file).map {
-        case (size, is) =>
-          try {
-            IOUtils.toString(is, "utf-8")
-          } finally {
-            is.close()
-          }
+      repo.repo.loadFile(hash, file).map { case (size, is) =>
+        try {
+          IOUtils.toString(is, "utf-8")
+        } finally {
+          is.close()
+        }
       }
     }
 
     for {
       mainVersion <- repo.config.mainVersion
       mainHash    <- repo.repo.hashForRef("main")
-      contents      <- fileContents(mainHash, mainVersion.file)
-      matched       <- mainVersion.pattern.findFirstMatchIn(contents)
-      version       <- Version.parse(matched.group(1).replace("-SNAPSHOT", ".x"))
+      contents    <- fileContents(mainHash, mainVersion.file)
+      matched     <- mainVersion.pattern.findFirstMatchIn(contents)
+      version     <- Version.parse(matched.group(1).replace("-SNAPSHOT", ".x"))
     } yield version -> mainHash
   }
 

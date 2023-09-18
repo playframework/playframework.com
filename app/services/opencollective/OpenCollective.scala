@@ -2,14 +2,16 @@ package services.opencollective
 
 import models.opencollective.OpenCollectiveMember
 import play.api.libs.json.Reads
-import play.api.libs.ws.{WSClient, WSResponse}
+import play.api.libs.ws.WSClient
+import play.api.libs.ws.WSResponse
 
 import javax.inject.Inject
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 
 case class OpenCollectiveConfig(
-  restApiUrl: String,
-  slug: String,
+    restApiUrl: String,
+    slug: String,
 )
 
 /**
@@ -24,8 +26,9 @@ trait OpenCollective {
 
 }
 
-class DefaultOpenCollective @Inject()(ws: WSClient, config: OpenCollectiveConfig)(implicit ec: ExecutionContext)
-  extends OpenCollective {
+class DefaultOpenCollective @Inject() (ws: WSClient, config: OpenCollectiveConfig)(implicit
+    ec: ExecutionContext,
+) extends OpenCollective {
 
   private def load[T: Reads](path: String) = {
     val url = if (path.matches("https?://.*")) path else s"${config.restApiUrl}/${config.slug}/" + path
@@ -42,9 +45,9 @@ class DefaultOpenCollective @Inject()(ws: WSClient, config: OpenCollectiveConfig
 
   private def checkSuccess(response: WSResponse): WSResponse = response.status match {
     case ok if ok < 300 => response
-    case _ => throw responseFailure(response)
+    case _              => throw responseFailure(response)
   }
-  
+
   override def fetchMembers(): Future[Seq[OpenCollectiveMember]] =
     load[OpenCollectiveMember]("members/all.json")
 }

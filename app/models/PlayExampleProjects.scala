@@ -50,7 +50,7 @@ class ExamplesModule extends AbstractModule {
 }
 
 @Singleton
-class PlayExampleProjectsService @Inject()(
+class PlayExampleProjectsService @Inject() (
     configuration: Configuration,
     ws: WSClient,
     cache: SyncCacheApi,

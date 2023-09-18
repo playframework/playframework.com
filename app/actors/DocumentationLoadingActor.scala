@@ -24,11 +24,19 @@ import utils._
  */
 object DocumentationLoadingActor {
   sealed trait Command
-  case class RenderPage(page: String, repo: PlayDoc, replyTo: ActorRef[Option[play.doc.RenderedPage]]) extends Command
-  case class RenderV1Page(page: String, repo: ExtendedFileRepository, replyTo: ActorRef[Option[String]]) extends Command
-  case class RenderV1Cheatsheet(category: String, repo: ExtendedFileRepository, replyTo: ActorRef[Option[V1Cheatsheet]]) extends Command
-  case class LoadResource(file: String, repo: FileRepository, replyTo: ActorRef[Option[Resource]]) extends Command
-  case class PageExists(page: String, playDoc: PlayDoc, repo: FileRepository, replyTo: ActorRef[Boolean]) extends Command
+  case class RenderPage(page: String, repo: PlayDoc, replyTo: ActorRef[Option[play.doc.RenderedPage]])
+      extends Command
+  case class RenderV1Page(page: String, repo: ExtendedFileRepository, replyTo: ActorRef[Option[String]])
+      extends Command
+  case class RenderV1Cheatsheet(
+      category: String,
+      repo: ExtendedFileRepository,
+      replyTo: ActorRef[Option[V1Cheatsheet]],
+  ) extends Command
+  case class LoadResource(file: String, repo: FileRepository, replyTo: ActorRef[Option[Resource]])
+      extends Command
+  case class PageExists(page: String, playDoc: PlayDoc, repo: FileRepository, replyTo: ActorRef[Boolean])
+      extends Command
   case class V1PageExists(page: String, repo: FileRepository, replyTo: ActorRef[Boolean]) extends Command
 
   case class V1Cheatsheet(sheets: Seq[String], title: String, otherCategories: Map[String, String])

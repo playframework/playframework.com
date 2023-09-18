@@ -48,7 +48,9 @@ case class Translation(
         // Ensure that the most recent Play 1 version, even if it's an RC, is in there
         val mostRecent1 = versions.find(_.era == 1).toSeq
 
-        (List[Version]() ++ mostRecentDevelopment ++ currentPatchVersions ++ previousMostRecentVersions ++ mostRecent1).distinct.sorted.reverse
+        (List[
+          Version,
+        ]() ++ mostRecentDevelopment ++ currentPatchVersions ++ previousMostRecentVersions ++ mostRecent1).distinct.sorted.reverse
       }
       .getOrElse(versions)
   }
