@@ -25,13 +25,13 @@ class ActorsModule extends AbstractModule with AkkaGuiceSupport {
 }
 
 @Singleton
-class DocumentationPollingActorFactoryProvider @Inject()(messages: MessagesApi)
+class DocumentationPollingActorFactoryProvider @Inject() (messages: MessagesApi)
     extends Provider[DocumentationPollingActor.Factory] {
   def get() = DocumentationPollingActor(messages, _, _)
 }
 
 @Singleton
-class DocumentationRedirectsProvider @Inject()(configuration: Configuration)
+class DocumentationRedirectsProvider @Inject() (configuration: Configuration)
     extends Provider[DocumentationRedirects] {
   override def get: DocumentationRedirects = DocumentationRedirects(
     configuration.get[Seq[Config]]("documentation.redirects").map { config =>
@@ -44,7 +44,7 @@ class DocumentationRedirectsProvider @Inject()(configuration: Configuration)
 }
 
 @Singleton
-class DocumentationConfigProvider @Inject()(environment: Environment, configuration: Configuration)
+class DocumentationConfigProvider @Inject() (environment: Environment, configuration: Configuration)
     extends Provider[DocumentationConfig] {
   private val log = LoggerFactory.getLogger(classOf[DocumentationConfigProvider])
 

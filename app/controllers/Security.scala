@@ -12,8 +12,8 @@ import org.apache.commons.io.IOUtils
 import java.io.File
 
 @Singleton
-class Security @Inject()(environment: Environment, val controllerComponents: ControllerComponents)(
-    implicit val reverseRouter: documentation.ReverseRouter,
+class Security @Inject() (environment: Environment, val controllerComponents: ControllerComponents)(implicit
+    val reverseRouter: documentation.ReverseRouter,
 ) extends BaseController
     with Common {
 

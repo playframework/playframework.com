@@ -42,9 +42,8 @@ case class Sitemap(urls: Seq[SitemapUrl]) {
         <loc>{url.loc}</loc>
         <priority>{"%.2f".format(url.priority.value)}</priority>
         {
-          url.alternates.map {
-            case (lang, href) =>
-              <xhtml:link
+          url.alternates.map { case (lang, href) =>
+            <xhtml:link
           rel="alternate"
           hreflang={lang.code}
           href={href}/>
@@ -87,8 +86,8 @@ object Sitemap {
 
     // If for some reason we don't have a PageIndex, we need to find the pages the hard way
     foundInToC.getOrElse {
-      tv.repo.listAllFilesInPath("manual").collect {
-        case Play2DocPage(page) => page
+      tv.repo.listAllFilesInPath("manual").collect { case Play2DocPage(page) =>
+        page
       }
     }.toSet
   }

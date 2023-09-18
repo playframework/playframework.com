@@ -10,8 +10,9 @@ import models.modules._
 import scala.concurrent.ExecutionContext
 
 @Singleton
-class Modules @Inject()(modulesLookup: ModulesLookup, moduleDao: ModuleDao, components: ControllerComponents)(
-    implicit ec: ExecutionContext,
+class Modules @Inject() (modulesLookup: ModulesLookup, moduleDao: ModuleDao, components: ControllerComponents)(
+    implicit
+    ec: ExecutionContext,
     reverseRouter: documentation.ReverseRouter,
 ) extends AbstractController(components) {
 

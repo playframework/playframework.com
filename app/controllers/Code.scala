@@ -8,8 +8,8 @@ import services.github.ContributorsSummariser
 
 import scala.concurrent.ExecutionContext
 
-class Code @Inject()(contributorsSummariser: ContributorsSummariser, components: ControllerComponents)(
-    implicit executionContext: ExecutionContext,
+class Code @Inject() (contributorsSummariser: ContributorsSummariser, components: ControllerComponents)(implicit
+    executionContext: ExecutionContext,
     reverseRouter: documentation.ReverseRouter,
 ) extends AbstractController(components) {
 

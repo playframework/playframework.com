@@ -1,7 +1,14 @@
 package actors
 
 import actors.SitemapGeneratingActor.GenerateSitemap
-import akka.actor.typed.{ ActorRef, ActorSystem, Behavior, DispatcherSelector, PostStop, PreRestart, Signal, SupervisorStrategy }
+import akka.actor.typed.ActorRef
+import akka.actor.typed.ActorSystem
+import akka.actor.typed.Behavior
+import akka.actor.typed.DispatcherSelector
+import akka.actor.typed.PostStop
+import akka.actor.typed.PreRestart
+import akka.actor.typed.Signal
+import akka.actor.typed.SupervisorStrategy
 import akka.actor.typed.scaladsl.AskPattern._
 import akka.actor.typed.scaladsl.ActorContext
 import akka.actor.typed.scaladsl.Behaviors
@@ -74,8 +81,13 @@ object DocumentationActor extends ActorModule {
    * @param version The version of the documentation to fetch the page for.
    * @param page The page to render.
    */
-  case class RenderPage(lang: Option[Lang], version: Version, cacheId: Option[String], page: String, replyTo: ActorRef[Response[RenderedPage]])
-      extends LangRequest[RenderedPage]
+  case class RenderPage(
+      lang: Option[Lang],
+      version: Version,
+      cacheId: Option[String],
+      page: String,
+      replyTo: ActorRef[Response[RenderedPage]],
+  ) extends LangRequest[RenderedPage]
 
   /**
    * A rendered page.
@@ -103,8 +115,13 @@ object DocumentationActor extends ActorModule {
    * @param version The version of the documentation to get the resource from.
    * @param resource The resource path.
    */
-  case class LoadResource(lang: Option[Lang], version: Version, cacheId: Option[String], resource: String, replyTo: ActorRef[Response[Resource]])
-      extends LangRequest[Resource]
+  case class LoadResource(
+      lang: Option[Lang],
+      version: Version,
+      cacheId: Option[String],
+      resource: String,
+      replyTo: ActorRef[Response[Resource]],
+  ) extends LangRequest[Resource]
 
   /**
    * Load an API resource.
@@ -112,7 +129,12 @@ object DocumentationActor extends ActorModule {
    * @param version The version of the documentation to load the resource for.
    * @param resource The resource path.
    */
-  case class LoadApi(version: Version, cacheId: Option[String], resource: String, replyTo: ActorRef[Response[Resource]]) extends Request[Resource]
+  case class LoadApi(
+      version: Version,
+      cacheId: Option[String],
+      resource: String,
+      replyTo: ActorRef[Response[Resource]],
+  ) extends Request[Resource]
 
   /**
    * A resource.
@@ -137,8 +159,13 @@ object DocumentationActor extends ActorModule {
   /**
    * Check whether the given page exists at the given version.
    */
-  case class QueryPageExists(lang: Option[Lang], version: Version, cacheId: Option[String], page: String, replyTo: ActorRef[Response[PageExists]])
-      extends LangRequest[PageExists]
+  case class QueryPageExists(
+      lang: Option[Lang],
+      version: Version,
+      cacheId: Option[String],
+      page: String,
+      replyTo: ActorRef[Response[PageExists]],
+  ) extends LangRequest[PageExists]
 
   /**
    * The queried page exists.
@@ -152,11 +179,21 @@ object DocumentationActor extends ActorModule {
    * @param version The version of the documentation to fetch the page for.
    * @param page The page to render.
    */
-  case class RenderV1Page(lang: Option[Lang], version: Version, cacheId: Option[String], page: String, replyTo: ActorRef[Response[RenderedPage]])
-      extends LangRequest[RenderedPage]
+  case class RenderV1Page(
+      lang: Option[Lang],
+      version: Version,
+      cacheId: Option[String],
+      page: String,
+      replyTo: ActorRef[Response[RenderedPage]],
+  ) extends LangRequest[RenderedPage]
 
-  case class RenderV1Cheatsheet(lang: Option[Lang], version: Version, cacheId: Option[String], category: String, replyTo: ActorRef[Response[V1Cheatsheet]])
-      extends LangRequest[V1Cheatsheet]
+  case class RenderV1Cheatsheet(
+      lang: Option[Lang],
+      version: Version,
+      cacheId: Option[String],
+      category: String,
+      replyTo: ActorRef[Response[V1Cheatsheet]],
+  ) extends LangRequest[V1Cheatsheet]
 
   case class V1Cheatsheet(
       sheets: Seq[String],
@@ -169,8 +206,13 @@ object DocumentationActor extends ActorModule {
   /**
    * Check whether the given page exists at the given version.
    */
-  case class QueryV1PageExists(lang: Option[Lang], version: Version, cacheId: Option[String], page: String, replyTo: ActorRef[Response[PageExists]])
-      extends LangRequest[PageExists]
+  case class QueryV1PageExists(
+      lang: Option[Lang],
+      version: Version,
+      cacheId: Option[String],
+      page: String,
+      replyTo: ActorRef[Response[PageExists]],
+  ) extends LangRequest[PageExists]
 
   /**
    * A summary of the documentation.
@@ -209,9 +251,8 @@ object DocumentationActor extends ActorModule {
   def apply(
       config: DocumentationConfig,
       pollerFactory: DocumentationPollingActor.Factory,
-  ): Behavior[Command] = Behaviors.setup(context =>
-    new DocumentationActor(config, pollerFactory, context).noDocumentation
-  )
+  ): Behavior[Command] =
+    Behaviors.setup(context => new DocumentationActor(config, pollerFactory, context).noDocumentation)
 }
 
 /**
@@ -230,7 +271,7 @@ class DocumentationActor(
   import DocumentationActor._
   import actors.{ DocumentationLoadingActor => Loader }
 
-  implicit val timeout: Timeout = Timeout(5.seconds)
+  implicit val timeout: Timeout             = Timeout(5.seconds)
   implicit val system: ActorSystem[Nothing] = context.system
   import system.executionContext
 
@@ -248,7 +289,10 @@ class DocumentationActor(
    * moving this actor into the documentation loaded state.
    */
   private val poller = context.spawn(
-    pollerFactory(repos, context.self), "documentationPoller", DispatcherSelector.fromConfig("polling-dispatcher"))
+    pollerFactory(repos, context.self),
+    "documentationPoller",
+    DispatcherSelector.fromConfig("polling-dispatcher"),
+  )
 
   private val loader = context.spawn(
     Routers.pool(4)(Behaviors.supervise(Loader()).onFailure[Exception](SupervisorStrategy.restart)),
@@ -276,13 +320,15 @@ class DocumentationActor(
    */
   def noDocumentation: Behavior[Command] =
     Behaviors.withStash(Int.MaxValue) { buffer =>
-      Behaviors.receiveMessage[Command] {
-        case UpdateDocumentation(docs) =>
-          buffer.unstashAll(documentationLoaded(docs))
-        case other =>
-          buffer.stash(other)
-          Behaviors.same
-      }.receiveSignal(postStop)
+      Behaviors
+        .receiveMessage[Command] {
+          case UpdateDocumentation(docs) =>
+            buffer.unstashAll(documentationLoaded(docs))
+          case other =>
+            buffer.stash(other)
+            Behaviors.same
+        }
+        .receiveSignal(postStop)
     }
 
   /**
@@ -299,15 +345,16 @@ class DocumentationActor(
         case None       => (documentation.defaultLang, Some(documentation.default))
       }
       maybeTranslation match {
-        case Some(translation) => translation.byVersion.get(req.version) match {
-          case Some(tv) =>
-            if (req.cacheId.exists(_ == tv.cacheId)) {
-              replyTo ! NotModified(tv.cacheId)
-            } else {
-              block(lang, translation, tv).pipeTo(replyTo.toClassic)
-            }
-          case None => replyTo ! NotFound(notFoundTranslationContext(lang, translation.displayVersions))
-        }
+        case Some(translation) =>
+          translation.byVersion.get(req.version) match {
+            case Some(tv) =>
+              if (req.cacheId.exists(_ == tv.cacheId)) {
+                replyTo ! NotModified(tv.cacheId)
+              } else {
+                block(lang, translation, tv).pipeTo(replyTo.toClassic)
+              }
+            case None => replyTo ! NotFound(notFoundTranslationContext(lang, translation.displayVersions))
+          }
         case None => replyTo ! NotFound(notFoundTranslationContext())
       }
     }
@@ -354,9 +401,8 @@ class DocumentationActor(
         true,
         findMostSuitableMatch(version, documentation.default.availableVersions.map(_.version)),
       )
-      val alternatives = documentation.translations.toList.sortBy(_._1.code).map {
-        case (l, t) =>
-          AlternateTranslation(l, false, findMostSuitableMatch(version, t.availableVersions.map(_.version)))
+      val alternatives = documentation.translations.toList.sortBy(_._1.code).map { case (l, t) =>
+        AlternateTranslation(l, false, findMostSuitableMatch(version, t.availableVersions.map(_.version)))
       }
       TranslationContext(
         lang,
@@ -397,123 +443,129 @@ class DocumentationActor(
         None,
         displayVersions,
         AlternateTranslation(documentation.defaultLang, true, None) ::
-          documentation.translations.toList.sortBy(_._1.code).map {
-            case (l, translation) =>
-              AlternateTranslation(l, false, None)
+          documentation.translations.toList.sortBy(_._1.code).map { case (l, translation) =>
+            AlternateTranslation(l, false, None)
           },
       )
     }
 
-    Behaviors.receiveMessage[Command] {
-      case UpdateDocumentation(docs) =>
-        documentationLoaded(docs)
+    Behaviors
+      .receiveMessage[Command] {
+        case UpdateDocumentation(docs) =>
+          documentationLoaded(docs)
 
-      case rp @ RenderPage(_, version, _, page, replyTo) =>
-        loaderRequestOpt[play.doc.RenderedPage, RenderedPage](rp, replyTo) { (tv, replyTo) =>
-          Loader.RenderPage(page, tv.playDoc, replyTo)
-        } { (lang, translation, tv, page) =>
-          val source = if (version.versionType.isLatest) {
-            translation.source.map { gitHubSource =>
-              gitHubSource.format(tv.symbolicName, page.path)
-            }
-          } else None
+        case rp @ RenderPage(_, version, _, page, replyTo) =>
+          loaderRequestOpt[play.doc.RenderedPage, RenderedPage](rp, replyTo) { (tv, replyTo) =>
+            Loader.RenderPage(page, tv.playDoc, replyTo)
+          } { (lang, translation, tv, page) =>
+            val source = if (version.versionType.isLatest) {
+              translation.source.map { gitHubSource =>
+                gitHubSource.format(tv.symbolicName, page.path)
+              }
+            } else None
 
-          RenderedPage(
-            pageHtml = page.html,
-            sidebarHtml = page.sidebarHtml,
-            breadcrumbsHtml = page.breadcrumbsHtml,
-            source = source,
-            translationContext = translationContext(lang, version, translation),
-            cacheId = tv.cacheId,
-          )
-        }
-        Behaviors.same
+            RenderedPage(
+              pageHtml = page.html,
+              sidebarHtml = page.sidebarHtml,
+              breadcrumbsHtml = page.breadcrumbsHtml,
+              source = source,
+              translationContext = translationContext(lang, version, translation),
+              cacheId = tv.cacheId,
+            )
+          }
+          Behaviors.same
 
-      case rp @ RenderV1Page(_, version, _, page, replyTo) =>
-        loaderRequestOpt[String, RenderedPage](rp, replyTo) { (tv, replyTo) =>
-          Loader.RenderV1Page(page, tv.repo, replyTo)
-        } { (lang, translation, tv, content) =>
-          RenderedPage(
-            pageHtml = content,
-            sidebarHtml = None,
-            breadcrumbsHtml = None,
-            source = None,
-            translationContext = translationContext(lang, version, translation),
-            cacheId = tv.cacheId,
-          )
-        }
-        Behaviors.same
+        case rp @ RenderV1Page(_, version, _, page, replyTo) =>
+          loaderRequestOpt[String, RenderedPage](rp, replyTo) { (tv, replyTo) =>
+            Loader.RenderV1Page(page, tv.repo, replyTo)
+          } { (lang, translation, tv, content) =>
+            RenderedPage(
+              pageHtml = content,
+              sidebarHtml = None,
+              breadcrumbsHtml = None,
+              source = None,
+              translationContext = translationContext(lang, version, translation),
+              cacheId = tv.cacheId,
+            )
+          }
+          Behaviors.same
 
-      case lr: LoadResource =>
-        loaderRequestOpt[Loader.Resource, Resource](lr, lr.replyTo) { (tv, replyTo) =>
-          Loader.LoadResource(lr.resource, tv.repo, replyTo)
-        } { (_, _, tv, resource) =>
-          Resource(resource.content, resource.size, tv.cacheId)
-        }
-        Behaviors.same
+        case lr: LoadResource =>
+          loaderRequestOpt[Loader.Resource, Resource](lr, lr.replyTo) { (tv, replyTo) =>
+            Loader.LoadResource(lr.resource, tv.repo, replyTo)
+          } { (_, _, tv, resource) =>
+            Resource(resource.content, resource.size, tv.cacheId)
+          }
+          Behaviors.same
 
-      case LoadApi(version, cacheId, resource, replyTo) =>
-        documentation.default.byVersion.get(version) match {
-          case Some(tr) =>
-            if (cacheId.exists(_ == tr.cacheId)) {
-              replyTo ! NotModified(tr.cacheId)
-            } else {
-              loader.ask[Option[Loader.Resource]](replyTo => Loader.LoadResource(s"api/$resource", tr.repo, replyTo))
+        case LoadApi(version, cacheId, resource, replyTo) =>
+          documentation.default.byVersion.get(version) match {
+            case Some(tr) =>
+              if (cacheId.exists(_ == tr.cacheId)) {
+                replyTo ! NotModified(tr.cacheId)
+              } else {
+                loader
+                  .ask[Option[Loader.Resource]](replyTo =>
+                    Loader.LoadResource(s"api/$resource", tr.repo, replyTo),
+                  )
                   .map {
                     case Some(resource) => Resource(resource.content, resource.size, tr.cacheId)
                     case None           => NotFound(notFoundTranslationContext())
-                  }.pipeTo(replyTo.toClassic)
+                  }
+                  .pipeTo(replyTo.toClassic)
+              }
+            case None => replyTo ! NotFound(notFoundTranslationContext())
           }
-          case None => replyTo ! NotFound(notFoundTranslationContext())
-        }
-        Behaviors.same
+          Behaviors.same
 
-      case GetSummary(replyTo) =>
-        replyTo ! DocumentationSummary(
-          documentation.default.defaultVersion,
-          documentation.defaultLang,
-          documentation.allLangs,
-          documentation.translations.view.mapValues(_.defaultVersion).toMap,
-          notFoundTranslationContext(),
-        )
-        Behaviors.same
-
-      case pe @ QueryPageExists(_, _, _, page, replyTo) =>
-        loaderRequest[Boolean, PageExists](pe, replyTo) { (tv, replyTo) =>
-          Loader.PageExists(page, tv.playDoc, tv.repo, replyTo)
-        } { (_, _, tv, exists) =>
-          PageExists(exists, tv.cacheId)
-        }
-        Behaviors.same
-
-      case pe @ QueryV1PageExists(_, _, _, page, replyTo) =>
-        loaderRequest[Boolean, PageExists](pe, replyTo) { (tv, replyTo) =>
-          Loader.V1PageExists(page, tv.repo, replyTo)
-        } { (_, _, tv, exists) =>
-          PageExists(exists, tv.cacheId)
-        }
-        Behaviors.same
-
-      case rc @ RenderV1Cheatsheet(_, version, _, category, replyTo) =>
-        loaderRequestOpt[Loader.V1Cheatsheet, V1Cheatsheet](rc, replyTo) { (tv, replyTo) =>
-          Loader.RenderV1Cheatsheet(category, tv.repo, replyTo)
-        } { (lang, translation, tv, cs) =>
-          V1Cheatsheet(
-            cs.sheets,
-            cs.title,
-            cs.otherCategories,
-            translationContext(lang, version, translation),
-            tv.cacheId,
+        case GetSummary(replyTo) =>
+          replyTo ! DocumentationSummary(
+            documentation.default.defaultVersion,
+            documentation.defaultLang,
+            documentation.allLangs,
+            documentation.translations.view.mapValues(_.defaultVersion).toMap,
+            notFoundTranslationContext(),
           )
-        }
-        Behaviors.same
+          Behaviors.same
 
-      case GetSitemap(replyTo) =>
-        sitemapGenerator.ask[Sitemap](replyTo => GenerateSitemap(documentation, replyTo))
-          .map(DocumentationSitemap)
-          .pipeTo(replyTo.toClassic)
-        Behaviors.same
-    }.receiveSignal(postStop)
+        case pe @ QueryPageExists(_, _, _, page, replyTo) =>
+          loaderRequest[Boolean, PageExists](pe, replyTo) { (tv, replyTo) =>
+            Loader.PageExists(page, tv.playDoc, tv.repo, replyTo)
+          } { (_, _, tv, exists) =>
+            PageExists(exists, tv.cacheId)
+          }
+          Behaviors.same
+
+        case pe @ QueryV1PageExists(_, _, _, page, replyTo) =>
+          loaderRequest[Boolean, PageExists](pe, replyTo) { (tv, replyTo) =>
+            Loader.V1PageExists(page, tv.repo, replyTo)
+          } { (_, _, tv, exists) =>
+            PageExists(exists, tv.cacheId)
+          }
+          Behaviors.same
+
+        case rc @ RenderV1Cheatsheet(_, version, _, category, replyTo) =>
+          loaderRequestOpt[Loader.V1Cheatsheet, V1Cheatsheet](rc, replyTo) { (tv, replyTo) =>
+            Loader.RenderV1Cheatsheet(category, tv.repo, replyTo)
+          } { (lang, translation, tv, cs) =>
+            V1Cheatsheet(
+              cs.sheets,
+              cs.title,
+              cs.otherCategories,
+              translationContext(lang, version, translation),
+              tv.cacheId,
+            )
+          }
+          Behaviors.same
+
+        case GetSitemap(replyTo) =>
+          sitemapGenerator
+            .ask[Sitemap](replyTo => GenerateSitemap(documentation, replyTo))
+            .map(DocumentationSitemap)
+            .pipeTo(replyTo.toClassic)
+          Behaviors.same
+      }
+      .receiveSignal(postStop)
   }
 
 }

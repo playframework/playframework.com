@@ -12,7 +12,7 @@ import play.api.Environment
 import play.api.libs.json.Json
 
 @Singleton
-class PlayReleasesProvider @Inject()(environment: Environment) extends Provider[PlayReleases] {
+class PlayReleasesProvider @Inject() (environment: Environment) extends Provider[PlayReleases] {
   private lazy val releases: PlayReleases = {
     environment
       .resourceAsStream("playReleases.json")
