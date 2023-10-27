@@ -2,11 +2,11 @@ package controllers.documentation
 
 import actors.DocumentationActor
 import actors.DocumentationActor.{ NotFound => DocsNotFound, NotModified => DocsNotModified, _ }
-import akka.actor.typed.ActorRef
-import akka.actor.typed.ActorSystem
-import akka.actor.typed.scaladsl.AskPattern._
-import akka.actor.typed.scaladsl.adapter._
-import akka.util.Timeout
+import org.apache.pekko.actor.typed.ActorRef
+import org.apache.pekko.actor.typed.ActorSystem
+import org.apache.pekko.actor.typed.scaladsl.AskPattern._
+import org.apache.pekko.actor.typed.scaladsl.adapter._
+import org.apache.pekko.util.Timeout
 import javax.inject.Inject
 import javax.inject.Singleton
 import models.PlayReleases
@@ -33,7 +33,7 @@ class DocumentationController @Inject() (
     documentationActor: ActorRef[Command],
     releases: PlayReleases,
     components: ControllerComponents,
-)(implicit actorSystem: akka.actor.ActorSystem, reverseRouter: ReverseRouter)
+)(implicit actorSystem: org.apache.pekko.actor.ActorSystem, reverseRouter: ReverseRouter)
     extends AbstractController(components) {
 
   private implicit val timeout: Timeout                  = Timeout(10.seconds)
