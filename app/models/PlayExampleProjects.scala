@@ -31,7 +31,6 @@ object TemplateParameter {
 
 case class ExampleProject(
     displayName: String,
-    downloadUrl: String,
     gitHubRepo: String,
     gitHubUrl: String,
     keywords: Seq[String],

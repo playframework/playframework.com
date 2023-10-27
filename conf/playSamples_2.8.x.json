@@ -19,7 +19,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-scala-macwire-di-example",
     "summary": "Sample project for compile-time DI with Macwire"
   },
   {
@@ -42,7 +41,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-scala-compile-di-example",
     "summary": "Example Play Project using compile time dependency injection and Play WS with ScalaTest"
   },
   {
@@ -64,7 +62,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-java-compile-di-example",
     "summary": "Play application using compile time DI with Java API"
   },
   {
@@ -87,7 +84,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-java-dagger2-example",
     "summary": "Play Application using Dagger 2 for Compile Time DI"
   },
   {
@@ -109,7 +105,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-java-chatroom-example",
     "summary": "A simple chatroom using Play and Websockets with the Java API.",
     "description": "This is a simple chatroom using Play and Websockets with the Java API.<br>This project makes use of<a href=\"http://doc.akka.io/docs/akka/current/java/stream/stream-dynamic.html\">dynamic streams</a> from Akka Streams, notably <code>BroadcastHub</code> and <code>MergeHub</code>.  By <a href=\"http://doc.akka.io/docs/akka/current/java/stream/stream-dynamic.html#Dynamic_fan-in_and_fan-out_with_MergeHub_and_BroadcastHub\">combining MergeHub and BroadcastHub</a>, you can get publish/subscribe functionality."
   },
@@ -132,7 +127,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-scala-chatroom-example",
     "summary": "A simple chatroom using Play and Websockets with the Scala API.",
     "description": "This is a simple chatroom using Play and Websockets with the Scala API.<br>This project makes use of<a href=\"http://doc.akka.io/docs/akka/current/scala/stream/stream-dynamic.html\">dynamic streams</a> from Akka Streams, notably <code>BroadcastHub</code> and <code>MergeHub</code>.  By <a href=\"http://doc.akka.io/docs/akka/current/scala/stream/stream-dynamic.html#Dynamic_fan-in_and_fan-out_with_MergeHub_and_BroadcastHub\">combining MergeHub and BroadcastHub</a>, you can get publish/subscribe functionality."
   },
@@ -157,7 +151,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-java-streaming-example",
     "summary": "This is an example Play template that demonstrates Streaming with Server Sent Events or Comet, using Akka Streams."
   },
   {
@@ -181,7 +174,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-scala-streaming-example",
     "summary": "This is an example Play template that demonstrates Streaming with Server Sent Events or Comet, using Akka Streams."
   },
   {
@@ -204,7 +196,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-java-websocket-example",
     "summary": "An example Play application that shows how to use Play's Websocket API in Java, by showing a series of stock tickers updated using WebSocket.",
     "description": "The Websocket API is built on Akka Streams, and so is async, non-blocking, and backpressure aware. Using Akka Streams also means that interacting with Akka Actors is simple.<br>There are also tests showing how Junit and Akka Testkit are used to test actors and flows."
   },
@@ -228,7 +219,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-scala-websocket-example",
     "summary": "An example Play application that shows how to use Play's Websocket API in Scala, by showing a series of stock tickers updated using WebSocket.",
     "description": "The Websocket API is built on Akka Streams, and so is async, non-blocking, and backpressure aware. Using Akka Streams also means that interacting with Akka Actors is simple.<br>There are also tests showing how Junit and Akka Testkit are used to test actors and flows."
   },
@@ -252,7 +242,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-java-fileupload-example",
     "summary": "A sample project that shows how to upload a file through Akka Streams using a custom BodyParser using Akka Streams using the Java API."
   },
   {
@@ -275,7 +264,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-scala-fileupload-example",
     "summary": "A sample project that shows how to upload a file through Akka Streams using a custom BodyParser using Akka Streams and the Scala API."
   },
   {
@@ -297,7 +285,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-scala-starter-example",
     "summary": "A starter application that shows how Play works.",
     "description": "This is a starter application that shows how Play works.  Please see the documentation at <a href=\"https://www.playframework.com/documentation/latest/Home\">https://www.playframework.com/documentation/latest/Home</a> for more details."
   },
@@ -320,7 +307,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-java-starter-example",
     "summary": "A starter application that shows how Play works.",
     "description": "This is a starter application that shows how Play works.  Please see the documentation at <a href=\"https://www.playframework.com/documentation/latest/Home\">https://www.playframework.com/documentation/latest/Home</a> for more details."
   },
@@ -345,7 +331,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-scala-anorm-example",
     "summary": "An example Play application that uses Scala on the front end, and communicates with an in memory database using Anorm."
   },
   {
@@ -370,7 +355,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-java-jpa-example",
     "summary": "This project demonstrate how to create a simple CRUD application with Play, using JPA."
   },
   {
@@ -394,7 +378,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-java-ebean-example",
     "summary": "An example Play application that uses Java, and communicates with an in memory database using EBean."
   },
   {
@@ -416,7 +399,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-scala-rest-api-example",
     "summary": "Example project for making a REST API in Play using the Scala API."
   },
   {
@@ -438,7 +420,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-java-rest-api-example",
     "summary": "Example project for making a REST API in Play using the Java API."
   },
   {
@@ -460,7 +441,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-scala-forms-example",
     "summary": "Example project for doing forms processing in Play in the Scala API."
   },
   {
@@ -482,7 +462,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-java-forms-example",
     "summary": "Example project for doing forms processing in Play in the Java API."
   },
   {
@@ -506,7 +485,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-scala-tls-example",
     "summary": "This application shows how to use Play with SSL/TLS, using the Java Secure Socket Extension (JSSE) API."
   },
   {
@@ -530,7 +508,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-scala-secure-session-example",
     "summary": "An example Play application showing encrypted session management",
     "description": "This is an example application that shows how to use symmetric encryption with <a href=\"https://github.com/abstractj/kalium/\">Kalium</a></br>You must install libsodium before using this application.  If you have homebrew, you can use <code>brew install libsodium</code>."
   },
@@ -554,7 +531,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-scala-hello-world-tutorial",
     "summary": "Play Hello World tutorial in Scala",
     "description": "This tutorial introduces Play Framework, describes how Play web applications work, and walks you through steps to create page that displays a Hello World greeting.",
     "featured": {
@@ -581,7 +557,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-java-hello-world-tutorial",
     "summary": "Play Hello World tutorial in Java",
     "description": "This tutorial introduces Play Framework, describes how Play web applications work, and walks you through steps to create page that displays a Hello World greeting."
   },
@@ -604,7 +579,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-scala-grpc-example",
     "summary": "A starter application that shows how to use gRPC within a Play app.",
     "description": "This is an example applicaiton shows how to use gRPC in Play.  Please see the documentation at <a href=\"https://developer.lightbend.com/guides/play-scala-grpc-example/\">https://developer.lightbend.com/guides/play-scala-grpc-example/</a> for more details."
   },
@@ -627,7 +601,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-samples-play-java-grpc-example",
     "summary": "A starter application that shows how to use gRPC within a Play app.",
     "description": "This is an example applicaiton shows how to use gRPC in Play.  Please see the documentation at <a href=\"https://developer.lightbend.com/guides/play-scala-grpc-example/\">https://developer.lightbend.com/guides/play-scala-grpc-example/</a> for more details."
   },
@@ -650,7 +623,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-scala-seed",
     "summary": "Play Scala Seed Project",
     "description": "This is a seed project which creates a basic build for a Play application. It doesn't include a tutorial or demonstration, it's just a minimal project to start your own application from.",
     "parameters": [
@@ -684,7 +656,6 @@
         "name": "2.8.x"
       }
     },
-    "downloadUrl": "https://example.lightbend.com/v1/download/play-java-seed",
     "summary": "Play Java Seed Project",
     "description": "This is a seed project which creates a basic build for a Play application. It doesn't include a tutorial or demonstration, it's just a minimal project to start your own application from.",
     "parameters": [
