@@ -2,7 +2,7 @@ package services.opencollective
 
 import javax.inject.Singleton
 import javax.inject.Inject
-import akka.actor.ActorSystem
+import org.apache.pekko.actor.ActorSystem
 import com.google.inject.name.Named
 import models.opencollective.FallbackMembers
 import models.opencollective.OpenCollectiveMember

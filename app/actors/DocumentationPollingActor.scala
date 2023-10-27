@@ -3,11 +3,11 @@ package actors
 import actors.DocumentationActor.DocumentationGitRepo
 import actors.DocumentationActor.DocumentationGitRepos
 import actors.DocumentationActor.UpdateDocumentation
-import akka.actor.typed.ActorRef
-import akka.actor.typed.Behavior
-import akka.actor.typed.scaladsl.ActorContext
-import akka.actor.typed.scaladsl.Behaviors
-import akka.actor.typed.scaladsl.LoggerOps
+import org.apache.pekko.actor.typed.ActorRef
+import org.apache.pekko.actor.typed.Behavior
+import org.apache.pekko.actor.typed.scaladsl.ActorContext
+import org.apache.pekko.actor.typed.scaladsl.Behaviors
+import org.apache.pekko.actor.typed.scaladsl.LoggerOps
 import models.documentation._
 import org.apache.commons.io.IOUtils
 import org.eclipse.jgit.lib.ObjectId
