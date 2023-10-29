@@ -1,13 +1,13 @@
 package services.github
 
 import models.github._
-import org.specs2.mock.Mockito
+import org.mockito.Mockito
 import play.api.test._
 
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
 
-object ContributorsSummariserSpec extends PlaySpecification with Mockito {
+object ContributorsSummariserSpec extends PlaySpecification {
   val config        = GitHubConfig("", "", "playframework", Seq("Owners", "Developers"))
   val org           = Organisation(0, "playframework", "", "", "")
   val ownersTeam    = Team(0, "Owners", "", "")
@@ -24,7 +24,8 @@ object ContributorsSummariserSpec extends PlaySpecification with Mockito {
 
   "Contributors summariser" should {
     "only include committer teams" in run { (gh, contributors) =>
-      there.was(no(gh).fetchTeamMembers(collaborators))
+      Mockito.verify(gh, Mockito.never()).fetchTeamMembers(collaborators)
+      true
     }
     "fetch details of committers" in run { (gh, contributors) =>
       contributors.committers must_== Seq(ownerDetails)
@@ -50,23 +51,23 @@ object ContributorsSummariserSpec extends PlaySpecification with Mockito {
       contributors.contributors must contain(exactly(contributor1, contributor2, contributor3))
     }
     "not fetch forked repositories" in run { (gh, contributors) =>
-      there.was(no(gh).fetchRepoContributors(forkRepo))
+      Mockito.verify(gh, Mockito.never()).fetchRepoContributors(forkRepo)
+      true
     }
   }
 
-  def run[T](block: (GitHub, Contributors) => T) = {
-    val gh = mock[GitHub]
-    gh.fetchOrganisation("playframework").returns(f(org))
-    gh.fetchOrganisationTeams(org).returns(f(Seq(ownersTeam, collaborators)))
-    gh.fetchTeamMembers(ownersTeam).returns(f(Seq(owner)))
-    gh.fetchUserDetails(owner).returns(f(ownerDetails))
+  def run[T](block: (GitHub, Contributors) => T): T = {
+    val gh = Mockito.mock(classOf[GitHub])
+    Mockito.when(gh.fetchOrganisation("playframework")).thenReturn(f(org))
+    Mockito.when(gh.fetchOrganisationTeams(org)).thenReturn(f(Seq(ownersTeam, collaborators)))
+    Mockito.when(gh.fetchTeamMembers(ownersTeam)).thenReturn(f(Seq(owner)))
+    Mockito.when(gh.fetchUserDetails(owner)).thenReturn(f(ownerDetails))
 
-    gh.fetchOrganisationMembers(org).returns(f(Seq(owner, orgMember)))
+    Mockito.when(gh.fetchOrganisationMembers(org)).thenReturn(f(Seq(owner, orgMember)))
 
-    gh.fetchOrganisationRepos(org).returns(f(Seq(playRepo, twirlRepo, forkRepo)))
-    gh.fetchRepoContributors(playRepo)
-      .returns(f(Seq(contributor2 -> 4, orgMember -> 10, contributor1 -> 3, owner -> 20)))
-    gh.fetchRepoContributors(twirlRepo).returns(f(Seq(contributor1 -> 3, contributor3 -> 1)))
+    Mockito.when(gh.fetchOrganisationRepos(org)).thenReturn(f(Seq(playRepo, twirlRepo, forkRepo)))
+    Mockito.when(gh.fetchRepoContributors(playRepo)).thenReturn(f(Seq(contributor2 -> 4, orgMember -> 10, contributor1 -> 3, owner -> 20)))
+    Mockito.when(gh.fetchRepoContributors(twirlRepo)).thenReturn(f(Seq(contributor1 -> 3, contributor3 -> 1)))
 
     val contributors = await(new DefaultContributorsSummariser(gh, config).fetchContributors)
     block(gh, contributors)

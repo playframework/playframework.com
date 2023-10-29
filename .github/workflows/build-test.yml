@@ -38,7 +38,7 @@ jobs:
     uses: playframework/.github/.github/workflows/cmd.yml@v3
     with:
       java: 17, 11
-      scala: 2.13.x
+      scala: 3.x
       cmd: |
         # Clone generated docs so that we can run some integration tests
         git clone -o origin https://github.com/playframework/play-generated-docs.git $PWD/data/generated

@@ -10,6 +10,7 @@ import play.twirl.api.Html
 import utils.Markdown
 import org.apache.commons.io.IOUtils
 import java.io.File
+import scala.concurrent.Future
 
 @Singleton
 class Security @Inject() (environment: Environment, val controllerComponents: ControllerComponents)(implicit
@@ -17,12 +18,12 @@ class Security @Inject() (environment: Environment, val controllerComponents: Co
 ) extends BaseController
     with Common {
 
-  def vulnerability(name: String) = Action { implicit req =>
+  def vulnerability(name: String) = Action.async { implicit req =>
     val path = "public/markdown/vulnerabilities/" + name
 
     // protect against dot dots
     if (new File("/" + path).getCanonicalPath != "/" + path) {
-      notFound
+      Future.successful(notFound)
     } else {
       environment
         .resourceAsStream(path + ".md")
@@ -30,22 +31,30 @@ class Security @Inject() (environment: Environment, val controllerComponents: Co
           val content = IOUtils.toString(is, "utf-8")
 
           try {
-            Ok(
-              views.html.security(
-                "Play Framework Security Advisory",
-                Html(Markdown.toHtml(content, link => (link, link))),
-              ),
-            ).withHeaders(CACHE_CONTROL -> "max-age=10000")
+            Future.successful(
+              Ok(
+                views.html.security(
+                  "Play Framework Security Advisory",
+                  Html(Markdown.toHtml(content, link => (link, link))),
+                ),
+              ).withHeaders(CACHE_CONTROL -> "max-age=10000")
+            )
           } finally {
             is.close()
           }
         }
-        .getOrElse(notFound)
+        .getOrElse(
+          Future.successful(
+            notFound
+          )
+        )
     }
   }
 
-  def index = Action { implicit req =>
-    Ok(views.html.vulnerabilities()).withHeaders(CACHE_CONTROL -> "max-age=1000")
+  def index = Action.async { implicit req =>
+    Future.successful(
+      Ok(views.html.vulnerabilities()).withHeaders(CACHE_CONTROL -> "max-age=1000")
+    )
   }
 
 }
