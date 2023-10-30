@@ -2,8 +2,11 @@ package models
 
 import com.google.inject.AbstractModule
 import com.google.inject.Singleton
+import org.apache.commons.io.IOUtils
+
 import javax.inject.Inject
 import play.api.Configuration
+import play.api.Environment
 import play.api.cache.SyncCacheApi
 import play.api.libs.json._
 import play.api.libs.ws.WSClient
@@ -28,7 +31,6 @@ object TemplateParameter {
 
 case class ExampleProject(
     displayName: String,
-    downloadUrl: String,
     gitHubRepo: String,
     gitHubUrl: String,
     keywords: Seq[String],
@@ -54,13 +56,14 @@ class PlayExampleProjectsService @Inject() (
     configuration: Configuration,
     ws: WSClient,
     cache: SyncCacheApi,
+    environment: Environment
 )(implicit ec: ExecutionContext) {
 
   val validPlayVersions: Seq[String] = configuration.get[Seq[String]]("examples.playVersions")
 
   private val logger = org.slf4j.LoggerFactory.getLogger(this.getClass)
 
-  private val examplesUrl = configuration.get[String]("examples.apiUrl")
+  //private val examplesUrl = configuration.get[String]("examples.apiUrl")
 
   // NOTE: TTL is really just a safety measure here.
   // We should re-deploy when we make major changes to projects
@@ -89,12 +92,19 @@ class PlayExampleProjectsService @Inject() (
 
   def examples(): Future[Seq[ExampleProject]] = {
     Future
-      .sequence(validPlayVersions.map { version =>
-        ws.url(examplesUrl)
-          .withQueryStringParameters(playQueryString(version): _*)
-          .get()
-          .map(response => (version, response.json))
-      })
+      .sequence(validPlayVersions.map { version => {
+        lazy val samples: JsValue =
+          environment
+            .resourceAsStream(s"playSamples_${version}.json")
+            .flatMap { is =>
+              try {
+                Json.fromJson[JsValue](Json.parse(IOUtils.toByteArray(is))).asOpt
+              } finally {
+                is.close()
+              }
+            }.getOrElse(JsArray())
+        Future.successful(version, samples)
+      }})
       .map { response =>
         response.flatMap((convertExampleProjects _).tupled)
       }

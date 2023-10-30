@@ -1,0 +1,673 @@
+[
+  {
+    "displayName": "Play Scala Dependency Injection using Macwire Example",
+    "templateName": "play-samples-play-scala-macwire-di-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-scala-macwire-di-example",
+    "keywords": [
+      "play",
+      "scala",
+      "macwire",
+      "di",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-scala-macwire-di-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "Sample project for compile-time DI with Macwire"
+  },
+  {
+    "displayName": "Play Scala Compile Time Dependency Injection Example",
+    "templateName": "play-samples-play-scala-compile-di-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-scala-compile-di-example",
+    "keywords": [
+      "play",
+      "scala",
+      "di",
+      "scalatest",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-scala-compile-di-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "Example Play Project using compile time dependency injection and Play WS with ScalaTest"
+  },
+  {
+    "displayName": "Play Java Compile Time Dependency Injection Example",
+    "templateName": "play-samples-play-java-compile-di-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-java-compile-di-example",
+    "keywords": [
+      "play",
+      "java",
+      "di",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-java-compile-di-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "Play application using compile time DI with Java API"
+  },
+  {
+    "displayName": "Play Java using Dagger 2 for Compile Time DI",
+    "templateName": "play-samples-play-java-dagger2-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-java-dagger2-example",
+    "keywords": [
+      "play",
+      "java",
+      "di",
+      "dagger2",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-java-dagger2-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "Play Application using Dagger 2 for Compile Time DI"
+  },
+  {
+    "displayName": "Play Java Chatroom using Websockets Example",
+    "templateName": "play-samples-play-java-chatroom-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-java-chatroom-example",
+    "keywords": [
+      "play",
+      "java",
+      "websocket",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-java-chatroom-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "A simple chatroom using Play and Websockets with the Java API.",
+    "description": "This is a simple chatroom using Play and Websockets with the Java API.<br>This project makes use of<a href=\"http://doc.akka.io/docs/akka/current/java/stream/stream-dynamic.html\">dynamic streams</a> from Akka Streams, notably <code>BroadcastHub</code> and <code>MergeHub</code>.  By <a href=\"http://doc.akka.io/docs/akka/current/java/stream/stream-dynamic.html#Dynamic_fan-in_and_fan-out_with_MergeHub_and_BroadcastHub\">combining MergeHub and BroadcastHub</a>, you can get publish/subscribe functionality."
+  },
+  {
+    "displayName": "Play Scala Chatroom using Websockets Example",
+    "templateName": "play-samples-play-scala-chatroom-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-scala-chatroom-example",
+    "keywords": [
+      "play",
+      "scala",
+      "websocket",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-scala-chatroom-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "A simple chatroom using Play and Websockets with the Scala API.",
+    "description": "This is a simple chatroom using Play and Websockets with the Scala API.<br>This project makes use of<a href=\"http://doc.akka.io/docs/akka/current/scala/stream/stream-dynamic.html\">dynamic streams</a> from Akka Streams, notably <code>BroadcastHub</code> and <code>MergeHub</code>.  By <a href=\"http://doc.akka.io/docs/akka/current/scala/stream/stream-dynamic.html#Dynamic_fan-in_and_fan-out_with_MergeHub_and_BroadcastHub\">combining MergeHub and BroadcastHub</a>, you can get publish/subscribe functionality."
+  },
+  {
+    "displayName": "Play Java Streaming Example",
+    "templateName": "play-samples-play-java-streaming-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-java-streaming-example",
+    "keywords": [
+      "play",
+      "java",
+      "streaming",
+      "sse",
+      "comet",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-java-streaming-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "This is an example Play template that demonstrates Streaming with Server Sent Events or Comet, using Akka Streams."
+  },
+  {
+    "displayName": "Play Scala Streaming Example",
+    "templateName": "play-samples-play-scala-streaming-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-scala-streaming-example",
+    "keywords": [
+      "play",
+      "scala",
+      "streaming",
+      "sse",
+      "comet",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-scala-streaming-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "This is an example Play template that demonstrates Streaming with Server Sent Events or Comet, using Akka Streams."
+  },
+  {
+    "displayName": "Play Java Websocket Example",
+    "templateName": "play-samples-play-java-websocket-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-java-websocket-example",
+    "keywords": [
+      "play",
+      "java",
+      "websocket",
+      "actor",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-java-websocket-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "An example Play application that shows how to use Play's Websocket API in Java, by showing a series of stock tickers updated using WebSocket.",
+    "description": "The Websocket API is built on Akka Streams, and so is async, non-blocking, and backpressure aware. Using Akka Streams also means that interacting with Akka Actors is simple.<br>There are also tests showing how Junit and Akka Testkit are used to test actors and flows."
+  },
+  {
+    "displayName": "Play Scala Websocket Example",
+    "templateName": "play-samples-play-scala-websocket-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-scala-websocket-example",
+    "keywords": [
+      "play",
+      "scala",
+      "websocket",
+      "actor",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-scala-websocket-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "An example Play application that shows how to use Play's Websocket API in Scala, by showing a series of stock tickers updated using WebSocket.",
+    "description": "The Websocket API is built on Akka Streams, and so is async, non-blocking, and backpressure aware. Using Akka Streams also means that interacting with Akka Actors is simple.<br>There are also tests showing how Junit and Akka Testkit are used to test actors and flows."
+  },
+  {
+    "displayName": "Play Java File Upload Example",
+    "templateName": "play-samples-play-java-fileupload-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-java-fileupload-example",
+    "keywords": [
+      "play",
+      "java",
+      "upload",
+      "multipart",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-java-fileupload-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "A sample project that shows how to upload a file through Akka Streams using a custom BodyParser using Akka Streams using the Java API."
+  },
+  {
+    "displayName": "Play Scala File Upload Example",
+    "templateName": "play-samples-play-scala-fileupload-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-scala-fileupload-example",
+    "keywords": [
+      "play",
+      "scala",
+      "upload",
+      "multipart",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-scala-fileupload-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "A sample project that shows how to upload a file through Akka Streams using a custom BodyParser using Akka Streams and the Scala API."
+  },
+  {
+    "displayName": "Play Scala Starter Example",
+    "templateName": "play-samples-play-scala-starter-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-scala-starter-example",
+    "keywords": [
+      "play",
+      "scala",
+      "starter",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-scala-starter-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "A starter application that shows how Play works.",
+    "description": "This is a starter application that shows how Play works.  Please see the documentation at <a href=\"https://www.playframework.com/documentation/latest/Home\">https://www.playframework.com/documentation/latest/Home</a> for more details."
+  },
+  {
+    "displayName": "Play Java Starter Example",
+    "templateName": "play-samples-play-java-starter-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-java-starter-example",
+    "keywords": [
+      "play",
+      "java",
+      "starter",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-java-starter-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "A starter application that shows how Play works.",
+    "description": "This is a starter application that shows how Play works.  Please see the documentation at <a href=\"https://www.playframework.com/documentation/latest/Home\">https://www.playframework.com/documentation/latest/Home</a> for more details."
+  },
+  {
+    "displayName": "Play Scala Anorm Example",
+    "templateName": "play-samples-play-scala-anorm-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-scala-anorm-example",
+    "keywords": [
+      "play",
+      "scala",
+      "anorm",
+      "database",
+      "orm",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-scala-anorm-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "An example Play application that uses Scala on the front end, and communicates with an in memory database using Anorm."
+  },
+  {
+    "displayName": "Play Java JPA Example",
+    "templateName": "play-samples-play-java-jpa-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-java-jpa-example",
+    "keywords": [
+      "play",
+      "java",
+      "jpa",
+      "hibernate",
+      "orm",
+      "database",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-java-jpa-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "This project demonstrate how to create a simple CRUD application with Play, using JPA."
+  },
+  {
+    "displayName": "Play Java Ebean Example",
+    "templateName": "play-samples-play-java-ebean-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-java-ebean-example",
+    "keywords": [
+      "play",
+      "java",
+      "ebean",
+      "database",
+      "orm",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-java-ebean-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "An example Play application that uses Java, and communicates with an in memory database using EBean."
+  },
+  {
+    "displayName": "Play Scala REST API Example",
+    "templateName": "play-samples-play-scala-rest-api-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-scala-rest-api-example",
+    "keywords": [
+      "play",
+      "scala",
+      "rest",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-scala-rest-api-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "Example project for making a REST API in Play using the Scala API."
+  },
+  {
+    "displayName": "Play Java REST API Example",
+    "templateName": "play-samples-play-java-rest-api-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-java-rest-api-example",
+    "keywords": [
+      "play",
+      "java",
+      "rest",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-java-rest-api-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "Example project for making a REST API in Play using the Java API."
+  },
+  {
+    "displayName": "Play Scala Forms Example",
+    "templateName": "play-samples-play-scala-forms-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-scala-forms-example",
+    "keywords": [
+      "play",
+      "scala",
+      "forms",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-scala-forms-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "Example project for doing forms processing in Play in the Scala API."
+  },
+  {
+    "displayName": "Play Java Forms Example",
+    "templateName": "play-samples-play-java-forms-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-java-forms-example",
+    "keywords": [
+      "play",
+      "java",
+      "forms",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-java-forms-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "Example project for doing forms processing in Play in the Java API."
+  },
+  {
+    "displayName": "Play Secure HTTP (SSL/TLS) Example",
+    "templateName": "play-samples-play-scala-tls-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-scala-tls-example",
+    "keywords": [
+      "play",
+      "scala",
+      "https",
+      "ssl",
+      "tls",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-scala-tls-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "This application shows how to use Play with SSL/TLS, using the Java Secure Socket Extension (JSSE) API."
+  },
+  {
+    "displayName": "Play Scala Secure Session Example",
+    "templateName": "play-samples-play-scala-secure-session-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-scala-secure-session-example",
+    "keywords": [
+      "play",
+      "scala",
+      "kalium",
+      "encryption",
+      "session",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-scala-secure-session-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "An example Play application showing encrypted session management",
+    "description": "This is an example application that shows how to use symmetric encryption with <a href=\"https://github.com/abstractj/kalium/\">Kalium</a></br>You must install libsodium before using this application.  If you have homebrew, you can use <code>brew install libsodium</code>."
+  },
+  {
+    "displayName": "Play Scala Hello World Tutorial",
+    "templateName": "play-samples-play-scala-hello-world-tutorial",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-scala-hello-world-tutorial",
+    "keywords": [
+      "play",
+      "scala",
+      "tutorial",
+      "hello-world",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-scala-hello-world-tutorial",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "Play Hello World tutorial in Scala",
+    "description": "This tutorial introduces Play Framework, describes how Play web applications work, and walks you through steps to create page that displays a Hello World greeting.",
+    "featured": {
+      "play": 0
+    }
+  },
+  {
+    "displayName": "Play Java Hello World Tutorial",
+    "templateName": "play-samples-play-java-hello-world-tutorial",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-java-hello-world-tutorial",
+    "keywords": [
+      "play",
+      "java",
+      "tutorial",
+      "hello-world",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-java-hello-world-tutorial",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "Play Hello World tutorial in Java",
+    "description": "This tutorial introduces Play Framework, describes how Play web applications work, and walks you through steps to create page that displays a Hello World greeting."
+  },
+  {
+    "displayName": "Play Scala gRPC Example",
+    "templateName": "play-samples-play-scala-grpc-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-scala-grpc-example",
+    "keywords": [
+      "play",
+      "scala",
+      "grpc",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-scala-grpc-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "A starter application that shows how to use gRPC within a Play app.",
+    "description": "This is an example applicaiton shows how to use gRPC in Play.  Please see the documentation at <a href=\"https://developer.lightbend.com/guides/play-scala-grpc-example/\">https://developer.lightbend.com/guides/play-scala-grpc-example/</a> for more details."
+  },
+  {
+    "displayName": "Play Java gRPC Example",
+    "templateName": "play-samples-play-java-grpc-example",
+    "gitHubRepo": "playframework/play-samples",
+    "gitHubUrl": "https://github.com/playframework/play-samples/tree/3.0.x/play-java-grpc-example",
+    "keywords": [
+      "play",
+      "java",
+      "grpc",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "play-java-grpc-example",
+      "url": "git@github.com:playframework/play-samples.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "A starter application that shows how to use gRPC within a Play app.",
+    "description": "This is an example applicaiton shows how to use gRPC in Play.  Please see the documentation at <a href=\"https://developer.lightbend.com/guides/play-scala-grpc-example/\">https://developer.lightbend.com/guides/play-scala-grpc-example/</a> for more details."
+  },
+  {
+    "displayName": "Play Scala Seed",
+    "templateName": "play-scala-seed",
+    "gitHubRepo": "playframework/play-scala-seed.g8",
+    "gitHubUrl": "https://github.com/playframework/play-scala-seed.g8/tree/3.0.x",
+    "keywords": [
+      "scala",
+      "play",
+      "seed",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "",
+      "url": "git@github.com:playframework/play-scala-seed.g8.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "Play Scala Seed Project",
+    "description": "This is a seed project which creates a basic build for a Play application. It doesn't include a tutorial or demonstration, it's just a minimal project to start your own application from.",
+    "parameters": [
+      {
+        "type": "text",
+        "query": "name",
+        "displayName": "Project Name",
+        "defaultValue": "play-scala-seed",
+        "required": true,
+        "pattern": "[-A-Za-z0-9_.]+",
+        "format": "a sequence of letters, digits, minus sign, underscore, dot"
+      }
+    ]
+  },
+  {
+    "displayName": "Play Java Seed",
+    "templateName": "play-java-seed",
+    "gitHubRepo": "playframework/play-java-seed.g8",
+    "gitHubUrl": "https://github.com/playframework/play-java-seed.g8/tree/3.0.x",
+    "keywords": [
+      "java",
+      "play",
+      "seed",
+      "3.0.x"
+    ],
+    "source": {
+      "relativePath": "",
+      "url": "git@github.com:playframework/play-java-seed.g8.git",
+      "ref": {
+        "type": "branch",
+        "name": "3.0.x"
+      }
+    },
+    "summary": "Play Java Seed Project",
+    "description": "This is a seed project which creates a basic build for a Play application. It doesn't include a tutorial or demonstration, it's just a minimal project to start your own application from.",
+    "parameters": [
+      {
+        "type": "text",
+        "query": "name",
+        "displayName": "Project Name",
+        "defaultValue": "play-java-seed",
+        "required": true,
+        "pattern": "[-A-Za-z0-9_.]+",
+        "format": "a sequence of letters, digits, minus sign, underscore, dot"
+      }
+    ]
+  }
+]
