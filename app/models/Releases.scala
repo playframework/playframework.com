@@ -17,7 +17,7 @@ object PlayRelease {
   implicit val releaseReads: Reads[PlayRelease] = Json.reads[PlayRelease]
 }
 
-case class PlayReleases(latest: PlayRelease, development: Seq[PlayRelease], previous: Seq[PlayRelease])
+case class PlayReleases(latest3: PlayRelease, latest2: PlayRelease, development: Seq[PlayRelease], previous: Seq[PlayRelease])
 
 object PlayReleases {
   implicit val playReleasesReads: Reads[PlayReleases] = Json.reads[PlayReleases]

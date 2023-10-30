@@ -187,7 +187,7 @@ class DocumentationController @Inject() (
   }
 
   def page(lang: Option[Lang], v: String, page: String) = VersionAction(v) { (actor, version) => implicit req =>
-    val linkFuture = canonicalLinkHeader(page)
+    val linkFuture = canonicalLinkHeader(page, version)
     val resultFuture =
       actorRequest(actor, page, replyTo => RenderPage(lang, version, etag(req), page, replyTo)) {
         case RenderedPage(html, sidebarHtml, breadcrumbsHtml, source, context, cacheId) =>
@@ -321,8 +321,12 @@ class DocumentationController @Inject() (
     }
   }
 
-  private def canonicalLinkHeader(page: String) = {
-    val Array(epoch, major, minor) = releases.latest.version.split("\\.", 4)
+  private def canonicalLinkHeader(page: String, version: Version) = {
+    val playRelease = version.era match {
+      case 3 => releases.latest3
+      case _ => releases.latest2
+    }
+    val Array(epoch, major, minor) = playRelease.version.split("\\.", 4)
     val latestVersion              = Version.parse(s"$epoch.$major.x").get
     documentationActor
       .ask[Response[PageExists]](replyTo => QueryPageExists(None, latestVersion, None, page, replyTo))

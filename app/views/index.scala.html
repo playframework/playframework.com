@@ -24,7 +24,7 @@
         <div id="actions">
             <div id="start">
                 <h2>Get Started</h2>
-                    <a href="@routes.Application.download" class="button">Try Play <br> @releases.latest.version@for(name <- releases.latest.name){ "@name"}</a>
+                    <a href="@routes.Application.download" class="button">Try Play <br> @releases.latest3.version or @releases.latest2.version@for(name <- releases.latest2.name){ "@name"}</a>
                 <p>
                     or <a href="@routes.Application.allreleases()">browse all versions</a>
                 </p>
@@ -33,7 +33,7 @@
             <div id="docs">
                 <h2>Read the Docs</h2>
 
-                <a href="@reverseRouter.index(None)" class="button">Documentation <br> @releases.latest.version@for(name <- releases.latest.name){ "@name"}</a>
+                <a href="@reverseRouter.index(None)" class="button">Documentation <br> @releases.latest3.version or @releases.latest2.version@for(name <- releases.latest2.name){ "@name"}</a>
                 <p>
                   or go to <a href="@reverseRouter.latest(None, "JavaHome")">Java docs</a> or <a href="@reverseRouter.latest(None, "ScalaHome")">Scala docs</a>
                 </p>
