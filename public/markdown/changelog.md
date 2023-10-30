@@ -1,3 +1,21 @@
+## Play 3.0.0
+
+*Released 25 October 2023
+
+[Highlights](https://playframework.com/documentation/3.0.x/Highlights30)
+[Migration Guide](https://playframework.com/documentation/3.0.x/Migration30)
+[All changes](https://github.com/playframework/playframework/compare/2.9.0...3.0.0/)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/129?closed=1)
+
+## Play 2.9.0
+
+*Released 25 October 2023
+
+[Highlights](https://playframework.com/documentation/2.9.x/Highlights29)
+[Migration Guide](https://playframework.com/documentation/2.9.x/Migration29)
+[All changes](https://github.com/playframework/playframework/compare/2.8.0...2.9.0/)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/105?closed=1)
+
 ## Play 2.8.20
 
 *Released 18 July 2023
