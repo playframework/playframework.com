@@ -23,7 +23,7 @@ class PlayReleasesProvider @Inject() (environment: Environment) extends Provider
           is.close()
         }
       }
-      .getOrElse(PlayReleases(PlayRelease("unknown", None, Some("unknown"), None, None), Nil, Nil))
+      .getOrElse(PlayReleases(PlayRelease("unknown", None, Some("unknown"), None, None), PlayRelease("unknown", None, Some("unknown"), None, None), Nil, Nil))
   }
 
   override def get(): PlayReleases = releases

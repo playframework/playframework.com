@@ -55,9 +55,11 @@ class Application @Inject() (
 
       }
       .orElse {
-        if (!version.contains(releases.latest.version)) {
+        if(version.isEmpty ||
+          (version.exists(_.startsWith("2.")) && !version.contains(releases.latest2.version)) ||
+          (version.exists(_.startsWith("3.")) && !version.contains(releases.latest3.version))) {
           Some(
-            s"""Play framework ${releases.latest.version} is out!  Check it out <a href="${routes.Application.download}">here</a>.""",
+            s"""Play framework ${if(version.isEmpty || version.exists(_.startsWith("3."))) releases.latest3.version else releases.latest2.version} is out!  Check it out <a href="${routes.Application.download}">here</a>.""",
           )
         } else {
           None
