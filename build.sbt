@@ -7,7 +7,7 @@ scalaVersion := "2.13.12"
 scalacOptions ++= List("-encoding", "utf8", "-deprecation", "-feature", "-unchecked")
 
 libraryDependencies ++= Seq(
-  "org.playframework" %% "play-doc"            % "3.0.0",
+  "org.playframework" %% "play-doc"            % "3.0.1",
   "org.eclipse.jgit"   % "org.eclipse.jgit"    % "6.7.0.202309050840-r",
   "com.damnhandy"      % "handy-uri-templates" % "2.1.8",
   "org.webjars"        % "jquery"              % "3.7.1",
