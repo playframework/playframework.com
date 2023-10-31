@@ -1,10 +1,18 @@
 @import controllers.documentation.ReverseRouter
 @(examples: PlayExamples)(implicit requestHeader: RequestHeader, reverseRouter: ReverseRouter)
 
-@renderProject(project: ExampleProject) = {
+@renderBaseTech(version: String) = @{
+  version match {
+    case "2.9.x" => "Akka"
+    case _ => "Pekko"
+  }
+}
+
+@renderProject(version:String, project: ExampleProject) = {
     <tr>
-        <td>@project.displayName</td>
+        <td>@project.displayName.dropRight(9)</td>
         <td><a href="@project.gitHubUrl" target="_blank">View on GitHub</a></td>
+        <td><a href="https://github.com/playframework/play-samples/archive/refs/heads/@{version}.zip">Download zip</a> <small>then unzip and<br><code>cd ./@{project.gitHubUrl.split("/").last}/</code></small></td>
     </tr>
 }
 
@@ -30,58 +38,82 @@
                     </div>
                 </div>
                 <div class="try-option">
-                    <h3><span>&raquo;</span> Try the Hello World Tutorial</h3>
+                    <h3><span>&raquo;</span> Try a Hello World Tutorial</h3>
                     <div class="try-option-content">
-                        <p>The Java and Scala Hello World projects are self-contained tutorials that include a distribution of the sbt build tool.</p>
-                        <p>Play requires Java 8 or higher. Check your version with the <code>java -version</code> command and if needed, install it from <a href="https://adoptium.net/" rel="noopener">Adoptium</a>.</p>
-                        <p>To try the tutorial, first download the Java or Scala project:</p>
-                            <table>
+                        <p>The Play Java and Play Scala "Hello World" projects are self-contained tutorials that are part of the <a href="https://github.com/playframework/play-samples">play-samples repository</a>. To try a tutorial, you can either clone the repository and check out the respective branch or download its contents as a zip file:</p>
+                        <table>
                             @examples.sections.map { case (version, section) =>
                             <tbody>
-                                <tr><th><h4>Play @version Hello World Projects</h4></th></tr>
+                                <tr><th colspan="3"><h4>Play @version Hello World Projects (Built on @{renderBaseTech(version)})</h4></th></tr>
                                 @section.tutorials.getOrElse("java", Seq.empty).map { (project) =>
-                                    @renderProject(project)
+                                    @renderProject(version, project)
                                 }
                                 @section.tutorials.getOrElse("scala", Seq.empty).map { (project) =>
-                                    @renderProject(project)
+                                    @renderProject(version, project)
                                 }
                             </tbody>
                             }
                         </table>
-                        <p>To run the tutorial:</p>
-                        <ol>   
-                            <li>Unzip the project in a convenient location.</li>
-                            <li>In a command window, change to the top-level project directory.</li>
+                        <blockquote>
+                            <p>
+                                Besides replacing Akka with Pekko, Play 3.0 is identical to Play 2.9. If you don't know what Akka or Pekko is, we recommend using Play 3.0. For more details on which version to use, read <a href="@reverseRouter.latest(None, "General#How-Play-Deals-with-Akkas-License-Change")" target="_blank">"How Play Deals with Akka’s License Change"</a>.
+                            </p>
+                        </blockquote>
+                        <p>To run a tutorial follow the <code>README</code> file instructions in the respective folder. In short:</p>
+                        <ol>
+                            <li>Please check <a href="@reverseRouter.latest(None, "Requirements")" target="_blank">the requirements for using Play</a>: Java and sbt needs to be installed.</li>
+                            <li>Clone or unzip the repo in a convenient location.</li>
+                            <li>In a command window, change to the project directory of the desired tutorial.</li>
                             <li>Enter <code>sbt run</code>.</li>
                             <li>After the message <code>Server started, ...</code> displays, enter the following URL in a browser: <a href="http://localhost:9000">http://localhost:9000</a></li>
+                            <li>The tutorial welcome page displays.</li>
                         </ol>
-                       <p>The tutorial welcome page displays.</p>
                     </div>
                 </div>
             </div>
 
             <div class="try-section">
                 <h2>Already know a bit about Play?</h2>
-                <p>There are a variety of <a href="https://github.com/playframework/play-samples">Play example projects for Java and Scala</a> that are focused on a particular use case. These include everything you need, including <a href="//www.scala-sbt.org/index.html">sbt</a>, Play Framework, and an HTTP server. The examples also support <a href="//gradle.github.io/playframework/">Gradle</a>.</p>
-                <p>If you are ready to start your own project and have sbt installed, you can create a Play project from the command line.</p>
+                <p>There are a variety of <a href="https://github.com/playframework/play-samples">Play example projects for Java and Scala</a> that focus on specific use cases. To run these sample projects, please check <a href="@reverseRouter.latest(None, "Requirements")" target="_blank">the requirements for using Play</a>: Java and sbt needs to be installed.</p>
+                <p>If you are ready to start your own project and have sbt and Java installed, you can create a Play project from the command line.</p>
 
                 <div class="try-option">
-                    <h3><span>&raquo;</span> Create a Play Java or Scala project using <code>sbt new</code></h3>
+                    <h3><span>&raquo;</span> Create a new Play Java or Scala project using <code>sbt new</code></h3>
                     <div class="try-option-content">
-                        <p>In a command window, enter one of the following and respond to the prompts to create a new project:</p>
-
-                        <h4>Java seed template</h4>
-                        <pre>sbt new playframework/play-java-seed.g8</pre>
-
-                        <h4>Scala seed template</h4>
-                        <pre>sbt new playframework/play-scala-seed.g8</pre>
-
-                        <p>After the template creates the project:</p>
+                        <p>In a command window, enter the following:</p>
+                        <pre>sbt new</pre>
+                        <p>
+                            In the interactive menu choose:
+                            <ul>
+                                <li><code>playframework/play-scala-seed.g8</code> for a Play Scala project</li>
+                                <li><code>playframework/play-java-seed.g8</code> for a Play Java project</li>
+                            </ul>
+                        </p>
+                        <p>
+                            Then respond to the prompts. After the project got created:</p>
                         <ol>
                             <li>Change into the top level project directory.</li>
                             <li>Enter <code>sbt run</code> to download dependencies and start the system.</li>
                             <li>In a browser, enter <a href="http://localhost:9000">http://localhost:9000</a> to view the welcome page.</li>
                         </ol>
+
+                        <h4>Using the Java seed template directly instead</h4>
+                        <p>Enter:</p>
+                        <pre>sbt new playframework/play-java-seed.g8</pre>
+                        To create a Play Java 2.9 project:
+                        <pre>sbt new playframework/play-java-seed.g8 --branch 2.9.x</pre>
+
+                        <h4>Using the Scala seed template directly instead</h4>
+                        <p>Enter:</p>
+                        <pre>sbt new playframework/play-scala-seed.g8</pre>
+                        To create a Play Scala 2.9 project:
+                        <pre>sbt new playframework/play-scala-seed.g8 --branch 2.9.x</pre>
+
+                        <blockquote>
+                            <p>
+                                Besides replacing Akka with Pekko, Play 3.0 is identical to Play 2.9. If you don't know what Akka or Pekko is, we recommend using Play 3.0. For more details on which version to use, read <a href="@reverseRouter.latest(None, "General#How-Play-Deals-with-Akkas-License-Change")" target="_blank">"How Play Deals with Akka’s License Change"</a>.
+                            </p>
+                        </blockquote>
                     </div>
                 </div>
             </div>
