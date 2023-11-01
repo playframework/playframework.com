@@ -1,5 +1,7 @@
 package services.modules
 
+import models.modules.Release
+import models.modules.Module
 import org.specs2.mutable.Specification
 
 object ModuleDaoSpec extends Specification {
@@ -8,7 +10,7 @@ object ModuleDaoSpec extends Specification {
     sequential
 
     "find a particular module and revision" in withDao { dao =>
-      dao.findById("deadbolt") must beSome.which { moduleVersions =>
+      dao.findById("deadbolt") must beSome[(Module, Seq[Release])].which { moduleVersions =>
         val (module, versions) = moduleVersions
         module.name must_== "deadbolt"
         module.author must_== "Steve Chaloner"
@@ -22,7 +24,7 @@ object ModuleDaoSpec extends Specification {
     "find all modules and revisions" in withDao { dao =>
       val modules = dao.findEverything()
       modules must haveSize(135)
-      modules.find(_._1.name == "deadbolt") must beSome.which { moduleVersions =>
+      modules.find(_._1.name == "deadbolt") must beSome[(Module, Seq[Release])].which { moduleVersions =>
         val (module, versions) = moduleVersions
         module.author must_== "Steve Chaloner"
         versions must haveSize(18)

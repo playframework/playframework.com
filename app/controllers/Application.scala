@@ -74,14 +74,18 @@ class Application @Inject() (
     }
   }
 
-  def widget(version: Option[String]) = Action { request =>
-    Ok(views.html.widget(news(version)))
+  def widget(version: Option[String]) = Action.async { request =>
+    Future.successful(
+      Ok(views.html.widget(news(version)))
+    )
   }
 
   // This used to be the download/getting-started page. We are keeping
   // the URL for SEO purposes only.
-  def download = Action { implicit request =>
-    MovedPermanently(routes.Application.gettingStarted.path)
+  def download = Action.async { implicit request =>
+    Future.successful(
+      MovedPermanently(routes.Application.gettingStarted.path)
+    )
   }
 
   def gettingStarted = Action.async { implicit request =>
@@ -99,9 +103,11 @@ class Application @Inject() (
     }
   }
 
-  def allreleases(platform: Option[String] = None) = Action { implicit request =>
+  def allreleases(platform: Option[String] = None) = Action.async { implicit request =>
     val selectedPlatform = Platform(platform.orElse(request.headers.get("User-Agent")))
-    Ok(html.allreleases(releases, selectedPlatform))
+    Future.successful(
+      Ok(html.allreleases(releases, selectedPlatform))
+    )
   }
 
   def changelog =
@@ -128,7 +134,7 @@ class Application @Inject() (
     Redirect("https://github.com/playframework/.github/blob/main/CONTRIBUTING.md")
   }
 
-  def markdownAction(markdownFile: String, template: RequestHeader => Html => Html) = Action {
+  def markdownAction(markdownFile: String, template: RequestHeader => Html => Html) = Action.async {
     implicit request =>
       def readInputStream(is: InputStream): String =
         try {
@@ -153,21 +159,33 @@ class Application @Inject() (
       page.foreach(cacheApi.set(markdownFile, _))
 
       page match {
-        case Some(content) => Ok(template(request)(Html(content))).withHeaders(CACHE_CONTROL -> "max-age=10000")
-        case None          => notFound
+        case Some(content) =>
+          Future.successful(
+            Ok(template(request)(Html(content))).withHeaders(CACHE_CONTROL -> "max-age=10000")
+          )
+        case None =>
+          Future.successful(
+            notFound
+          )
       }
   }
 
-  def getInvolved = Action { implicit request =>
-    Ok(html.getInvolved())
+  def getInvolved = Action.async { implicit request =>
+    Future.successful(
+      Ok(html.getInvolved())
+    )
   }
 
-  def sponsors = Action { implicit request =>
-    Ok(html.sponsors())
+  def sponsors = Action.async { implicit request =>
+    Future.successful(
+      Ok(html.sponsors())
+    )
   }
 
-  def cookie = Action { implicit request =>
-    Ok(html.cookie())
+  def cookie = Action.async { implicit request =>
+    Future.successful(
+      Ok(html.cookie())
+    )
   }
 
   // Deprecated links
@@ -175,7 +193,7 @@ class Application @Inject() (
     MovedPermanently(url)
   }
 
-  def onHandlerNotFound(route: String) = Action { implicit request =>
+  def onHandlerNotFound(route: String) = Action.async { implicit request =>
     if (
       route.startsWith("play-") && route.endsWith("-released") && !route
         .contains("-rc") && !route.contains("-m")
@@ -184,11 +202,17 @@ class Application @Inject() (
         .replace("play-", "")
         .replace("-released", "")
         .replace("-", ".")
-      MovedPermanently(s"https://github.com/playframework/playframework/releases/tag/$version")
+      Future.successful(
+        MovedPermanently(s"https://github.com/playframework/playframework/releases/tag/$version")
+      )
     } else if (route.endsWith("/")) {
-      MovedPermanently("/" + request.path.take(request.path.length - 1).dropWhile(_ == '/'))
+      Future.successful(
+        MovedPermanently("/" + request.path.take(request.path.length - 1).dropWhile(_ == '/'))
+      )
     } else {
-      notFound
+      Future.successful(
+        notFound
+      )
     }
   }
 

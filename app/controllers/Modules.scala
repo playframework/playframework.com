@@ -8,6 +8,7 @@ import services.modules._
 import models.modules._
 
 import scala.concurrent.ExecutionContext
+import scala.concurrent.Future
 
 @Singleton
 class Modules @Inject() (modulesLookup: ModulesLookup, moduleDao: ModuleDao, components: ControllerComponents)(
@@ -16,42 +17,63 @@ class Modules @Inject() (modulesLookup: ModulesLookup, moduleDao: ModuleDao, com
     reverseRouter: documentation.ReverseRouter,
 ) extends AbstractController(components) {
 
-  def index(keyword: String) = Action { implicit request =>
-    render {
-      case Accepts.Html() =>
-        Ok(views.html.modules.list(moduleDao.findAll(keyword)))
-      case Accepts.Json() =>
-        import Module.modulesWrites
-        Ok(Json.toJson(moduleDao.findEverything()))
-    }
+  def index(keyword: String) = Action.async { implicit request =>
+    Future.successful(
+      render {
+        case Accepts.Html() =>
+          Ok(views.html.modules.list(moduleDao.findAll(keyword)))
+        case Accepts.Json() =>
+          import Module.modulesWrites
+          Ok(Json.toJson(moduleDao.findEverything()))
+      }
+    )
   }
 
-  def download(name: String, version: String) = Action { implicit request =>
+  def download(name: String, version: String) = Action.async { implicit request =>
     modulesLookup.findModule(name, version) match {
-      case Some(zip) => Ok.sendFile(zip)
-      case None      => PageNotFound
+      case Some(zip) =>
+        Future.successful(
+          Ok.sendFile(zip)
+        )
+      case None =>
+        Future.successful(
+          PageNotFound
+        )
     }
   }
 
-  def documentation(name: String, version: String, page: String) = Action { implicit request =>
+  def documentation(name: String, version: String, page: String) = Action.async { implicit request =>
     modulesLookup.loadModuleDocumentation(name, version, page) match {
       case Some(content) =>
-        Ok(views.html.modules.documentation(name, content))
-      case None => PageNotFound
+        Future.successful(
+          Ok(views.html.modules.documentation(name, content))
+        )
+      case None =>
+        Future.successful(
+          PageNotFound
+        )
     }
   }
 
-  def show(name: String) = Action { implicit request =>
+  def show(name: String) = Action.async { implicit request =>
     moduleDao.findById(name) match {
-      case Some((module, releases)) => Ok(views.html.modules.show(module, releases))
-      case None                     => PageNotFound
+      case Some((module, releases)) =>
+        Future.successful(
+          Ok(views.html.modules.show(module, releases))
+        )
+      case None =>
+        Future.successful(
+          PageNotFound
+        )
     }
   }
 
-  def dependencies(name: String, version: String) = Action { implicit request =>
+  def dependencies(name: String, version: String) = Action.async { implicit request =>
     modulesLookup.findDependencies(name, version) match {
-      case Some(yml) => Ok(yml)
-      case None      => PageNotFound
+      case Some(yml) =>
+        Future.successful(Ok(yml))
+      case None =>
+        Future.successful(PageNotFound)
     }
   }
 

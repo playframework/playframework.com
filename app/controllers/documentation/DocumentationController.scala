@@ -132,7 +132,7 @@ class DocumentationController @Inject() (
 
   def v1Page(lang: Option[Lang], v: String, page: String) = VersionAction(v) {
     (actor, version) => implicit req =>
-      actorRequest(actor, page, replyTo => RenderV1Page(lang, version, etag(req), page, replyTo)) {
+      actorRequest(actor, page, (replyTo: ActorRef[Response[RenderedPage]]) => RenderV1Page(lang, version, etag(req), page, replyTo)) {
         case RenderedPage(html, _, _, _, context, cacheId) =>
           val result = Ok(views.html.documentation.v1(messages, context, page, html))
           cacheable(withLangHeaders(result, page, context), cacheId)
@@ -163,7 +163,7 @@ class DocumentationController @Inject() (
       actorRequest(
         actor,
         category,
-        replyTo => RenderV1Cheatsheet(lang, version, etag(req), category, replyTo),
+        (replyTo: ActorRef[Response[V1Cheatsheet]]) => RenderV1Cheatsheet(lang, version, etag(req), category, replyTo),
       ) { case V1Cheatsheet(sheets, title, otherCategories, context, cacheId) =>
         cacheable(
           Ok(views.html.documentation.cheatsheet(context, title, otherCategories, sheets)),
@@ -189,7 +189,7 @@ class DocumentationController @Inject() (
   def page(lang: Option[Lang], v: String, page: String) = VersionAction(v) { (actor, version) => implicit req =>
     val linkFuture = canonicalLinkHeader(page, version)
     val resultFuture =
-      actorRequest(actor, page, replyTo => RenderPage(lang, version, etag(req), page, replyTo)) {
+      actorRequest(actor, page, (replyTo: ActorRef[Response[RenderedPage]]) => RenderPage(lang, version, etag(req), page, replyTo)) {
         case RenderedPage(html, sidebarHtml, breadcrumbsHtml, source, context, cacheId) =>
           val pageTitle = HtmlHelpers.friendlyTitle(page)
           val result = Ok(
@@ -351,7 +351,7 @@ class DocumentationController @Inject() (
       home: String,
   ) = { (lang: Option[Lang], v: String, page: String) =>
     VersionAction(v) { (actor, version) => implicit req =>
-      actorRequest(actor, page, replyTo => msg(lang, version, etag(req), page, replyTo)) {
+      actorRequest(actor, page, (replyTo: ActorRef[Response[PageExists]]) => msg(lang, version, etag(req), page, replyTo)) {
         case PageExists(true, cacheId) =>
           cacheable(TemporaryRedirect(reverseRouter.page(lang, version.name, page)), cacheId)
         case PageExists(false, cacheId) =>

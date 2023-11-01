@@ -28,16 +28,22 @@ class Blog @Inject() (
 
   val blogName = "Play Framework Blog"
 
-  def index() = Action { implicit request =>
-    Ok(html.blog.index(blogName))
+  def index() = Action.async { implicit request =>
+    Future.successful(
+      Ok(html.blog.index(blogName))
+    )
   }
 
-  def graal() = Action { implicit request =>
-    Ok(html.blog.graal(blogName, "Running Play on GraalVM"))
+  def graal() = Action.async { implicit request =>
+    Future.successful(
+      Ok(html.blog.graal(blogName, "Running Play on GraalVM"))
+    )
   }
 
-  def socketio() = Action { implicit request =>
-    Ok(html.blog.socketio(blogName, "Play socket.io support"))
+  def socketio() = Action.async { implicit request =>
+    Future.successful(
+      Ok(html.blog.socketio(blogName, "Play socket.io support"))
+    )
   }
 
 }
