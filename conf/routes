@@ -20,9 +20,9 @@ GET         /community-process                                       controllers
 GET         /contributing                                            controllers.Application.contributing
 GET         /releases                                                controllers.Application.allreleases(platform: Option[String] ?= None)
 
-GET         /outreachy                                               controllers.Outreachy.outreachy
-GET         /outreachy/round10                                       controllers.Outreachy.round10
-GET         /outreachy/round15                                       controllers.Outreachy.round15
+#GET        /outreachy                                               controllers.Outreachy.outreachy
+#GET        /outreachy/round10                                       controllers.Outreachy.round10
+#GET        /outreachy/round15                                       controllers.Outreachy.round15
 
 GET         /preferredLang/:lang                                     controllers.Application.setPreferedLanguage(lang, path)
 
