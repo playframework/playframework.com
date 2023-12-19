@@ -1,15 +1,23 @@
 {
   "latest3": {
-    "version": "3.0.0",
-    "date": "Oct 25 2023"
+    "version": "3.0.1",
+    "date": "Dec 19 2023"
   },
   "latest2": {
-    "version": "2.9.0",
-    "date": "Oct 25 2023"
+    "version": "2.9.1",
+    "date": "Dec 19 2023"
   },
   "development": [
   ],
   "previous": [
+    {
+      "version": "3.0.0",
+      "date": "Oct 25 2023"
+    },
+    {
+      "version": "2.9.0",
+      "date": "Oct 25 2023"
+    },
     {
       "version": "2.8.21",
       "date": "Nov 9 2023"
