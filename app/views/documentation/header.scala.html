@@ -1,7 +1,7 @@
 @import controllers.documentation.ReverseRouter
 @(page: String, maybeContext: Option[models.documentation.TranslationContext] = None)(content: Html)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
 
-@main(page, "documentation") {
+@main(page, "documentation", maybeContext) {
 
     <header id="top">
         <div class="wrapper">
