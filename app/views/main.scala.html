@@ -1,5 +1,5 @@
 @import controllers.documentation.ReverseRouter
-@(title: String, scope: String = "home")(content: Html)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
+@(title: String, scope: String = "home", maybeContext: Option[models.documentation.TranslationContext] = None)(content: Html)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -21,6 +21,13 @@
 
         <meta name="globalsign-domain-verification" content="wISFsU3SjLaCmI4hF3fuBebFOs4shuuBnKV7fGALYz" />
         <meta name="google-site-verification" content="9oxXjOc4jWfnf21Iep-0dc2sDawa14s-Gpwho_yb5AU" />
+
+        @maybeContext.map { context =>
+            @for(version <- context.version) {
+                <meta name="docsearch:version" content="@{version.name}" />
+            }
+            <meta name="docsearch:tags" content="@{context.lang.language}" />
+        }
 
         <!-- OneTrust Cookies Consent Notice (Production Standard, playframework.com, en-GB) start -->
         <script src="https://cdn.cookielaw.org/scripttemplates/otSDKStub.js"  type="text/javascript" charset="UTF-8" data-domain-script="f6af8492-c939-49d1-98d9-0b5cde6ce6d2" ></script>
