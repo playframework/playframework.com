@@ -5,11 +5,12 @@
   @if(release.secureUrl) {
     <td width="250">
       <a href="@release.secureUrl.get" class="@linkClass" data-version="@{release.version}">play-@{release.version}.zip</a>
+      @if(versionAtLeast(release.version, "2.0")){<a class="doclink" href="https://www.playframework.com/documentation/@{release.version}/Home">docs</a>}else{}
     </td>
     <td width="200">@release.date</td>
     <td width="100">@release.size.get</td>
   } else {
-    <td width="250">Play @release.version</td>
+    <td width="250">Play @release.version@if(versionAtLeast(release.version, "2.0")){<a class="doclink" href="https://www.playframework.com/documentation/@{release.version}/Home">docs</a>}else{}</td>
     <td width="200">@release.date</td>
     <td width="100"></td>
   }
