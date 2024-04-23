@@ -34,7 +34,7 @@
 
             @source.map { source =>
               <hr/>
-              <p>
+              <p id="contribute-to-docs">
                   @Html(messages("documentation.contribute.message",
                       s"""<a href="$source">""", "</a>",
                       s"""<a href="${reverseRouter.latest(context.alternateLang, "Documentation")}">""", "</a>",
