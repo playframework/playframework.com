@@ -8,6 +8,7 @@ docsearch({
     indexName: 'playframework',
     inputSelector: '#search-input',
     algoliaOptions: {
+        hitsPerPage: 10,
         'facetFilters': [
             @for(version <- context.version) {
               "version: @{version.name}",
