@@ -3,10 +3,12 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script>
 @views.html.helper.script(Symbol("type") -> "text/javascript") {
 docsearch({
-    apiKey: 'a0b34e68c804cf96e76adcb02d47159b',
+    apiKey: '3a5278088008947c54a733e069ff82af',
+    appId: 'TCZHH5O33A',
     indexName: 'playframework',
     inputSelector: '#search-input',
     algoliaOptions: {
+        hitsPerPage: 10,
         'facetFilters': [
             @for(version <- context.version) {
               "version: @{version.name}",
