@@ -60,6 +60,10 @@
 
       <hr/>
 
+      <!-- Hidden links to the latest releases so their documentation pages get crawled by Algolia -->
+      <a class="doclink" href="https://www.playframework.com/documentation/@{releases.latest3.version}/Home">Latest Play 3 release</a>
+      <a class="doclink" href="https://www.playframework.com/documentation/@{releases.latest2.version}/Home">Latest Play 2 release</a>
+
       <h3 id="older-versions">Previous releases</h3>
       <table class="releases">
       @releases.previous.groupBy(_.version.split('.').take(2).mkString(".")).toSeq.sortBy(_._1).reverse.map { group =>
