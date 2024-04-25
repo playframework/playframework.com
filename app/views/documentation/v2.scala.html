@@ -19,7 +19,9 @@
 
     <article>
         @content.map { html =>
-            @versionInfo(pageFileName)(messages, context, reverseRouter)
+            @if(!req.headers.get(play.api.http.HeaderNames.USER_AGENT).exists(_.toLowerCase.startsWith("algolia crawler"))) {
+                @versionInfo(pageFileName)(messages, context, reverseRouter)
+            }
 
             @for(version <- context.version) {
                 <form id="search">
