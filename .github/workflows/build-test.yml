@@ -37,7 +37,7 @@ jobs:
       - "check-docs"
     uses: playframework/.github/.github/workflows/cmd.yml@v4
     with:
-      java: 17, 11
+      java: 21, 17
       scala: 3.x
       cmd: |
         # Clone generated docs so that we can run some integration tests
