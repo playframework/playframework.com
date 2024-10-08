@@ -46,4 +46,9 @@ class Blog @Inject() (
     )
   }
 
+  def ossPledgeLaunch() = Action.async { implicit request =>
+    Future.successful(
+      Ok(html.blog.ossPledgeLaunch(blogName, "Celebrating the Launch of the Open Source Pledge"))
+    )
+  }
 }

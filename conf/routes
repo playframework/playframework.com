@@ -63,7 +63,9 @@ GET         /robots.txt                                              controllers
 GET         /blog                                                    controllers.Blog.index()
 GET         /play-on-graal                                           controllers.Application.movedTo(url="/blog/play-on-graal", originalPath="foo")
 GET         /play-socket-io                                          controllers.Application.movedTo(url="/blog/play-socket-io", originalPath="foo")
+GET         /open-source-pledge-launched                                          controllers.Application.movedTo(url="/blog/open-source-pledge-launched", originalPath="foo")
 GET         /blog/play-on-graal                                      controllers.Blog.graal()
 GET         /blog/play-socket-io                                     controllers.Blog.socketio()
+GET         /blog/open-source-pledge-launched                        controllers.Blog.ossPledgeLaunch()
 
 GET         /*route                                                  controllers.Application.onHandlerNotFound(route)

@@ -1,0 +1,45 @@
+@import controllers.documentation.ReverseRouter
+@(blogName:String,title: String)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
+@main( title, blogName){
+    <header id="top">
+        <div class="wrapper">
+            <h1>
+                @blogName
+            </h1>
+        </div>
+    </header>
+    <section id="content">
+        <article>
+            <br/>
+                <h1>@title</h1>
+
+                <p>
+                    <a href="https://github.com/mkurz">Matthias Kurz</a>, 08 October 2024
+                </p>
+
+                <p>The Open Source ecosystem is the backbone of innovation, supporting everything from personal projects to large-scale enterprise operations. At Play Framework, we’ve always been proud to contribute to this thriving community. Today, we are excited to announce our support for a new initiative that aims to ensure the sustainability of the open-source community: The <a href="https://opensourcepledge.com/">Open Source Pledge</a>.</p>
+                <p>The Open Source Pledge encourages companies to take action by providing financial support to the open-source projects they rely on. It aims to raise awareness around the importance of supporting the developers and maintainers who keep these projects alive and thriving, urging companies to step up and support the projects that power their businesses.</p>
+                <p><a href="https://opensourcepledge.com/"><img alt="Open Source Pledge" src="@routes.Assets.versioned("images/blog/open-source-pledge.png")"></a></p>
+                <h2 id="why-oss-pledge-matters">Why the Open Source Pledge Matters</h2>
+                <p>Maintaining a project like the <a href="https://github.com/playframework/playframework/">Play Framework</a>, which is used by developers around the world, requires considerable time and effort. Many open-source projects face sustainability challenges due to limited financial resources. <!--The Open Source Pledge addresses this by urging companies to recognize their dependence on open-source software and to contribute back to the community.--></p>
+                <p>We’ve seen the challenges firsthand. Play Framework <a href="https://discuss.lightbend.com/t/on-the-future-of-play-framework/8920">has been community-driven for several years now</a>, and keeping it alive and thriving wouldn’t have been possible without contributions from organizations and developers who believe in the value of open-source development.
+                <p>Play Framework’s continued development and growth would not have been sustainable without the <a href="https://opencollective.com/playframework">financial support from companies and individuals</a> that rely on it. Over the years, <a href="https://www.playframework.com/#sponsors-backers">several organizations</a></a> have recognized the value of the framework and contributed to its sustainability, allowing us to maintain and enhance it for the community. This support has been crucial, especially as Play transitioned to being a community-driven project, and allows us to pay a full-time developer. Our experience shows that when companies step up to fund the open-source projects they depend on, it can have a transformative impact, enabling long-term innovation and stability.</p>
+                <p>As I recently discussed with the team at the <a href="https://oscollective.org/">Open Source Collective</a> during their annual retreat <a href="https://opencollective.com/opensource/updates/september-update-from-osc">in Berlin</a>, there is <a href="https://blog.opencollective.com/why-the-open-source-pledge-is-both-relevant-and-timely/">an urgent need to ensure the future of open-source projects</a>. The Open Source Pledge is taking a step toward making open-source sustainability a mainstream issue that can no longer be ignored.</p>
+                <h2 id="looking-ahead">Looking Ahead</h2>
+                <p>We are thrilled about the launch of the Open Source Pledge and what it represents for the future of open-source development. We fully support its mission and applaud the organizations that are stepping forward to contribute to the sustainability of open-source projects.</p>
+                <p>If you or your organization relies on open-source software, we encourage you to <a href="https://opensourcepledge.com/join/">explore the Open Source Pledge</a> and consider the positive impact it can have on the future of software development. Together, we can ensure the long-term success and growth of the open-source ecosystem.</p>
+                <blockquote>
+                    <p><b>Congratulations to the Open Source Pledge team on this exciting launch, and here’s to a future where open-source sustainability becomes the industry standard!</b></p>
+                </blockquote>
+                <p>
+                    <ul>
+                        <li><a href="https://opensourcepledge.com/">Open Source Pledge Website</a></li>
+                        <li><a href="https://twitter.com/ThePledge">Follow the OSS Pledge</a></li>
+                        <li><a href="https://blog.sentry.io/join-the-pledge/">Blog Post: Join the Pledge</a></li>
+                    </ul>
+                </p>
+
+        </article>
+    </section>
+}
+
