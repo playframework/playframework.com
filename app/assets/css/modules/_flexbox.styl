@@ -33,6 +33,9 @@ boxgap(v)
 	.lb-grey &
 		background: rgba(white, .2)
 	
+.block-only-not-small
+	display: none
+
 .one-up
 	boxgap(one-up)
 .two-up
@@ -55,6 +58,8 @@ boxgap(v)
 @media mediumOn
 	.small-only
 		display: none
+	.block-only-not-small
+		display: block
 	.one-up-medium
 		boxgap(one-up)
 	.two-up-medium
@@ -74,6 +79,8 @@ boxgap(v)
 	.nine-up-medium
 		boxgap(nine-up)
 @media largeOn
+	.block-only-not-small
+		display: block
 	.one-up-large
 		boxgap(one-up)	
 	.two-up-large
