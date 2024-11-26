@@ -20,3 +20,4 @@ data/*
 !*.keep
 conf/generated.keystore
 .bsp/
+.vscode
