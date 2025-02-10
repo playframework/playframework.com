@@ -3,7 +3,7 @@ version := "1.0-SNAPSHOT"
 
 enablePlugins(PlayScala)
 
-scalaVersion := "3.3.4"
+scalaVersion := "3.3.5"
 scalacOptions ++= List("-encoding", "utf8", "-deprecation", "-feature", "-unchecked")
 
 libraryDependencies ++= Seq(
