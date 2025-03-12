@@ -12,7 +12,7 @@ GET         /getting-started                                         controllers
 GET         /code                                                    controllers.Code.index
 GET         /get-involved                                            controllers.Application.getInvolved
 GET         /sponsors                                                controllers.Application.sponsors
-GET         /cookie                                                  controllers.Application.cookie
+GET         /cookie                                                  controllers.Application.movedTo(url="/", originalPath = "")
 GET         /widget                                                  controllers.Application.widget(version: Option[String] ?= None)
 GET         /changelog                                               controllers.Application.changelog
 GET         /conduct                                                 controllers.Application.conduct

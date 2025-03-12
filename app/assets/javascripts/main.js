@@ -159,28 +159,4 @@ $(function(){
             }).toggle(!!list.length);
         });
     })
-
-    // This function handles analytics tracking for certain
-    // download links.
-    function trackDownload(selector, name) {
-        var downloadElements = $(selector);
-        downloadElements.click(function() {
-            var el = $(this)
-            var version = el.data("version");
-            if (version) {
-                var label = name + "-" + version;
-            } else {
-                var label = name;
-            }
-            _gaq.push(["_trackEvent", "download", "click", label]);
-            return true;
-        })
-        // Target downloads at an iframe so they don't unload this
-        // page. Unloading the page can interrupt Google Analytics
-        // and mess up our statistics.
-        downloadElements.attr('target', 'download-iframe');
-    }
-    trackDownload(".downloadStandaloneLink", "standalone");
-    trackDownload(".downloadDevelopmentLink", "development");
-    trackDownload(".downloadPreviousLink", "previous");
 })
