@@ -1,3 +1,18 @@
+## Play 3.0.7
+
+*Released 13 March 2025
+
+[All changes](https://github.com/playframework/playframework/compare/3.0.6...3.0.7/)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/144?closed=1)
+
+## Play 2.9.7
+
+*Released 13 March 2025
+
+[All changes](https://github.com/playframework/playframework/compare/2.9.6...2.9.7/)
+[GitHub milestone](https://github.com/playframework/playframework/milestone/142?closed=1)
+
+
 ## Play 3.0.6
 
 *Released 28 November 2024

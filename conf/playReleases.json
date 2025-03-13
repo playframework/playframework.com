@@ -1,15 +1,23 @@
 {
   "latest3": {
-    "version": "3.0.6",
-    "date": "Nov 28 2024"
+    "version": "3.0.7",
+    "date": "Mar 13 2025"
   },
   "latest2": {
-    "version": "2.9.6",
-    "date": "Nov 28 2024"
+    "version": "2.9.7",
+    "date": "Mar 13 2025"
   },
   "development": [
   ],
   "previous": [
+    {
+      "version": "3.0.6",
+      "date": "Nov 28 2024"
+    },
+    {
+      "version": "2.9.6",
+      "date": "Nov 28 2024"
+    },
     {
       "version": "3.0.5",
       "date": "Jul 24 2024"
