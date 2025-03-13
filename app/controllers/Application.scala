@@ -182,12 +182,6 @@ class Application @Inject() (
     )
   }
 
-  def cookie = Action.async { implicit request =>
-    Future.successful(
-      Ok(html.cookie())
-    )
-  }
-
   // Deprecated links
   def movedTo(url: String, originalPath: String) = Action {
     MovedPermanently(url)
