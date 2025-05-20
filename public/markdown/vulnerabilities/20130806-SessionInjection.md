@@ -36,7 +36,7 @@ Upgrade to the appropriate version below:
 * [Play 2.0.6](https://github.com/playframework/playframework/releases/download/2.0.6/play-2.0.6.zip)
 * [Play 1.2.6](https://github.com/playframework/play1/releases/download/1.2.6/play-1.2.6.zip)
 * [Play 1.1.3](https://github.com/playframework/play1/releases/download/1.1.3/play-1.1.3.zip)
-* [Play 1.0.3.4](https://github.com/playframework/play1/releases/download/1.0.3.4/play-1.0.3.4.zip)
+* [Play 1.0.3.4](https://github.com/playframework/archive/raw/refs/heads/main/play1/play-1.0.3.4.zip)
 
 ### CVSS metrics (<a href="https://www.first.org/cvss/user-guide">more info</a>)
 

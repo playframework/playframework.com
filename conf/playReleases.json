@@ -730,7 +730,7 @@
     },
     {
       "version": "1.0.3.4",
-        "url": "https://github.com/playframework/play1/releases/download/1.0.3.4/play-1.0.3.4.zip",
+        "url": "https://github.com/playframework/archive/raw/refs/heads/main/play1/play-1.0.3.4.zip",
       "date": "Aug 06 2013",
         "size": "32.9M"
     },
@@ -814,7 +814,7 @@
     },
     {
       "version": "1.0.3.3",
-        "url": "https://github.com/playframework/play1/releases/download/1.0.3.3/play-1.0.3.3.zip",
+        "url": "https://github.com/playframework/archive/raw/refs/heads/main/play1/play-1.0.3.3.zip",
       "date": "Aug 23 2011",
         "size": "32.8M"
     },
@@ -850,43 +850,43 @@
     },
     {
       "version": "1.0.3.2",
-        "url": "https://github.com/playframework/play1/releases/download/1.0.3.2/play-1.0.3.2.zip",
+        "url": "https://github.com/playframework/archive/raw/refs/heads/main/play1/play-1.0.3.2.zip",
       "date": "Jul 28 2010",
         "size": "32.9M"
     },
     {
       "version": "1.0.3.1",
-        "url": "https://github.com/playframework/play1/releases/download/1.0.3.1/play-1.0.3.1.zip",
+        "url": "https://github.com/playframework/archive/raw/refs/heads/main/play1/play-1.0.3.1.zip",
       "date": "Jul 15 2010",
         "size": "32.8M"
     },
     {
       "version": "1.0.3",
-        "url": "https://github.com/playframework/play1/releases/download/1.0.3/play-1.0.3.zip",
+        "url": "https://github.com/playframework/archive/raw/refs/heads/main/play1/play-1.0.3.zip",
       "date": "Jun 16 2010",
         "size": "32.8M"
     },
     {
       "version": "1.0.2.1",
-        "url": "https://github.com/playframework/play1/releases/download/1.0.2.1/play-1.0.2.1.zip",
+        "url": "https://github.com/playframework/archive/raw/refs/heads/main/play1/play-1.0.2.1.zip",
       "date": "Apr 16 2010",
         "size": "32.8M"
     },
     {
       "version": "1.0.2",
-        "url": "https://github.com/playframework/play1/releases/download/1.0.2/play-1.0.2.zip",
+        "url": "https://github.com/playframework/archive/raw/refs/heads/main/play1/play-1.0.2.zip",
       "date": "Apr 06 2010",
         "size": "32.8M"
     },
     {
       "version": "1.0.1",
-        "url": "https://github.com/playframework/play1/releases/download/1.0.1/play-1.0.1.zip",
+        "url": "https://github.com/playframework/archive/raw/refs/heads/main/play1/play-1.0.1.zip",
       "date": "Jan 17 2010",
         "size": "44.6M"
     },
     {
       "version": "1.0",
-        "url": "https://github.com/playframework/play1/releases/download/1.0/play-1.0.zip",
+        "url": "https://github.com/playframework/archive/raw/refs/heads/main/play1/play-1.0.zip",
       "date": "Oct 19 2009",
         "size": "41.5M"
     }
