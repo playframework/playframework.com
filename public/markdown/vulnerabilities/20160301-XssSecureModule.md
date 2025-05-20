@@ -41,7 +41,7 @@ ${messages.get(flash.success)}
 
 Upgrade to the appropriate version below:
 
-* [Play 1.3.4](https://github.com/playframework/play1/releases/download/1.3.1/play-1.3.4.zip)
+* [Play 1.3.4](https://github.com/playframework/play1/releases/download/1.3.4/play-1.3.4.zip)
 * [Play 1.4.2](https://github.com/playframework/play1/releases/download/1.4.2/play-1.4.2.zip)
 
 
