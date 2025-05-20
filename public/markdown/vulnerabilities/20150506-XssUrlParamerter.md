@@ -29,10 +29,10 @@ Encode parameter before using it,
 
 Upgrade to the appropriate version below:
 
-* [Play 1.2.5.5](https://downloads.typesafe.com/play/1.2.5.5/play-1.2.5.5.zip)
-* [Play 1.2.6.1](https://downloads.typesafe.com/play/1.2.6.1/play-1.2.6.1.zip)
-* [Play 1.2.7.2](https://downloads.typesafe.com/play/1.2.7.2/play-1.2.7.2.zip)
-* [Play 1.3.1](https://downloads.typesafe.com/play/1.3.1/play-1.3.1.zip)
+* [Play 1.2.5.5](https://github.com/playframework/play1/releases/download/1.2.5.5/play-1.2.5.5.zip)
+* [Play 1.2.6.1](https://github.com/playframework/play1/releases/download/1.2.6.1/play-1.2.6.1.zip)
+* [Play 1.2.7.2](https://github.com/playframework/play1/releases/download/1.2.7.2/play-1.2.7.2.zip)
+* [Play 1.3.1](https://github.com/playframework/play1/releases/download/1.3.1/play-1.3.1.zip)
 
 ### CVSS metrics (<a href="https://www.first.org/cvss/user-guide">more info</a>)
 

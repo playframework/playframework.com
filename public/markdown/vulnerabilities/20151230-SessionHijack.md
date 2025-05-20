@@ -29,10 +29,10 @@ Do not use the session when generating a 500 error page.
 
 Upgrade to the appropriate version below:
 
-* [Play 1.4.1](https://downloads.typesafe.com/play/1.4.1/play-1.4.1.zip)
-* [Play 1.3.3](https://downloads.typesafe.com/play/1.3.3/play-1.3.3.zip)
-* [Play 1.2.6.2](https://downloads.typesafe.com/play/1.2.6.2/play-1.2.6.2.zip)
-* [Play 1.2.5.6](https://downloads.typesafe.com/play/1.2.5.6/play-1.2.5.6.zip)
+* [Play 1.4.1](https://github.com/playframework/play1/releases/download/1.4.1/play-1.4.1.zip)
+* [Play 1.3.3](https://github.com/playframework/play1/releases/download/1.3.3/play-1.3.3.zip)
+* [Play 1.2.6.2](https://github.com/playframework/play1/releases/download/1.2.6.2/play-1.2.6.2.zip)
+* [Play 1.2.5.6](https://github.com/playframework/play1/releases/download/1.2.5.6/play-1.2.5.6.zip)
 
 ### Acknowledgements
 
