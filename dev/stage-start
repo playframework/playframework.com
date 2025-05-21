@@ -1,0 +1,7 @@
+#!/bin/bash
+
+rm -rf ./target/universal/RUNNING_PID;
+rm -rf ./target/universal/stage
+sbt stage;
+#cp -rv ./dev/ ./target/universal/stage/;
+./target/universal/stage/bin/playframework
