@@ -1,4 +1,4 @@
-name := "playframework"
+name    := "playframework"
 version := "1.0-SNAPSHOT"
 
 enablePlugins(PlayScala)
@@ -25,7 +25,7 @@ routesGenerator := InjectedRoutesGenerator
 
 JsEngineKeys.engineType := JsEngineKeys.EngineType.Node
 
-Assets / StylusKeys.useNib := true
+Assets / StylusKeys.useNib   := true
 Assets / StylusKeys.compress := true
 
 pipelineStages := Seq(digest, gzip)
@@ -49,5 +49,5 @@ Compile / sourceGenerators += Def.task {
 }.taskValue
 
 Compile / managedSourceDirectories += crossTarget.value / "version"
-Compile / doc / sources := Seq.empty
+Compile / doc / sources                := Seq.empty
 Compile / packageDoc / publishArtifact := false

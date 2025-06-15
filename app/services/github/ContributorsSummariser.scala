@@ -101,7 +101,7 @@ class CachingContributorsSummariser @Inject() (
 
   actorSystem.scheduler.scheduleWithFixedDelay(0.seconds, 24.hours)(() => {
     delegate.fetchContributors.onComplete {
-      case Failure(t) => log.error("Unable to load contributors from GitHub", t)
+      case Failure(t)  => log.error("Unable to load contributors from GitHub", t)
       case Success(cs) =>
         if (contributors != cs) {
           val count =

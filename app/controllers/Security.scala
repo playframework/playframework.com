@@ -37,7 +37,7 @@ class Security @Inject() (environment: Environment, val controllerComponents: Co
                   "Play Framework Security Advisory",
                   Html(Markdown.toHtml(content, link => (link, link))),
                 ),
-              ).withHeaders(CACHE_CONTROL -> "max-age=10000")
+              ).withHeaders(CACHE_CONTROL -> "max-age=10000"),
             )
           } finally {
             is.close()
@@ -45,15 +45,15 @@ class Security @Inject() (environment: Environment, val controllerComponents: Co
         }
         .getOrElse(
           Future.successful(
-            notFound
-          )
+            notFound,
+          ),
         )
     }
   }
 
   def index = Action.async { implicit req =>
     Future.successful(
-      Ok(views.html.vulnerabilities()).withHeaders(CACHE_CONTROL -> "max-age=1000")
+      Ok(views.html.vulnerabilities()).withHeaders(CACHE_CONTROL -> "max-age=1000"),
     )
   }
 

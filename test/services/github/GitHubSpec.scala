@@ -74,7 +74,7 @@ object GitHubSpec extends PlaySpecification {
   def withGitHub[T](block: GitHub => T): T =
     Server.withRouterFromComponents() { components =>
       {
-        case Get(p"/orgs/${_}") => components.defaultActionBuilder(Ok.sendResource("github/org.json"))
+        case Get(p"/orgs/${_}")         => components.defaultActionBuilder(Ok.sendResource("github/org.json"))
         case Get(p"/orgs/${_}/members") =>
           components.defaultActionBuilder(Ok.sendResource("github/orgMembers.json"))
         case Get(p"/orgs/${_}/teams") => components.defaultActionBuilder(Ok.sendResource("github/teams.json"))
