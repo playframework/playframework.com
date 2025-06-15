@@ -39,7 +39,7 @@ object ModulesSpec extends PlaySpecification {
       "as html when the client accepts html" in new WithApplication(app) {
         override def running() = {
           val (modules, _, dao) = createModules(this.app)
-          val result = modules.index("foo")(FakeRequest().withHeaders(ACCEPT -> "text/html"))
+          val result            = modules.index("foo")(FakeRequest().withHeaders(ACCEPT -> "text/html"))
           status(result) must_== 200
           contentType(result) must beSome("text/html")
           contentAsString(result) must contain("Some Description")

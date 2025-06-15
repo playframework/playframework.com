@@ -75,7 +75,7 @@ class DefaultGitHub @Inject() (ws: WSClient, config: GitHubConfig)(implicit ec: 
   }
 
   object NextLink {
-    val ParseNext = """.*<([^>]+)>;\s*rel="?next"?.*""".r
+    val ParseNext                                     = """.*<([^>]+)>;\s*rel="?next"?.*""".r
     def unapply(response: WSResponse): Option[String] = {
       response.header("Link").collect { case ParseNext(next) =>
         next
@@ -104,7 +104,7 @@ class DefaultGitHub @Inject() (ws: WSClient, config: GitHubConfig)(implicit ec: 
     def loadNext(url: String): Future[Seq[T]] = {
       authCall(url).get().flatMap {
         case notOk if notOk.status >= 300 => throw responseFailure(notOk)
-        case response @ NextLink(next) =>
+        case response @ NextLink(next)    =>
           for {
             nextResults <- loadNext(next)
           } yield {

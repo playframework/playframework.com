@@ -395,7 +395,7 @@ class DocumentationActor(
      * Get the translation context for the given language and version.
      */
     def translationContext(lang: Lang, version: Version, translation: Translation): TranslationContext = {
-      val isDefault = lang == documentation.defaultLang
+      val isDefault          = lang == documentation.defaultLang
       val defaultAlternative = AlternateTranslation(
         documentation.defaultLang,
         true,

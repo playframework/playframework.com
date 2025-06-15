@@ -119,7 +119,7 @@ class DocumentationPollingActor(
         old.flatMap(_.default.byVersion.get(version)) match {
           // The version hasn't changed, don't rescan
           case Some(same: TranslationVersion) if same.cacheId == newCacheId => same
-          case _ =>
+          case _                                                            =>
             implicit val lang = repos.default.config.lang
 
             if (old.isDefined) {
@@ -144,7 +144,7 @@ class DocumentationPollingActor(
     // Now for each translation
     val translations = repos.translations.map { t =>
       // Parse all the versions from tags, branches and the main version
-      val gitTags = parseVersionsFromRefs(t.repo.allTags).map(v => (v._1, v._2, v._1.name))
+      val gitTags     = parseVersionsFromRefs(t.repo.allTags).map(v => (v._1, v._2, v._1.name))
       val gitBranches = parseVersionsFromRefs(
         t.repo.allBranches
           .filter(_._1.matches("""\d+\.\d+\.x""")),
@@ -152,7 +152,7 @@ class DocumentationPollingActor(
       val mainVersion = determineMainVersion(t).map(v => (v._1, v._2, "main"))
 
       implicit val lang = t.config.lang
-      val versions = versionsToTranslations(
+      val versions      = versionsToTranslations(
         t.repo,
         gitTags ++ gitBranches ++ mainVersion,
         defaultTranslation,
@@ -184,8 +184,8 @@ class DocumentationPollingActor(
       .sortBy(_._1)
       .reverse
       .map { version =>
-        val baseRepo         = repo.fileRepoForHash(version._2)
-        val aggregateVersion = aggregate.byVersion.get(version._1)
+        val baseRepo            = repo.fileRepoForHash(version._2)
+        val aggregateVersion    = aggregate.byVersion.get(version._1)
         val (fileRepo, cacheId) =
           aggregateVersion.fold(baseRepo -> xorHashes(version._2.name, utils.SiteVersion.hash)) { default =>
             new AggregateFileRepository(Seq(baseRepo, default.repo)) ->
@@ -195,7 +195,7 @@ class DocumentationPollingActor(
         old.flatMap(_.byVersion.get(version._1)) match {
           // The version hasn't changed, don't rescan
           case Some(same: TranslationVersion) if same.cacheId == cacheId => same
-          case _ =>
+          case _                                                         =>
             val playDoc = new PlayDoc(
               markdownRepository = fileRepo,
               codeRepository = fileRepo,

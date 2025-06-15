@@ -16,8 +16,8 @@ class Router @Inject() (docController: DocumentationController) extends play.api
   private var _prefix = "/"
 
   def withPrefix(prefix: String): Router = { _prefix = prefix; this }
-  def prefix: String = _prefix
-  def documentation  = Nil
+  def prefix: String                     = _prefix
+  def documentation                      = Nil
 
   private val Language = "^/([A-Za-z]{2}(?:_[A-Za-z]{2})?)((?:/.*)?)$".r
 
@@ -58,9 +58,9 @@ class Router @Inject() (docController: DocumentationController) extends play.api
         case p"/$version<1\.[^/]+>/cheatsheet/$category" => docController.v1Cheatsheet(lang, version, category)
 
         // Other paths
-        case p"/$version<\d+\.[^/]+>"       => docController.home(lang, version)
-        case p"/$version<\d+\.[^/]+>/"      => docController.home(lang, version)
-        case p"/$version<\d+\.[^/]+>/$page" => docController.page(lang, version, page)
+        case p"/$version<\d+\.[^/]+>"                  => docController.home(lang, version)
+        case p"/$version<\d+\.[^/]+>/"                 => docController.home(lang, version)
+        case p"/$version<\d+\.[^/]+>/$page"            => docController.page(lang, version, page)
         case p"/$version<\d+\.[^/]+>/resources/$path*" =>
           docController.resource(lang, version, decodePath(path))
         case p"/latest"                            => docController.latest(lang, "Home")
@@ -84,8 +84,8 @@ class ReverseRouter @Inject() (routerProvider: Provider[Router]) {
   def home(lang: Option[Lang], version: String) = s"${index(lang)}/$version"
   def page(lang: Option[Lang], version: String, pageFileName: String = "Home") =
     s"${index(lang)}/$version/$pageFileName"
-  def api(version: String, path: String)                = s"${router.prefix}/$version/api/$path"
-  def latest(lang: Option[Lang], page: String = "Home") = this.page(lang, "latest", page)
+  def api(version: String, path: String)                                = s"${router.prefix}/$version/api/$path"
+  def latest(lang: Option[Lang], page: String = "Home")                 = this.page(lang, "latest", page)
   def cheatsheet(lang: Option[Lang], version: String, category: String) =
     s"${index(lang)}/$version/cheatsheet/$category"
   def switch(lang: Option[Lang], version: String, pageFileName: String) =
