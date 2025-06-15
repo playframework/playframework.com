@@ -11,10 +11,10 @@ object DocumentationControllerSpec extends PlaySpecification {
       override def running(): Unit = {
         inject[Router] // makes sure generated router.Routes class (in target folder) get initialized, which injects controllers.documentation.Router and calls its withPrefix(...)
         val reverseRouter: ReverseRouter = inject[ReverseRouter]
-        val page: String = reverseRouter.page(None, "2.5.x", "Home")
+        val page: String                 = reverseRouter.page(None, "2.5.x", "Home")
         page must beEqualTo("/documentation/2.5.x/Home")
         val request = FakeRequest("GET", page)
-        val result = await(route(app, request).get)
+        val result  = await(route(app, request).get)
         result.header.status must beEqualTo(OK)
       }
     }
@@ -23,8 +23,8 @@ object DocumentationControllerSpec extends PlaySpecification {
       override def running(): Unit = {
         inject[Router] // makes sure router.Routes class get initialized, which injects controllers.documentation.Router and calls its withPrefix(...)
         val reverseRouter: ReverseRouter = inject[ReverseRouter]
-        val request = FakeRequest("GET", reverseRouter.page(None, "2.5.x", "Home"))
-        val result = await(route(app, request).get)
+        val request                      = FakeRequest("GET", reverseRouter.page(None, "2.5.x", "Home"))
+        val result                       = await(route(app, request).get)
         result.header.headers.contains("Link") must beTrue
       }
     }
@@ -36,7 +36,7 @@ object DocumentationControllerSpec extends PlaySpecification {
           val reverseRouter: ReverseRouter = inject[ReverseRouter]
 
           val request = FakeRequest("GET", reverseRouter.switch(None, "2.7.x", "Home"))
-          val result = route(app, request).get
+          val result  = route(app, request).get
 
           redirectLocation(result) must beSome(reverseRouter.page(None, "2.7.x", "Home"))
         }
@@ -49,7 +49,7 @@ object DocumentationControllerSpec extends PlaySpecification {
           val reverseRouter: ReverseRouter = inject[ReverseRouter]
 
           val request = FakeRequest("GET", reverseRouter.switch(None, "2.7.x", ""))
-          val result = route(app, request).get
+          val result  = route(app, request).get
 
           redirectLocation(result) must beSome(reverseRouter.page(None, "2.7.x", "Home"))
         }
@@ -61,9 +61,9 @@ object DocumentationControllerSpec extends PlaySpecification {
           inject[Router] // makes sure router.Routes class get initialized, which injects controllers.documentation.Router and calls its withPrefix(...)
           val reverseRouter: ReverseRouter = inject[ReverseRouter]
 
-          val page = reverseRouter.switch(None, "2.7.x", "").stripSuffix("/")
+          val page    = reverseRouter.switch(None, "2.7.x", "").stripSuffix("/")
           val request = FakeRequest("GET", page)
-          val result = route(app, request).get
+          val result  = route(app, request).get
 
           redirectLocation(result) must beSome(reverseRouter.page(None, "2.7.x", "Home"))
         }
@@ -77,7 +77,7 @@ object DocumentationControllerSpec extends PlaySpecification {
           val reverseRouter: ReverseRouter = inject[ReverseRouter]
           // When accessing "AkkaCore" (was renamed to "ThreadPools")
           val request = FakeRequest("GET", reverseRouter.page(None, "2.5.x", "AkkaCore"))
-          val result = route(app, request).get
+          val result  = route(app, request).get
 
           // Then we should be redirected to "ThreadPools"
           redirectLocation(result) must beSome(reverseRouter.page(None, "2.5.x", "ThreadPools"))
@@ -89,7 +89,7 @@ object DocumentationControllerSpec extends PlaySpecification {
           inject[Router] // makes sure router.Routes class get initialized, which injects controllers.documentation.Router and calls its withPrefix(...)
           val reverseRouter: ReverseRouter = inject[ReverseRouter]
           val request = FakeRequest("GET", reverseRouter.page(None, "2.5.x", "PullRequests"))
-          val result = route(app, request).get
+          val result  = route(app, request).get
 
           redirectLocation(result) must beSome(
             "https://github.com/playframework/.github/blob/main/CONTRIBUTING.md",
@@ -102,7 +102,7 @@ object DocumentationControllerSpec extends PlaySpecification {
           inject[Router] // makes sure router.Routes class get initialized, which injects controllers.documentation.Router and calls its withPrefix(...)
           val reverseRouter: ReverseRouter = inject[ReverseRouter]
           val request = FakeRequest("GET", reverseRouter.page(None, "2.5.x", "DoesNotExists"))
-          val result = route(app, request).get
+          val result  = route(app, request).get
 
           redirectLocation(result) must beNone
           await(result).header.status must beEqualTo(NOT_FOUND)
@@ -115,7 +115,7 @@ object DocumentationControllerSpec extends PlaySpecification {
           val reverseRouter: ReverseRouter = inject[ReverseRouter]
           // AkkaCore exists for version 2.0
           val request = FakeRequest("GET", reverseRouter.page(None, "2.0.x", "AkkaCore"))
-          val result = route(app, request).get
+          val result  = route(app, request).get
 
           redirectLocation(result) must beNone
           await(result).header.status must beEqualTo(OK)

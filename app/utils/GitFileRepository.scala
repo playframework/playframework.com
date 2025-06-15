@@ -25,7 +25,7 @@ class PlayGitRepository(val gitDir: File, val remote: String = "origin", basePat
     new GitFileRepository(this, hash, basePath)
   }
 
-  def close(): Unit = repository.close()
+  def close(): Unit                    = repository.close()
   def allTags: Seq[(String, ObjectId)] =
     git
       .tagList()

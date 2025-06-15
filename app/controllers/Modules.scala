@@ -25,7 +25,7 @@ class Modules @Inject() (modulesLookup: ModulesLookup, moduleDao: ModuleDao, com
         case Accepts.Json() =>
           import Module.modulesWrites
           Ok(Json.toJson(moduleDao.findEverything()))
-      }
+      },
     )
   }
 
@@ -33,11 +33,11 @@ class Modules @Inject() (modulesLookup: ModulesLookup, moduleDao: ModuleDao, com
     modulesLookup.findModule(name, version) match {
       case Some(zip) =>
         Future.successful(
-          Ok.sendFile(zip)
+          Ok.sendFile(zip),
         )
       case None =>
         Future.successful(
-          PageNotFound
+          PageNotFound,
         )
     }
   }
@@ -46,11 +46,11 @@ class Modules @Inject() (modulesLookup: ModulesLookup, moduleDao: ModuleDao, com
     modulesLookup.loadModuleDocumentation(name, version, page) match {
       case Some(content) =>
         Future.successful(
-          Ok(views.html.modules.documentation(name, content))
+          Ok(views.html.modules.documentation(name, content)),
         )
       case None =>
         Future.successful(
-          PageNotFound
+          PageNotFound,
         )
     }
   }
@@ -59,11 +59,11 @@ class Modules @Inject() (modulesLookup: ModulesLookup, moduleDao: ModuleDao, com
     moduleDao.findById(name) match {
       case Some((module, releases)) =>
         Future.successful(
-          Ok(views.html.modules.show(module, releases))
+          Ok(views.html.modules.show(module, releases)),
         )
       case None =>
         Future.successful(
-          PageNotFound
+          PageNotFound,
         )
     }
   }

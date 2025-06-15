@@ -17,7 +17,7 @@ object GitFileRepositoryPerformanceTest extends App {
   val basePath = "documentation/manual"
 
   // First, find all the files that we might want to look up
-  val tags = repo.allTags
+  val tags     = repo.allTags
   val allFiles = tags.flatMap { case (_, ref) =>
     repo.listAllFilesInPath(ref, basePath).map((ref, _))
   }
@@ -29,7 +29,7 @@ object GitFileRepositoryPerformanceTest extends App {
     @volatile var running      = true
     val findFileWithNameTiming = new AtomicLong()
     val loadFileTiming         = new AtomicLong()
-    val tasks = Future.sequence(for (i <- 0 to threads) yield {
+    val tasks                  = Future.sequence(for (i <- 0 to threads) yield {
       Future {
         var markdownLoaded = 0
 
@@ -68,8 +68,8 @@ object GitFileRepositoryPerformanceTest extends App {
 
     println("Loaded " + loaded + " files in " + seconds + " seconds")
     println("That's " + (loaded / seconds) + " files a second")
-    println(s"Total time spent finding markdown files: ${(findFileWithNameTiming.get() / 1000000)}ms")
-    println(s"Total time spent loading markdown files: ${(loadFileTiming.get() / 1000000)}ms")
+    println(s"Total time spent finding markdown files: ${findFileWithNameTiming.get() / 1000000}ms")
+    println(s"Total time spent loading markdown files: ${loadFileTiming.get() / 1000000}ms")
   }
 
   println()

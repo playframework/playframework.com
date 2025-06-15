@@ -626,7 +626,7 @@ object FallbackContributors {
    * Code to generate the code above from a current list of contributors
    */
   def dumpContributors(contributors: Contributors) = {
-    def option(s: Option[String]) = s.fold("None")("Some(\"" + _ + "\")")
+    def option(s: Option[String])         = s.fold("None")("Some(\"" + _ + "\")")
     def formatUser(u: GitHubUser): String = {
       import u._
       // format: off

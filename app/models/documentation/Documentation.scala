@@ -83,7 +83,7 @@ case class TranslationVersion(
  * Release types.  Primary use is to identify which versions are stable, and how to sort them.
  */
 sealed abstract class VersionType(val name: String, val order: Int) extends Ordered[VersionType] {
-  val number = 0
+  val number                     = 0
   def compare(that: VersionType) = {
     val compare1 = order - that.order
     if (compare1 != 0) compare1 else number - that.number
@@ -105,7 +105,7 @@ case class Milestone(override val number: Int)        extends VersionType("m", 8
  */
 case class Version(name: String, era: Int, major: Int, minor: Int, patch: Int, versionType: VersionType)
     extends Ordered[Version] {
-  def sameMajor(that: Version) = era == that.era && major == that.major
+  def sameMajor(that: Version)        = era == that.era && major == that.major
   def earlierMajorThan(that: Version) = {
     if (era < that.era) true
     else if (era > that.era) false

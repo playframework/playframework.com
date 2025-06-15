@@ -66,7 +66,9 @@ object ContributorsSummariserSpec extends PlaySpecification {
     Mockito.when(gh.fetchOrganisationMembers(org)).thenReturn(f(Seq(owner, orgMember)))
 
     Mockito.when(gh.fetchOrganisationRepos(org)).thenReturn(f(Seq(playRepo, twirlRepo, forkRepo)))
-    Mockito.when(gh.fetchRepoContributors(playRepo)).thenReturn(f(Seq(contributor2 -> 4, orgMember -> 10, contributor1 -> 3, owner -> 20)))
+    Mockito
+      .when(gh.fetchRepoContributors(playRepo))
+      .thenReturn(f(Seq(contributor2 -> 4, orgMember -> 10, contributor1 -> 3, owner -> 20)))
     Mockito.when(gh.fetchRepoContributors(twirlRepo)).thenReturn(f(Seq(contributor1 -> 3, contributor3 -> 1)))
 
     val contributors = await(new DefaultContributorsSummariser(gh, config).fetchContributors)
