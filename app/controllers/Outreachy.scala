@@ -10,7 +10,7 @@ import scala.concurrent.Future
 /**
  * The outreachy controller
  */
-class Outreachy @Inject() (components: ControllerComponents)(implicit
+class Outreachy @Inject() (components: ControllerComponents)(using
     reverseRouter: documentation.ReverseRouter,
 ) extends AbstractController(components) {
 

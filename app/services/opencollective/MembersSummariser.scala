@@ -22,7 +22,7 @@ trait MembersSummariser {
   def fetchMembers: Future[Seq[OpenCollectiveMember]]
 }
 
-class DefaultMembersSummariser @Inject() (openCollective: OpenCollective)(implicit
+class DefaultMembersSummariser @Inject() (openCollective: OpenCollective)(using
     ec: ExecutionContext,
 ) extends MembersSummariser {
 
@@ -42,7 +42,7 @@ class DefaultMembersSummariser @Inject() (openCollective: OpenCollective)(implic
 class CachingMembersSummariser @Inject() (
     actorSystem: ActorSystem,
     @Named("openCollectiveMembersSummariser") delegate: MembersSummariser,
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends MembersSummariser {
   private val log = LoggerFactory.getLogger(classOf[CachingMembersSummariser])
 

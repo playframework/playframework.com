@@ -22,7 +22,7 @@ trait ContributorsSummariser {
   def fetchContributors: Future[Contributors]
 }
 
-class DefaultContributorsSummariser @Inject() (gitHub: GitHub, config: GitHubConfig)(implicit
+class DefaultContributorsSummariser @Inject() (gitHub: GitHub, config: GitHubConfig)(using
     ec: ExecutionContext,
 ) extends ContributorsSummariser {
 
@@ -93,7 +93,7 @@ class DefaultContributorsSummariser @Inject() (gitHub: GitHub, config: GitHubCon
 class CachingContributorsSummariser @Inject() (
     actorSystem: ActorSystem,
     @Named("gitHubContributorsSummariser") delegate: ContributorsSummariser,
-)(implicit ec: ExecutionContext)
+)(using ec: ExecutionContext)
     extends ContributorsSummariser {
   private val log = LoggerFactory.getLogger(classOf[CachingContributorsSummariser])
 

@@ -60,8 +60,7 @@ case class GitHubConfig(
     committerTeams: Seq[String],
 )
 
-class DefaultGitHub @Inject() (ws: WSClient, config: GitHubConfig)(implicit ec: ExecutionContext)
-    extends GitHub {
+class DefaultGitHub @Inject() (ws: WSClient, config: GitHubConfig)(using ec: ExecutionContext) extends GitHub {
 
   private def authCall(url: String) = {
     ws.url(url).withHttpHeaders(HeaderNames.AUTHORIZATION -> ("token " + config.accessToken))

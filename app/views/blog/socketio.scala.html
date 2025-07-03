@@ -1,5 +1,5 @@
 @import controllers.documentation.ReverseRouter
-@(blogName:String,title: String)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
+@(blogName:String,title: String)(using req: RequestHeader, reverseRouter: ReverseRouter)
 @main( title, blogName){
     <header id="top">
         <div class="wrapper">
@@ -32,7 +32,7 @@ import akka<span class="hljs-selector-class">.stream</span><span class="hljs-sel
 import play<span class="hljs-selector-class">.engineio</span><span class="hljs-selector-class">.EngineIOController</span>
 import play<span class="hljs-selector-class">.socketio</span><span class="hljs-selector-class">.scaladsl</span><span class="hljs-selector-class">.SocketIO</span>
 
-class ChatEngine(socketIO: SocketIO)(implicit mat: Materializer) {
+class ChatEngine(socketIO: SocketIO)(using mat: Materializer) {
   import play<span class="hljs-selector-class">.socketio</span><span class="hljs-selector-class">.scaladsl</span><span class="hljs-selector-class">.SocketIOEventCodec</span>._
 
   <span class="hljs-comment">// codec to encode/codec chat message events to/from strings</span>

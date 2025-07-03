@@ -21,7 +21,7 @@ import scala.concurrent.Future
 @Singleton
 class Blog @Inject() (
     components: ControllerComponents,
-)(implicit ec: ExecutionContext, val reverseRouter: _root_.controllers.documentation.ReverseRouter)
+)(using ec: ExecutionContext, val reverseRouter: _root_.controllers.documentation.ReverseRouter)
     extends AbstractController(components)
     with Common
     with I18nSupport {

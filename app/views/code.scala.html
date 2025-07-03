@@ -1,6 +1,6 @@
 @import models.github._
 @import controllers.documentation.ReverseRouter
-@(contributors: Contributors, title: String = "Code & contributors")(implicit req: RequestHeader, reverseRouter: ReverseRouter)
+@(contributors: Contributors, title: String = "Code & contributors")(using req: RequestHeader, reverseRouter: ReverseRouter)
 
 @avatar(url: String, size: Int) = @{
     val doubleSize = size * 2

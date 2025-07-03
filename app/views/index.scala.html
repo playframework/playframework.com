@@ -1,6 +1,6 @@
 @import controllers.documentation.ReverseRouter
 @import models.opencollective.OpenCollectiveMember
-@(backers: Seq[OpenCollectiveMember], releases: PlayReleases, title: String = "Play Framework - Build Modern & Scalable Web Apps with Java and Scala")(implicit req: RequestHeader, reverseRouter: ReverseRouter)
+@(backers: Seq[OpenCollectiveMember], releases: PlayReleases, title: String = "Play Framework - Build Modern & Scalable Web Apps with Java and Scala")(using req: RequestHeader, reverseRouter: ReverseRouter)
 
 @renderBackers(backers: Seq[OpenCollectiveMember]) = {
     @for(backer <- backers) {

@@ -1,5 +1,5 @@
 @import controllers.documentation.ReverseRouter
-@(messages: MessagesApi, context: models.documentation.TranslationContext, page: String, content: String)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
+@(messages: MessagesApi, context: models.documentation.TranslationContext, page: String, content: String)(using req: RequestHeader, reverseRouter: ReverseRouter)
 
 @title = {
   @page @context.version.map(" - " + _).getOrElse("")

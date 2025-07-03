@@ -1,5 +1,5 @@
 @import controllers.documentation.ReverseRouter
-@(messages: MessagesApi, context: models.documentation.TranslationContext, pageFileName: String, apis: Seq[(String, String)])(implicit reverseRouter: ReverseRouter)
+@(messages: MessagesApi, context: models.documentation.TranslationContext, pageFileName: String, apis: Seq[(String, String)])(using reverseRouter: ReverseRouter)
 
 @language(lang: Lang, isDefault: Boolean, version: Option[models.documentation.Version]) = {
     <a href="@version.fold(
@@ -18,7 +18,7 @@
 <nav id="toolbar">
     <h3>Browse versions</h3>
     <div class="switch">
-        @for(version <- Helpers.latestCurrent(context)) {
+        @for(version <- Helpers.latestCurrent(using context)) {
             <a ga-on="click" ga-event-category="Version" ga-event-action="@version.name" href="@reverseRouter.switch(context.alternateLang, version.name, pageFileName)">@version.name</a>
         }
         <dl class="dropdown">

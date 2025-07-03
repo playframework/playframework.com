@@ -33,18 +33,18 @@ class DocumentationController @Inject() (
     documentationActor: ActorRef[Command],
     releases: PlayReleases,
     components: ControllerComponents,
-)(implicit actorSystem: org.apache.pekko.actor.ActorSystem, reverseRouter: ReverseRouter)
+)(using actorSystem: org.apache.pekko.actor.ActorSystem, reverseRouter: ReverseRouter)
     extends AbstractController(components) {
 
-  private implicit val timeout: Timeout                  = Timeout(10.seconds)
-  private implicit val typedSystem: ActorSystem[Nothing] = actorSystem.toTyped
+  private given timeout: Timeout                  = Timeout(10.seconds)
+  private given typedSystem: ActorSystem[Nothing] = actorSystem.toTyped
   import typedSystem.executionContext
 
   private val Rfc1123DateTimeFormat = DateTimeFormat.forPattern("EEE, dd MMM yyyy HH:mm:ss 'GMT'").withZoneUTC()
 
   private val EmptyContext = TranslationContext(Lang("en"), true, None, Nil, Nil)
 
-  private def pageNotFound(context: TranslationContext, title: String, alternateVersions: Seq[Version])(implicit
+  private def pageNotFound(context: TranslationContext, title: String, alternateVersions: Seq[Version])(using
       req: RequestHeader,
   ) =
     NotFound(views.html.documentation.v2(messages, context, title, alternateVersions = alternateVersions))
@@ -81,7 +81,7 @@ class DocumentationController @Inject() (
     }
   }
 
-  private def preferredLang(langs: Seq[Lang])(implicit request: RequestHeader) = {
+  private def preferredLang(langs: Seq[Lang])(using request: RequestHeader) = {
     val maybeLangFromCookie = request.cookies.get(messages.langCookieName).flatMap(c => Lang.get(c.value))
     val candidateLangs      = maybeLangFromCookie match {
       case Some(cookieLang) => cookieLang +: request.acceptLanguages
@@ -97,7 +97,7 @@ class DocumentationController @Inject() (
       actor: ActorRef[Command],
       page: String,
       msg: ActorRef[Response[T]] => DocumentationActor.Request[T],
-  )(block: T => Result)(implicit req: RequestHeader): Future[Result] = {
+  )(block: T => Result)(using req: RequestHeader): Future[Result] = {
     actor.ask[Response[T]](replyTo => msg(replyTo)).flatMap {
       case DocsNotFound(context) =>
         val future = Future.sequence(context.displayVersions.map(pageExists(_, page)))
@@ -371,7 +371,7 @@ class DocumentationController @Inject() (
     }
   }
 
-  def withLangHeaders(result: Result, page: String, context: TranslationContext)(implicit
+  def withLangHeaders(result: Result, page: String, context: TranslationContext)(using
       req: RequestHeader,
   ) = {
     val linkHeader = context.alternatives

@@ -120,7 +120,7 @@ class DocumentationPollingActor(
           // The version hasn't changed, don't rescan
           case Some(same: TranslationVersion) if same.cacheId == newCacheId => same
           case _                                                            =>
-            implicit val lang = repos.default.config.lang
+            given lang: Lang = repos.default.config.lang
 
             if (old.isDefined) {
               log.info2("Updating default documentation for {}: {}", version, cacheId)
@@ -151,8 +151,8 @@ class DocumentationPollingActor(
       ).map(v => (v._1, v._2, v._1.name))
       val mainVersion = determineMainVersion(t).map(v => (v._1, v._2, "main"))
 
-      implicit val lang = t.config.lang
-      val versions      = versionsToTranslations(
+      given lang: Lang = t.config.lang
+      val versions     = versionsToTranslations(
         t.repo,
         gitTags ++ gitBranches ++ mainVersion,
         defaultTranslation,
@@ -179,7 +179,7 @@ class DocumentationPollingActor(
       versions: Seq[(Version, ObjectId, String)],
       aggregate: Translation,
       old: Option[Translation],
-  )(implicit lang: Lang): List[TranslationVersion] = {
+  )(using lang: Lang): List[TranslationVersion] = {
     versions
       .sortBy(_._1)
       .reverse

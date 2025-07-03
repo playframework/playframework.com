@@ -1,5 +1,5 @@
 @import controllers.documentation.ReverseRouter
-@(title: String, markdown: Html)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
+@(title: String, markdown: Html)(using req: RequestHeader, reverseRouter: ReverseRouter)
 
 @main(title, "security"){
     <header id="top">

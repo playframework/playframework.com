@@ -26,7 +26,7 @@ trait OpenCollective {
 
 }
 
-class DefaultOpenCollective @Inject() (ws: WSClient, config: OpenCollectiveConfig)(implicit
+class DefaultOpenCollective @Inject() (ws: WSClient, config: OpenCollectiveConfig)(using
     ec: ExecutionContext,
 ) extends OpenCollective {
 

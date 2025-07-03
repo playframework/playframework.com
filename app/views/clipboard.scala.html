@@ -1,4 +1,4 @@
-@()(implicit request: RequestHeader)
+@()(using request: RequestHeader)
 
 <script type="text/javascript" charset="utf-8" src="@routes.Assets.versioned("lib/clipboard.js/clipboard.js")"></script>
 @views.html.helper.script(Symbol("type") -> "text/javascript") {

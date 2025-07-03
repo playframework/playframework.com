@@ -26,7 +26,7 @@ case class TemplateParameter(
 )
 
 object TemplateParameter {
-  implicit val format: Format[TemplateParameter] = Json.format
+  given format: Format[TemplateParameter] = Json.format
 }
 
 case class ExampleProject(
@@ -42,7 +42,7 @@ case class ExampleProject(
 }
 
 object ExampleProject {
-  implicit val format: Format[ExampleProject] = Json.format
+  given format: Format[ExampleProject] = Json.format
 }
 
 class ExamplesModule extends AbstractModule {
@@ -57,7 +57,7 @@ class PlayExampleProjectsService @Inject() (
     ws: WSClient,
     cache: SyncCacheApi,
     environment: Environment,
-)(implicit ec: ExecutionContext) {
+)(using ec: ExecutionContext) {
 
   val validPlayVersions: Seq[String] = configuration.get[Seq[String]]("examples.playVersions")
 

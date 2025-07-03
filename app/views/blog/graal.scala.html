@@ -1,5 +1,5 @@
 @import controllers.documentation.ReverseRouter
-    @(blogName:String, title: String)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
+    @(blogName:String, title: String)(using req: RequestHeader, reverseRouter: ReverseRouter)
 @main(title, blogName){
     <header id="top">
         <div class="wrapper">

@@ -4,7 +4,7 @@ import play.api.mvc._
 import play.api.mvc.Results._
 
 trait Common {
-  def notFound(implicit request: RequestHeader) = NotFound(views.html.notfound())
+  def notFound(using request: RequestHeader) = NotFound(views.html.notfound())
 
-  implicit def reverseRouter: documentation.ReverseRouter
+  given reverseRouter: documentation.ReverseRouter
 }
