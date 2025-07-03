@@ -16,15 +16,15 @@ case class Module(
 )
 
 object Module {
-  implicit val modulesWrites: Writes[Seq[(Module, Seq[Release])]] = {
+  given modulesWrites: Writes[Seq[(Module, Seq[Release])]] = {
 
-    implicit val releaseWrites: Writes[Release] = (
+    given releaseWrites: Writes[Release] = (
       (__ \ "isDefault").write[Boolean] ~
         (__ \ "version").write[String] ~
         (__ \ "matches").write[String]
     ).apply(r => (r.isDefault, r.version, r.frameworkMatch))
 
-    implicit val moduleWrites: Writes[(Module, Seq[Release])] = (
+    given moduleWrites: Writes[(Module, Seq[Release])] = (
       (__ \ "name").write[String] ~
         (__ \ "fullname").write[String] ~
         (__ \ "versions").write[Seq[Release]]

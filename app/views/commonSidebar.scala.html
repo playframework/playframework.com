@@ -1,5 +1,5 @@
 @import controllers.documentation.ReverseRouter
-@(hn: String = "h3")(implicit reverseRouter: ReverseRouter)
+@(hn: String = "h3")(using reverseRouter: ReverseRouter)
 
 <@hn>Documentation</@hn>
 <ul>

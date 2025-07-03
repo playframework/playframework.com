@@ -44,5 +44,5 @@ case class OpenCollectiveMember(
 }
 
 object OpenCollectiveMember {
-  implicit val jsonReads: Reads[OpenCollectiveMember] = Json.reads[OpenCollectiveMember]
+  given jsonReads: Reads[OpenCollectiveMember] = Json.reads[OpenCollectiveMember]
 }

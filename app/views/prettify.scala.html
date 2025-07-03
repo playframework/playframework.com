@@ -1,4 +1,4 @@
-@()(implicit request: RequestHeader)
+@()(using request: RequestHeader)
 <script type="text/javascript" charset="utf-8" src="@routes.Assets.versioned("lib/prettify/prettify.js")"></script>
 <script type="text/javascript" charset="utf-8" src="@routes.Assets.versioned("lib/prettify/lang-scala.js")"></script>
 @views.html.helper.script(Symbol("type") -> "text/javascript") {

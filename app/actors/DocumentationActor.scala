@@ -271,8 +271,8 @@ class DocumentationActor(
   import DocumentationActor._
   import actors.{ DocumentationLoadingActor => Loader }
 
-  implicit val timeout: Timeout             = Timeout(5.seconds)
-  implicit val system: ActorSystem[Nothing] = context.system
+  given timeout: Timeout             = Timeout(5.seconds)
+  given system: ActorSystem[Nothing] = context.system
   import system.executionContext
 
   private def createRepo(config: TranslationConfig) = {

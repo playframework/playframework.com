@@ -12,7 +12,7 @@ import scala.concurrent.Future
 
 @Singleton
 class Modules @Inject() (modulesLookup: ModulesLookup, moduleDao: ModuleDao, components: ControllerComponents)(
-    implicit
+    using
     ec: ExecutionContext,
     reverseRouter: documentation.ReverseRouter,
 ) extends AbstractController(components) {
@@ -77,5 +77,5 @@ class Modules @Inject() (modulesLookup: ModulesLookup, moduleDao: ModuleDao, com
     }
   }
 
-  private def PageNotFound(implicit request: RequestHeader) = NotFound(views.html.notfound())
+  private def PageNotFound(using request: RequestHeader) = NotFound(views.html.notfound())
 }

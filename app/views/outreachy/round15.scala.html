@@ -1,5 +1,5 @@
 @import controllers.documentation.ReverseRouter
-@(title: String = "Outreachy")(implicit req: RequestHeader, reverseRouter: ReverseRouter)
+@(title: String = "Outreachy")(using req: RequestHeader, reverseRouter: ReverseRouter)
 
 @main(title, "outreachy"){
     <header id="top">

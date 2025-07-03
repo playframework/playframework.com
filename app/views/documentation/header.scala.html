@@ -1,5 +1,5 @@
 @import controllers.documentation.ReverseRouter
-@(page: String, maybeContext: Option[models.documentation.TranslationContext] = None)(content: Html)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
+@(page: String, maybeContext: Option[models.documentation.TranslationContext] = None)(content: Html)(using req: RequestHeader, reverseRouter: ReverseRouter)
 
 @main(page, "documentation", maybeContext) {
 

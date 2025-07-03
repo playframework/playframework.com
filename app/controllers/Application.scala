@@ -28,7 +28,7 @@ class Application @Inject() (
     exampleProjectsService: PlayExampleProjectsService,
     components: ControllerComponents,
     cacheApi: SyncCacheApi,
-)(implicit ec: ExecutionContext, val reverseRouter: _root_.controllers.documentation.ReverseRouter)
+)(using ec: ExecutionContext, val reverseRouter: _root_.controllers.documentation.ReverseRouter)
     extends AbstractController(components)
     with Common
     with I18nSupport {

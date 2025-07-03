@@ -14,7 +14,7 @@ case class PlayRelease(
 }
 
 object PlayRelease {
-  implicit val releaseReads: Reads[PlayRelease] = Json.reads[PlayRelease]
+  given releaseReads: Reads[PlayRelease] = Json.reads[PlayRelease]
 }
 
 case class PlayReleases(
@@ -25,7 +25,7 @@ case class PlayReleases(
 )
 
 object PlayReleases {
-  implicit val playReleasesReads: Reads[PlayReleases] = Json.reads[PlayReleases]
+  given playReleasesReads: Reads[PlayReleases] = Json.reads[PlayReleases]
 }
 
 private[models] object SecurifyUrl {

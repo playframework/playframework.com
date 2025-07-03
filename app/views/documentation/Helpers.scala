@@ -11,16 +11,16 @@ import play.twirl.api.Html
 
 object Helpers {
 
-  def isNotMostRecentVersion(implicit context: TranslationContext): Boolean = {
+  def isNotMostRecentVersion(using context: TranslationContext): Boolean = {
     !context.version.equals(latestCurrent)
   }
 
   def displayVersionMessage(
       pageFileName: String,
-  )(implicit messagesApi: MessagesApi, context: TranslationContext, reverseRouter: ReverseRouter): Html = {
-    implicit val alternateLang = context.alternateLang
-    implicit val lang          = context.alternateLang.getOrElse(Lang.defaultLang)
-    val version                = context.version.get
+  )(using messagesApi: MessagesApi, context: TranslationContext, reverseRouter: ReverseRouter): Html = {
+    given alternateLang: Option[Lang] = context.alternateLang
+    given lang: Lang                  = context.alternateLang.getOrElse(Lang.defaultLang)
+    val version                       = context.version.get
     if (isDevelopmentVersion(version)) {
       upgrade(unstableMessage(link(version, pageFileName)), pageFileName)
     } else {
@@ -45,25 +45,25 @@ object Helpers {
   private def upgrade(
       originalHtml: Html,
       pageFileName: String,
-  )(implicit messagesApi: MessagesApi, context: TranslationContext, reverseRouter: ReverseRouter): Html = {
+  )(using messagesApi: MessagesApi, context: TranslationContext, reverseRouter: ReverseRouter): Html = {
     import scala.collection.immutable.Seq
     new Html(Seq(originalHtml, Html(" "), displayUpgradeMessage(pageFileName)))
   }
 
   // 2.6.0
-  private def unstableMessage(specificLink: Html)(implicit messagesApi: MessagesApi, lang: Lang) = {
+  private def unstableMessage(specificLink: Html)(using messagesApi: MessagesApi, lang: Lang) = {
     // documentation.unstable.message=You are viewing the documentation for the {0} development release.
     Html(messagesApi("documentation.unstable.message", specificLink.toString()))
   }
 
   // Current release 2.5.0.  (Displayed because latest is 2.5.x)
-  private def currentReleaseMessage(specificLink: Html)(implicit messagesApi: MessagesApi, lang: Lang): Html = {
+  private def currentReleaseMessage(specificLink: Html)(using messagesApi: MessagesApi, lang: Lang): Html = {
     // You are viewing the documentation for the {0} release.
     Html(messagesApi("documentation.current.release.message", specificLink.toString()))
   }
 
   // Used to point people to 2.5.x
-  private def currentLatestMessage(seriesLink: Html)(implicit messagesApi: MessagesApi, lang: Lang): Html = {
+  private def currentLatestMessage(seriesLink: Html)(using messagesApi: MessagesApi, lang: Lang): Html = {
     // The latest stable release series is {0}.
     Html(messagesApi("documentation.current.latest.message", seriesLink.toString()))
   }
@@ -72,13 +72,13 @@ object Helpers {
   private def oldReleaseMessage(
       specificLink: Html,
       seriesLink: Html,
-  )(implicit messagesApi: MessagesApi, lang: Lang): Html = {
+  )(using messagesApi: MessagesApi, lang: Lang): Html = {
     // You are viewing the documentation for the {0} release in the {1} series of releases.
     Html(messagesApi("documentation.old.release.message", specificLink.toString(), seriesLink.toString()))
   }
 
   // 2.3.x
-  private def oldLatestMessage(seriesLink: Html)(implicit messagesApi: MessagesApi, lang: Lang): Html = {
+  private def oldLatestMessage(seriesLink: Html)(using messagesApi: MessagesApi, lang: Lang): Html = {
     // You are viewing the documentation for the {0} release series.
     Html(messagesApi("documentation.old.latest.message", seriesLink.toString()))
   }
@@ -86,31 +86,31 @@ object Helpers {
   private def link(
       version: Version,
       pageFileName: String,
-  )(implicit alternateLang: Option[Lang], reverseRouter: ReverseRouter): Html = {
+  )(using alternateLang: Option[Lang], reverseRouter: ReverseRouter): Html = {
     val url = reverseRouter.page(alternateLang, version.toString, pageFileName)
     Html(s"""<a href="$url">${version.toString}</a>""")
   }
 
   private def displayUpgradeMessage(
       pageFileName: String,
-  )(implicit messagesApi: MessagesApi, context: TranslationContext, reverseRouter: ReverseRouter): Html = {
-    val version                = latestCurrent.get
-    implicit val alternateLang = context.alternateLang
-    implicit val lang          = context.alternateLang.getOrElse(Lang.defaultLang)
+  )(using messagesApi: MessagesApi, context: TranslationContext, reverseRouter: ReverseRouter): Html = {
+    val version                       = latestCurrent.get
+    given alternateLang: Option[Lang] = context.alternateLang
+    given lang: Lang                  = context.alternateLang.getOrElse(Lang.defaultLang)
     currentLatestMessage(link(version, pageFileName))
   }
 
   /** Returns the most current version, i.e. 2.6.x. */
-  def latestCurrent(implicit context: TranslationContext): Option[Version] = {
+  def latestCurrent(using context: TranslationContext): Option[Version] = {
     Version.findDefaultVersion(context.displayVersions)
   }
 
   /** Returns the latest compatible version for the context.version, i.e. 2.3.0 will return 2.3.x */
-  private def latestCompatible(implicit context: TranslationContext): Option[Version] = {
+  private def latestCompatible(using context: TranslationContext): Option[Version] = {
     context.version.flatMap(v => Version.findCurrentPatchVersions(context.displayVersions, v).headOption)
   }
 
-  private def isDevelopmentVersion(version: Version)(implicit context: TranslationContext): Boolean = {
+  private def isDevelopmentVersion(version: Version)(using context: TranslationContext): Boolean = {
     version.versionType match {
       case rc: ReleaseCandidate                                  => true
       case m: Milestone                                          => true

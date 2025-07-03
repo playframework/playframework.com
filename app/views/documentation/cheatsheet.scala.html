@@ -1,5 +1,5 @@
 @import controllers.documentation.ReverseRouter
-@(context: models.documentation.TranslationContext, title: String, otherCategories: Map[String,String], sheets: Seq[String])(implicit reverseRouter: ReverseRouter)
+@(context: models.documentation.TranslationContext, title: String, otherCategories: Map[String,String], sheets: Seq[String])(using reverseRouter: ReverseRouter)
 
 <html>
 <head>

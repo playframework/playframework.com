@@ -1,5 +1,5 @@
 @import controllers.documentation.ReverseRouter
-@(examples: PlayExamples)(implicit requestHeader: RequestHeader, reverseRouter: ReverseRouter)
+@(examples: PlayExamples)(using requestHeader: RequestHeader, reverseRouter: ReverseRouter)
 
 @renderBaseTech(version: String) = @{
   version match {

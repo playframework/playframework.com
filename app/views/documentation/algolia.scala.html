@@ -1,4 +1,4 @@
-@(context: models.documentation.TranslationContext)(implicit request: RequestHeader)
+@(context: models.documentation.TranslationContext)(using request: RequestHeader)
 
 <script type="text/javascript" src="https://cdn.jsdelivr.net/docsearch.js/1/docsearch.min.js"></script>
 @views.html.helper.script(Symbol("type") -> "text/javascript") {

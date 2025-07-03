@@ -13,7 +13,7 @@ case class Team(id: Long, name: String, url: String, members_url: String) {
 }
 
 object Team {
-  implicit val jsonReads: Reads[Team] = Json.reads[Team]
+  given jsonReads: Reads[Team] = Json.reads[Team]
 }
 
 /**
@@ -37,7 +37,7 @@ case class GitHubUser(
 }
 
 object GitHubUser {
-  implicit val jsonReads: Reads[GitHubUser] = Json.reads[GitHubUser]
+  given jsonReads: Reads[GitHubUser] = Json.reads[GitHubUser]
 }
 
 case class Repository(id: Long, name: String, full_name: String, fork: Boolean, contributors_url: String) {
@@ -46,7 +46,7 @@ case class Repository(id: Long, name: String, full_name: String, fork: Boolean, 
 }
 
 object Repository {
-  implicit val jsonReads: Reads[Repository] = Json.reads[Repository]
+  given jsonReads: Reads[Repository] = Json.reads[Repository]
 }
 
 case class Organisation(id: Long, login: String, url: String, repos_url: String, members_url: String) {
@@ -55,5 +55,5 @@ case class Organisation(id: Long, login: String, url: String, repos_url: String,
 }
 
 object Organisation {
-  implicit val jsonReads: Reads[Organisation] = Json.reads[Organisation]
+  given jsonReads: Reads[Organisation] = Json.reads[Organisation]
 }

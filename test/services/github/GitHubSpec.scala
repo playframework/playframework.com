@@ -16,7 +16,7 @@ import scala.concurrent.Future
 
 object GitHubSpec extends PlaySpecification {
 
-  implicit val fileMimeTypes: DefaultFileMimeTypes = new DefaultFileMimeTypesProvider(
+  given fileMimeTypes: DefaultFileMimeTypes = new DefaultFileMimeTypesProvider(
     FileMimeTypesConfiguration(Map("json" -> "application/json")),
   ).get
 

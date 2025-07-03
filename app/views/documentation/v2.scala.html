@@ -1,5 +1,5 @@
 @import controllers.documentation.ReverseRouter
-@(messages: MessagesApi, context: models.documentation.TranslationContext, pageFileName:String, pageTitle: String = "Documentation", content: Option[String] = None, sidebar: Option[String] = None, source: Option[String] = None, alternateVersions: Seq[models.documentation.Version] = Nil, breadcrumbs: Option[String] = None)(implicit req: RequestHeader, reverseRouter: ReverseRouter)
+@(messages: MessagesApi, context: models.documentation.TranslationContext, pageFileName:String, pageTitle: String = "Documentation", content: Option[String] = None, sidebar: Option[String] = None, source: Option[String] = None, alternateVersions: Seq[models.documentation.Version] = Nil, breadcrumbs: Option[String] = None)(using req: RequestHeader, reverseRouter: ReverseRouter)
 
 @import Helpers._
 
@@ -20,7 +20,7 @@
     <article>
         @content.map { html =>
             @if(!req.headers.get(play.api.http.HeaderNames.USER_AGENT).exists(_.toLowerCase.startsWith("algolia crawler"))) {
-                @versionInfo(pageFileName)(messages, context, reverseRouter)
+                @versionInfo(pageFileName)(using messages, context, reverseRouter)
             }
 
             @for(version <- context.version) {

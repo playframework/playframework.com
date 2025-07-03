@@ -1,5 +1,5 @@
 @import controllers.documentation.ReverseRouter
-@(releases: PlayReleases, platform: Platform.Platform, title: String = "Play Releases")(implicit requestHeader: RequestHeader, reverseRouter: ReverseRouter)
+@(releases: PlayReleases, platform: Platform.Platform, title: String = "Play Releases")(using requestHeader: RequestHeader, reverseRouter: ReverseRouter)
 
 @renderRelease(linkClass: String, release: PlayRelease) = {
   @if(release.secureUrl) {
