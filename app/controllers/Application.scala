@@ -55,11 +55,16 @@ class Application @Inject() (
 
       }
       .orElse {
-        if(version.isEmpty ||
+        if (
+          version.isEmpty ||
           (version.exists(_.startsWith("2.")) && !version.contains(releases.latest2.version)) ||
-          (version.exists(_.startsWith("3.")) && !version.contains(releases.latest3.version))) {
+          (version.exists(_.startsWith("3.")) && !version.contains(releases.latest3.version))
+        ) {
           Some(
-            s"""Play framework ${if(version.isEmpty || version.exists(_.startsWith("3."))) releases.latest3.version else releases.latest2.version} is out!  Check it out <a href="${routes.Application.download}">here</a>.""",
+            s"""Play framework ${
+                if (version.isEmpty || version.exists(_.startsWith("3."))) releases.latest3.version
+                else releases.latest2.version
+              } is out!  Check it out <a href="${routes.Application.download}">here</a>.""",
           )
         } else {
           None
@@ -76,7 +81,7 @@ class Application @Inject() (
 
   def widget(version: Option[String]) = Action.async { request =>
     Future.successful(
-      Ok(views.html.widget(news(version)))
+      Ok(views.html.widget(news(version))),
     )
   }
 
@@ -84,7 +89,7 @@ class Application @Inject() (
   // the URL for SEO purposes only.
   def download = Action.async { implicit request =>
     Future.successful(
-      MovedPermanently(routes.Application.gettingStarted.path)
+      MovedPermanently(routes.Application.gettingStarted.path),
     )
   }
 
@@ -106,7 +111,7 @@ class Application @Inject() (
   def allreleases(platform: Option[String] = None) = Action.async { implicit request =>
     val selectedPlatform = Platform(platform.orElse(request.headers.get("User-Agent")))
     Future.successful(
-      Ok(html.allreleases(releases, selectedPlatform))
+      Ok(html.allreleases(releases, selectedPlatform)),
     )
   }
 
@@ -161,24 +166,24 @@ class Application @Inject() (
       page match {
         case Some(content) =>
           Future.successful(
-            Ok(template(request)(Html(content))).withHeaders(CACHE_CONTROL -> "max-age=10000")
+            Ok(template(request)(Html(content))).withHeaders(CACHE_CONTROL -> "max-age=10000"),
           )
         case None =>
           Future.successful(
-            notFound
+            notFound,
           )
       }
   }
 
   def getInvolved = Action.async { implicit request =>
     Future.successful(
-      Ok(html.getInvolved())
+      Ok(html.getInvolved()),
     )
   }
 
   def sponsors = Action.async { implicit request =>
     Future.successful(
-      Ok(html.sponsors())
+      Ok(html.sponsors()),
     )
   }
 
@@ -197,15 +202,15 @@ class Application @Inject() (
         .replace("-released", "")
         .replace("-", ".")
       Future.successful(
-        MovedPermanently(s"https://github.com/playframework/playframework/releases/tag/$version")
+        MovedPermanently(s"https://github.com/playframework/playframework/releases/tag/$version"),
       )
     } else if (route.endsWith("/")) {
       Future.successful(
-        MovedPermanently("/" + request.path.take(request.path.length - 1).dropWhile(_ == '/'))
+        MovedPermanently("/" + request.path.take(request.path.length - 1).dropWhile(_ == '/')),
       )
     } else {
       Future.successful(
-        notFound
+        notFound,
       )
     }
   }
@@ -244,7 +249,7 @@ class Application @Inject() (
     val sections = byVersion.map { case (v, p) =>
       val TutorialKeyword = "tutorial" // this MUST be in the project keywords for this to work
       val SeedKeyword     = "seed"
-      val tutorials = p
+      val tutorials       = p
         .filter(e => e.keywords.contains(TutorialKeyword) && !e.hasParams)
         .groupBy(byLanguage)
         .view

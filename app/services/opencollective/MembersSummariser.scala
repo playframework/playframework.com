@@ -50,7 +50,7 @@ class CachingMembersSummariser @Inject() (
 
   actorSystem.scheduler.scheduleWithFixedDelay(0.seconds, 24.hours)(() => {
     delegate.fetchMembers.onComplete {
-      case Failure(t) => log.error("Unable to load members from OpenCollective", t)
+      case Failure(t)  => log.error("Unable to load members from OpenCollective", t)
       case Success(ms) =>
         if (members != ms) {
           val count = members.size

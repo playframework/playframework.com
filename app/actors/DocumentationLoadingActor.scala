@@ -69,7 +69,7 @@ object DocumentationLoadingActor {
         val sheets = sortedSheets.flatMap { file =>
           repo.loadFile(s"cheatsheets/$category/$file")(is => Textile.toHTML(IOUtils.toString(is, "utf-8")))
         }
-        val title = CheatSheetHelper.getCategoryTitle(category)
+        val title           = CheatSheetHelper.getCategoryTitle(category)
         val otherCategories = CheatSheetHelper
           .listCategoriesAndTitles(
             repo

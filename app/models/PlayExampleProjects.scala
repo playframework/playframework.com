@@ -56,14 +56,14 @@ class PlayExampleProjectsService @Inject() (
     configuration: Configuration,
     ws: WSClient,
     cache: SyncCacheApi,
-    environment: Environment
+    environment: Environment,
 )(implicit ec: ExecutionContext) {
 
   val validPlayVersions: Seq[String] = configuration.get[Seq[String]]("examples.playVersions")
 
   private val logger = org.slf4j.LoggerFactory.getLogger(this.getClass)
 
-  //private val examplesUrl = configuration.get[String]("examples.apiUrl")
+  // private val examplesUrl = configuration.get[String]("examples.apiUrl")
 
   // NOTE: TTL is really just a safety measure here.
   // We should re-deploy when we make major changes to projects
@@ -92,19 +92,22 @@ class PlayExampleProjectsService @Inject() (
 
   def examples(): Future[Seq[ExampleProject]] = {
     Future
-      .sequence(validPlayVersions.map { version => {
-        lazy val samples: JsValue =
-          environment
-            .resourceAsStream(s"playSamples_${version}.json")
-            .flatMap { is =>
-              try {
-                Json.fromJson[JsValue](Json.parse(IOUtils.toByteArray(is))).asOpt
-              } finally {
-                is.close()
+      .sequence(validPlayVersions.map { version =>
+        {
+          lazy val samples: JsValue =
+            environment
+              .resourceAsStream(s"playSamples_${version}.json")
+              .flatMap { is =>
+                try {
+                  Json.fromJson[JsValue](Json.parse(IOUtils.toByteArray(is))).asOpt
+                } finally {
+                  is.close()
+                }
               }
-            }.getOrElse(JsArray())
-        Future.successful(version, samples)
-      }})
+              .getOrElse(JsArray())
+          Future.successful(version, samples)
+        }
+      })
       .map { response =>
         response.flatMap((convertExampleProjects _).tupled)
       }

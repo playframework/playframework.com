@@ -48,7 +48,7 @@ object FallbackMembers {
    * Code to generate the code above from a current list of members
    */
   def dumpMembers(members: Seq[OpenCollectiveMember]) = {
-    def option(s: Option[String]) = s.fold("None")("Some(\"" + _ + "\")")
+    def option(s: Option[String])                     = s.fold("None")("Some(\"" + _ + "\")")
     def formatMember(m: OpenCollectiveMember): String = {
       import m._
       // format: off

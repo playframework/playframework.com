@@ -14,17 +14,17 @@ class Outreachy @Inject() (components: ControllerComponents)(implicit
     reverseRouter: documentation.ReverseRouter,
 ) extends AbstractController(components) {
 
-  //def outreachy = Action(Redirect(routes.Outreachy.round15))
+  // def outreachy = Action(Redirect(routes.Outreachy.round15))
 
   def round10 = Action.async { implicit req =>
     Future.successful(
-      Ok(views.html.outreachy.round10())
+      Ok(views.html.outreachy.round10()),
     )
   }
 
   def round15 = Action.async { implicit req =>
     Future.successful(
-      Ok(views.html.outreachy.round15())
+      Ok(views.html.outreachy.round15()),
     )
   }
 }
