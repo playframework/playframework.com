@@ -3,6 +3,7 @@ package services.github
 import play.api.http.DefaultFileMimeTypesProvider
 import play.api.http.DefaultFileMimeTypes
 import play.api.http.FileMimeTypesConfiguration
+import play.api.http.Port
 import play.api.mvc.Results._
 import play.api.routing.sird.{ GET => Get, _ }
 import play.api.test.PlaySpecification
@@ -94,7 +95,7 @@ object GitHubSpec extends PlaySpecification {
           }
         case Get(p"/users/${_}") => components.defaultActionBuilder(Ok.sendResource("github/user.json"))
       }
-    } { implicit port =>
+    } { case given Port =>
       WsTestClient.withClient { ws =>
         val gitHub = new DefaultGitHub(ws, GitHubConfig("token", "", "playframework", Nil))
         block(gitHub)

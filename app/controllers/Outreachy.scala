@@ -3,7 +3,9 @@ package controllers
 import javax.inject.Inject
 
 import play.api.mvc.AbstractController
+import play.api.mvc.AnyContent
 import play.api.mvc.ControllerComponents
+import play.api.mvc.Request
 
 import scala.concurrent.Future
 
@@ -16,13 +18,13 @@ class Outreachy @Inject() (components: ControllerComponents)(using
 
   // def outreachy = Action(Redirect(routes.Outreachy.round15))
 
-  def round10 = Action.async { implicit req =>
+  def round10 = Action.async { case given Request[AnyContent] =>
     Future.successful(
       Ok(views.html.outreachy.round10()),
     )
   }
 
-  def round15 = Action.async { implicit req =>
+  def round15 = Action.async { case given Request[AnyContent] =>
     Future.successful(
       Ok(views.html.outreachy.round15()),
     )

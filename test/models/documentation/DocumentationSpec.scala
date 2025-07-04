@@ -75,7 +75,7 @@ class DocumentationSpec extends Specification {
   }
 
   "display versions" should {
-    implicit def p(s: String): Version = Version.parse(s).get
+    def p(s: String): Version = Version.parse(s).get
     "work like this" in {
 
       mockTranslation(
@@ -94,7 +94,7 @@ class DocumentationSpec extends Specification {
         "2.1.2",
         "2.1.3-RC1",
       ).displayVersions must containAllOf(
-        Seq[Version](
+        Seq(
           "2.2-SNAPSHOT",
           "2.1.3-RC2",
           "2.1.2",
@@ -103,7 +103,7 @@ class DocumentationSpec extends Specification {
           "2.0.4",
           "1.3.x",
           "1.2.4.1",
-        ),
+        ).map(p),
       ).inOrder
     }
     "should only show most recent snapshot and development version" in {
@@ -114,11 +114,11 @@ class DocumentationSpec extends Specification {
         "2.1.4-RC1",
         "2.1.3",
       ).displayVersions must containAllOf(
-        Seq[Version](
+        Seq(
           "2.2-SNAPSHOT",
           "2.2.0-RC1",
           "2.1.3",
-        ),
+        ).map(p),
       ).inOrder
     }
   }

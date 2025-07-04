@@ -73,13 +73,13 @@ class Application @Inject() (
     message.toSeq.map(Html.apply)
   }
 
-  def index = Action.async { implicit request =>
+  def index = Action.async { case given Request[AnyContent] =>
     membersSummariser.fetchMembers.map { members =>
       Ok(html.index(members, releases))
     }
   }
 
-  def widget(version: Option[String]) = Action.async { request =>
+  def widget(version: Option[String]) = Action.async { case given Request[AnyContent] =>
     Future.successful(
       Ok(views.html.widget(news(version))),
     )
@@ -87,13 +87,13 @@ class Application @Inject() (
 
   // This used to be the download/getting-started page. We are keeping
   // the URL for SEO purposes only.
-  def download = Action.async { implicit request =>
+  def download = Action.async { case given Request[AnyContent] =>
     Future.successful(
       MovedPermanently(routes.Application.gettingStarted.path),
     )
   }
 
-  def gettingStarted = Action.async { implicit request =>
+  def gettingStarted = Action.async { case given Request[AnyContent] =>
     exampleProjectsService.cached() match {
       case Some(cached) =>
         val examples = toExamples(cached)
@@ -108,8 +108,8 @@ class Application @Inject() (
     }
   }
 
-  def allreleases(platform: Option[String] = None) = Action.async { implicit request =>
-    val selectedPlatform = Platform(platform.orElse(request.headers.get("User-Agent")))
+  def allreleases(platform: Option[String] = None) = Action.async { case given Request[AnyContent] =>
+    val selectedPlatform = Platform(platform.orElse(summon[Request[AnyContent]].headers.get("User-Agent")))
     Future.successful(
       Ok(html.allreleases(releases, selectedPlatform)),
     )
@@ -118,9 +118,7 @@ class Application @Inject() (
   def changelog =
     markdownAction(
       "public/markdown/changelog.md",
-      { implicit request =>
-        views.html.changelog(_)
-      },
+      views.html.changelog(_),
     )
 
   def conduct = Action {
@@ -130,17 +128,15 @@ class Application @Inject() (
   def communityProcess =
     markdownAction(
       "public/markdown/community-process.md",
-      { implicit request => markdown =>
-        views.html.markdownPage("Community process", markdown)
-      },
+      markdown => views.html.markdownPage("Community process", markdown),
     )
 
   def contributing = Action {
     Redirect("https://github.com/playframework/.github/blob/main/CONTRIBUTING.md")
   }
 
-  def markdownAction(markdownFile: String, template: RequestHeader => Html => Html) = Action.async {
-    implicit request =>
+  def markdownAction(markdownFile: String, template: RequestHeader ?=> Html => Html) = Action.async {
+    case given RequestHeader =>
       def readInputStream(is: InputStream): String =
         try {
           IOUtils.toString(is, "utf-8")
@@ -166,7 +162,7 @@ class Application @Inject() (
       page match {
         case Some(content) =>
           Future.successful(
-            Ok(template(request)(Html(content))).withHeaders(CACHE_CONTROL -> "max-age=10000"),
+            Ok(template(Html(content))).withHeaders(CACHE_CONTROL -> "max-age=10000"),
           )
         case None =>
           Future.successful(
@@ -175,13 +171,13 @@ class Application @Inject() (
       }
   }
 
-  def getInvolved = Action.async { implicit request =>
+  def getInvolved = Action.async { case given Request[AnyContent] =>
     Future.successful(
       Ok(html.getInvolved()),
     )
   }
 
-  def sponsors = Action.async { implicit request =>
+  def sponsors = Action.async { case given Request[AnyContent] =>
     Future.successful(
       Ok(html.sponsors()),
     )
@@ -192,7 +188,8 @@ class Application @Inject() (
     MovedPermanently(url)
   }
 
-  def onHandlerNotFound(route: String) = Action.async { implicit request =>
+  def onHandlerNotFound(route: String) = Action.async { case given Request[AnyContent] =>
+    val request = summon[Request[AnyContent]]
     if (
       route.startsWith("play-") && route.endsWith("-released") && !route
         .contains("-rc") && !route.contains("-m")
