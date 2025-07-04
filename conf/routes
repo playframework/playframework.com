@@ -45,6 +45,11 @@ GET         /modules/repo/:name/:version/dependencies.yml            controllers
 GET         /community                                               controllers.Application.movedTo(url="/get-involved", originalPath = "")
 GET         /code/*something                                         controllers.Application.movedTo(url="/code", something)
 
+# Old logo url still used on https://github.com/playframework/playframework/releases/tag/2.8.16 and other pages
+GET         /assets/images/home/sponsors/61220b8306493af6a21b7db17de7f4b2-informaticon-logo-full-color.png controllers.Application.movedTo(url="/assets/images/home/sponsors/ad86c68a917e70a42440b4feb413c68d-informaticon-logo-black.png", originalPath = "")
+# Old logo url still used on https://github.com/playframework/playframework/releases/tag/3.0.7 and other pages
+GET         /assets/images/home/sponsors/49a3d5258c8e8b1daf5481eb9e00b898-informaticon-logo-black.png controllers.Application.movedTo(url="/assets/images/home/sponsors/ad86c68a917e70a42440b4feb413c68d-informaticon-logo-black.png", originalPath = "")
+
 GET         /assets/*file                                            controllers.Assets.versioned(path="/public", file: Asset)
 
 GET         /sitemap-index.xml                                       controllers.Assets.at(path="/public", file="sitemap-index.xml")
