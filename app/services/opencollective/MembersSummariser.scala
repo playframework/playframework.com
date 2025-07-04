@@ -1,7 +1,7 @@
 package services.opencollective
 
-import javax.inject.Singleton
-import javax.inject.Inject
+import jakarta.inject.Singleton
+import jakarta.inject.Inject
 import org.apache.pekko.actor.ActorSystem
 import com.google.inject.name.Named
 import models.opencollective.FallbackMembers

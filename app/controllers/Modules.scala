@@ -1,7 +1,7 @@
 package controllers
 
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 import play.api.mvc._
 import play.api.libs.json._
 import services.modules._

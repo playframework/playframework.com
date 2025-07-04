@@ -7,8 +7,8 @@ import org.apache.pekko.actor.typed.ActorSystem
 import org.apache.pekko.actor.typed.scaladsl.AskPattern._
 import org.apache.pekko.actor.typed.scaladsl.adapter._
 import org.apache.pekko.util.Timeout
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 import models.PlayReleases
 import models.documentation.AlternateTranslation
 import models.documentation.DocumentationRedirects
