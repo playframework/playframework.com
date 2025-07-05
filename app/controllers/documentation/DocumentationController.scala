@@ -261,7 +261,7 @@ class DocumentationController @Inject() (
    * - Otherwise, we redirect them to the latest for the default language.
    */
   def latest(lang: Option[Lang], path: String) = DocsAction { actor =>
-    (actor ? GetSummary).mapTo[DocumentationSummary].map { summary =>
+    (actor ? GetSummary.apply).mapTo[DocumentationSummary].map { summary =>
       val (selectedLang, version) = lang match {
         // requested the default lang
         case Some(l) if l == summary.defaultLang => None -> summary.defaultLatest
@@ -290,7 +290,7 @@ class DocumentationController @Inject() (
     summary.translations.contains(lang) && summary.translations(lang) == summary.defaultLatest
 
   def sitemap = DocsAction { actor =>
-    (actor ? GetSitemap).mapTo[DocumentationSitemap].map { docSitemap =>
+    (actor ? GetSitemap.apply).mapTo[DocumentationSitemap].map { docSitemap =>
       Ok(docSitemap.sitemap.toXml)
     }
   }
