@@ -4,9 +4,9 @@ import java.io.File
 
 import com.google.inject.AbstractModule
 import com.typesafe.config.Config
-import javax.inject.Inject
+import jakarta.inject.Inject
 import javax.inject.Provider
-import javax.inject.Singleton
+import jakarta.inject.Singleton
 import models.documentation._
 import org.slf4j.LoggerFactory
 import play.api._

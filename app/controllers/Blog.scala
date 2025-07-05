@@ -2,8 +2,8 @@ package controllers
 
 import java.io.InputStream
 
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 import models._
 import org.apache.commons.io.IOUtils
 import play.api._

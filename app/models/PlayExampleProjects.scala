@@ -4,7 +4,7 @@ import com.google.inject.AbstractModule
 import com.google.inject.Singleton
 import org.apache.commons.io.IOUtils
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 import play.api.Configuration
 import play.api.Environment
 import play.api.cache.SyncCacheApi

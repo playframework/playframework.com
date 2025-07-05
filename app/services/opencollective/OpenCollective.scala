@@ -5,7 +5,7 @@ import play.api.libs.json.Reads
 import play.api.libs.ws.WSClient
 import play.api.libs.ws.WSResponse
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 import scala.concurrent.ExecutionContext
 import scala.concurrent.Future
 

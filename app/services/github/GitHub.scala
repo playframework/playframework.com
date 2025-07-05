@@ -1,6 +1,6 @@
 package services.github
 
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 import com.damnhandy.uri.template.UriTemplate
 import play.api.http.HeaderNames

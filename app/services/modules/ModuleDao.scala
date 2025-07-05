@@ -1,7 +1,7 @@
 package services.modules
 
-import javax.inject.Inject
-import javax.inject.Singleton
+import jakarta.inject.Inject
+import jakarta.inject.Singleton
 
 import com.google.inject.ImplementedBy
 import models.modules._

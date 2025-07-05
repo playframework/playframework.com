@@ -2,7 +2,7 @@ package services.modules
 
 import java.io.File
 import java.util.zip.ZipFile
-import javax.inject.Inject
+import jakarta.inject.Inject
 
 import com.google.inject.ImplementedBy
 import play.api.Environment
