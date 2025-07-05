@@ -561,7 +561,7 @@ class DocumentationActor(
         case GetSitemap(replyTo) =>
           sitemapGenerator
             .ask[Sitemap](replyTo => GenerateSitemap(documentation, replyTo))
-            .map(DocumentationSitemap)
+            .map(DocumentationSitemap.apply)
             .pipeTo(replyTo.toClassic)
           Behaviors.same
       }
