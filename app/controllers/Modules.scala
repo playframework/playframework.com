@@ -17,7 +17,7 @@ class Modules @Inject() (modulesLookup: ModulesLookup, moduleDao: ModuleDao, com
     reverseRouter: documentation.ReverseRouter,
 ) extends AbstractController(components) {
 
-  def index(keyword: String) = Action.async { implicit request =>
+  def index(keyword: String) = Action.async { case given Request[AnyContent] =>
     Future.successful(
       render {
         case Accepts.Html() =>
@@ -29,7 +29,7 @@ class Modules @Inject() (modulesLookup: ModulesLookup, moduleDao: ModuleDao, com
     )
   }
 
-  def download(name: String, version: String) = Action.async { implicit request =>
+  def download(name: String, version: String) = Action.async { case given Request[AnyContent] =>
     modulesLookup.findModule(name, version) match {
       case Some(zip) =>
         Future.successful(
@@ -42,20 +42,21 @@ class Modules @Inject() (modulesLookup: ModulesLookup, moduleDao: ModuleDao, com
     }
   }
 
-  def documentation(name: String, version: String, page: String) = Action.async { implicit request =>
-    modulesLookup.loadModuleDocumentation(name, version, page) match {
-      case Some(content) =>
-        Future.successful(
-          Ok(views.html.modules.documentation(name, content)),
-        )
-      case None =>
-        Future.successful(
-          PageNotFound,
-        )
-    }
+  def documentation(name: String, version: String, page: String) = Action.async {
+    case given Request[AnyContent] =>
+      modulesLookup.loadModuleDocumentation(name, version, page) match {
+        case Some(content) =>
+          Future.successful(
+            Ok(views.html.modules.documentation(name, content)),
+          )
+        case None =>
+          Future.successful(
+            PageNotFound,
+          )
+      }
   }
 
-  def show(name: String) = Action.async { implicit request =>
+  def show(name: String) = Action.async { case given Request[AnyContent] =>
     moduleDao.findById(name) match {
       case Some((module, releases)) =>
         Future.successful(
@@ -68,7 +69,7 @@ class Modules @Inject() (modulesLookup: ModulesLookup, moduleDao: ModuleDao, com
     }
   }
 
-  def dependencies(name: String, version: String) = Action.async { implicit request =>
+  def dependencies(name: String, version: String) = Action.async { case given Request[AnyContent] =>
     modulesLookup.findDependencies(name, version) match {
       case Some(yml) =>
         Future.successful(Ok(yml))

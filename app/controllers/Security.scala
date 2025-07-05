@@ -3,8 +3,10 @@ package controllers
 import jakarta.inject.Inject
 import jakarta.inject.Singleton
 
+import play.api.mvc.AnyContent
 import play.api.mvc.BaseController
 import play.api.mvc.ControllerComponents
+import play.api.mvc.Request
 import play.api.Environment
 import play.twirl.api.Html
 import utils.Markdown
@@ -13,12 +15,12 @@ import java.io.File
 import scala.concurrent.Future
 
 @Singleton
-class Security @Inject() (environment: Environment, val controllerComponents: ControllerComponents)(implicit
+class Security @Inject() (environment: Environment, val controllerComponents: ControllerComponents)(using
     val reverseRouter: documentation.ReverseRouter,
 ) extends BaseController
     with Common {
 
-  def vulnerability(name: String) = Action.async { implicit req =>
+  def vulnerability(name: String) = Action.async { case given Request[AnyContent] =>
     val path = "public/markdown/vulnerabilities/" + name
 
     // protect against dot dots
@@ -51,7 +53,7 @@ class Security @Inject() (environment: Environment, val controllerComponents: Co
     }
   }
 
-  def index = Action.async { implicit req =>
+  def index = Action.async { case given Request[AnyContent] =>
     Future.successful(
       Ok(views.html.vulnerabilities()).withHeaders(CACHE_CONTROL -> "max-age=1000"),
     )
