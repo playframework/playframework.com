@@ -10,7 +10,7 @@ libraryDependencies ++= Seq(
   "org.playframework" %% "play-doc"            % "3.0.1",
   "org.eclipse.jgit"   % "org.eclipse.jgit"    % "7.5.0.202512021534-r",
   "com.damnhandy"      % "handy-uri-templates" % "2.1.8",
-  "org.webjars"        % "jquery"              % "3.7.1",
+  "org.webjars"        % "jquery"              % "4.0.0",
   "org.webjars"        % "html5shiv"           % "3.7.3-1",
   "org.webjars"        % "prettify"            % "4-Mar-2013-1",
   "org.webjars"        % "clipboard.js"        % "2.0.11",
