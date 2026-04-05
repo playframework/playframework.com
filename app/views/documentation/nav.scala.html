@@ -12,7 +12,7 @@
           lang.language,
           reverseRouter.page(Some(lang).filterNot(_ => isDefault), v.name, pageFileName)
         )
-    )">@messages("lang.name")(lang)</a>
+    )">@messages("lang.name")(using lang)</a>
 }
 
 <nav id="toolbar">

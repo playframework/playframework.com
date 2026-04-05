@@ -41,7 +41,7 @@
                       s"""<a href="$source">""", "</a>",
                       s"""<a href="${reverseRouter.latest(context.alternateLang, "Documentation")}">""", "</a>",
                       s"""<a href="https://github.com/playframework/playframework/discussions">""", "</a>"
-                  )(context.lang))
+                  )(using context.lang))
               </p>
             }
         }.getOrElse {

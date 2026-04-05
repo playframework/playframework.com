@@ -109,7 +109,7 @@ class PlayExampleProjectsService @Inject() (
         }
       })
       .map { response =>
-        response.flatMap((convertExampleProjects _).tupled)
+        response.flatMap(convertExampleProjects.tupled)
       }
   }
 
