@@ -134,7 +134,7 @@ class DefaultGitHub @Inject() (ws: WSClient, config: GitHubConfig)(using ec: Exe
     load[GitHubUser](expand(user.url))
 
   def fetchRepoContributors(repo: Repository) =
-    loadWithPaging[(GitHubUser, Int)](expand(repo.contributorsUrl))(
+    loadWithPaging[(GitHubUser, Int)](expand(repo.contributorsUrl))(using
       implicitly[Reads[GitHubUser]].and((__ \ "contributions").read[Int]).tupled,
     )
 

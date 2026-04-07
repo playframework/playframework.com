@@ -40,7 +40,7 @@ object DocumentationLoadingActor {
   case class V1PageExists(page: String, repo: FileRepository, replyTo: ActorRef[Boolean]) extends Command
 
   case class V1Cheatsheet(sheets: Seq[String], title: String, otherCategories: Map[String, String])
-  case class Resource(content: Source[ByteString, _], size: Long)
+  case class Resource(content: Source[ByteString, ?], size: Long)
 
   def apply(): Behavior[Command] = Behaviors.receiveMessage {
     case RenderPage(page, playDoc, replyTo) =>

@@ -229,7 +229,7 @@ class DocumentationController @Inject() (
     for {
       link   <- linkFuture
       result <- resultFuture
-    } yield result.withHeaders(link: _*)
+    } yield result.withHeaders(link*)
   }
 
   def resource(lang: Option[Lang], v: String, resource: String) =
@@ -320,7 +320,7 @@ class DocumentationController @Inject() (
           }
           val entity =
             HttpEntity.Streamed(source, Some(size), Some(fileMimeTypes.forFileName(fileName).getOrElse(BINARY)))
-          cacheable(Ok.sendEntity(entity).withHeaders(contentDisposition: _*), cacheId)
+          cacheable(Ok.sendEntity(entity).withHeaders(contentDisposition*), cacheId)
       }
     }
   }

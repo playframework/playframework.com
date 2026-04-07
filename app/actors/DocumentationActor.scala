@@ -142,7 +142,7 @@ object DocumentationActor extends ActorModule {
    * @param content The content of the resource.
    * @param size The size of the resource.
    */
-  case class Resource(content: Source[ByteString, _], size: Long, cacheId: String) extends Found[Resource]
+  case class Resource(content: Source[ByteString, ?], size: Long, cacheId: String) extends Found[Resource]
 
   /**
    * Update the documentation.
