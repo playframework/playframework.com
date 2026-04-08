@@ -30,7 +30,7 @@ object Module {
         (__ \ "versions").write[Seq[Release]]
     ).apply(m => (m._1.name, m._1.fullname, m._2))
 
-    (__ \ "modules").write(using Writes.iterableWrites[(Module, Seq[Release]), Seq])
+    (__ \ "modules").write(using Writes.iterableWrites2[(Module, Seq[Release]), Seq[(Module, Seq[Release])]])
   }
 }
 
