@@ -31,7 +31,7 @@ class DefaultMembersSummariser @Inject() (openCollective: OpenCollective)(using
       members <- openCollective.fetchMembers()
     } yield {
       val filteredMembers = members.filter(m =>
-        m.isActive && m.role == "BACKER" && m.name != "Guest",
+        m.isActive && m.role == "BACKER" && m.name != "Guest" && m.totalAmountDonated >= 50,
       ) // Users with the name "Guest" don't even have a profile picture
       filteredMembers.sortBy(_.totalAmountDonated).reverse
     }
