@@ -1,3 +1,15 @@
+## Play 3.0.12
+
+*Released 30 September 2026
+
+[All changes](https://github.com/playframework/playframework/compare/3.0.11...3.0.12/)
+
+## Play 2.9.12
+
+*Released 30 September 2026
+
+[All changes](https://github.com/playframework/playframework/compare/2.9.11...2.9.12/)
+
 ## Play 3.0.11
 
 *Released 21 May 2026
